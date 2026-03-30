@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Computational Turn | PhD LDA Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Outfit:wght@500;700&display=swap" rel="stylesheet">
+</head>
+<body class="dark-theme">
+    <div class="app-container">
+        <!-- Sidebar -->
+        <nav class="sidebar">
+            <div class="logo">
+                <span class="logo-icon">💠</span>
+                <span class="logo-text">Computation</span>
+            </div>
+            <ul class="nav-links">
+                <li class="active"><a href="#dashboard">Dashboard</a></li>
+                <li><a href="#harvest">Data Harvest</a></li>
+                <li><a href="#analysis">LDA Analysis</a></li>
+                <li><a href="#synthesis">Theory Synthesis</a></li>
+            </ul>
+            <div class="sidebar-footer">
+                <p>PhD Research: German Publishing</p>
+                <div class="status-indicator">
+                    <span class="dot"></span> Online
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="content">
+            <header class="top-header">
+                <h1>Discursive Mapping & Topic Modeling</h1>
+                <div class="actions">
+                    <button id="run-lda-btn" class="btn btn-primary">Run LDA Pipeline</button>
+                </div>
+            </header>
+
+            <!-- Dashboard Stats -->
+            <section class="stats-grid">
+                <div class="stat-card">
+                    <span class="stat-label">Total Corpus</span>
+                    <h2 id="total-corpus">15 Items (Mock)</h2>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">Active Publishers</span>
+                    <h2 id="publishers">2 Houses</h2>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">LDA Coherence</span>
+                    <h2 id="coherence">0.42</h2>
+                </div>
+            </section>
+
+            <!-- Primary Visualization -->
+            <section class="viz-section glass">
+                <div class="viz-header">
+                    <h3>Latent Dirichlet Allocation: Topic Interdistance Map</h3>
+                </div>
+                <div id="lda-viz-container" class="viz-body">
+                    <iframe id="viz-frame" src="lda_viz.html" frameborder="0" width="100%" height="800px"></iframe>
+                </div>
+            </section>
+
+            <!-- Insights Panel -->
+            <section class="insights-grid">
+                <div class="insight-card glass">
+                    <h3>Top Keywords</h3>
+                    <ul id="keywords-list" class="tag-list">
+                        <!-- Static tags for now, can be dynamically generated from a JSON -->
+                        <span class="tag">Bertelsmann</span>
+                        <span class="tag">Suhrkamp</span>
+                        <span class="tag">Neoliberalismus</span>
+                    </ul>
+                </div>
+                <div class="insight-card glass">
+                    <h3>Manual Control</h3>
+                    <p>To update this dashboard after new data harvesting, run:</p>
+                    <code style="display:block; background: #000; padding: 10px; border-radius: 5px; margin-top: 10px;">python lda_pipeline.py</code>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        async function fetchDataSummary() {
+            try {
+                const res = await fetch('data_summary.json');
+                const data = await res.json();
+                document.getElementById('total-corpus').innerText = data.count + " Items (" + data.source + ")";
+                if (data.publishers) {
+                    document.getElementById('publishers').innerText = data.publishers.length + " Houses";
+                }
+            } catch (err) {
+                console.warn("Could not fetch data summary. Run the pipeline first.");
+            }
+        }
+
+        // Initial fetch
+        fetchDataSummary();
+    </script>
+</body>
+</html>

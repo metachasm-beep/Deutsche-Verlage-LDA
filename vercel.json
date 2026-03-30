@@ -1,0 +1,20 @@
+{
+  "version": 2,
+  "name": "phd-lda-dashboard",
+  "builds": [
+    {
+      "src": "app/**",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/topic-viz",
+      "dest": "/app/lda_viz.html"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/app/$1"
+    }
+  ]
+}

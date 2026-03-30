@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+env/
+venv/
+ENV/
+
+# Data & Models (Keep research data private)
+data/
+*.model
+*.model.state
+*.dictionary
+*.corpus
+
+# Environment / Secret Keys
+.env
+.gsd/STATE.md
+.agent/skills/*/ .env
+
+# IDs & Temporary
+.DS_Store
+*.log
+tmp/
+CORTEX_SESSION/
+
+# Vercel
+.vercel
