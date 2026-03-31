@@ -2,7 +2,7 @@ import os
 
 # Paths
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-DATA_DIR = os.path.join(BASE_DIR, "data")
+DATA_DIR = os.path.join(BASE_DIR, "app", "data")
 MOCK_DATA_PATH = os.path.join(DATA_DIR, "religion_voices_mock.csv")
 
 # NLP Settings

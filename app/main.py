@@ -35,8 +35,9 @@ os.makedirs(DATA_STORAGE_DIR, exist_ok=True)
 REAL_DATA_PATH = os.path.join(DATA_STORAGE_DIR, "dnb_metadata.csv")
 
 # Copy the default data to tmp if it exists locally and not in tmp yet
-if not os.path.exists(REAL_DATA_PATH) and os.path.exists("data/dnb_metadata.csv"):
-    shutil.copy("data/dnb_metadata.csv", REAL_DATA_PATH)
+DEFAULT_DATA_SOURCE = os.path.join(config.DATA_DIR, "dnb_metadata.csv")
+if not os.path.exists(REAL_DATA_PATH) and os.path.exists(DEFAULT_DATA_SOURCE):
+    shutil.copy(DEFAULT_DATA_SOURCE, REAL_DATA_PATH)
 
 @app.get("/api/health")
 async def health():

@@ -125,7 +125,7 @@ if __name__ == "__main__":
     data_path = config.MOCK_DATA_PATH
     
     # Priority: Real harvest if it exists and is not empty
-    real_path = "data/dnb_metadata.csv"
+    real_path = os.path.join(config.DATA_DIR, "dnb_metadata.csv")
     if os.path.exists(real_path) and os.path.getsize(real_path) > 100:
         data_path = real_path
         print(f"Using REAL HARVEST data from {data_path}")
