@@ -1,4 +1,4 @@
-import pandas as pd
+import csv
 import gensim
 from gensim import corpora
 from gensim.models import LdaModel
@@ -6,6 +6,7 @@ import spacy
 from tqdm import tqdm
 import config
 import os
+import json
 
 # Load German Spacy model
 try:
@@ -19,6 +20,8 @@ def preprocess_text(text, allowed_postags=config.ALLOWED_POSTAGS):
     Tokenize, lemmatize, remove stopwords and filter by POS tags for German text.
     Includes weighting for 'Religious Voices' keywords.
     """
+    if not text or not isinstance(text, str):
+        return []
     doc = nlp(text)
     # Lemmatization & POS Filtering
     tokens = [token.lemma_.lower() for token in doc if token.pos_ in allowed_postags]
@@ -39,15 +42,17 @@ def preprocess_text(text, allowed_postags=config.ALLOWED_POSTAGS):
 
 def run_pipeline(data_path):
     print(f"Loading data from {data_path}...")
-    df = pd.read_csv(data_path)
     
-    # Filter out empty rows if any
-    df = df.dropna(subset=['text'])
-    
-    print("Preprocessing texts...")
     processed_docs = []
-    for text in tqdm(df['text']):
-        processed_docs.append(preprocess_text(text))
+    with open(data_path, mode='r', encoding='utf-8') as f:
+        reader = csv.DictReader(f)
+        rows = list(reader)
+        
+    print("Preprocessing texts...")
+    for row in tqdm(rows):
+        text = row.get('text', '')
+        if text:
+            processed_docs.append(preprocess_text(text))
     
     # --- PHASE 1: N-Gram Detection ---
     print("Detecting common collocations (N-Grams)...")
@@ -59,9 +64,6 @@ def run_pipeline(data_path):
     
     # Create Dictionary
     dictionary = corpora.Dictionary(processed_n_grams)
-    
-    # Filter extreme tokens (optional but recommended for large corpora)
-    # dictionary.filter_extremes(no_below=2, no_above=0.5)
     
     # Create Corpus
     corpus = [dictionary.doc2bow(doc) for doc in processed_n_grams]
@@ -80,11 +82,6 @@ def run_pipeline(data_path):
     )
     
     return lda_model, corpus, dictionary
-
-# import pyLDAvis
-# import pyLDAvis.gensim_models as gensimvis
-
-import json
 
 def get_viz_html(lda_model, corpus, dictionary):
     """
@@ -105,11 +102,19 @@ def export_results(model, corpus, dictionary, data_path):
         f.write(html)
         
     # 2. Data Summary
-    df = pd.read_csv(data_path)
+    publishers = set()
+    count = 0
+    with open(data_path, mode='r', encoding='utf-8') as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            count += 1
+            if 'publisher' in row:
+                publishers.add(row['publisher'])
+                
     summary = {
-        "count": len(df),
+        "count": count,
         "source": os.path.basename(data_path),
-        "publishers": df['publisher'].unique().tolist() if 'publisher' in df.columns else ["N/A"]
+        "publishers": sorted(list(publishers))
     }
     with open("app/data_summary.json", "w", encoding='utf-8') as f:
         json.dump(summary, f)

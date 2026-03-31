@@ -1,6 +1,5 @@
 fastapi==0.111.0
 uvicorn==0.29.0
-pandas==2.2.2
 gensim==4.3.2
 spacy==3.8.2
 https://github.com/explosion/spacy-models/releases/download/de_core_news_sm-3.8.0/de_core_news_sm-3.8.0-py3-none-any.whl

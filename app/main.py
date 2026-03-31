@@ -5,8 +5,10 @@ from fastapi.staticfiles import StaticFiles
 import os
 import lda_pipeline
 import config
-import pandas as pd
+import csv
+import re
 import shutil
+from collections import defaultdict
 
 app = FastAPI(title="The Computational Turn: LDA Dashboard")
 
@@ -54,16 +56,19 @@ async def upload_dataset(file: UploadFile = File(...)):
         with open(file_location, "wb+") as file_object:
             shutil.copyfileobj(file.file, file_object)
         
-        # Verify it's readable by Pandas
-        df = pd.read_csv(file_location)
-        if 'publisher' not in df.columns or 'date' not in df.columns:
-            os.remove(file_location)
-            raise HTTPException(status_code=400, detail="CSV must contain 'publisher' and 'date' columns.")
+        # Verify it's readable and check columns
+        with open(file_location, mode='r', encoding='utf-8') as f:
+            reader = csv.DictReader(f)
+            headers = reader.fieldnames
+            if not headers or 'publisher' not in headers or 'date' not in headers:
+                os.remove(file_location)
+                raise HTTPException(status_code=400, detail="CSV must contain 'publisher' and 'date' columns.")
+            
+            count = sum(1 for row in reader)
         
-        return {"status": "success", "message": f"Dataset {file.filename} ingested successfully, containing {len(df)} records."}
-    except pd.errors.EmptyDataError:
-        raise HTTPException(status_code=400, detail="CSV is empty.")
+        return {"status": "success", "message": f"Dataset {file.filename} ingested successfully, containing {count} records."}
     except Exception as e:
+        if os.path.exists(REAL_DATA_PATH): os.remove(REAL_DATA_PATH)
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.post("/api/run-lda")
@@ -74,14 +79,22 @@ async def run_lda(year: int = Query(None)):
     
     try:
         if year:
-            df = pd.read_csv(data_path)
-            # Filter by year
-            df = df[df['date'].astype(str).str.contains(str(year))]
-            if df.empty:
+            rows = []
+            with open(data_path, mode='r', encoding='utf-8') as f:
+                reader = csv.DictReader(f)
+                headers = reader.fieldnames
+                for row in reader:
+                    if str(year) in str(row.get('date', '')):
+                         rows.append(row)
+            
+            if not rows:
                 raise HTTPException(status_code=404, detail=f"No records found for year {year}")
             
             filtered_path = os.path.join(DATA_STORAGE_DIR, f"filtered_{year}.csv")
-            df.to_csv(filtered_path, index=False)
+            with open(filtered_path, mode='w', encoding='utf-8', newline='') as f:
+                writer = csv.DictWriter(f, fieldnames=headers)
+                writer.writeheader()
+                writer.writerows(rows)
             data_path = filtered_path
 
         current_model, current_corpus, current_dictionary = lda_pipeline.run_pipeline(data_path)
@@ -94,12 +107,35 @@ async def run_lda(year: int = Query(None)):
 async def get_trends():
     """
     Returns year-by-year counts for the 'Live Graph'.
+    Replaces pandas groupby/unstack logic.
     """
     data_path = REAL_DATA_PATH if os.path.exists(REAL_DATA_PATH) else config.MOCK_DATA_PATH
-    df = pd.read_csv(data_path)
-    df['year_clean'] = df['date'].astype(str).str.extract(r'(\d{4})')
-    trends = df.groupby(['year_clean', 'publisher']).size().unstack(fill_value=0).reset_index()
-    return trends.to_dict(orient="records")
+    
+    data_map = defaultdict(lambda: defaultdict(int))
+    publishers = set()
+    
+    try:
+        with open(data_path, mode='r', encoding='utf-8') as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                date_str = str(row.get('date', ''))
+                match = re.search(r'(\d{4})', date_str)
+                year = match.group(1) if match else "Unknown"
+                
+                pub = row.get('publisher', 'N/A')
+                data_map[year][pub] += 1
+                publishers.add(pub)
+                
+        result = []
+        for year in sorted(data_map.keys()):
+            item = {"year_clean": year}
+            for pub in publishers:
+                item[pub] = data_map[year][pub]
+            result.append(item)
+            
+        return result
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 @app.get("/api/topic-viz", response_class=HTMLResponse)
 async def get_viz():
@@ -125,13 +161,23 @@ async def get_topics():
 async def data_summary():
     data_path = REAL_DATA_PATH if os.path.exists(REAL_DATA_PATH) else config.MOCK_DATA_PATH
     if os.path.exists(data_path):
-        df = pd.read_csv(data_path)
+        publishers = set()
+        titles = []
+        count = 0
+        with open(data_path, mode='r', encoding='utf-8') as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                count += 1
+                if 'publisher' in row: publishers.add(row['publisher'])
+                if len(titles) < 5 and 'title' in row: titles.append(row['title'])
+                
         return {
             "source": "Custom Upload" if os.environ.get("VERCEL") or data_path == REAL_DATA_PATH else "Mock Data",
-            "count": len(df),
-            "publishers": df['publisher'].unique().tolist(),
-            "first_titles": df['title'].head(5).tolist() if 'title' in df.columns else []
+            "count": count,
+            "publishers": sorted(list(publishers)),
+            "first_titles": titles
         }
+    return {"source": "Unknown Data", "count": 0}
     return {"source": "Unknown Data", "count": 0}
 
 # Local Testing Serve React
