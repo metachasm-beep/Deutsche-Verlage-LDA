@@ -171,16 +171,35 @@ async def get_viz():
 
 @app.get("/api/topics")
 async def get_topics():
-    if not current_model:
+    if not current_model or not current_corpus:
         return {"topics": []}
     
-    # Extract topics for React frontend
+    # Calculate topic prevalence across the entire corpus
+    # This sums the probability of each topic across all documents
+    topic_prevalence = defaultdict(float)
+    doc_count = len(current_corpus)
+    
+    if doc_count > 0:
+        for doc in current_corpus:
+            doc_topics = current_model.get_document_topics(doc)
+            for topic_id, prob in doc_topics:
+                topic_prevalence[topic_id] += prob
+        
+        # Convert to percentage
+        for tid in topic_prevalence:
+            topic_prevalence[tid] = (topic_prevalence[tid] / doc_count) * 100
+
+    # Extract topics with weights and prevalence
     topics = []
-    for topic_id, words in current_model.show_topics(num_topics=10, num_words=10, formatted=False):
+    for topic_id, words in current_model.show_topics(num_topics=config.NUM_TOPICS, num_words=15, formatted=False):
         topics.append({
             "id": topic_id,
-            "keywords": [{"word": w, "weight": float(p)} for w, p in words]
+            "prevalence": round(topic_prevalence.get(topic_id, 0), 2),
+            "keywords": [{"word": w, "weight": round(float(p), 4)} for w, p in words]
         })
+    
+    # Sort topics by prevalence (most common first)
+    topics = sorted(topics, key=lambda x: x['prevalence'], reverse=True)
     return {"topics": topics}
 
 @app.get("/api/data-summary")

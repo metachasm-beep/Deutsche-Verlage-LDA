@@ -8,6 +8,7 @@ export const useLDA = () => {
   const [isUploading, setIsUploading] = useState(false);
   const [trendsData, setTrendsData] = useState<any[]>([]);
   const [summary, setSummary] = useState<any>(null);
+  const [topics, setTopics] = useState<any[]>([]);
 
   const fetchTrends = async () => {
     try {
@@ -16,6 +17,16 @@ export const useLDA = () => {
       setTrendsData(data);
     } catch (e) {
       console.error("Failed to fetch trends", e);
+    }
+  };
+
+  const fetchTopics = async () => {
+    try {
+      const res = await fetch(`${API_BASE}/api/topics`);
+      const data = await res.json();
+      setTopics(data.topics || []);
+    } catch (e) {
+      console.error("Failed to fetch topics", e);
     }
   };
 
@@ -35,6 +46,7 @@ export const useLDA = () => {
       const endpoint = year ? `${API_BASE}/api/run-lda?year=${year}` : `${API_BASE}/api/run-lda`;
       const res = await fetch(endpoint, { method: 'POST' });
       const data = await res.json();
+      await fetchTopics();
       return data;
     } catch (e) {
       console.error("Failed to run LDA", e);
@@ -60,6 +72,7 @@ export const useLDA = () => {
       
       await fetchSummary();
       await fetchTrends();
+      await fetchTopics();
       return true;
     } catch (e) {
       console.error("Failed to upload dataset", e);
@@ -70,7 +83,7 @@ export const useLDA = () => {
   };
 
   return { 
-    isTraining, isUploading, trendsData, summary, 
-    fetchTrends, fetchSummary, runLDA, uploadDataset, API_BASE 
+    isTraining, isUploading, trendsData, summary, topics,
+    fetchTrends, fetchSummary, fetchTopics, runLDA, uploadDataset, API_BASE 
   };
 };

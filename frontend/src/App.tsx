@@ -8,28 +8,27 @@ import Particles from './components/Particles';
 import BlurText from './components/BlurText';
 import { useLDA } from './hooks/useLDA';
 import { Database, Filter, Cpu, BarChart3, Loader2, Upload } from 'lucide-react';
+import TopicModelViz from './components/TopicModelViz';
 
 function App() {
   const [selectedYear, setSelectedYear] = useState<number | null>(null);
-  const [vizKey, setVizKey] = useState(0); 
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const { isTraining, isUploading, trendsData, summary, fetchTrends, fetchSummary, runLDA, uploadDataset, API_BASE } = useLDA();
+  const { isTraining, isUploading, trendsData, summary, topics, fetchTrends, fetchSummary, fetchTopics, runLDA, uploadDataset } = useLDA();
 
   useEffect(() => {
     fetchTrends();
     fetchSummary();
+    fetchTopics();
   }, []);
 
   const handleYearSelect = async (year: number) => {
     setSelectedYear(year);
     await runLDA(year);
-    setVizKey(prev => prev + 1);
   };
 
   const handleFullAnalysis = async () => {
     setSelectedYear(null);
     await runLDA();
-    setVizKey(prev => prev + 1);
   };
 
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -210,26 +209,9 @@ function App() {
                 </SpotlightCard>
               </motion.div>
 
-              <motion.div variants={itemVariants} className="flex-grow w-full">
-                <SpotlightCard className="flex-grow min-h-[550px] !p-1 overflow-hidden relative group shadow-2xl border-neutral-800 w-full bg-white/5 backdrop-blur-sm z-20">
-                  {isTraining && (
-                      <div className="absolute inset-0 z-40 bg-midnight-950/90 backdrop-blur-xl flex items-center justify-center transition-all">
-                        <div className="flex flex-col items-center">
-                          <Loader2 className="animate-spin text-gold mb-6" size={56} />
-                          <p className="text-neutral-200 font-heading text-xl animate-pulse tracking-wide">Synthesizing Topic Clusters...</p>
-                        </div>
-                      </div>
-                  )}
-                  <div className="w-full h-full min-h-[550px] rounded-2xl overflow-hidden bg-white/95 ring-1 ring-inset ring-black/10">
-                    <iframe 
-                        key={vizKey}
-                        src={`${API_BASE}/api/topic-viz`} 
-                        className="w-full h-full min-h-[550px] border-0 mix-blend-multiply opacity-95 group-hover:opacity-100 transition-opacity duration-500"
-                        title="LDA pyLDAvis Output"
-                    />
+                  <div className="w-full h-full min-h-[550px] rounded-2xl overflow-hidden bg-black/5 ring-1 ring-inset ring-neutral-800/20">
+                    <TopicModelViz topics={topics} isTraining={isTraining} />
                   </div>
-                </SpotlightCard>
-              </motion.div>
 
             </div>
           </div>
