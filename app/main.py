@@ -204,8 +204,7 @@ async def data_summary():
         return {
             "source": "Custom Upload" if os.environ.get("VERCEL") or data_path == REAL_DATA_PATH else "Mock Data",
             "count": count,
-            "publishers": sorted(list(publishers)),
-            "first_titles": titles
+            "publishers": sorted(list(publishers))
         }
     return {"source": "Unknown Data", "count": 0}
     return {"source": "Unknown Data", "count": 0}
