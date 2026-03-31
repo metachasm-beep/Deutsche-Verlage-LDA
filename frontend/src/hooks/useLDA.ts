@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 // Hardcoded testing endpoint to connect the local UI to the live Vercel deployment
-const API_BASE = 'https://deutscheverlagelda.vercel.app';
+const API_BASE = '';
 
 export const useLDA = () => {
   const [isTraining, setIsTraining] = useState(false);
