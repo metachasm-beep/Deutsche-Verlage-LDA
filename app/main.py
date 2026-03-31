@@ -187,15 +187,19 @@ async def get_topics():
 async def data_summary():
     data_path = REAL_DATA_PATH if os.path.exists(REAL_DATA_PATH) else config.MOCK_DATA_PATH
     if os.path.exists(data_path):
+        years = set()
         publishers = set()
-        titles = []
         count = 0
         with open(data_path, mode='r', encoding='utf-8') as f:
             reader = csv.DictReader(f)
             for row in reader:
                 count += 1
+                y = row.get('year') or row.get('date')
+                if y:
+                    try:
+                        years.add(int(str(y).strip()[:4]))
+                    except: pass
                 if 'publisher' in row: publishers.add(row['publisher'])
-                if len(titles) < 5 and 'title' in row: titles.append(row['title'])
                 
         return {
             "source": "Custom Upload" if os.environ.get("VERCEL") or data_path == REAL_DATA_PATH else "Mock Data",
