@@ -6,7 +6,7 @@
       "src": "app/main.py",
       "use": "@vercel/python",
       "config": {
-        "includeFiles": ["app/**", "lda_pipeline.py", "config.py", "requirements.txt", "app/data/**"]
+        "includeFiles": ["app/**", "lda_pipeline.py", "config.py", "requirements.txt"]
       }
     },
     {
