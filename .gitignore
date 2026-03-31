@@ -27,3 +27,29 @@ CORTEX_SESSION/
 
 # Vercel
 .vercel
+
+# Node.js
+node_modules/
+dist/
+build/
+.next/
+out/
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# React Native / Expo (if any)
+.expo/
+android/
+ios/
+
+# Misc
+*.zip
+*.tar.gz
+*.rar
+!react-bits-main/ # If user specifically wants this, I'll leave it but maybe better to ignore if it's large.
+# Actually, I'll ignore the react-native folders if they look like separate repos or library source.
+react-native-bottom-sheet-master/
+react-native-graph-main/
+react-native-skia-main/

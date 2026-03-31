@@ -3,7 +3,7 @@ import os
 # Paths
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = os.path.join(BASE_DIR, "data")
-MOCK_DATA_PATH = os.path.join(BASE_DIR, "mock_data.csv")
+MOCK_DATA_PATH = os.path.join(DATA_DIR, "religion_voices_mock.csv")
 
 # NLP Settings
 SPACY_MODEL = "de_core_news_lg"
@@ -26,4 +26,11 @@ DOMAIN_STOPWORDS = [
     "verlag", "seiten", "isbn", "auflage", "euro", "jahr", "märz", "berlin", "frankfurt",
     "ebd", "vgl", "hrsg", "hg", "abb", "anm", "aufl", "bd", "bde", "bzw", "ca", "dh", 
     "diss", "me", "ua", "usw", "zb", "zt", "ff", "f", "s"
+]
+
+# Specialized keywords for 'Voices on Religion' weighting
+RELIGIOUS_VOICE_KEYWORDS = [
+    "glaube", "gott", "spiritualität", "kirche", "ethik", "moral", 
+    "erlösung", "sinn", "transzendenz", "gnade", "offenbarung",
+    "seelsorge", "predigt", "theologie", "religiös", "christlich"
 ]

@@ -17,13 +17,22 @@ except OSError:
 def preprocess_text(text, allowed_postags=config.ALLOWED_POSTAGS):
     """
     Tokenize, lemmatize, remove stopwords and filter by POS tags for German text.
+    Includes weighting for 'Religious Voices' keywords.
     """
     doc = nlp(text)
     # Lemmatization & POS Filtering
     tokens = [token.lemma_.lower() for token in doc if token.pos_ in allowed_postags]
+    
+    # Weighting: Duplicate tokens if they match the Religious whitelist
+    weighted_tokens = []
+    for t in tokens:
+        weighted_tokens.append(t)
+        if t in config.RELIGIOUS_VOICE_KEYWORDS:
+            weighted_tokens.append(t) # Weight: 2x
+            
     # Stopword removal (NLTK/Spacy defaults + Custom)
     all_stop = nlp.Defaults.stop_words.union(set(config.DOMAIN_STOPWORDS))
-    tokens = [t for t in tokens if t not in all_stop]
+    tokens = [t for t in weighted_tokens if t not in all_stop]
     # Remove short tokens
     tokens = [t for t in tokens if len(t) > 2]
     return tokens
@@ -110,8 +119,14 @@ def export_results(model, corpus, dictionary, data_path):
 
 if __name__ == "__main__":
     data_path = config.MOCK_DATA_PATH
-    if os.path.exists("data/dnb_metadata.csv"):
-        data_path = "data/dnb_metadata.csv"
+    
+    # Priority: Real harvest if it exists and is not empty
+    real_path = "data/dnb_metadata.csv"
+    if os.path.exists(real_path) and os.path.getsize(real_path) > 100:
+        data_path = real_path
+        print(f"Using REAL HARVEST data from {data_path}")
+    else:
+        print(f"Using MOCK 'Voices on Religion' data from {data_path}")
         
     model, corp, dict_ = run_pipeline(data_path)
     export_results(model, corp, dict_, data_path)

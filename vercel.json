@@ -3,18 +3,25 @@
   "name": "phd-lda-dashboard",
   "builds": [
     {
-      "src": "app/**",
-      "use": "@vercel/static"
+      "src": "app/main.py",
+      "use": "@vercel/python"
+    },
+    {
+      "src": "frontend/package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "dist"
+      }
     }
   ],
   "routes": [
     {
-      "src": "/topic-viz",
-      "dest": "/app/lda_viz.html"
+      "src": "/api/(.*)",
+      "dest": "/app/main.py"
     },
     {
       "src": "/(.*)",
-      "dest": "/app/$1"
+      "dest": "/frontend/dist/$1"
     }
   ]
 }
