@@ -43,6 +43,31 @@ if not os.path.exists(REAL_DATA_PATH) and os.path.exists(DEFAULT_DATA_SOURCE):
 async def health():
     return {"status": "ok", "mode": "PhD Research API Active"}
 
+@app.get("/api/debug-fs")
+async def debug_fs():
+    """
+    Diagnostic endpoint to see what files are actually present in the serverless environment.
+    """
+    import os
+    results = {}
+    try:
+        results["cwd"] = os.getcwd()
+        results["base_dir"] = config.BASE_DIR
+        results["data_dir"] = config.DATA_DIR
+        results["root_files"] = os.listdir(".")
+        if os.path.exists("app"):
+            results["app_files"] = os.listdir("app")
+            if os.path.exists("app/data"):
+                results["app_data_files"] = os.listdir("app/data")
+        
+        # Check specifically for the mock file
+        results["mock_file_exists"] = os.path.exists(config.MOCK_DATA_PATH)
+        results["mock_path_abs"] = os.path.abspath(config.MOCK_DATA_PATH)
+        
+    except Exception as e:
+        results["error"] = str(e)
+    return results
+
 @app.post("/api/upload-dataset")
 async def upload_dataset(file: UploadFile = File(...)):
     """
