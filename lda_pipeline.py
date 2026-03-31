@@ -2,11 +2,13 @@ import csv
 import gensim
 from gensim import corpora
 from gensim.models import LdaModel
+from gensim.models.coherencemodel import CoherenceModel
 import spacy
 from tqdm import tqdm
 import config
 import os
 import json
+import re
 
 # Load German Spacy model
 try:
@@ -44,6 +46,7 @@ def run_pipeline(data_path):
     print(f"Loading data from {data_path}...")
     
     processed_docs = []
+    original_texts = []
     with open(data_path, mode='r', encoding='utf-8') as f:
         reader = csv.DictReader(f)
         rows = list(reader)
@@ -53,6 +56,7 @@ def run_pipeline(data_path):
         text = row.get('text', '')
         if text:
             processed_docs.append(preprocess_text(text))
+            original_texts.append(text)
     
     # --- PHASE 1: N-Gram Detection ---
     print("Detecting common collocations (N-Grams)...")
@@ -81,7 +85,28 @@ def run_pipeline(data_path):
         per_word_topics=True
     )
     
-    return lda_model, corpus, dictionary
+    # --- PHASE 2: Model Validation (Coherence) ---
+    print("Calculating Coherence Score...")
+    # u_mass is faster and doesn't require the original tokens (working directly on corpus/dictionary)
+    coherence_model = CoherenceModel(model=lda_model, corpus=corpus, dictionary=dictionary, coherence='u_mass')
+    coherence_score = float(coherence_model.get_coherence())
+    
+    # --- PHASE 3: Representative Documents ---
+    print("Extracting Top Document Snippets (Source Evidence)...")
+    top_docs = {i: [] for i in range(config.NUM_TOPICS)} # {topic_id: [(score, text), ...]}
+    
+    for i, doc_bow in enumerate(corpus):
+        doc_topics = lda_model.get_document_topics(doc_bow)
+        for topic_id, score in doc_topics:
+            top_docs[topic_id].append((score, original_texts[i]))
+            
+    # Sort and keep top 3 for each topic, limiting snippet length
+    representative_docs = {}
+    for topic_id, docs in top_docs.items():
+        sorted_docs = sorted(docs, key=lambda x: x[0], reverse=True)[:3]
+        representative_docs[topic_id] = [d[1][:500] + "..." if len(d[1]) > 500 else d[1] for d in sorted_docs]
+    
+    return lda_model, corpus, dictionary, coherence_score, representative_docs
 
 def get_viz_html(lda_model, corpus, dictionary):
     """
@@ -132,5 +157,5 @@ if __name__ == "__main__":
     else:
         print(f"Using MOCK 'Voices on Religion' data from {data_path}")
         
-    model, corp, dict_ = run_pipeline(data_path)
+    model, corp, dict_, coh, docs = run_pipeline(data_path)
     export_results(model, corp, dict_, data_path)

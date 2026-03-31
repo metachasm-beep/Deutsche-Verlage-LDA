@@ -26,6 +26,8 @@ app.add_middleware(
 current_model = None
 current_corpus = None
 current_dictionary = None
+current_coherence = 0.0
+current_top_docs = {}
 current_viz_html = ""
 
 # Since Vercel serverless environment represents a readonly filesystem except for /tmp
@@ -112,6 +114,8 @@ async def reset_to_mock():
         current_model = None
         current_corpus = None
         current_dictionary = None
+        current_coherence = 0.0
+        current_top_docs = {}
         current_viz_html = ""
         
         return {"status": "success", "message": "Reverted to Demo Corpus (Voices on Religion)."}
@@ -119,34 +123,44 @@ async def reset_to_mock():
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.post("/api/run-lda")
-async def run_lda(year: int = Query(None)):
+async def run_lda(year: int = Query(None), decade: int = Query(None)):
     global current_model, current_corpus, current_dictionary, current_viz_html
     
     data_path = REAL_DATA_PATH if os.path.exists(REAL_DATA_PATH) else config.MOCK_DATA_PATH
     
     try:
-        if year:
+        # Filter logic for Year or Decade
+        if year or decade:
             rows = []
             with open(data_path, mode='r', encoding='utf-8') as f:
                 reader = csv.DictReader(f)
                 headers = reader.fieldnames
                 for row in reader:
-                    if str(year) in str(row.get('date', '')):
-                         rows.append(row)
+                    date_val = str(row.get('date', ''))
+                    match = re.search(r'(\d{4})', date_val)
+                    if not match: continue
+                    r_year = int(match.group(1))
+                    
+                    if year and r_year == year:
+                        rows.append(row)
+                    elif decade and (decade <= r_year < decade + 10):
+                        rows.append(row)
             
             if not rows:
-                raise HTTPException(status_code=404, detail=f"No records found for year {year}")
+                target = f"year {year}" if year else f"decade {decade}s"
+                raise HTTPException(status_code=404, detail=f"No records found for {target}")
             
-            filtered_path = os.path.join(DATA_STORAGE_DIR, f"filtered_{year}.csv")
+            suffix = year if year else f"decade_{decade}"
+            filtered_path = os.path.join(DATA_STORAGE_DIR, f"filtered_{suffix}.csv")
             with open(filtered_path, mode='w', encoding='utf-8', newline='') as f:
                 writer = csv.DictWriter(f, fieldnames=headers)
                 writer.writeheader()
                 writer.writerows(rows)
             data_path = filtered_path
 
-        current_model, current_corpus, current_dictionary = lda_pipeline.run_pipeline(data_path)
+        current_model, current_corpus, current_dictionary, current_coherence, current_top_docs = lda_pipeline.run_pipeline(data_path)
         current_viz_html = lda_pipeline.get_viz_html(current_model, current_corpus, current_dictionary)
-        return {"status": "success", "year_filtered": year}
+        return {"status": "success", "year_filtered": year, "decade_filtered": decade}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
@@ -221,7 +235,11 @@ async def get_topics():
     
     # Sort topics by prevalence (most common first)
     topics = sorted(topics, key=lambda x: x['prevalence'], reverse=True)
-    return {"topics": topics}
+    return {
+        "topics": topics,
+        "coherence_score": round(current_coherence, 4),
+        "representative_docs": current_top_docs
+    }
 
 @app.get("/api/data-summary")
 async def data_summary():

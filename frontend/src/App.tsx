@@ -7,13 +7,19 @@ import TrendsGraph from './components/TrendsGraph';
 import Particles from './components/Particles';
 import BlurText from './components/BlurText';
 import { useLDA } from './hooks/useLDA';
-import { Database, Filter, Cpu, BarChart3, Loader2, Upload, RotateCcw, BookOpen } from 'lucide-react';
+import { Database, Cpu, BarChart3, Loader2, Upload, RotateCcw, BookOpen } from 'lucide-react';
 import TopicModelViz from './components/TopicModelViz';
+import clsx from 'clsx';
 
 function App() {
   const [selectedYear, setSelectedYear] = useState<number | null>(null);
+  const [selectedDecade, setSelectedDecade] = useState<number | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const { isTraining, isUploading, trendsData, summary, topics, fetchTrends, fetchSummary, fetchTopics, runLDA, uploadDataset, resetToMock } = useLDA();
+  const { 
+    isTraining, isUploading, trendsData, summary, topics, 
+    coherenceScore, representativeDocs,
+    fetchTrends, fetchSummary, fetchTopics, runLDA, uploadDataset, resetToMock 
+  } = useLDA();
 
   useEffect(() => {
     fetchTrends();
@@ -23,12 +29,37 @@ function App() {
 
   const handleYearSelect = async (year: number) => {
     setSelectedYear(year);
+    setSelectedDecade(null);
     await runLDA(year);
+  };
+
+  const handleDecadeSelect = async (decade: number) => {
+    setSelectedDecade(decade);
+    setSelectedYear(null);
+    await runLDA(undefined, decade);
   };
 
   const handleFullAnalysis = async () => {
     setSelectedYear(null);
+    setSelectedDecade(null);
     await runLDA();
+  };
+
+  const handleExport = () => {
+    const report = {
+      researchTitle: "Mediating Faith and Power",
+      generatedAt: new Date().toISOString(),
+      corpusSummary: summary,
+      modelCoherence: coherenceScore,
+      topics: topics,
+      temporalContext: { selectedYear, selectedDecade }
+    };
+    const blob = new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `LDA_Research_Report_${new Date().getTime()}.json`;
+    a.click();
   };
 
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -80,22 +111,41 @@ function App() {
         />
       </div>
 
+      {/* Navigation */}
+      <nav className="fixed top-0 w-full z-50 bg-midnight-950/50 backdrop-blur-xl border-b border-white/5 px-8 py-4 flex justify-between items-center">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 bg-gold/10 border border-gold/30 rounded-xl flex items-center justify-center shadow-lg shadow-gold/10">
+            <Database className="text-gold" size={20} />
+          </div>
+          <div>
+            <h1 className="text-xl font-black tracking-tighter text-white uppercase italic">Mediating Faith & Power</h1>
+            <p className="text-[10px] text-gold/60 font-bold uppercase tracking-[0.2em]">Religious Authority & German Publishing</p>
+          </div>
+        </div>
+        <div className="flex gap-4">
+          <div className="px-4 py-2 rounded-lg bg-white/5 border border-white/10 flex items-center gap-3">
+            <div className={`w-2 h-2 rounded-full ${isTraining ? 'bg-gold animate-pulse' : 'bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]'}`} />
+            <span className="text-xs font-bold text-white/70 uppercase tracking-widest">
+              {isTraining ? 'Neural Engine Active' : 'System Ready'}
+            </span>
+          </div>
+        </div>
+      </nav>
+
       <div className="relative z-10 w-full p-6 lg:p-12 min-h-screen flex flex-col justify-between">
         <motion.div 
-          className="max-w-7xl mx-auto w-full"
+          className="max-w-7xl mx-auto w-full pt-20"
           variants={containerVariants}
           initial="hidden"
           animate="visible"
         >
           {/* Header */}
-          <motion.header variants={itemVariants} className="mb-14 text-center max-w-4xl mx-auto pt-8">
-            <h1 className="text-4xl lg:text-6xl font-heading font-semibold text-neutral-50 mb-4 flex items-center justify-center tracking-tight drop-shadow-2xl">
-              <ShinyText text="The Computational Turn" speed={3} className="mr-3" />
-              <span className="text-neutral-600 font-light mx-2 opacity-50">|</span> 
-              <span className="font-light italic text-gold-light ml-2">Voices on Religion</span>
+          <motion.header variants={itemVariants} className="mb-14 text-center max-w-4xl mx-auto">
+            <h1 className="text-4xl lg:text-7xl font-heading font-black text-neutral-50 mb-4 tracking-tighter italic drop-shadow-2xl">
+              <ShinyText text="Mediating Faith and Power" speed={3} />
             </h1>
-            <p className="text-neutral-400 text-lg md:text-xl font-light tracking-wide drop-shadow-md">
-              High-fidelity Latent Dirichlet Allocation (LDA) dashboard mapping theological and secular-critical trends within the German publishing landscape.
+            <p className="text-neutral-400 text-lg md:text-xl font-light tracking-wide max-w-3xl mx-auto leading-relaxed">
+              Computational Hermeneutics analyzing the <span className="text-gold italic font-medium">German Publishing Landscape (1970–2025)</span> through the lens of the Propaganda Model.
             </p>
           </motion.header>
 
@@ -107,20 +157,20 @@ function App() {
               <motion.div variants={itemVariants}>
                 <SpotlightCard className="shadow-2xl shadow-gold/5 border-gold/10">
                   <div className="flex items-center gap-3 mb-6">
-                    <Database className="text-gold animate-pulse" size={24} />
-                    <h2 className="text-xl font-heading text-neutral-50 tracking-wide">Corpus Overview</h2>
+                    <Database className="text-gold" size={24} />
+                    <h2 className="text-sm font-bold uppercase tracking-[0.2em] text-neutral-200">Corpus Metadata</h2>
                   </div>
                   {summary ? (
                     <div className="space-y-4 text-sm text-neutral-400">
                       <div className="flex justify-between border-b border-neutral-800/80 pb-2 transition-all hover:text-neutral-300">
-                        <span>Source Hub</span>
-                        <span className="text-neutral-200">{summary.source}</span>
+                        <span>Active Dataset</span>
+                        <span className="text-gold font-medium italic">{summary.source}</span>
                       </div>
                       <div className="flex justify-between border-b border-neutral-800/80 pb-2 transition-all hover:text-neutral-300">
-                        <span>Total Records</span>
-                        <span className="text-neutral-200 font-medium">{summary.count} document(s)</span>
+                        <span>Volume (Records)</span>
+                        <span className="text-neutral-200 font-medium">{summary.count?.toLocaleString()}</span>
                       </div>
-                      <div className="flex justify-between border-b border-neutral-800/80 pb-2 border-0 transition-all hover:text-neutral-300">
+                      <div className="flex justify-between border-0 transition-all hover:text-neutral-300">
                         <span>Unique Publishers</span>
                         <span className="text-neutral-200 font-medium">{summary.publishers?.length || 0}</span>
                       </div>
@@ -138,13 +188,12 @@ function App() {
                     <div className="bg-neutral-900/50 border border-neutral-800 rounded-xl p-4 mb-4">
                       <div className="flex items-center gap-2 mb-2 text-gold-light">
                         <BookOpen size={14} />
-                        <span className="text-[10px] font-black uppercase tracking-widest">CSV Format Guide</span>
+                        <span className="text-[10px] font-black uppercase tracking-widest text-gold/80">Archival Format Guide</span>
                       </div>
                       <ul className="text-[11px] text-neutral-500 space-y-1.5 list-disc list-inside font-light">
-                        <li><strong className="text-neutral-400">date:</strong> YYYY or YYYY-MM-DD</li>
-                        <li><strong className="text-neutral-400">publisher:</strong> Name of the entity</li>
-                        <li><strong className="text-neutral-400">text:</strong> Full content for analysis</li>
-                        <li className="list-none pt-1 opacity-70">Encoding: UTF-8 recommended</li>
+                        <li><strong className="text-neutral-400">date:</strong> YYYY (Temporal Scope)</li>
+                        <li><strong className="text-neutral-400">publisher:</strong> DNB Metadata Mapping</li>
+                        <li><strong className="text-neutral-400">text:</strong> Paratext/Catalogue Corpus</li>
                       </ul>
                     </div>
 
@@ -159,19 +208,28 @@ function App() {
                       <button 
                         onClick={() => fileInputRef.current?.click()}
                         disabled={isUploading}
-                        className="w-full flex justify-center items-center gap-2 py-3 px-4 rounded-xl bg-gold/10 border border-gold/30 text-gold hover:bg-gold hover:text-midnight-950 transition-all duration-300 text-sm font-bold disabled:opacity-50 group shadow-lg shadow-gold/5"
+                        className="w-full flex justify-center items-center gap-2 py-3 px-4 rounded-xl bg-gold/10 border border-gold/30 text-gold hover:bg-gold hover:text-midnight-950 transition-all duration-300 text-[11px] uppercase tracking-widest font-black disabled:opacity-50 group"
                       >
-                        {isUploading ? <Loader2 size={18} className="animate-spin" /> : <Upload size={18} className="group-hover:-translate-y-0.5 transition-transform" />}
-                        {isUploading ? 'Ingesting...' : 'Upload Custom Corpus'}
+                        {isUploading ? <Loader2 size={16} className="animate-spin" /> : <Upload size={16} />}
+                        {isUploading ? 'Ingesting...' : 'Ingest Archival Data'}
+                      </button>
+
+                      <button 
+                        onClick={handleExport}
+                        disabled={!topics.length}
+                        className="w-full flex justify-center items-center gap-2 py-3 px-4 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-500 hover:bg-emerald-500 hover:text-midnight-950 transition-all duration-300 text-[11px] uppercase tracking-widest font-black disabled:opacity-30 group"
+                      >
+                        <Database size={16} />
+                        Export Research Report
                       </button>
 
                       <button 
                         onClick={resetToMock}
                         disabled={isUploading || isTraining}
-                        className="w-full flex justify-center items-center gap-2 py-3 px-4 rounded-xl bg-neutral-900 border border-neutral-800 text-neutral-400 hover:text-neutral-100 hover:bg-neutral-800 transition-all duration-300 text-sm font-medium disabled:opacity-50 group"
+                        className="w-full flex justify-center items-center gap-2 py-3 px-4 rounded-xl bg-neutral-900/50 border border-neutral-800 text-neutral-500 hover:text-neutral-200 hover:bg-neutral-800 transition-all duration-300 text-[11px] uppercase tracking-widest font-bold disabled:opacity-50 group"
                       >
-                        <RotateCcw size={16} className="group-hover:rotate-[-45deg] transition-transform" />
-                        Load Demo Corpus
+                        <RotateCcw size={14} />
+                        Load Research Proxy
                       </button>
                     </div>
                   </div>
@@ -180,30 +238,45 @@ function App() {
 
               <motion.div variants={itemVariants} className="flex-grow flex flex-col">
                 <SpotlightCard className="flex-grow flex flex-col shadow-2xl shadow-gold/5 border-gold/10">
-                  <div className="flex items-center gap-3 mb-4">
-                    <Cpu className="text-gold" size={24} />
-                    <h2 className="text-xl font-heading text-neutral-50 tracking-wide">Neural Engine</h2>
+                  <div className="flex items-center gap-3 mb-6">
+                    <Cpu className="text-gold" size={20} />
+                    <h2 className="text-sm font-bold uppercase tracking-[0.2em] text-neutral-200">Neural Engine</h2>
                   </div>
-                  
-                  <p className="text-sm text-neutral-400 mb-6 flex-grow font-light leading-relaxed">
-                    Execute full-spectrum LDA analysis to regenerate the topic distribution map. Or interact with the graph to isolate specific temporal slices.
+                  <p className="text-[11px] text-neutral-500 mb-6 leading-relaxed">
+                    Execute <span className="text-neutral-300 font-medium italic">Latent Dirichlet Allocation</span> to identify recurring thematic patterns.
                   </p>
-
+                  
                   <button 
                     onClick={handleFullAnalysis}
-                    disabled={isTraining}
-                    className="w-full py-4 px-4 bg-neutral-900 border border-neutral-700 hover:border-gold/50 text-neutral-200 hover:text-gold hover:bg-neutral-800 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 font-medium shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed group"
+                    disabled={isTraining || isUploading}
+                    className="w-full py-4 rounded-xl bg-white text-midnight-950 hover:bg-gold transition-all duration-500 text-xs font-black uppercase tracking-[0.2em] flex items-center justify-center gap-3 disabled:opacity-50 shadow-[0_0_30px_rgba(255,255,255,0.1)] group mb-8"
                   >
-                    {isTraining ? <Loader2 className="animate-spin text-gold" size={20} /> : <Filter size={20} className="text-gold group-hover:scale-110 transition-transform" />}
-                    {isTraining ? 'Training Sub-Models...' : 'Execute Full Analysis'}
+                    {isTraining ? <Loader2 size={18} className="animate-spin" /> : <Cpu size={18} className="group-hover:rotate-90 transition-transform duration-700" />}
+                    {isTraining ? 'Training Model...' : 'Execute Analysis'}
                   </button>
 
-                  {selectedYear && !isTraining && (
-                    <div className="mt-4 p-4 border border-gold/30 bg-gold/5 backdrop-blur-md text-gold-light rounded-xl text-sm flex justify-between items-center shadow-inner">
-                      <span>Active Slice: <strong className="text-gold">{selectedYear}</strong></span>
-                      <button onClick={handleFullAnalysis} className="text-xs hover:text-gold opacity-80 hover:opacity-100 transition-opacity uppercase tracking-widest font-bold">Clear Target</button>
+                  <div className="space-y-4 pt-6 border-t border-neutral-800/50">
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-[10px] font-black uppercase tracking-widest text-neutral-400">Segment by Decade</h3>
+                      <div className="w-1.5 h-1.5 rounded-full bg-gold/50 shadow-[0_0_5px_#CA8A04]" />
                     </div>
-                  )}
+                    <div className="flex flex-wrap gap-2">
+                      {[1970, 1980, 1990, 2000, 2010, 2020].map((d) => (
+                        <button
+                          key={d}
+                          onClick={() => handleDecadeSelect(d)}
+                          className={clsx(
+                            "px-3 py-2 rounded-lg text-[10px] font-black tracking-widest uppercase transition-all duration-300 border",
+                            selectedDecade === d 
+                              ? "bg-gold border-gold text-midnight-950 shadow-lg shadow-gold/20" 
+                              : "bg-neutral-900/50 border-neutral-800 text-neutral-500 hover:border-neutral-600 hover:text-neutral-200"
+                          )}
+                        >
+                          {d}s
+                        </button>
+                      ))}
+                    </div>
+                  </div>
                 </SpotlightCard>
               </motion.div>
             </div>
@@ -216,12 +289,12 @@ function App() {
                   <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-2 relative z-30">
                     <BarChart3 className="text-gold" size={24} />
                     <div className="flex-grow flex items-center justify-between">
-                      <h2 className="text-xl font-heading text-neutral-50 tracking-wide">Publisher Archetypes</h2>
-                      <span className="text-[10px] uppercase tracking-widest font-bold bg-neutral-900/90 border border-neutral-700 text-gold-light px-3 py-1.5 rounded-md shadow-sm">Interactive</span>
+                      <h2 className="text-xl font-heading font-bold text-neutral-50 tracking-widest uppercase italic">Diachronic Thematic Evolution</h2>
+                      <span className="text-[10px] uppercase tracking-widest font-black bg-gold/20 text-gold px-3 py-1.5 rounded-md border border-gold/30">Propaganda Filter Mapping</span>
                     </div>
                   </div>
-                  <p className="text-sm text-neutral-500 mb-6 border-b border-neutral-800/60 pb-4 font-light relative z-30">
-                    Click on a specific year node below to dynamically re-train the LDA topic model on that precise temporal band.
+                  <p className="text-xs text-neutral-500 mb-6 border-b border-neutral-800/60 pb-4 font-light relative z-30">
+                    Interact with the temporal nodes below to isolate specific decade-wise shifts in the <span className="text-neutral-300">Filtering Mechanisms</span> of the German book market.
                   </p>
                   <div className="relative z-30 bg-midnight-950/40 rounded-xl -mx-2 -mb-2 p-2">
                     <TrendsGraph 
@@ -233,9 +306,46 @@ function App() {
                 </SpotlightCard>
               </motion.div>
 
-                  <div className="w-full h-full min-h-[550px] rounded-2xl overflow-hidden bg-black/5 ring-1 ring-inset ring-neutral-800/20">
-                    <TopicModelViz topics={topics} isTraining={isTraining} />
+              <motion.div variants={itemVariants} className="w-full">
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="h-px flex-1 bg-white/5"></div>
+                  <h3 className="text-[10px] font-black uppercase tracking-[0.4em] text-white/40 italic">Discursive Patterns Analysis</h3>
+                  <div className="h-px flex-1 bg-white/5"></div>
+                </div>
+                <div className="w-full h-full min-h-[550px] rounded-2xl overflow-hidden bg-black/5 ring-1 ring-inset ring-neutral-800/20">
+                  <TopicModelViz 
+                    topics={topics} 
+                    isTraining={isTraining} 
+                    selectedYear={selectedYear}
+                    selectedDecade={selectedDecade}
+                    coherenceScore={coherenceScore}
+                    representativeDocs={representativeDocs}
+                  />
+                </div>
+              </motion.div>
+
+              {/* Research Methodology Note */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.6 }}
+                className="p-6 rounded-2xl bg-gold/5 border border-gold/10 backdrop-blur-sm"
+              >
+                <div className="flex gap-4 items-start">
+                  <div className="p-2 bg-gold/10 rounded-lg text-gold mt-1">
+                    <BookOpen size={20} />
                   </div>
+                  <div>
+                    <h4 className="text-sm font-bold text-white mb-2 uppercase tracking-[0.2em] italic">Ideological Filtering Diagnostics</h4>
+                    <p className="text-sm text-neutral-400 leading-relaxed font-light">
+                      This visualization identifies systematic disparities between publisher thematic output and market visibility. 
+                      Recurring latent themes such as <span className="text-neutral-200 italic">Atheismus</span> or <span className="text-neutral-200 italic">Kirchenkritik</span> are 
+                      cross-referenced against paratextual and catalogue corpora to detect filtering mechanisms as defined by the <span className="text-gold font-medium">Propaganda Model (Chomsky, 1988)</span>.
+                    </p>
+                  </div>
+                </div>
+              </motion.div>
 
             </div>
           </div>
@@ -250,11 +360,9 @@ function App() {
         >
           <div className="mx-auto flex justify-center py-2 px-6 rounded-full bg-neutral-900/50 backdrop-blur-sm border border-neutral-800 inline-block">
             <BlurText 
-              text="This webapp is made by Paul Marandi, Phd, CGS, SL, JNU."
+              text="Thesis by Paul Marandi | Ph.D. Research @ CGS, SL, JNU"
               delay={40}
-              animateBy="letters"
-              direction="bottom"
-              className="text-neutral-400 font-heading uppercase text-xs md:text-sm tracking-[0.2em] font-medium"
+              className="text-neutral-400 font-heading uppercase text-[10px] md:text-xs tracking-[0.3em] font-bold"
             />
           </div>
         </motion.footer>

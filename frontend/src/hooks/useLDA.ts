@@ -9,6 +9,8 @@ export const useLDA = () => {
   const [trendsData, setTrendsData] = useState<any[]>([]);
   const [summary, setSummary] = useState<any>(null);
   const [topics, setTopics] = useState<any[]>([]);
+  const [coherenceScore, setCoherenceScore] = useState<number>(0);
+  const [representativeDocs, setRepresentativeDocs] = useState<Record<number, string[]>>({});
 
   const fetchTrends = async () => {
     try {
@@ -40,16 +42,19 @@ export const useLDA = () => {
     }
   };
 
-  const runLDA = async (year?: number) => {
+  const runLDA = async (year?: number, decade?: number) => {
     setIsTraining(true);
     try {
-      const endpoint = year ? `${API_BASE}/api/run-lda?year=${year}` : `${API_BASE}/api/run-lda`;
-      const res = await fetch(endpoint, { method: 'POST' });
-      const data = await res.json();
+      let url = `${API_BASE}/api/run-lda`;
+      const params = new URLSearchParams();
+      if (year) params.append('year', year.toString());
+      if (decade) params.append('decade', decade.toString());
+      if (params.toString()) url += `?${params.toString()}`;
+
+      await fetch(url, { method: 'POST' });
       await fetchTopics();
-      return data;
     } catch (e) {
-      console.error("Failed to run LDA", e);
+      console.error("LDA training failed", e);
     } finally {
       setIsTraining(false);
     }
@@ -101,7 +106,8 @@ export const useLDA = () => {
   };
 
   return { 
-    isTraining, isUploading, trendsData, summary, topics,
+    isTraining, isUploading, trendsData, summary, topics, 
+    coherenceScore, representativeDocs,
     fetchTrends, fetchSummary, fetchTopics, runLDA, uploadDataset, resetToMock, API_BASE 
   };
 };

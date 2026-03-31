@@ -10,7 +10,7 @@ import {
   ResponsiveContainer,
   Cell 
 } from 'recharts';
-import { Layers, Info, Activity } from 'lucide-react';
+import { Layers, Info, Activity, Search, BookText, Quote } from 'lucide-react';
 import clsx from 'clsx';
 
 interface Keyword {
@@ -27,10 +27,22 @@ interface Topic {
 interface TopicModelVizProps {
   topics: Topic[];
   isTraining: boolean;
+  selectedYear?: number | null;
+  selectedDecade?: number | null;
+  coherenceScore?: number;
+  representativeDocs?: Record<number, string[]>;
 }
 
-const TopicModelViz: React.FC<TopicModelVizProps> = ({ topics, isTraining }) => {
+const TopicModelViz: React.FC<TopicModelVizProps> = ({ 
+  topics, 
+  isTraining, 
+  selectedYear,
+  selectedDecade,
+  coherenceScore = 0,
+  representativeDocs = {}
+}) => {
   const [selectedTopicId, setSelectedTopicId] = useState<number | null>(null);
+  const [searchTerm, setSearchTerm] = useState('');
 
   const selectedTopic = topics.find(t => t.id === selectedTopicId) || topics[0];
 
@@ -108,8 +120,8 @@ const TopicModelViz: React.FC<TopicModelVizProps> = ({ topics, isTraining }) => 
         </div>
       </div>
 
-      {/* Main Content: Keyword Distribution */}
-      <div className="flex-grow p-8 flex flex-col bg-gradient-to-br from-midnight-950/40 to-neutral-950/40 relative">
+      {/* Main Content: Keyword Distribution & Evidence */}
+      <div className="flex-grow p-8 flex flex-col bg-gradient-to-br from-midnight-950/40 to-neutral-950/40 relative overflow-y-auto custom-scrollbar">
         <AnimatePresence mode="wait">
           <motion.div
             key={selectedTopic?.id || 'none'}
@@ -119,16 +131,35 @@ const TopicModelViz: React.FC<TopicModelVizProps> = ({ topics, isTraining }) => 
             transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
             className="flex-grow flex flex-col h-full"
           >
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 pb-8 border-b border-neutral-800/40">
-              <div className="space-y-2">
-                <div className="flex items-center gap-3">
+            <div className="flex flex-col md:flex-row md:items-start justify-between gap-6 mb-8 pb-8 border-b border-neutral-800/40">
+              <div className="space-y-4">
+                <div className="flex items-center gap-4">
                    <h2 className="text-4xl font-heading font-light text-neutral-50 tracking-tight">
-                    Topic Cluster <span className="text-gold font-bold">#{selectedTopic ? selectedTopic.id + 1 : '?'}</span>
+                    Discursive Pattern <span className="text-gold font-bold">#{selectedTopic ? selectedTopic.id + 1 : '?'}</span>
                   </h2>
+                  <div className="flex items-center gap-2 px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded-full">
+                    <Activity size={12} className="text-emerald-400" />
+                    <span className="text-[10px] font-black text-emerald-400 uppercase tracking-widest">
+                      Confidence: {(coherenceScore * 100).toFixed(1)}%
+                    </span>
+                  </div>
+                  {(selectedYear || selectedDecade) && (
+                    <div className="text-[10px] text-neutral-500 font-bold tracking-[0.3em] uppercase border-l border-neutral-800 pl-4">
+                      Temporal Context: {selectedYear ? `Year ${selectedYear}` : `Decade ${selectedDecade}s`}
+                    </div>
+                  )}
                 </div>
-                <p className="text-sm text-neutral-400 font-light tracking-wide max-w-lg leading-relaxed">
-                  Latent semantic distribution across the corpus. Higher weights indicate term importance within this specific cognitive cluster.
-                </p>
+                
+                <div className="relative max-w-sm group">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-500 group-focus-within:text-gold transition-colors" size={14} />
+                  <input 
+                    type="text" 
+                    placeholder="Search keywords..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="w-full bg-neutral-900/50 border border-neutral-800 rounded-xl py-2 pl-9 pr-4 text-xs text-neutral-200 focus:outline-none focus:ring-1 focus:ring-gold/50 transition-all placeholder:text-neutral-600"
+                  />
+                </div>
               </div>
 
               <div className="flex items-center gap-6 bg-black/30 backdrop-blur-xl p-4 rounded-2xl border border-neutral-800/80 shadow-2xl">
@@ -144,19 +175,15 @@ const TopicModelViz: React.FC<TopicModelVizProps> = ({ topics, isTraining }) => 
               </div>
             </div>
 
-            <div className="flex-grow w-full min-h-[300px] relative px-2">
+            <div className="flex-grow w-full min-h-[350px] relative px-2 mb-10">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart
                   layout="vertical"
-                  data={selectedTopic?.keywords || []}
+                  data={(selectedTopic?.keywords || []).filter(k => k.word.toLowerCase().includes(searchTerm.toLowerCase()))}
                   margin={{ top: 0, right: 40, left: 20, bottom: 0 }}
                 >
                   <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#1e293b" />
-                  <XAxis 
-                    type="number" 
-                    hide 
-                    domain={[0, 'dataMax']} 
-                  />
+                  <XAxis type="number" hide domain={[0, 'dataMax']} />
                   <YAxis 
                     dataKey="word" 
                     type="category" 
@@ -171,20 +198,18 @@ const TopicModelViz: React.FC<TopicModelVizProps> = ({ topics, isTraining }) => 
                       backgroundColor: 'rgba(15, 23, 42, 0.95)', 
                       borderRadius: '16px', 
                       border: '1px solid rgba(202, 138, 4, 0.3)',
-                      boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)',
                       backdropFilter: 'blur(12px)',
                       padding: '12px'
                     }}
-                    labelStyle={{ color: '#F8FAFC', fontWeight: 'bold', fontSize: '14px', marginBottom: '8px' }}
-                    itemStyle={{ color: '#F59E0B', fontSize: '12px' }}
-                    formatter={(value: any) => [`${(Number(value) * 100).toFixed(2)}% Contribution`, 'Semantic Weight']}
+                    labelStyle={{ color: '#F8FAFC', fontWeight: 'bold' }}
+                    itemStyle={{ color: '#F59E0B' }}
+                    formatter={(value: any) => [`${(Number(value) * 100).toFixed(2)}%`, 'Semantic Weight']}
                   />
                   <Bar 
                     dataKey="weight" 
                     radius={[0, 6, 6, 0]}
                     barSize={24}
                     animationDuration={1500}
-                    animationEasing="ease-out"
                   >
                     {
                       selectedTopic?.keywords.map((_, index) => (
@@ -200,16 +225,53 @@ const TopicModelViz: React.FC<TopicModelVizProps> = ({ topics, isTraining }) => 
               </ResponsiveContainer>
             </div>
 
-            <div className="mt-8 p-5 rounded-2xl bg-neutral-900/60 border border-neutral-800/80 flex gap-4 items-start shadow-xl">
-               <div className="p-2 bg-gold/10 rounded-lg text-gold mt-1">
-                 <Info size={18} />
-               </div>
-               <div className="space-y-1">
-                 <h4 className="text-xs font-bold text-neutral-300 uppercase tracking-widest">Interpretive Matrix</h4>
-                 <p className="text-[12px] text-neutral-400 leading-relaxed font-light">
-                   Dominant keyword <strong className="text-gold font-bold uppercase tracking-tight">"{selectedTopic?.keywords[0].word}"</strong> ({(selectedTopic?.keywords[0].weight * 100).toFixed(1)}% weight) suggests this topic cluster captures theological or institutional terminology most frequently found in <span className="text-neutral-200">{selectedTopic?.prevalence > 30 ? 'broad' : 'specialized'}</span> discourse sectors.
-                 </p>
-               </div>
+            {/* Representative Evidence Layer */}
+            <div className="space-y-6">
+              <div className="flex items-center gap-4">
+                <div className="h-px flex-1 bg-white/5"></div>
+                <div className="flex items-center gap-2 text-gold/60">
+                  <BookText size={14} />
+                  <h3 className="text-[10px] font-black uppercase tracking-[0.4em] italic">Primary Textual Evidence</h3>
+                </div>
+                <div className="h-px flex-1 bg-white/5"></div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {representativeDocs[selectedTopic?.id || 0]?.map((doc, idx) => (
+                  <motion.div
+                    key={idx}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.1 * idx }}
+                    className="p-5 rounded-2xl bg-neutral-950/40 border border-neutral-800/50 hover:border-gold/30 transition-all duration-500 flex flex-col gap-3 relative group"
+                  >
+                    <Quote className="absolute right-4 top-4 text-neutral-800 group-hover:text-gold/20 transition-colors" size={24} />
+                    <span className="text-[9px] font-black uppercase tracking-widest text-neutral-600">Source Index 0{idx + 1}</span>
+                    <p className="text-[11px] text-neutral-400 leading-relaxed font-light line-clamp-6 italic italic-important">
+                      "{doc}"
+                    </p>
+                  </motion.div>
+                )) || (
+                  <div className="col-span-3 py-10 flex flex-col items-center justify-center opacity-30 border border-dashed border-neutral-800 rounded-2xl">
+                    <Layers size={24} className="mb-2" />
+                    <span className="text-[10px] font-bold uppercase tracking-widest">No matching evidence extracted</span>
+                  </div>
+                )}
+              </div>
+
+              <div className="mt-4 p-5 rounded-2xl bg-neutral-900/60 border border-neutral-800/80 flex gap-4 items-start shadow-xl">
+                 <div className="p-2 bg-gold/10 rounded-lg text-gold mt-1">
+                   <Info size={18} />
+                 </div>
+                 <div className="space-y-1">
+                   <h4 className="text-xs font-bold text-neutral-300 uppercase tracking-widest">Heuristic Insights (Propaganda Model)</h4>
+                   <p className="text-[12px] text-neutral-400 leading-relaxed font-light">
+                     Dominant keyword <strong className="text-gold font-bold uppercase tracking-tight">"{selectedTopic?.keywords[0].word}"</strong> suggests 
+                     this discursive sector captures institutional filtering mechanisms. Cross-referencing against the primary evidence above validates the 
+                     <span className="text-neutral-200"> ideological constraints</span> observed in the catalogues.
+                   </p>
+                 </div>
+              </div>
             </div>
           </motion.div>
         </AnimatePresence>

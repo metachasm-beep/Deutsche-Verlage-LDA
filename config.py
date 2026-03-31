@@ -19,18 +19,20 @@ ETA = "auto"
 CITATION_STYLE = "APA" # Enforce APA 7th Edition for all research and writing skills
 
 # POS tags to keep for LDA
-ALLOWED_POSTAGS = ["NOUN", "PROPN", "ADJ", "VERB"]
+ALLOWED_POSTAGS = ["NOUN", "PROPN", "ADJ"]
 
-# Domain-specific German stopwords (Academic & Publishing)
+# Domain-specific German stopwords (Archival & Publishing)
 DOMAIN_STOPWORDS = [
     "verlag", "seiten", "isbn", "auflage", "euro", "jahr", "märz", "berlin", "frankfurt",
     "ebd", "vgl", "hrsg", "hg", "abb", "anm", "aufl", "bd", "bde", "bzw", "ca", "dh", 
-    "diss", "me", "ua", "usw", "zb", "zt", "ff", "f", "s"
+    "diss", "me", "ua", "usw", "zb", "zt", "ff", "f", "s",
+    "dnb", "bibliothek", "deutsche", "nationalbibliothek", "katalog", "reihe"
 ]
 
-# Specialized keywords for 'Voices on Religion' weighting
+# Specialized keywords for Ph.D. Research weighting (Thematic Focus)
 RELIGIOUS_VOICE_KEYWORDS = [
     "glaube", "gott", "spiritualität", "kirche", "ethik", "moral", 
     "erlösung", "sinn", "transzendenz", "gnade", "offenbarung",
-    "seelsorge", "predigt", "theologie", "religiös", "christlich"
+    "seelsorge", "predigt", "theologie", "religiös", "christlich",
+    "atheismus", "kirchenkritik", "religionskritik", "säkularität", "selbsthilfe"
 ]
