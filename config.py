@@ -6,7 +6,7 @@ DATA_DIR = os.path.join(BASE_DIR, "data")
 MOCK_DATA_PATH = os.path.join(DATA_DIR, "religion_voices_mock.csv")
 
 # NLP Settings
-SPACY_MODEL = "de_core_news_lg"
+SPACY_MODEL = "de_core_news_sm"
 STOPWORDS_FILE = None # Can be a path to a custom txt file
 
 # LDA Hyperparameters

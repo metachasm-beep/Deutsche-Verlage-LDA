@@ -103,9 +103,23 @@ async def get_trends():
 
 @app.get("/api/topic-viz", response_class=HTMLResponse)
 async def get_viz():
-    if not current_viz_html:
-        return "<html><body style='color: white; font-family: sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0;'><h3>No model trained yet. Please click 'Execute Full Analysis'</h3></body></html>"
+    if not current_viz_html or "Disabled" in current_viz_html:
+        return f"<html><body style='color: white; background: #0f172a; font-family: sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0;'><div><h3>Visualization optimized for React</h3><p>pyLDAvis is disabled to reduce server load. Switching to native React components.</p></div></body></html>"
     return current_viz_html
+
+@app.get("/api/topics")
+async def get_topics():
+    if not current_model:
+        return {"topics": []}
+    
+    # Extract topics for React frontend
+    topics = []
+    for topic_id, words in current_model.show_topics(num_topics=10, num_words=10, formatted=False):
+        topics.append({
+            "id": topic_id,
+            "keywords": [{"word": w, "weight": float(p)} for w, p in words]
+        })
+    return {"topics": topics}
 
 @app.get("/api/data-summary")
 async def data_summary():

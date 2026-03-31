@@ -1,0 +1,33 @@
+# Vercel Ignore File
+# Exclude heavy directories that are not needed for builds
+
+# Python virtual environments
+.venv/
+venv/
+ENV/
+__pycache__/
+*.pyc
+
+# Heavy external projects/resources not part of the core app
+antigravity-awesome-skills-main/
+antigravity-skills-main/
+get-shit-done-for-antigravity-main/
+react-bits-main/
+react-native-bottom-sheet-master/
+react-native-graph-main/
+react-native-skia-main/
+
+# Docs and scripts
+docs/
+scripts/
+*.docx
+*.pdf
+
+# Local data that shouldn't be bundled if huge (the CSVs we use are fine though)
+# data/
+
+# Git
+.git/
+.agent/
+.gsd/
+.gemini/

@@ -81,18 +81,17 @@ def run_pipeline(data_path):
     
     return lda_model, corpus, dictionary
 
-import pyLDAvis
-import pyLDAvis.gensim_models as gensimvis
+# import pyLDAvis
+# import pyLDAvis.gensim_models as gensimvis
 
 import json
 
 def get_viz_html(lda_model, corpus, dictionary):
     """
-    Generates the pyLDAvis HTML string for the given model.
+    Placeholder for topic visualization.
+    In a production React environment, we extract JSON data instead of generating heavy HTML.
     """
-    print("Preparing topic visualization (this may take a moment)...")
-    vis_data = gensimvis.prepare(lda_model, corpus, dictionary)
-    return pyLDAvis.prepared_data_to_html(vis_data)
+    return "<!-- LDA Visualisation Disabled for Speed/Size optimization. Use JSON API instead. -->"
 
 def export_results(model, corpus, dictionary, data_path):
     """
