@@ -27,6 +27,8 @@ export const useLDA = () => {
       const res = await fetch(`${API_BASE}/api/topics`);
       const data = await res.json();
       setTopics(data.topics || []);
+      setCoherenceScore(data.coherence_score || 0);
+      setRepresentativeDocs(data.representative_docs || {});
     } catch (e) {
       console.error("Failed to fetch topics", e);
     }
@@ -108,6 +110,6 @@ export const useLDA = () => {
   return { 
     isTraining, isUploading, trendsData, summary, topics, 
     coherenceScore, representativeDocs,
-    fetchTrends, fetchSummary, fetchTopics, runLDA, uploadDataset, resetToMock, API_BASE 
+    fetchTrends, fetchSummary, fetchTopics, runLDA, uploadDataset, resetToMock 
   };
 };
