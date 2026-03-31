@@ -97,6 +97,27 @@ async def upload_dataset(file: UploadFile = File(...)):
         if os.path.exists(REAL_DATA_PATH): os.remove(REAL_DATA_PATH)
         raise HTTPException(status_code=500, detail=str(e))
 
+@app.post("/api/reset-to-mock")
+async def reset_to_mock():
+    """
+    Deletes any uploaded custom dataset and resets the model state to force return to mock data.
+    """
+    global current_model, current_corpus, current_dictionary, current_viz_html
+    
+    try:
+        if os.path.exists(REAL_DATA_PATH):
+            os.remove(REAL_DATA_PATH)
+        
+        # Reset model state
+        current_model = None
+        current_corpus = None
+        current_dictionary = None
+        current_viz_html = ""
+        
+        return {"status": "success", "message": "Reverted to Demo Corpus (Voices on Religion)."}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
 @app.post("/api/run-lda")
 async def run_lda(year: int = Query(None)):
     global current_model, current_corpus, current_dictionary, current_viz_html

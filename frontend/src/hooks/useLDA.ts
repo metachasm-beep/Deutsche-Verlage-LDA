@@ -82,8 +82,26 @@ export const useLDA = () => {
     }
   };
 
+  const resetToMock = async () => {
+    setIsUploading(true);
+    try {
+      await fetch(`${API_BASE}/api/reset-to-mock`, { method: 'POST' });
+      await fetchSummary();
+      await fetchTrends();
+      await fetchTopics();
+      // Auto-run LDA for better UX
+      await runLDA();
+      return true;
+    } catch (e) {
+      console.error("Failed to reset to mock data", e);
+      return false;
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
   return { 
     isTraining, isUploading, trendsData, summary, topics,
-    fetchTrends, fetchSummary, fetchTopics, runLDA, uploadDataset, API_BASE 
+    fetchTrends, fetchSummary, fetchTopics, runLDA, uploadDataset, resetToMock, API_BASE 
   };
 };

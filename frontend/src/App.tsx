@@ -7,13 +7,13 @@ import TrendsGraph from './components/TrendsGraph';
 import Particles from './components/Particles';
 import BlurText from './components/BlurText';
 import { useLDA } from './hooks/useLDA';
-import { Database, Filter, Cpu, BarChart3, Loader2, Upload } from 'lucide-react';
+import { Database, Filter, Cpu, BarChart3, Loader2, Upload, RotateCcw, BookOpen } from 'lucide-react';
 import TopicModelViz from './components/TopicModelViz';
 
 function App() {
   const [selectedYear, setSelectedYear] = useState<number | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const { isTraining, isUploading, trendsData, summary, topics, fetchTrends, fetchSummary, fetchTopics, runLDA, uploadDataset } = useLDA();
+  const { isTraining, isUploading, trendsData, summary, topics, fetchTrends, fetchSummary, fetchTopics, runLDA, uploadDataset, resetToMock } = useLDA();
 
   useEffect(() => {
     fetchTrends();
@@ -134,7 +134,20 @@ function App() {
                     </div>
                   )}
 
-                  <div className="mt-6 pt-6 border-t border-neutral-800/50">
+                  <div className="mt-6 pt-6 border-t border-neutral-800/50 space-y-3">
+                    <div className="bg-neutral-900/50 border border-neutral-800 rounded-xl p-4 mb-4">
+                      <div className="flex items-center gap-2 mb-2 text-gold-light">
+                        <BookOpen size={14} />
+                        <span className="text-[10px] font-black uppercase tracking-widest">CSV Format Guide</span>
+                      </div>
+                      <ul className="text-[11px] text-neutral-500 space-y-1.5 list-disc list-inside font-light">
+                        <li><strong className="text-neutral-400">date:</strong> YYYY or YYYY-MM-DD</li>
+                        <li><strong className="text-neutral-400">publisher:</strong> Name of the entity</li>
+                        <li><strong className="text-neutral-400">text:</strong> Full content for analysis</li>
+                        <li className="list-none pt-1 opacity-70">Encoding: UTF-8 recommended</li>
+                      </ul>
+                    </div>
+
                     <input 
                       type="file" 
                       accept=".csv" 
@@ -142,14 +155,25 @@ function App() {
                       className="hidden" 
                       onChange={handleFileUpload}
                     />
-                    <button 
-                      onClick={() => fileInputRef.current?.click()}
-                      disabled={isUploading}
-                      className="w-full flex justify-center items-center gap-2 py-3 px-4 rounded-xl bg-neutral-950/80 border border-gold/30 text-gold hover:bg-gold hover:text-midnight-950 hover:shadow-[0_0_15px_rgba(202,138,4,0.4)] transition-all duration-300 text-sm font-semibold disabled:opacity-50 disabled:cursor-not-allowed group"
-                    >
-                      {isUploading ? <Loader2 size={18} className="animate-spin" /> : <Upload size={18} className="group-hover:-translate-y-1 transition-transform" />}
-                      {isUploading ? 'Ingesting Dataset...' : 'Upload Custom Corpus'}
-                    </button>
+                    <div className="grid grid-cols-1 gap-3">
+                      <button 
+                        onClick={() => fileInputRef.current?.click()}
+                        disabled={isUploading}
+                        className="w-full flex justify-center items-center gap-2 py-3 px-4 rounded-xl bg-gold/10 border border-gold/30 text-gold hover:bg-gold hover:text-midnight-950 transition-all duration-300 text-sm font-bold disabled:opacity-50 group shadow-lg shadow-gold/5"
+                      >
+                        {isUploading ? <Loader2 size={18} className="animate-spin" /> : <Upload size={18} className="group-hover:-translate-y-0.5 transition-transform" />}
+                        {isUploading ? 'Ingesting...' : 'Upload Custom Corpus'}
+                      </button>
+
+                      <button 
+                        onClick={resetToMock}
+                        disabled={isUploading || isTraining}
+                        className="w-full flex justify-center items-center gap-2 py-3 px-4 rounded-xl bg-neutral-900 border border-neutral-800 text-neutral-400 hover:text-neutral-100 hover:bg-neutral-800 transition-all duration-300 text-sm font-medium disabled:opacity-50 group"
+                      >
+                        <RotateCcw size={16} className="group-hover:rotate-[-45deg] transition-transform" />
+                        Load Demo Corpus
+                      </button>
+                    </div>
                   </div>
                 </SpotlightCard>
               </motion.div>
