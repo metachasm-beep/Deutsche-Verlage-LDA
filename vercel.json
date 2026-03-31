@@ -4,7 +4,10 @@
   "builds": [
     {
       "src": "app/main.py",
-      "use": "@vercel/python"
+      "use": "@vercel/python",
+      "config": {
+        "includeFiles": ["app/**", "lda_pipeline.py", "config.py", "requirements.txt", "data/**"]
+      }
     },
     {
       "src": "frontend/package.json",
@@ -20,8 +23,11 @@
       "dest": "/app/main.py"
     },
     {
+      "handle": "filesystem"
+    },
+    {
       "src": "/(.*)",
-      "dest": "/frontend/dist/$1"
+      "dest": "/index.html"
     }
   ]
 }
