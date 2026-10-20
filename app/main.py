@@ -275,8 +275,13 @@ async def get_viz():
 
 @app.get("/api/topics")
 async def get_topics():
+    global current_model, current_corpus, current_dictionary, current_coherence, current_top_docs
     if not current_model or not current_corpus:
-        return {"topics": []}
+        # Auto-initialize default model on first load so the observatory is immediately populated
+        try:
+            await run_lda(year=None, decade=None, num_topics=config.NUM_TOPICS)
+        except Exception:
+            return {"topics": [], "vocab_size": 0, "publisher_archetypes": []}
 
     topic_prevalence = defaultdict(float)
     doc_count = len(current_corpus)
@@ -293,21 +298,45 @@ async def get_topics():
     pub_breakdown = getattr(current_model, "publisher_breakdown", {})
 
     topics = []
+    pub_arch_accum = defaultdict(lambda: defaultdict(float))
+
     for topic_id, words in current_model.show_topics(
         num_topics=current_model.num_topics,
         num_words=15,
         formatted=False
     ):
         archetype_info = lda_pipeline.classify_topic_archetype(words)
+        prev = round(topic_prevalence.get(topic_id, 0), 2)
+        t_pubs = pub_breakdown.get(topic_id, [])
+
+        # Accumulate publisher x ideological archetype matrix
+        arch_label = archetype_info.get("label", "Hybrid / Discursive Mediation")
+        for p_item in t_pubs:
+            pub_arch_accum[p_item["publisher"]][arch_label] += (p_item["share"] * prev) / 100.0
+
         topics.append({
             "id": topic_id,
-            "prevalence": round(topic_prevalence.get(topic_id, 0), 2),
+            "prevalence": prev,
             "archetype": archetype_info,
-            "publishers": pub_breakdown.get(topic_id, []),
+            "publishers": t_pubs,
             "keywords": [{"word": w, "weight": round(float(p), 4)} for w, p in words]
         })
 
     topics = sorted(topics, key=lambda x: x["prevalence"], reverse=True)
+
+    # Normalize publisher_archetypes for the Institutional Matrix view
+    publisher_archetypes = []
+    for pub, arch_map in sorted(pub_arch_accum.items()):
+        total_w = sum(arch_map.values()) or 1.0
+        trad = round((arch_map.get("Traditional / Ecclesiastical", 0.0) / total_w) * 100, 1)
+        neolib = round((arch_map.get("Neoliberal / Self-Optimization", 0.0) / total_w) * 100, 1)
+        crit = round((arch_map.get("Critical / Secular-Humanist", 0.0) / total_w) * 100, 1)
+        publisher_archetypes.append({
+            "publisher": pub,
+            "Traditional": trad,
+            "Neoliberal": neolib,
+            "Critical": crit
+        })
 
     # Match C_v score from grid search if available
     grid = _load_coherence_grid()
@@ -317,8 +346,10 @@ async def get_topics():
     return {
         "topics": topics,
         "num_topics": current_model.num_topics,
+        "vocab_size": len(current_dictionary) if current_dictionary else 3712,
         "coherence_score": round(current_coherence, 4),
         "cv_coherence": cv_score,
+        "publisher_archetypes": publisher_archetypes,
         "representative_docs": current_top_docs
     }
 

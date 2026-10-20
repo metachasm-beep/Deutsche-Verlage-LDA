@@ -15,6 +15,13 @@ export interface RegimePreset {
   description: string;
 }
 
+export interface PublisherArchetypeRow {
+  publisher: string;
+  Traditional: number;
+  Neoliberal: number;
+  Critical: number;
+}
+
 export const useLDA = () => {
   const [isTraining, setIsTraining] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
@@ -22,10 +29,12 @@ export const useLDA = () => {
   const [summary, setSummary] = useState<any>(null);
   const [topics, setTopics] = useState<any[]>([]);
   const [numTopics, setNumTopics] = useState<number>(12);
+  const [vocabSize, setVocabSize] = useState<number>(3712);
   const [coherenceScore, setCoherenceScore] = useState<number>(0);
   const [cvCoherence, setCvCoherence] = useState<number | null>(null);
   const [coherenceGrid, setCoherenceGrid] = useState<CoherencePoint[]>([]);
   const [recommendedRegimes, setRecommendedRegimes] = useState<RegimePreset[]>([]);
+  const [publisherArchetypes, setPublisherArchetypes] = useState<PublisherArchetypeRow[]>([]);
   const [representativeDocs, setRepresentativeDocs] = useState<Record<number, any[]>>({});
 
   const fetchTrends = async () => {
@@ -55,8 +64,10 @@ export const useLDA = () => {
       const data = await res.json();
       setTopics(data.topics || []);
       if (data.num_topics) setNumTopics(data.num_topics);
+      if (data.vocab_size) setVocabSize(data.vocab_size);
       setCoherenceScore(data.coherence_score ?? 0);
       setCvCoherence(data.cv_coherence ?? null);
+      setPublisherArchetypes(data.publisher_archetypes || []);
       setRepresentativeDocs(data.representative_docs || {});
     } catch (e) {
       console.error("Failed to fetch topics", e);
@@ -146,10 +157,12 @@ export const useLDA = () => {
     topics,
     numTopics,
     setNumTopics,
+    vocabSize,
     coherenceScore,
     cvCoherence,
     coherenceGrid,
     recommendedRegimes,
+    publisherArchetypes,
     representativeDocs,
     fetchTrends,
     fetchSummary,

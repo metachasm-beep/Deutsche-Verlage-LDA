@@ -8,26 +8,33 @@ export default {
     extend: {
       colors: {
         midnight: {
-          900: "#1C1917",
-          950: "#0C0A09",
+          800: "#14161D",
+          900: "#0D0E12",
+          950: "#070709",
         },
         gold: {
-          DEFAULT: "#CA8A04",
-          light: "#EAB308",
+          DEFAULT: "#D4AF37",
+          light: "#FACC15",
           dark: "#A16207",
+        },
+        archetype: {
+          traditional: "#EAB308",
+          neoliberal: "#38BDF8",
+          critical: "#FB7185",
         }
       },
       fontFamily: {
-        heading: ["Crimson Pro", "serif"],
-        body: ["Atkinson Hyperlegible", "sans-serif"],
+        heading: ["Cormorant Garamond", "Georgia", "serif"],
+        body: ["Plus Jakarta Sans", "system-ui", "sans-serif"],
+        mono: ["JetBrains Mono", "monospace"],
       },
       animation: {
-        "shiny-text": "shiny-text 2s infinite",
+        "shiny-text": "shiny-text 3s infinite",
       },
       keyframes: {
         "shiny-text": {
           "0%, 100%": { opacity: 1 },
-          "50%": { opacity: 0.5 },
+          "50%": { opacity: 0.65 },
         },
       },
     },
