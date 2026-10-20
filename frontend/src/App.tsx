@@ -1,51 +1,42 @@
-import { useEffect, useState, useRef, useMemo } from 'react';
-import { motion } from 'framer-motion';
-import type { Variants } from 'framer-motion';
+import React, { useState, useEffect, useRef } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
-  LineChart,
-  Line,
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip as RechartsTooltip,
-  ResponsiveContainer,
-  Legend
-} from 'recharts';
-import ShinyText from './components/ShinyText';
-import SpotlightCard from './components/SpotlightCard';
-import TrendsGraph from './components/TrendsGraph';
-import Particles from './components/Particles';
-import BlurText from './components/BlurText';
-import { useLDA } from './hooks/useLDA';
-import {
-  Database,
-  Cpu,
-  BarChart3,
-  Loader2,
-  Upload,
-  RotateCcw,
   BookOpen,
   Sliders,
+  Sparkles,
+  Database,
   Layers,
-  Building2,
-  Activity,
-  Download,
+  TrendingUp,
+  RotateCcw,
+  Upload,
+  CheckCircle2,
+  AlertCircle,
+  GraduationCap,
+  Award,
   Compass,
-  Sparkles
+  Library,
+  Scale,
+  Quote,
+  Copy,
+  Check,
+  Building2,
+  FileText,
+  PanelLeftClose,
+  PanelLeftOpen,
+  PanelRightClose,
+  PanelRightOpen,
+  LayoutGrid,
+  BarChart3,
+  Search,
+  ChevronDown,
+  ChevronUp,
 } from 'lucide-react';
-import TopicModelViz from './components/TopicModelViz';
+import { useLDA } from './hooks/useLDA';
+import { TrendsGraph } from './components/TrendsGraph';
+import { TopicModelViz, getArchetypeTheme, type Topic, type RepresentativeDoc, type Keyword } from './components/TopicModelViz';
 import clsx from 'clsx';
 
-type WorkbenchTab = 'clusters' | 'matrix' | 'diachronic';
-
 function App() {
-  const [selectedYear, setSelectedYear] = useState<number | null>(null);
-  const [selectedDecade, setSelectedDecade] = useState<number | null>(null);
-  const [activeTab, setActiveTab] = useState<WorkbenchTab>('clusters');
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
   const {
     isTraining,
     isUploading,
@@ -67,762 +58,1328 @@ function App() {
     fetchCoherenceGrid,
     runLDA,
     uploadDataset,
-    resetToMock
   } = useLDA();
 
+  // Initialize telemetry on mount
   useEffect(() => {
-    fetchTrends();
     fetchSummary();
-    fetchTopics();
+    fetchTrends();
     fetchCoherenceGrid();
+    fetchTopics();
   }, []);
 
-  // Compute dominant ideological archetype across active topics
-  const dominantArchetype = useMemo(() => {
-    if (!topics || topics.length === 0) {
-      return { label: 'Initializing...', share: 0 };
-    }
-    const tally: Record<string, number> = {};
-    for (const t of topics) {
-      const arch = t.archetype?.label || 'Hybrid / Discursive';
-      tally[arch] = (tally[arch] || 0) + (Number(t.prevalence) || 0);
-    }
-    let bestLabel = 'Hybrid / Discursive';
-    let bestVal = 0;
-    for (const [k, v] of Object.entries(tally)) {
-      if (v > bestVal) {
-        bestVal = v;
-        bestLabel = k;
-      }
-    }
-    return { label: bestLabel, share: Math.round(bestVal * 10) / 10 };
-  }, [topics]);
+  // 3-Pane Split-View IDE State
+  const [workspaceMode, setWorkspaceMode] = useState<'bento' | 'topics' | 'matrix'>('bento');
+  const [leftSidebarOpen, setLeftSidebarOpen] = useState<boolean>(true);
+  const [rightInspectorOpen, setRightInspectorOpen] = useState<boolean>(true);
+  const [monographBannerExpanded, setMonographBannerExpanded] = useState<boolean>(false);
 
-  const handleYearSelect = async (year: number) => {
-    setSelectedYear(year);
-    setSelectedDecade(null);
-    await runLDA(year, null, numTopics);
-  };
+  // Synchronized Selection & Filter State across Panes 1, 2, and 3
+  const [selectedYear, setSelectedYear] = useState<number | null>(null);
+  const [selectedTopicIndex, setSelectedTopicIndex] = useState<number>(0);
+  const [ideologicalFilter, setIdeologicalFilter] = useState<string | null>(null);
+  const [inspectorSearch, setInspectorSearch] = useState<string>('');
 
-  const handleDecadeSelect = async (decade: number) => {
-    setSelectedDecade(decade);
-    setSelectedYear(null);
-    await runLDA(null, decade, numTopics);
-  };
+  // Upload & Citation Copy State
+  const [uploadStatus, setUploadStatus] = useState<{
+    type: 'success' | 'error';
+    message: string;
+  } | null>(null);
+  const [copiedCitationKey, setCopiedCitationKey] = useState<string | null>(null);
+  const [showCitationModal, setShowCitationModal] = useState<boolean>(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleRegimeSelect = async (k: number) => {
-    setNumTopics(k);
-    await runLDA(selectedYear, selectedDecade, k);
-  };
+  const typedTopics: Topic[] = topics as Topic[];
+  const safeTopicIndex = selectedTopicIndex < typedTopics.length ? selectedTopicIndex : 0;
+  const activeTopic: Topic | undefined = typedTopics[safeTopicIndex];
+  const activeTopicTheme = getArchetypeTheme(activeTopic?.archetype?.label);
 
-  const handleFullAnalysis = async () => {
-    setSelectedYear(null);
-    setSelectedDecade(null);
-    await runLDA(null, null, numTopics);
-  };
-
-  const handleExport = () => {
-    const report = {
-      researchTitle: "Mediating Faith and Power: German Publishing LDA",
-      author: "Paul Marandi, Ph.D. Scholar, CGS, SLL&CS, JNU",
-      generatedAt: new Date().toISOString(),
-      corpusSummary: summary,
-      vocabSize,
-      numTopics,
-      modelCoherenceUMass: coherenceScore,
-      modelCoherenceCv: cvCoherence,
-      coherenceGrid,
-      publisherArchetypes,
-      topics,
-      representativeEvidence: representativeDocs,
-      temporalContext: { selectedYear, selectedDecade }
-    };
-    const blob = new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `LDA_Dissertation_Dossier_K${numTopics}_${new Date().getTime()}.json`;
-    a.click();
-  };
-
-  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      await uploadDataset(file);
-      if (fileInputRef.current) {
-        fileInputRef.current.value = '';
-      }
-    }
-  };
-
-  const containerVariants: Variants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.1
-      }
-    }
-  };
-
-  const itemVariants: Variants = {
-    hidden: { opacity: 0, y: 18 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] }
-    }
-  };
-
-  const defaultRegimes = recommendedRegimes.length > 0 ? recommendedRegimes : [
-    { k: 4, label: "Macro (K=4)", description: "Optimal U_Mass Archetypes" },
-    { k: 12, label: "Meso (K=12)", description: "Sub-disciplinary Inflection" },
-    { k: 20, label: "High-Res (K=20)", description: "Thematic Differentiation" },
-    { k: 30, label: "Micro (K=30)", description: "Global C_v NPMI Peak" }
+  const publishersList: string[] = summary?.publishers || [
+    'Verlag Herder',
+    'Suhrkamp / Insel',
+    'C.H. Beck',
+    'Kösel-Verlag',
+    'Gräfe und Unzer (GU)',
+    'SCM R. Brockhaus',
+    'St. Benno Verlag',
+    'J. Kamphausen',
   ];
 
-  return (
-    <div className="relative min-h-screen bg-midnight-950 archival-grid-bg font-body text-neutral-300 overflow-x-hidden">
-      
-      {/* Ambient WebGL Particle Constellation */}
-      <div className="fixed inset-0 z-0 pointer-events-none opacity-55">
-        <Particles
-          particleColors={['#D4AF37', '#38BDF8', '#FB7185', '#A16207']}
-          particleCount={220}
-          particleSpread={16}
-          speed={0.12}
-          particleBaseSize={70}
-          moveParticlesOnHover={true}
-          alphaParticles={true}
-          disableRotation={false}
-          cameraDistance={32}
-        />
-      </div>
+  const handleSliderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNumTopics(parseInt(e.target.value, 10));
+  };
 
-      {/* Floating Archival Masthead Bar (Compliant with UI/UX Pro Max spacing) */}
-      <header className="fixed top-4 left-4 right-4 z-50 max-w-7xl mx-auto">
-        <nav className="bg-midnight-900/85 backdrop-blur-2xl border border-white/10 rounded-2xl px-5 py-3 flex flex-wrap justify-between items-center gap-4 shadow-2xl">
-          <div className="flex items-center gap-3.5">
-            <div className="w-9 h-9 bg-gold/10 border border-gold/40 rounded-xl flex items-center justify-center">
-              <Compass className="text-gold" size={18} />
+  const handleRecalculate = () => {
+    runLDA(selectedYear, null, numTopics);
+  };
+
+  const handleRegimeSelect = (kVal: number) => {
+    setNumTopics(kVal);
+    runLDA(selectedYear, null, kVal);
+  };
+
+  const handleYearClick = (year: number) => {
+    const nextYear = selectedYear === year ? null : year;
+    setSelectedYear(nextYear);
+    runLDA(nextYear, null, numTopics);
+  };
+
+  const handleResetYear = () => {
+    setSelectedYear(null);
+    runLDA(null, null, numTopics);
+  };
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploadStatus(null);
+    const ok = await uploadDataset(file);
+    if (ok) {
+      setUploadStatus({
+        type: 'success',
+        message: 'Custom DNB CSV corpus ingested and posterior LDA model re-estimated.',
+      });
+      setTimeout(() => setUploadStatus(null), 6000);
+    } else {
+      setUploadStatus({
+        type: 'error',
+        message: 'Failed to ingest CSV file. Verify required columns (title, publisher, year).',
+      });
+    }
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+
+  const copyText = (key: string, text: string) => {
+    navigator.clipboard.writeText(text);
+    setCopiedCitationKey(key);
+    setTimeout(() => setCopiedCitationKey(null), 2000);
+  };
+
+  // Resolve representative MARC21 documents for the active topic
+  const activeTopicDocs: RepresentativeDoc[] =
+    activeTopic?.representative_docs ||
+    (activeTopic && representativeDocs[activeTopic.id]) ||
+    [];
+
+  const handleCopyAllTopicCitations = () => {
+    if (!activeTopicDocs.length) return;
+    const allCitations = activeTopicDocs
+      .map((doc: RepresentativeDoc) => doc.apa_citation || `${doc.publisher}. (${doc.year}). ${doc.title}.`)
+      .join('\n\n');
+    copyText('batch-topic-apa', allCitations);
+  };
+
+  // Compute Aggregate Ideological Regime Share across current topics
+  const computeCorpusArchetypeSummary = () => {
+    if (!typedTopics || typedTopics.length === 0) {
+      return {
+        dominant: 'Traditional / Ecclesiastical',
+        tradCount: 0,
+        neoCount: 0,
+        critCount: 0,
+      };
+    }
+    let tradCount = 0;
+    let neoCount = 0;
+    let critCount = 0;
+    typedTopics.forEach((t: Topic) => {
+      const label = t.archetype?.label || '';
+      if (label.includes('Traditional') || label.includes('Theological')) tradCount += 1;
+      else if (label.includes('Neoliberal') || label.includes('Self-Help')) neoCount += 1;
+      else if (label.includes('Critical') || label.includes('Secular')) critCount += 1;
+    });
+    let dominant = 'Traditional / Ecclesiastical';
+    if (neoCount >= tradCount && neoCount >= critCount) dominant = 'Neoliberal / Self-Optimization';
+    if (critCount >= tradCount && critCount >= neoCount && critCount > 0)
+      dominant = 'Critical / Secular-Humanist';
+    return { dominant, tradCount, neoCount, critCount };
+  };
+
+  const archetypeSummary = computeCorpusArchetypeSummary();
+
+  const dissertationCitationAPA =
+    'Marandi, P. (2026). Mediating faith and power: A computational topic modeling (LDA) analysis of German theological, self-help, and secular-academic publishing (2005–2026) [Doctoral dissertation research observatory, Centre for German Studies, Jawaharlal Nehru University].';
+
+  const filteredInspectorDocs = activeTopicDocs.filter((doc: RepresentativeDoc) => {
+    if (!inspectorSearch.trim()) return true;
+    const q = inspectorSearch.toLowerCase();
+    return (
+      doc.title.toLowerCase().includes(q) ||
+      doc.publisher.toLowerCase().includes(q) ||
+      Boolean(doc.snippet && doc.snippet.toLowerCase().includes(q)) ||
+      String(doc.year).toLowerCase().includes(q)
+    );
+  });
+
+  const displayCv = cvCoherence || coherenceScore || 0.4366;
+
+  return (
+    <div className="min-h-dvh lg:h-dvh lg:overflow-hidden bg-obsidian-950 text-parchment-50 font-sans antialiased flex flex-col archival-grid-bg">
+      {/* =====================================================================
+          TOP COMPACT IDE COMMAND BAR (h-13 shrink-0)
+         ===================================================================== */}
+      <header className="h-13 shrink-0 border-b border-white/[0.08] bg-obsidian-900/95 backdrop-blur-xl px-3 sm:px-4 flex items-center justify-between gap-2 z-30">
+        {/* Left: Sidebar Toggle + Monograph Identity */}
+        <div className="flex items-center gap-2.5 min-w-0">
+          <button
+            onClick={() => setLeftSidebarOpen((prev) => !prev)}
+            title={leftSidebarOpen ? 'Collapse Bayesian Command Rail' : 'Expand Bayesian Command Rail'}
+            aria-label="Toggle Left Command Sidebar"
+            className="p-1.5 rounded-lg bg-white/[0.03] hover:bg-white/[0.08] border border-white/10 text-parchment-200 transition-colors cursor-pointer shrink-0"
+          >
+            {leftSidebarOpen ? (
+              <PanelLeftClose className="w-4 h-4 text-traditional" />
+            ) : (
+              <PanelLeftOpen className="w-4 h-4 text-traditional" />
+            )}
+          </button>
+
+          <div className="flex items-center gap-2 min-w-0">
+            <div className="w-7 h-7 rounded-md bg-traditional/15 border border-traditional/40 flex items-center justify-center shrink-0">
+              <BookOpen className="w-3.5 h-3.5 text-traditional" />
             </div>
-            <div>
+            <div className="truncate">
               <div className="flex items-center gap-2">
-                <span className="text-[10px] font-mono font-bold uppercase tracking-[0.2em] text-gold">
-                  EDITION CGS · JNU
+                <span className="font-serif font-bold text-sm sm:text-base text-parchment-50 truncate">
+                  Mediating Faith & Power
                 </span>
-                <span className="text-neutral-700">|</span>
-                <span className="text-[10px] font-mono uppercase tracking-widest text-neutral-400">
-                  Paul Marandi, Ph.D.
+                <span className="hidden xl:inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/30 font-mono text-[9px] uppercase tracking-widest text-emerald-300">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                  DNB SRU v1.1 · MARC21
                 </span>
               </div>
-              <h1 className="text-base font-heading font-bold italic text-white tracking-tight">
-                Mediating Faith &amp; Power · Computational Hermeneutics Observatory
-              </h1>
             </div>
           </div>
+        </div>
 
-          <div className="flex items-center gap-2.5">
-            <input
-              type="file"
-              accept=".csv"
-              ref={fileInputRef}
-              className="hidden"
-              onChange={handleFileUpload}
-            />
+        {/* Center: Workspace Layout Switcher */}
+        <div className="hidden md:flex items-center gap-1 p-1 rounded-lg bg-obsidian-950 border border-white/[0.08]">
+          <button
+            onClick={() => setWorkspaceMode('bento')}
+            className={clsx(
+              'flex items-center gap-1.5 px-2.5 py-1 rounded-md font-mono text-[11px] transition-all cursor-pointer',
+              workspaceMode === 'bento'
+                ? 'bg-traditional text-obsidian-950 font-bold shadow-glow-gold'
+                : 'text-parchment-200 hover:text-parchment-50 hover:bg-white/[0.04]'
+            )}
+          >
+            <LayoutGrid className="w-3.5 h-3.5" />
+            <span>Observatory Bento (2×2)</span>
+          </button>
+          <button
+            onClick={() => setWorkspaceMode('topics')}
+            className={clsx(
+              'flex items-center gap-1.5 px-2.5 py-1 rounded-md font-mono text-[11px] transition-all cursor-pointer',
+              workspaceMode === 'topics'
+                ? 'bg-traditional text-obsidian-950 font-bold shadow-glow-gold'
+                : 'text-parchment-200 hover:text-parchment-50 hover:bg-white/[0.04]'
+            )}
+          >
+            <BarChart3 className="w-3.5 h-3.5" />
+            <span>Topic & Lexical Deep-Dive</span>
+          </button>
+          <button
+            onClick={() => setWorkspaceMode('matrix')}
+            className={clsx(
+              'flex items-center gap-1.5 px-2.5 py-1 rounded-md font-mono text-[11px] transition-all cursor-pointer',
+              workspaceMode === 'matrix'
+                ? 'bg-traditional text-obsidian-950 font-bold shadow-glow-gold'
+                : 'text-parchment-200 hover:text-parchment-50 hover:bg-white/[0.04]'
+            )}
+          >
+            <Building2 className="w-3.5 h-3.5" />
+            <span>Publisher & Coherence Atlas</span>
+          </button>
+        </div>
+
+        {/* Right: Active Filter Pill, Upload, APA Modal, Scholar Badge & Right Inspector Toggle */}
+        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+          {selectedYear && (
             <button
-              onClick={() => fileInputRef.current?.click()}
-              disabled={isUploading}
-              className="cursor-pointer px-3 py-1.5 rounded-lg bg-white/[0.04] hover:bg-gold/15 border border-white/10 hover:border-gold/40 text-[11px] font-mono font-semibold text-neutral-200 hover:text-gold transition-all duration-200 flex items-center gap-1.5 disabled:opacity-50"
+              onClick={handleResetYear}
+              title="Clear Temporal Year Filter"
+              className="inline-flex items-center gap-1 px-2 py-1 rounded-md bg-neoliberal/15 border border-neoliberal/40 font-mono text-[10px] text-neoliberal hover:bg-neoliberal/25 transition-colors cursor-pointer"
             >
-              {isUploading ? <Loader2 size={13} className="animate-spin" /> : <Upload size={13} />}
-              <span className="hidden sm:inline">Ingest CSV</span>
+              <span>Year: {selectedYear}</span>
+              <RotateCcw className="w-3 h-3" />
             </button>
+          )}
 
-            <button
-              onClick={handleExport}
-              disabled={!topics.length}
-              className="cursor-pointer px-3 py-1.5 rounded-lg bg-white/[0.04] hover:bg-emerald-500/15 border border-white/10 hover:border-emerald-500/40 text-[11px] font-mono font-semibold text-neutral-200 hover:text-emerald-400 transition-all duration-200 flex items-center gap-1.5 disabled:opacity-30"
-            >
-              <Download size={13} />
-              <span className="hidden sm:inline">Export Dossier</span>
-            </button>
+          <button
+            onClick={() => setShowCitationModal((prev) => !prev)}
+            className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-white/[0.03] hover:bg-white/[0.08] border border-white/10 text-[11px] font-mono text-parchment-100 transition-colors cursor-pointer"
+          >
+            <Quote className="w-3 h-3 text-traditional" />
+            <span>APA 7th</span>
+          </button>
 
-            <div className="px-3 py-1.5 rounded-lg bg-midnight-950 border border-white/10 flex items-center gap-2">
-              <span className={`w-2 h-2 rounded-full ${isTraining ? 'bg-gold animate-pulse' : 'bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.6)]'}`} />
-              <span className="text-[10px] font-mono font-bold text-neutral-300 uppercase tracking-wider">
-                {isTraining ? 'Inference Active' : `K=${numTopics} Ready`}
-              </span>
-            </div>
+          <input
+            type="file"
+            accept=".csv"
+            ref={fileInputRef}
+            onChange={handleFileUpload}
+            className="hidden"
+          />
+          <button
+            onClick={() => fileInputRef.current?.click()}
+            disabled={isUploading || isTraining}
+            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-traditional/15 hover:bg-traditional/25 border border-traditional/40 text-traditional text-[11px] font-mono font-medium transition-colors cursor-pointer disabled:opacity-50"
+          >
+            <Upload className="w-3 h-3" />
+            <span className="hidden sm:inline">{isUploading ? 'Ingesting...' : 'Upload CSV'}</span>
+          </button>
+
+          <div className="hidden 2xl:flex items-center gap-1.5 pl-2 border-l border-white/10">
+            <GraduationCap className="w-3.5 h-3.5 text-traditional" />
+            <span className="font-mono text-[10px] text-parchment-200">
+              Paul Marandi · Ph.D. Scholar, JNU
+            </span>
           </div>
-        </nav>
+
+          <button
+            onClick={() => setRightInspectorOpen((prev) => !prev)}
+            title={rightInspectorOpen ? 'Collapse MARC21 Inspector Drawer' : 'Expand MARC21 Inspector Drawer'}
+            aria-label="Toggle Right MARC21 Inspector Drawer"
+            className="p-1.5 rounded-lg bg-white/[0.03] hover:bg-white/[0.08] border border-white/10 text-parchment-200 transition-colors cursor-pointer"
+          >
+            {rightInspectorOpen ? (
+              <PanelRightClose className="w-4 h-4 text-traditional" />
+            ) : (
+              <PanelRightOpen className="w-4 h-4 text-traditional" />
+            )}
+          </button>
+        </div>
       </header>
 
-      <div className="relative z-10 w-full px-4 sm:px-8 lg:px-12 pt-28 pb-12 min-h-screen flex flex-col justify-between">
-        <motion.main
-          className="max-w-7xl mx-auto w-full space-y-8"
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-        >
-          {/* Suhrkamp Editorial Monograph Banner */}
-          <motion.section
-            variants={itemVariants}
-            className="relative rounded-2xl bg-gradient-to-r from-midnight-900/95 via-midnight-900/80 to-midnight-950/90 border border-white/[0.08] p-6 lg:p-8 overflow-hidden shadow-2xl"
+      {/* APA 7th Citation Floating Popover Modal */}
+      <AnimatePresence>
+        {showCitationModal && (
+          <motion.div
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            className="fixed top-14 right-4 z-50 max-w-xl w-[calc(100%-2rem)] bg-obsidian-900/95 backdrop-blur-2xl border border-traditional/40 rounded-xl p-4 shadow-archival"
           >
-            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-yellow-500 via-sky-400 to-rose-500 opacity-85" />
-            <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
-              <div className="space-y-2 max-w-3xl">
-                <div className="flex flex-wrap items-center gap-2 text-[10px] font-mono uppercase tracking-[0.25em] text-gold">
-                  <span>BAND I · DISKURSANALYSE DEUTSCHER VERLAGE</span>
-                  <span>//</span>
-                  <span className="text-neutral-400">DNB SRU MARC21 · DDC 200/230</span>
-                </div>
-                <h2 className="text-3xl sm:text-5xl font-heading font-bold italic text-white tracking-tight leading-none">
-                  <ShinyText text="Voices on Religion & the Neoliberal Moral Order" speed={4} />
-                </h2>
-                <p className="text-sm sm:text-base text-neutral-400 font-light leading-relaxed pt-1">
-                  Mapping the dialectical tension between <span className="text-yellow-400 font-medium">Ecclesiastical Tradition</span>,{' '}
-                  <span className="text-sky-400 font-medium">Neoliberal Self-Optimization</span>, and{' '}
-                  <span className="text-rose-400 font-medium">Secular-Humanist Critique</span> across contemporary German publishing imprints.
-                </p>
-              </div>
-
-              {/* Active Slice / Reset Quick Controls */}
-              <div className="flex flex-wrap items-center gap-2.5 shrink-0">
-                {(selectedYear || selectedDecade) && (
-                  <button
-                    onClick={handleFullAnalysis}
-                    className="cursor-pointer px-3.5 py-2 rounded-xl bg-gold/15 border border-gold/40 text-xs font-mono font-bold text-gold hover:bg-gold hover:text-midnight-950 transition-all"
-                  >
-                    Clear Slice ({selectedYear || `${selectedDecade}s`}) ×
-                  </button>
+            <div className="flex items-center justify-between pb-2 mb-2 border-b border-white/10">
+              <span className="font-mono text-[10px] uppercase tracking-widest text-traditional flex items-center gap-1.5">
+                <Quote className="w-3.5 h-3.5" />
+                APA 7th Edition Dissertation Reference
+              </span>
+              <button
+                onClick={() => setShowCitationModal(false)}
+                className="font-mono text-[10px] text-parchment-300 hover:text-white cursor-pointer"
+              >
+                [ESC / Close]
+              </button>
+            </div>
+            <p className="font-mono text-xs text-parchment-100 leading-relaxed mb-3">
+              {dissertationCitationAPA}
+            </p>
+            <div className="flex justify-end">
+              <button
+                onClick={() => copyText('dissertation-apa', dissertationCitationAPA)}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded bg-traditional text-obsidian-950 font-mono text-xs font-bold cursor-pointer"
+              >
+                {copiedCitationKey === 'dissertation-apa' ? (
+                  <>
+                    <Check className="w-3.5 h-3.5" />
+                    <span>Copied APA 7th</span>
+                  </>
+                ) : (
+                  <>
+                    <Copy className="w-3.5 h-3.5" />
+                    <span>Copy Citation</span>
+                  </>
                 )}
-                <button
-                  onClick={resetToMock}
-                  disabled={isUploading || isTraining}
-                  className="cursor-pointer px-3.5 py-2 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 text-xs font-mono text-neutral-300 flex items-center gap-2 transition-all"
-                >
-                  <RotateCcw size={13} />
-                  <span>Sync DNB Corpus</span>
-                </button>
-              </div>
+              </button>
             </div>
-          </motion.section>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-          {/* 5-Card Executive Scholarly KPI Ribbon (kpi-dashboard-design pattern) */}
-          <motion.section variants={itemVariants} className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-            <div className="glass-panel p-4 border-l-2 border-l-gold">
-              <div className="flex items-center justify-between text-[10px] font-mono uppercase tracking-widest text-neutral-400 mb-1">
-                <span>Corpus Volume (M)</span>
-                <Database size={13} className="text-gold" />
-              </div>
-              <div className="text-2xl font-mono font-bold text-white tabular-nums">
-                {summary?.count?.toLocaleString() || '160'}
-              </div>
-              <div className="text-[10px] font-mono text-neutral-500 mt-1 truncate">
-                {summary?.source || 'DNB SRU Harvest'} · {summary?.year_range || '2020–2027'}
-              </div>
-            </div>
+      {/* Upload Notification Toast */}
+      <AnimatePresence>
+        {uploadStatus && (
+          <motion.div
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            className={clsx(
+              'fixed top-14 left-1/2 -translate-x-1/2 z-50 px-4 py-2.5 rounded-xl border flex items-center gap-2.5 text-xs font-mono shadow-archival',
+              uploadStatus.type === 'success'
+                ? 'bg-emerald-950/95 border-emerald-500/40 text-emerald-200'
+                : 'bg-rose-950/95 border-rose-500/40 text-rose-200'
+            )}
+          >
+            {uploadStatus.type === 'success' ? (
+              <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+            ) : (
+              <AlertCircle className="w-4 h-4 text-rose-400 shrink-0" />
+            )}
+            <span>{uploadStatus.message}</span>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-            <div className="glass-panel p-4 border-l-2 border-l-sky-400">
-              <div className="flex items-center justify-between text-[10px] font-mono uppercase tracking-widest text-neutral-400 mb-1">
-                <span>Lexical Space (|V|)</span>
-                <BookOpen size={13} className="text-sky-400" />
-              </div>
-              <div className="text-2xl font-mono font-bold text-white tabular-nums">
-                {vocabSize.toLocaleString()}
-              </div>
-              <div className="text-[10px] font-mono text-neutral-500 mt-1 truncate">
-                NOUN · PROPN · ADJ + Bigrams
-              </div>
-            </div>
-
-            <div className="glass-panel p-4 border-l-2 border-l-emerald-400">
-              <div className="flex items-center justify-between text-[10px] font-mono uppercase tracking-widest text-neutral-400 mb-1">
-                <span>Granularity (K)</span>
-                <Layers size={13} className="text-emerald-400" />
-              </div>
-              <div className="text-2xl font-mono font-bold text-white tabular-nums">
-                K = {numTopics}
-              </div>
-              <div className="text-[10px] font-mono text-emerald-400 mt-1 truncate">
-                {numTopics <= 5 ? 'Macro-Archetypes' : numTopics <= 15 ? 'Meso-Inflection' : 'Micro-Thematic'}
-              </div>
-            </div>
-
-            <div className="glass-panel p-4 border-l-2 border-l-purple-400">
-              <div className="flex items-center justify-between text-[10px] font-mono uppercase tracking-widest text-neutral-400 mb-1">
-                <span>Model Coherence</span>
-                <Activity size={13} className="text-purple-400" />
-              </div>
-              <div className="text-xl font-mono font-bold text-white tabular-nums">
-                {cvCoherence !== null ? `C_v ${cvCoherence.toFixed(3)}` : `U_M ${coherenceScore.toFixed(2)}`}
-              </div>
-              <div className="text-[10px] font-mono text-neutral-500 mt-1 truncate">
-                U_Mass: {coherenceScore.toFixed(3)} · Variational
-              </div>
-            </div>
-
-            <div className="glass-panel p-4 border-l-2 border-l-rose-400 col-span-2 md:col-span-1">
-              <div className="flex items-center justify-between text-[10px] font-mono uppercase tracking-widest text-neutral-400 mb-1">
-                <span>Hegemonic Voice</span>
-                <Sparkles size={13} className="text-rose-400" />
-              </div>
-              <div className="text-sm font-mono font-bold text-white truncate pt-1">
-                {dominantArchetype.label}
-              </div>
-              <div className="text-[10px] font-mono text-rose-400 mt-1 truncate">
-                {dominantArchetype.share}% Corpus Share ({summary?.publishers?.length || 8} Houses)
-              </div>
-            </div>
-          </motion.section>
-
-          {/* Main Workspace Grid: Left Control Console (1 Col) + Right Multi-Tab Analytical Workbench (3 Cols) */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-            
-            {/* Left Column (4 Cols on LG): Neural Engine & Hyperparameter Console */}
-            <motion.aside variants={itemVariants} className="lg:col-span-4 space-y-6">
-              <SpotlightCard className="border-white/10 bg-midnight-900/85">
-                <div className="flex items-center justify-between mb-4 pb-3 border-b border-white/[0.07]">
-                  <div className="flex items-center gap-2.5">
-                    <Cpu className="text-gold" size={18} />
-                    <h2 className="text-xs font-mono font-bold uppercase tracking-[0.2em] text-white">
-                      Bayesian Neural Console
-                    </h2>
+      {/* =====================================================================
+          3-PANE SPLIT-VIEW IDE BODY (Left Rail + Center Bento + Right Inspector)
+         ===================================================================== */}
+      <div className="flex-1 min-h-0 flex flex-col lg:flex-row lg:overflow-hidden">
+        {/* -------------------------------------------------------------------
+            PANE 1: LEFT DOCKED BAYESIAN COMMAND SIDEBAR
+           ------------------------------------------------------------------- */}
+        <AnimatePresence initial={false}>
+          {leftSidebarOpen && (
+            <motion.aside
+              initial={{ width: 0, opacity: 0 }}
+              animate={{ width: 310, opacity: 1 }}
+              exit={{ width: 0, opacity: 0 }}
+              transition={{ duration: 0.2, ease: 'easeOut' }}
+              className="w-full lg:w-[310px] shrink-0 border-b lg:border-b-0 lg:border-r border-white/[0.08] bg-obsidian-900/90 flex flex-col lg:h-full lg:overflow-y-auto custom-scrollbar"
+            >
+              <div className="p-3.5 space-y-4 flex-1">
+                {/* 1. Ideological Archetype Filter (RQ1 - RQ3) */}
+                <div className="bg-obsidian-950/80 border border-white/[0.07] rounded-xl p-3">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="font-mono text-[10px] uppercase tracking-widest text-parchment-300 flex items-center gap-1.5">
+                      <Compass className="w-3 h-3 text-traditional" />
+                      Ideological Regime Filter
+                    </span>
+                    {ideologicalFilter && (
+                      <button
+                        onClick={() => setIdeologicalFilter(null)}
+                        className="font-mono text-[9px] text-traditional hover:underline cursor-pointer"
+                      >
+                        Reset
+                      </button>
+                    )}
                   </div>
-                  <span className="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/25">
-                    SHA1 Cached
-                  </span>
+
+                  <div className="space-y-1.5">
+                    <button
+                      onClick={() =>
+                        setIdeologicalFilter((prev) =>
+                          prev === 'Traditional' ? null : 'Traditional'
+                        )
+                      }
+                      className={clsx(
+                        'w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg border text-left transition-all cursor-pointer',
+                        ideologicalFilter === 'Traditional'
+                          ? 'bg-traditional/15 border-traditional text-parchment-50'
+                          : 'bg-obsidian-900/70 border-white/[0.06] text-parchment-200 hover:border-traditional/40'
+                      )}
+                    >
+                      <div className="flex items-center gap-2 min-w-0">
+                        <span className="w-2 h-2 rounded-full bg-traditional shrink-0" />
+                        <span className="text-xs font-medium truncate">
+                          RQ₁ · Traditional / Dogmatic
+                        </span>
+                      </div>
+                      <span className="font-mono text-[10px] text-traditional font-bold">
+                        {archetypeSummary.tradCount}
+                      </span>
+                    </button>
+
+                    <button
+                      onClick={() =>
+                        setIdeologicalFilter((prev) =>
+                          prev === 'Neoliberal' ? null : 'Neoliberal'
+                        )
+                      }
+                      className={clsx(
+                        'w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg border text-left transition-all cursor-pointer',
+                        ideologicalFilter === 'Neoliberal'
+                          ? 'bg-neoliberal/15 border-neoliberal text-parchment-50'
+                          : 'bg-obsidian-900/70 border-white/[0.06] text-parchment-200 hover:border-neoliberal/40'
+                      )}
+                    >
+                      <div className="flex items-center gap-2 min-w-0">
+                        <span className="w-2 h-2 rounded-full bg-neoliberal shrink-0" />
+                        <span className="text-xs font-medium truncate">
+                          RQ₂ · Neoliberal / Self-Help
+                        </span>
+                      </div>
+                      <span className="font-mono text-[10px] text-neoliberal font-bold">
+                        {archetypeSummary.neoCount}
+                      </span>
+                    </button>
+
+                    <button
+                      onClick={() =>
+                        setIdeologicalFilter((prev) => (prev === 'Critical' ? null : 'Critical'))
+                      }
+                      className={clsx(
+                        'w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg border text-left transition-all cursor-pointer',
+                        ideologicalFilter === 'Critical'
+                          ? 'bg-critical/15 border-critical text-parchment-50'
+                          : 'bg-obsidian-900/70 border-white/[0.06] text-parchment-200 hover:border-critical/40'
+                      )}
+                    >
+                      <div className="flex items-center gap-2 min-w-0">
+                        <span className="w-2 h-2 rounded-full bg-critical shrink-0" />
+                        <span className="text-xs font-medium truncate">
+                          RQ₃ · Critical / Secular
+                        </span>
+                      </div>
+                      <span className="font-mono text-[10px] text-critical font-bold">
+                        {archetypeSummary.critCount}
+                      </span>
+                    </button>
+                  </div>
                 </div>
 
-                {/* Dynamic Topic Granularity (K) Selector */}
-                <div className="space-y-3.5 mb-5">
-                  <div className="flex items-center justify-between">
-                    <label htmlFor="k-slider" className="flex items-center gap-1.5 text-[11px] font-mono font-semibold text-neutral-300">
-                      <Sliders size={13} className="text-gold" />
-                      <span>Latent Topics (K = {numTopics})</span>
-                    </label>
-                    <span className="text-[10px] font-mono text-gold">
-                      α = auto · η = auto
+                {/* 2. Bayesian K-Granularity Parameter Console */}
+                <div className="bg-obsidian-950/80 border border-white/[0.07] rounded-xl p-3">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="font-mono text-[10px] uppercase tracking-widest text-parchment-300 flex items-center gap-1.5">
+                      <Sliders className="w-3 h-3 text-traditional" />
+                      Bayesian Posterior (K)
+                    </span>
+                    <span className="px-2 py-0.5 rounded bg-traditional/15 border border-traditional/40 font-mono text-xs font-bold text-traditional tabular-nums">
+                      K = {numTopics}
                     </span>
                   </div>
 
                   <input
-                    id="k-slider"
                     type="range"
-                    min={2}
-                    max={30}
+                    min="2"
+                    max="30"
                     value={numTopics}
-                    onChange={(e) => setNumTopics(Number(e.target.value))}
-                    className="w-full accent-yellow-500 cursor-pointer h-1.5 bg-neutral-800 rounded-lg"
+                    onChange={handleSliderChange}
+                    className="w-full h-1.5 bg-obsidian-800 rounded-lg appearance-none cursor-pointer accent-traditional mb-1.5"
                   />
-
-                  <div className="grid grid-cols-2 gap-2">
-                    {defaultRegimes.map((reg) => (
-                      <button
-                        key={reg.k}
-                        onClick={() => handleRegimeSelect(reg.k)}
-                        disabled={isTraining}
-                        className={clsx(
-                          "cursor-pointer p-2.5 rounded-xl text-left transition-all duration-200 border flex flex-col",
-                          numTopics === reg.k
-                            ? "bg-gold/15 border-gold text-gold shadow-md"
-                            : "bg-midnight-950/70 border-white/[0.06] text-neutral-400 hover:border-white/20 hover:text-neutral-200"
-                        )}
-                      >
-                        <span className="text-[11px] font-mono font-bold">
-                          K = {reg.k} · {reg.label.split(' ')[0]}
-                        </span>
-                        <span className="text-[9px] text-neutral-500 truncate mt-0.5">
-                          {reg.description}
-                        </span>
-                      </button>
-                    ))}
+                  <div className="flex justify-between text-[9px] font-mono text-parchment-300 mb-2.5">
+                    <span>2 (Macro)</span>
+                    <span>12 (Meso)</span>
+                    <span>25 (Optimum)</span>
+                    <span>30</span>
                   </div>
-                </div>
 
-                {/* Interactive Mini Coherence Optimization Curve */}
-                {coherenceGrid.length > 0 && (
-                  <div className="mb-5 p-3.5 rounded-xl bg-midnight-950/80 border border-white/[0.06]">
-                    <div className="flex justify-between items-center mb-2">
-                      <span className="text-[10px] font-mono uppercase tracking-wider text-neutral-400">
-                        Empirical C_v Optimization Curve
-                      </span>
-                      <span className="text-[9px] font-mono text-gold">Click node to train K</span>
-                    </div>
-                    <div className="h-28 w-full">
-                      <ResponsiveContainer width="100%" height="100%">
-                        <LineChart
-                          data={coherenceGrid}
-                          onClick={(e: any) => {
-                            if (e && e.activeLabel) {
-                              handleRegimeSelect(Number(e.activeLabel));
-                            }
-                          }}
+                  {/* 3 Regime Presets */}
+                  <div className="grid grid-cols-3 gap-1.5 mb-2.5">
+                    {(recommendedRegimes.length > 0
+                      ? recommendedRegimes
+                      : [
+                          { k: 6, label: 'Macro', description: '3-Way Ideological Regimes' },
+                          { k: 12, label: 'Meso', description: 'Balanced Sub-Genres' },
+                          { k: 25, label: 'Micro', description: 'Global Cv Optimum' },
+                        ]
+                    ).map((reg) => {
+                      const isCurrent = numTopics === reg.k;
+                      return (
+                        <button
+                          key={reg.k}
+                          onClick={() => handleRegimeSelect(reg.k)}
+                          className={clsx(
+                            'p-1.5 rounded-lg border text-center transition-all cursor-pointer',
+                            isCurrent
+                              ? 'bg-traditional/15 border-traditional text-parchment-50'
+                              : 'bg-obsidian-900 border-white/[0.06] text-parchment-300 hover:border-white/20'
+                          )}
                         >
-                          <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" vertical={false} />
-                          <XAxis dataKey="k" tick={{ fill: '#94a3b8', fontSize: 10, fontFamily: 'var(--font-mono)' }} axisLine={false} tickLine={false} />
-                          <YAxis domain={['auto', 'auto']} hide />
-                          <RechartsTooltip
-                            contentStyle={{
-                              backgroundColor: '#070709',
-                              border: '1px solid rgba(212,175,55,0.4)',
-                              borderRadius: '8px',
-                              fontSize: '10px',
-                              fontFamily: 'var(--font-mono)'
-                            }}
-                            formatter={(val: any) => [Number(val).toFixed(4), 'C_v NPMI']}
-                            labelFormatter={(label) => `Topics K = ${label}`}
-                          />
-                          <Line
-                            type="monotone"
-                            dataKey="c_v"
-                            stroke="#D4AF37"
-                            strokeWidth={2}
-                            dot={{ r: 3.5, fill: '#FACC15' }}
-                            activeDot={{ r: 5.5, fill: '#ffffff' }}
-                          />
-                        </LineChart>
-                      </ResponsiveContainer>
-                    </div>
+                          <div className="font-mono text-[10px] font-bold text-traditional">
+                            K={reg.k}
+                          </div>
+                          <div className="font-mono text-[9px] text-parchment-300 truncate">
+                            {reg.label.split(' ')[0]}
+                          </div>
+                        </button>
+                      );
+                    })}
                   </div>
-                )}
 
-                <button
-                  onClick={handleFullAnalysis}
-                  disabled={isTraining || isUploading}
-                  className="cursor-pointer w-full py-3.5 rounded-xl bg-gold text-midnight-950 hover:bg-gold-light transition-all duration-200 text-xs font-mono font-bold uppercase tracking-[0.15em] flex items-center justify-center gap-2.5 disabled:opacity-50 shadow-lg shadow-gold/10 mb-6"
-                >
-                  {isTraining ? <Loader2 size={16} className="animate-spin" /> : <Cpu size={16} />}
-                  <span>{isTraining ? `Synthesizing K=${numTopics}...` : `Execute Posterior Inference (K=${numTopics})`}</span>
-                </button>
+                  <button
+                    onClick={handleRecalculate}
+                    disabled={isTraining}
+                    className="w-full py-2 px-3 rounded-lg bg-traditional hover:bg-traditional-light text-obsidian-950 font-mono text-xs font-bold tracking-wide transition-all flex items-center justify-center gap-1.5 shadow-glow-gold disabled:opacity-50 cursor-pointer"
+                  >
+                    <Sparkles className={clsx('w-3.5 h-3.5', isTraining && 'animate-spin')} />
+                    <span>
+                      {isTraining ? 'Sampling Posterior...' : `Re-Estimate Model (K=${numTopics})`}
+                    </span>
+                  </button>
+                </div>
 
-                {/* Diachronic Decade Segmentation */}
-                <div className="space-y-3 pt-4 border-t border-white/[0.07]">
-                  <div className="flex items-center justify-between">
-                    <h3 className="text-[10px] font-mono font-bold uppercase tracking-widest text-neutral-400">
-                      Diachronic Decade Filter
-                    </h3>
-                    {selectedDecade && (
-                      <button
-                        onClick={handleFullAnalysis}
-                        className="cursor-pointer text-[10px] font-mono text-gold hover:underline"
-                      >
-                        Reset All
-                      </button>
-                    )}
+                {/* 3. Latent Topic Source List (Master-Detail Directory) */}
+                <div className="bg-obsidian-950/80 border border-white/[0.07] rounded-xl p-3 flex flex-col">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="font-mono text-[10px] uppercase tracking-widest text-parchment-300 flex items-center gap-1.5">
+                      <Layers className="w-3 h-3 text-traditional" />
+                      Latent Topic Directory ({typedTopics.length})
+                    </span>
+                    <span className="font-mono text-[9px] text-parchment-300">Click to inspect</span>
                   </div>
-                  <div className="grid grid-cols-3 gap-2">
-                    {[1970, 1980, 1990, 2000, 2010, 2020].map((d) => (
-                      <button
-                        key={d}
-                        onClick={() => handleDecadeSelect(d)}
-                        className={clsx(
-                          "cursor-pointer py-2 rounded-lg text-[11px] font-mono font-bold uppercase transition-all duration-200 border",
-                          selectedDecade === d
-                            ? "bg-gold border-gold text-midnight-950 shadow-md"
-                            : "bg-midnight-950/60 border-white/[0.06] text-neutral-400 hover:border-white/20 hover:text-white"
-                        )}
-                      >
-                        {d}s
-                      </button>
-                    ))}
+
+                  <div className="space-y-1 max-h-[290px] overflow-y-auto pr-1 custom-scrollbar">
+                    {typedTopics.map((t: Topic, idx: number) => {
+                      const theme = getArchetypeTheme(t.archetype?.label);
+                      const isSelected = idx === safeTopicIndex;
+                      const matchesFilter = !ideologicalFilter || theme.id === ideologicalFilter;
+
+                      return (
+                        <button
+                          key={t.id}
+                          onClick={() => setSelectedTopicIndex(idx)}
+                          className={clsx(
+                            'w-full flex items-center justify-between gap-2 px-2.5 py-2 rounded-lg border text-left transition-all cursor-pointer',
+                            isSelected
+                              ? clsx('bg-obsidian-800', theme.borderGlow)
+                              : 'bg-obsidian-900/60 border-white/[0.05] hover:border-white/15',
+                            !matchesFilter && 'opacity-35'
+                          )}
+                        >
+                          <div className="flex items-center gap-2 min-w-0">
+                            <span
+                              className="w-2 h-2 rounded-full shrink-0"
+                              style={{ backgroundColor: theme.hex }}
+                            />
+                            <div className="min-w-0">
+                              <div className="flex items-center gap-1.5">
+                                <span className="font-mono text-[11px] font-bold text-parchment-50">
+                                  T{String(t.id + 1).padStart(2, '0')}
+                                </span>
+                                <span
+                                  className={clsx('font-mono text-[9px] truncate', theme.textClass)}
+                                >
+                                  {theme.id}
+                                </span>
+                              </div>
+                              <p className="text-[11px] text-parchment-300 truncate">
+                                {t.keywords
+                                  .slice(0, 3)
+                                  .map((k: Keyword) => k.word)
+                                  .join(' · ')}
+                              </p>
+                            </div>
+                          </div>
+                          <span className="font-mono text-[10px] text-parchment-200 tabular-nums shrink-0">
+                            {t.archetype?.confidence || 0}%
+                          </span>
+                        </button>
+                      );
+                    })}
                   </div>
                 </div>
-              </SpotlightCard>
+              </div>
 
-              {/* Ideological Legend & Methodology Folio Card */}
-              <div className="glass-panel p-5 space-y-3.5">
-                <div className="flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-widest text-neutral-200">
-                  <BookOpen size={14} className="text-gold" />
-                  <span>Critical Theory Archetype Key</span>
-                </div>
-                <div className="space-y-2.5 text-xs">
-                  <div className="p-2.5 rounded-lg bg-yellow-500/5 border border-yellow-500/20 flex items-start gap-2.5">
-                    <span className="w-2.5 h-2.5 rounded-full bg-yellow-400 shrink-0 mt-1" />
-                    <div>
-                      <div className="font-mono font-bold text-yellow-400 text-[11px]">1. Traditional / Ecclesiastical</div>
-                      <p className="text-neutral-400 text-[11px] leading-snug mt-0.5">
-                        Herder, EVA, Patmos — Dogmatik, Seelsorge, Liturgie, Ökumene.
-                      </p>
-                    </div>
-                  </div>
-                  <div className="p-2.5 rounded-lg bg-sky-500/5 border border-sky-400/20 flex items-start gap-2.5">
-                    <span className="w-2.5 h-2.5 rounded-full bg-sky-400 shrink-0 mt-1" />
-                    <div>
-                      <div className="font-mono font-bold text-sky-400 text-[11px]">2. Neoliberal / Self-Optimization</div>
-                      <p className="text-neutral-400 text-[11px] leading-snug mt-0.5">
-                        Gütersloher (Bertelsmann), Kösel — Achtsamkeit, Resilienz, Erfolg, Lebenshilfe.
-                      </p>
-                    </div>
-                  </div>
-                  <div className="p-2.5 rounded-lg bg-rose-500/5 border border-rose-400/20 flex items-start gap-2.5">
-                    <span className="w-2.5 h-2.5 rounded-full bg-rose-400 shrink-0 mt-1" />
-                    <div>
-                      <div className="font-mono font-bold text-rose-400 text-[11px]">3. Critical / Secular-Humanist</div>
-                      <p className="text-neutral-400 text-[11px] leading-snug mt-0.5">
-                        Suhrkamp, Alibri, Rowohlt — Religionskritik, Säkularismus, Machtkritik.
-                      </p>
-                    </div>
+              {/* Sidebar Colophon Footer */}
+              <div className="p-3 border-t border-white/[0.07] bg-obsidian-950/90">
+                <div className="flex items-center gap-2">
+                  <GraduationCap className="w-4 h-4 text-traditional shrink-0" />
+                  <div className="min-w-0">
+                    <p className="font-serif text-xs font-bold text-parchment-50 truncate">
+                      Paul Marandi, Ph.D. Scholar
+                    </p>
+                    <p className="font-mono text-[9px] text-parchment-300 truncate">
+                      Centre for German Studies · SLL&CS, JNU
+                    </p>
                   </div>
                 </div>
               </div>
             </motion.aside>
+          )}
+        </AnimatePresence>
 
-            {/* Right Column (8 Cols on LG): Multi-Tab Hermeneutics Workbench */}
-            <motion.section variants={itemVariants} className="lg:col-span-8 space-y-5">
-              
-              {/* Workbench View Switcher Bar */}
-              <div className="flex flex-wrap items-center justify-between gap-3 bg-midnight-900/90 backdrop-blur-xl p-2 rounded-2xl border border-white/[0.08]">
-                <div className="flex flex-wrap gap-1.5">
-                  <button
-                    onClick={() => setActiveTab('clusters')}
-                    className={clsx(
-                      "cursor-pointer px-4 py-2.5 rounded-xl text-xs font-mono font-bold uppercase tracking-wider transition-all duration-200 flex items-center gap-2",
-                      activeTab === 'clusters'
-                        ? "bg-gold text-midnight-950 shadow-md"
-                        : "text-neutral-400 hover:text-white hover:bg-white/[0.04]"
-                    )}
-                  >
-                    <Layers size={14} />
-                    <span>1. Discursive Clusters &amp; MARC21</span>
-                  </button>
+        {/* -------------------------------------------------------------------
+            PANE 2: CENTER SIMULTANEOUS BENTO CANVAS
+           ------------------------------------------------------------------- */}
+        <main className="flex-1 min-w-0 lg:h-full lg:overflow-y-auto p-3.5 sm:p-5 space-y-4 custom-scrollbar">
+          {/* Collapsible Monograph Abstract & Research Framing Strip */}
+          <div className="archival-panel rounded-xl px-4 py-3 border border-white/[0.08]">
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <div className="flex items-center gap-2.5 min-w-0">
+                <span className="px-2 py-0.5 rounded bg-traditional/15 border border-traditional/40 font-mono text-[10px] uppercase tracking-widest text-traditional shrink-0">
+                  JNU Doctoral Monograph
+                </span>
+                <h1 className="font-serif text-base sm:text-lg font-bold text-parchment-50 truncate">
+                  Ideological Transformation of German Theological, Self-Help & Secular Publishing (2005–2026)
+                </h1>
+              </div>
+              <button
+                onClick={() => setMonographBannerExpanded((prev) => !prev)}
+                className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 font-mono text-[10px] text-parchment-200 transition-colors cursor-pointer shrink-0"
+              >
+                <span>{monographBannerExpanded ? 'Hide Framing' : 'Research Framing (RQ₁–RQ₃)'}</span>
+                {monographBannerExpanded ? (
+                  <ChevronUp className="w-3 h-3 text-traditional" />
+                ) : (
+                  <ChevronDown className="w-3 h-3 text-traditional" />
+                )}
+              </button>
+            </div>
 
-                  <button
-                    onClick={() => setActiveTab('matrix')}
-                    className={clsx(
-                      "cursor-pointer px-4 py-2.5 rounded-xl text-xs font-mono font-bold uppercase tracking-wider transition-all duration-200 flex items-center gap-2",
-                      activeTab === 'matrix'
-                        ? "bg-gold text-midnight-950 shadow-md"
-                        : "text-neutral-400 hover:text-white hover:bg-white/[0.04]"
-                    )}
-                  >
-                    <Building2 size={14} />
-                    <span>2. Publisher × Archetype Matrix</span>
-                  </button>
+            <AnimatePresence>
+              {monographBannerExpanded && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: 'auto', opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  className="overflow-hidden"
+                >
+                  <div className="pt-3 mt-3 border-t border-white/[0.07] grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+                    <div className="p-3 rounded-lg bg-obsidian-950/80 border-l-2 border-traditional">
+                      <div className="font-mono text-[10px] text-traditional uppercase mb-1">
+                        RQ₁ · Ecclesiastical Continuity
+                      </div>
+                      <p className="text-parchment-200 leading-relaxed">
+                        Tracks classical dogmatic, liturgical, and pastoral vocabulary (*Kirche, Glaube, Liturgie, Sakrament*) across **Verlag Herder**, **St. Benno**, and **SCM R. Brockhaus**.
+                      </p>
+                    </div>
+                    <div className="p-3 rounded-lg bg-obsidian-950/80 border-l-2 border-neoliberal">
+                      <div className="font-mono text-[10px] text-neoliberal uppercase mb-1">
+                        RQ₂ · Neoliberal Therapeutic Turn
+                      </div>
+                      <p className="text-parchment-200 leading-relaxed">
+                        Measures the displacement of confessional theology by secularized mindfulness and resilience (*Achtsamkeit, Resilienz, Selbstoptimierung*) in **Kösel**, **GU**, and **Kamphausen**.
+                      </p>
+                    </div>
+                    <div className="p-3 rounded-lg bg-obsidian-950/80 border-l-2 border-critical">
+                      <div className="font-mono text-[10px] text-critical uppercase mb-1">
+                        RQ₃ · Post-Secular Critical Theory
+                      </div>
+                      <p className="text-parchment-200 leading-relaxed">
+                        Examines macro-sociological critiques of religion, capitalism, and modernity (*Säkularisierung, Kapitalismus, Macht*) in **Suhrkamp / Insel** and **C.H. Beck**.
+                      </p>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
 
-                  <button
-                    onClick={() => setActiveTab('diachronic')}
-                    className={clsx(
-                      "cursor-pointer px-4 py-2.5 rounded-xl text-xs font-mono font-bold uppercase tracking-wider transition-all duration-200 flex items-center gap-2",
-                      activeTab === 'diachronic'
-                        ? "bg-gold text-midnight-950 shadow-md"
-                        : "text-neutral-400 hover:text-white hover:bg-white/[0.04]"
-                    )}
-                  >
-                    <BarChart3 size={14} />
-                    <span>3. Diachronic &amp; Coherence Atlas</span>
-                  </button>
+          {/* Row 1: Compact 5-Card Executive KPI Strip */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-5 gap-3">
+            <div className="archival-panel rounded-xl p-3 border-l-2 border-l-traditional">
+              <div className="flex items-center justify-between mb-1">
+                <span className="font-mono text-[9px] uppercase tracking-widest text-parchment-300">
+                  Corpus (D)
+                </span>
+                <Database className="w-3.5 h-3.5 text-traditional" />
+              </div>
+              <div className="font-serif text-xl font-bold text-parchment-50 tabular-nums">
+                {summary?.total_records || 160}{' '}
+                <span className="text-xs font-sans font-normal text-parchment-300">Docs</span>
+              </div>
+              <p className="font-mono text-[9px] text-parchment-300 truncate mt-0.5">
+                {selectedYear
+                  ? `Active Slice: ${selectedYear}`
+                  : `${publishersList.length} Publishers · 2005–2026`}
+              </p>
+            </div>
+
+            <div className="archival-panel rounded-xl p-3 border-l-2 border-l-neoliberal">
+              <div className="flex items-center justify-between mb-1">
+                <span className="font-mono text-[9px] uppercase tracking-widest text-parchment-300">
+                  Lexicon (|V|)
+                </span>
+                <Library className="w-3.5 h-3.5 text-neoliberal" />
+              </div>
+              <div className="font-serif text-xl font-bold text-parchment-50 tabular-nums">
+                {vocabSize.toLocaleString()}{' '}
+                <span className="text-xs font-sans font-normal text-parchment-300">Lemmas</span>
+              </div>
+              <p className="font-mono text-[9px] text-parchment-300 truncate mt-0.5">
+                spaCy de_core_news_lg
+              </p>
+            </div>
+
+            <div className="archival-panel rounded-xl p-3 border-l-2 border-l-critical">
+              <div className="flex items-center justify-between mb-1">
+                <span className="font-mono text-[9px] uppercase tracking-widest text-parchment-300">
+                  Granularity (K)
+                </span>
+                <Layers className="w-3.5 h-3.5 text-critical" />
+              </div>
+              <div className="font-serif text-xl font-bold text-parchment-50 tabular-nums">
+                K = {numTopics}
+              </div>
+              <p className="font-mono text-[9px] text-parchment-300 truncate mt-0.5">
+                {numTopics <= 7 ? 'Macro Regime' : numTopics <= 16 ? 'Meso Regime' : 'Micro Regime'}
+              </p>
+            </div>
+
+            <div className="archival-panel rounded-xl p-3 border-l-2 border-l-emerald-400">
+              <div className="flex items-center justify-between mb-1">
+                <span className="font-mono text-[9px] uppercase tracking-widest text-parchment-300">
+                  Coherence (C<sub>v</sub>)
+                </span>
+                <Award className="w-3.5 h-3.5 text-emerald-400" />
+              </div>
+              <div className="font-serif text-xl font-bold text-emerald-300 tabular-nums">
+                {displayCv.toFixed(4)}
+              </div>
+              <p className="font-mono text-[9px] text-parchment-300 truncate mt-0.5">
+                Optimum: K=25 (0.5177)
+              </p>
+            </div>
+
+            <div className="archival-panel rounded-xl p-3 border-l-2 border-l-traditional col-span-2 sm:col-span-1">
+              <div className="flex items-center justify-between mb-1">
+                <span className="font-mono text-[9px] uppercase tracking-widest text-parchment-300">
+                  Regime Balance
+                </span>
+                <Scale className="w-3.5 h-3.5 text-traditional" />
+              </div>
+              <div className="flex items-center gap-2 font-mono text-xs font-bold tabular-nums">
+                <span className="text-traditional">T:{archetypeSummary.tradCount}</span>
+                <span className="text-parchment-300">/</span>
+                <span className="text-neoliberal">N:{archetypeSummary.neoCount}</span>
+                <span className="text-parchment-300">/</span>
+                <span className="text-critical">C:{archetypeSummary.critCount}</span>
+              </div>
+              <p className="font-mono text-[9px] text-parchment-300 truncate mt-0.5">
+                Lead: {archetypeSummary.dominant.split(' / ')[0]}
+              </p>
+            </div>
+          </div>
+
+          {/* =================================================================
+              WORKSPACE MODE 1: OBSERVATORY BENTO (2x2 SIMULTANEOUS GRID)
+             ================================================================= */}
+          {workspaceMode === 'bento' && (
+            <>
+              {/* Upper Bento Row: Topic Posterior Distribution (7 cols) + Diachronic Trajectory (5 cols) */}
+              <div className="grid grid-cols-1 2xl:grid-cols-12 gap-4 items-stretch">
+                <div className="2xl:col-span-7">
+                  <TopicModelViz
+                    topics={typedTopics}
+                    loading={isTraining}
+                    selectedYear={selectedYear}
+                    selectedTopicIndex={safeTopicIndex}
+                    onSelectTopicIndex={setSelectedTopicIndex}
+                    ideologicalFilter={ideologicalFilter}
+                    hideInlineInspector={rightInspectorOpen}
+                    onOpenInspector={() => setRightInspectorOpen(true)}
+                  />
+                </div>
+                <div className="2xl:col-span-5">
+                  <TrendsGraph
+                    data={trendsData}
+                    publishers={publishersList}
+                    onYearClick={handleYearClick}
+                    selectedYear={selectedYear}
+                    onResetYear={handleResetYear}
+                    compact={true}
+                  />
                 </div>
               </div>
 
-              {/* TAB 1: Discursive Clusters & MARC21 Paratextual Inspector */}
-              {activeTab === 'clusters' && (
-                <TopicModelViz
-                  topics={topics}
-                  isTraining={isTraining}
-                  selectedYear={selectedYear}
-                  selectedDecade={selectedDecade}
-                  coherenceScore={coherenceScore}
-                  cvCoherence={cvCoherence}
-                  representativeDocs={representativeDocs}
-                />
-              )}
-
-              {/* TAB 2: Institutional Publisher × Ideological Archetype Matrix */}
-              {activeTab === 'matrix' && (
-                <div className="glass-panel p-6 lg:p-8 space-y-8">
-                  <div className="border-b border-white/[0.08] pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                    <div>
-                      <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-gold">
-                        INSTITUTIONAL CROSS-TABULATION //
-                      </span>
-                      <h3 className="text-2xl sm:text-3xl font-heading font-bold italic text-white mt-1">
-                        German Publishing Houses × Ideological Archetype Affinity
-                      </h3>
-                    </div>
-                    <span className="text-xs font-mono text-neutral-400 bg-midnight-950 px-3 py-1.5 rounded-lg border border-white/10">
-                      Posterior θ × φ Synthesis
-                    </span>
-                  </div>
-
-                  {/* Stacked Bar Chart of Publisher Archetype Shares */}
-                  <div className="h-80 w-full">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <BarChart
-                        data={publisherArchetypes}
-                        margin={{ top: 10, right: 20, left: 0, bottom: 20 }}
-                      >
-                        <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
-                        <XAxis
-                          dataKey="publisher"
-                          tick={{ fill: '#E2E8F0', fontSize: 11, fontFamily: 'var(--font-mono)' }}
-                          axisLine={false}
-                          tickLine={false}
-                        />
-                        <YAxis
-                          unit="%"
-                          tick={{ fill: '#94a3b8', fontSize: 11, fontFamily: 'var(--font-mono)' }}
-                          axisLine={false}
-                          tickLine={false}
-                        />
-                        <RechartsTooltip
-                          contentStyle={{
-                            backgroundColor: '#070709',
-                            border: '1px solid rgba(255,255,255,0.15)',
-                            borderRadius: '12px',
-                            fontFamily: 'var(--font-mono)',
-                            fontSize: '11px'
-                          }}
-                        />
-                        <Legend wrapperStyle={{ fontFamily: 'var(--font-mono)', fontSize: '11px' }} />
-                        <Bar dataKey="Traditional" name="Traditional / Ecclesiastical (%)" stackId="a" fill="#EAB308" radius={[0, 0, 0, 0]} />
-                        <Bar dataKey="Neoliberal" name="Neoliberal / Self-Optimization (%)" stackId="a" fill="#38BDF8" />
-                        <Bar dataKey="Critical" name="Critical / Secular-Humanist (%)" stackId="a" fill="#FB7185" radius={[6, 6, 0, 0]} />
-                      </BarChart>
-                    </ResponsiveContainer>
-                  </div>
-
-                  {/* Quantitative Cross-Tabulation Table */}
-                  <div className="overflow-x-auto">
-                    <table className="w-full text-left border-collapse font-mono text-xs">
-                      <thead>
-                        <tr className="border-b border-white/10 text-[10px] uppercase tracking-wider text-neutral-400">
-                          <th className="py-3 px-4">German Publishing House (Imprint)</th>
-                          <th className="py-3 px-4 text-yellow-400">Traditional / Ecclesia</th>
-                          <th className="py-3 px-4 text-sky-400">Neoliberal / Market</th>
-                          <th className="py-3 px-4 text-rose-400">Critical / Secular</th>
-                          <th className="py-3 px-4">Primary Discursive Orientation</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-white/[0.06]">
-                        {publisherArchetypes.map((row) => {
-                          const maxVal = Math.max(row.Traditional, row.Neoliberal, row.Critical);
-                          const dom =
-                            maxVal === row.Traditional
-                              ? 'Traditional / Ecclesiastical'
-                              : maxVal === row.Neoliberal
-                              ? 'Neoliberal / Self-Optimization'
-                              : 'Critical / Secular-Humanist';
-                          return (
-                            <tr key={row.publisher} className="hover:bg-white/[0.02] transition-colors">
-                              <td className="py-3 px-4 font-bold text-white">{row.publisher}</td>
-                              <td className="py-3 px-4 text-yellow-400">{row.Traditional}%</td>
-                              <td className="py-3 px-4 text-sky-400">{row.Neoliberal}%</td>
-                              <td className="py-3 px-4 text-rose-400">{row.Critical}%</td>
-                              <td className="py-3 px-4 text-neutral-300">{dom}</td>
-                            </tr>
-                          );
-                        })}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              )}
-
-              {/* TAB 3: Diachronic Evolution & Hyperparameter Coherence Atlas */}
-              {activeTab === 'diachronic' && (
-                <div className="space-y-6">
-                  <SpotlightCard className="border-white/10 bg-midnight-900/85">
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4 pb-4 border-b border-white/[0.07]">
+              {/* Lower Bento Row: Institutional Publisher Matrix (7 cols) + Coherence Atlas (5 cols) */}
+              <div className="grid grid-cols-1 2xl:grid-cols-12 gap-4 items-stretch">
+                {/* Left Cell: Publisher × Ideological Archetype Matrix */}
+                <div className="2xl:col-span-7 archival-panel rounded-xl p-4 sm:p-5 flex flex-col justify-between">
+                  <div>
+                    <div className="flex flex-wrap items-center justify-between gap-2 pb-3 mb-3 border-b border-white/[0.07]">
                       <div>
-                        <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-gold">
-                          TEMPORAL OBSERVATORY //
+                        <span className="font-mono text-[10px] uppercase tracking-widest text-traditional">
+                          Institutional Imprint Positioning
                         </span>
-                        <h3 className="text-2xl font-heading font-bold italic text-white mt-0.5">
-                          Diachronic Publication Volume &amp; Interactive Year Slicing
+                        <h3 className="font-serif text-lg sm:text-xl font-bold text-parchment-50">
+                          Publisher × Ideological Archetype Matrix
                         </h3>
                       </div>
-                      <span className="text-[10px] font-mono uppercase tracking-widest bg-gold/15 text-gold px-3 py-1.5 rounded-lg border border-gold/30">
-                        Click Any Year Node to Slice LDA
-                      </span>
-                    </div>
-                    <TrendsGraph
-                      data={trendsData}
-                      onYearSelect={handleYearSelect}
-                      selectedYear={selectedYear}
-                    />
-                  </SpotlightCard>
-
-                  {/* Full Coherence Optimization Table */}
-                  {coherenceGrid.length > 0 && (
-                    <div className="glass-panel p-6 space-y-4">
-                      <div className="flex items-center justify-between border-b border-white/[0.08] pb-3">
-                        <div>
-                          <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-gold">
-                            EMPIRICAL VALIDATION (RÖDER ET AL., 2015) //
-                          </span>
-                          <h4 className="text-xl font-heading font-bold italic text-white">
-                            Hyperparameter Grid Search Matrix (K ∈ [4, 30])
-                          </h4>
-                        </div>
+                      <div className="flex items-center gap-2 font-mono text-[10px]">
+                        <span className="text-traditional">■ Trad</span>
+                        <span className="text-neoliberal">■ Neo</span>
+                        <span className="text-critical">■ Crit</span>
                       </div>
-                      <div className="overflow-x-auto">
-                        <table className="w-full text-left border-collapse font-mono text-xs">
-                          <thead>
-                            <tr className="border-b border-white/10 text-[10px] uppercase tracking-wider text-neutral-400">
-                              <th className="py-2.5 px-3">Topics (K)</th>
-                              <th className="py-2.5 px-3 text-gold">C_v Coherence (NPMI)</th>
-                              <th className="py-2.5 px-3 text-emerald-400">U_Mass Coherence</th>
-                              <th className="py-2.5 px-3">Log Perplexity Bound</th>
-                              <th className="py-2.5 px-3">Action</th>
-                            </tr>
-                          </thead>
-                          <tbody className="divide-y divide-white/[0.06]">
-                            {coherenceGrid.map((pt) => (
+                    </div>
+
+                    <div className="space-y-2.5 max-h-[320px] overflow-y-auto pr-1 custom-scrollbar">
+                      {publisherArchetypes.map((item) => {
+                        const trad = item.Traditional ?? 0;
+                        const neo = item.Neoliberal ?? 0;
+                        const crit = item.Critical ?? 0;
+                        const isTrad = trad >= neo && trad >= crit;
+                        const isNeo = neo > trad && neo >= crit;
+                        const dominantLabel = isTrad
+                          ? 'Traditional'
+                          : isNeo
+                          ? 'Neoliberal'
+                          : 'Critical';
+                        const badgeClass = isTrad
+                          ? 'bg-traditional/15 text-traditional border-traditional/30'
+                          : isNeo
+                          ? 'bg-neoliberal/15 text-neoliberal border-neoliberal/30'
+                          : 'bg-critical/15 text-critical border-critical/30';
+
+                        return (
+                          <div
+                            key={item.publisher}
+                            className="p-2.5 rounded-lg bg-obsidian-950/80 border border-white/[0.06] hover:border-white/15 transition-all"
+                          >
+                            <div className="flex items-center justify-between gap-2 mb-1.5">
+                              <div className="flex items-center gap-2 min-w-0">
+                                <span className="font-serif font-bold text-sm text-parchment-50 truncate">
+                                  {item.publisher}
+                                </span>
+                                <span
+                                  className={clsx(
+                                    'px-1.5 py-0.5 rounded border font-mono text-[9px] font-semibold shrink-0',
+                                    badgeClass
+                                  )}
+                                >
+                                  {dominantLabel}
+                                </span>
+                              </div>
+                              <div className="flex items-center gap-2 font-mono text-[10px] tabular-nums shrink-0">
+                                <span className="text-traditional">{trad}%</span>
+                                <span className="text-neoliberal">{neo}%</span>
+                                <span className="text-critical">{crit}%</span>
+                              </div>
+                            </div>
+                            <div className="w-full h-2 rounded-full overflow-hidden flex bg-obsidian-900 p-0.5 gap-0.5">
+                              <div
+                                style={{ width: `${trad}%` }}
+                                className="h-full bg-traditional rounded-l-full"
+                              />
+                              <div style={{ width: `${neo}%` }} className="h-full bg-neoliberal" />
+                              <div
+                                style={{ width: `${crit}%` }}
+                                className="h-full bg-critical rounded-r-full"
+                              />
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Right Cell: Coherence Grid Validation Atlas */}
+                <div className="2xl:col-span-5 archival-panel rounded-xl p-4 sm:p-5 flex flex-col justify-between">
+                  <div>
+                    <div className="flex items-center justify-between pb-3 mb-3 border-b border-white/[0.07]">
+                      <div>
+                        <span className="font-mono text-[10px] uppercase tracking-widest text-emerald-400">
+                          Röder et al. (2015) Validation
+                        </span>
+                        <h3 className="font-serif text-lg sm:text-xl font-bold text-parchment-50">
+                          Coherence Grid (C<sub>v</sub> vs. U<sub>Mass</sub>)
+                        </h3>
+                      </div>
+                      <TrendingUp className="w-4 h-4 text-emerald-400" />
+                    </div>
+
+                    <div className="overflow-x-auto max-h-[320px] overflow-y-auto custom-scrollbar">
+                      <table className="w-full text-left border-collapse font-mono text-[11px]">
+                        <thead>
+                          <tr className="border-b border-white/10 text-parchment-300 text-[9px] uppercase">
+                            <th className="py-1.5 px-2">K</th>
+                            <th className="py-1.5 px-2">Cv (NPMI)</th>
+                            <th className="py-1.5 px-2">UMass</th>
+                            <th className="py-1.5 px-2 text-right">Regime</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-white/[0.05]">
+                          {coherenceGrid.map((row) => {
+                            const isActive = row.k === numTopics;
+                            const isPeak = row.k === 25;
+                            return (
                               <tr
-                                key={pt.k}
+                                key={row.k}
+                                onClick={() => handleRegimeSelect(row.k)}
                                 className={clsx(
-                                  "hover:bg-white/[0.03] transition-colors",
-                                  numTopics === pt.k && "bg-gold/10"
+                                  'cursor-pointer transition-colors',
+                                  isActive
+                                    ? 'bg-traditional/15 text-traditional font-bold'
+                                    : 'hover:bg-white/[0.04] text-parchment-200'
                                 )}
                               >
-                                <td className="py-2.5 px-3 font-bold text-white">K = {pt.k}</td>
-                                <td className="py-2.5 px-3 text-gold font-semibold">{pt.c_v.toFixed(4)}</td>
-                                <td className="py-2.5 px-3 text-emerald-400">{pt.u_mass.toFixed(4)}</td>
-                                <td className="py-2.5 px-3 text-neutral-400">{pt.log_perplexity.toFixed(4)}</td>
-                                <td className="py-2.5 px-3">
-                                  <button
-                                    onClick={() => {
-                                      handleRegimeSelect(pt.k);
-                                      setActiveTab('clusters');
-                                    }}
-                                    className="cursor-pointer px-2.5 py-1 rounded bg-white/[0.06] hover:bg-gold hover:text-midnight-950 text-[10px] font-bold transition-colors"
-                                  >
-                                    Load K={pt.k}
-                                  </button>
+                                <td className="py-1.5 px-2 tabular-nums">K={row.k}</td>
+                                <td className="py-1.5 px-2 tabular-nums text-emerald-300">
+                                  {row.c_v.toFixed(4)}
+                                </td>
+                                <td className="py-1.5 px-2 tabular-nums text-neoliberal">
+                                  {row.u_mass.toFixed(3)}
+                                </td>
+                                <td className="py-1.5 px-2 text-right">
+                                  {isPeak ? (
+                                    <span className="px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-300 text-[9px]">
+                                      Optimum
+                                    </span>
+                                  ) : row.k === 12 ? (
+                                    <span className="px-1.5 py-0.5 rounded bg-traditional/15 text-traditional text-[9px]">
+                                      Meso
+                                    </span>
+                                  ) : (
+                                    <span className="text-parchment-300 text-[9px]">
+                                      {row.k <= 8 ? 'Macro' : 'Micro'}
+                                    </span>
+                                  )}
                                 </td>
                               </tr>
-                            ))}
-                          </tbody>
-                        </table>
+                            );
+                          })}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
+
+          {/* =================================================================
+              WORKSPACE MODE 2: TOPIC & LEXICAL DEEP-DIVE
+             ================================================================= */}
+          {workspaceMode === 'topics' && (
+            <TopicModelViz
+              topics={typedTopics}
+              loading={isTraining}
+              selectedYear={selectedYear}
+              selectedTopicIndex={safeTopicIndex}
+              onSelectTopicIndex={setSelectedTopicIndex}
+              ideologicalFilter={ideologicalFilter}
+              hideInlineInspector={false}
+            />
+          )}
+
+          {/* =================================================================
+              WORKSPACE MODE 3: PUBLISHER & COHERENCE ATLAS
+             ================================================================= */}
+          {workspaceMode === 'matrix' && (
+            <div className="space-y-4">
+              <div className="grid grid-cols-1 2xl:grid-cols-12 gap-4 items-stretch">
+                {/* Publisher Matrix */}
+                <div className="2xl:col-span-7 archival-panel rounded-xl p-4 sm:p-5">
+                  <div className="flex flex-wrap items-center justify-between gap-2 pb-3 mb-3 border-b border-white/[0.07]">
+                    <div>
+                      <span className="font-mono text-[10px] uppercase tracking-widest text-traditional">
+                        Institutional Imprint Positioning
+                      </span>
+                      <h3 className="font-serif text-lg sm:text-xl font-bold text-parchment-50">
+                        Publisher × Ideological Archetype Matrix
+                      </h3>
+                    </div>
+                    <div className="flex items-center gap-2 font-mono text-[10px]">
+                      <span className="text-traditional">■ Trad</span>
+                      <span className="text-neoliberal">■ Neo</span>
+                      <span className="text-critical">■ Crit</span>
+                    </div>
+                  </div>
+                  <div className="space-y-2.5">
+                    {publisherArchetypes.map((item) => {
+                      const trad = item.Traditional ?? 0;
+                      const neo = item.Neoliberal ?? 0;
+                      const crit = item.Critical ?? 0;
+                      const isTrad = trad >= neo && trad >= crit;
+                      const isNeo = neo > trad && neo >= crit;
+                      const dominantLabel = isTrad
+                        ? 'Traditional'
+                        : isNeo
+                        ? 'Neoliberal'
+                        : 'Critical';
+                      const badgeClass = isTrad
+                        ? 'bg-traditional/15 text-traditional border-traditional/30'
+                        : isNeo
+                        ? 'bg-neoliberal/15 text-neoliberal border-neoliberal/30'
+                        : 'bg-critical/15 text-critical border-critical/30';
+                      return (
+                        <div
+                          key={item.publisher}
+                          className="p-2.5 rounded-lg bg-obsidian-950/80 border border-white/[0.06]"
+                        >
+                          <div className="flex items-center justify-between gap-2 mb-1.5">
+                            <div className="flex items-center gap-2 min-w-0">
+                              <span className="font-serif font-bold text-sm text-parchment-50 truncate">
+                                {item.publisher}
+                              </span>
+                              <span
+                                className={clsx(
+                                  'px-1.5 py-0.5 rounded border font-mono text-[9px] font-semibold shrink-0',
+                                  badgeClass
+                                )}
+                              >
+                                {dominantLabel}
+                              </span>
+                            </div>
+                            <div className="flex items-center gap-2 font-mono text-[10px] tabular-nums shrink-0">
+                              <span className="text-traditional">{trad}%</span>
+                              <span className="text-neoliberal">{neo}%</span>
+                              <span className="text-critical">{crit}%</span>
+                            </div>
+                          </div>
+                          <div className="w-full h-2 rounded-full overflow-hidden flex bg-obsidian-900 p-0.5 gap-0.5">
+                            <div
+                              style={{ width: `${trad}%` }}
+                              className="h-full bg-traditional rounded-l-full"
+                            />
+                            <div style={{ width: `${neo}%` }} className="h-full bg-neoliberal" />
+                            <div
+                              style={{ width: `${crit}%` }}
+                              className="h-full bg-critical rounded-r-full"
+                            />
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Coherence Grid Validation Table */}
+                <div className="2xl:col-span-5 archival-panel rounded-xl p-4 sm:p-5">
+                  <div className="flex items-center justify-between pb-3 mb-3 border-b border-white/[0.07]">
+                    <div>
+                      <span className="font-mono text-[10px] uppercase tracking-widest text-emerald-400">
+                        Röder et al. (2015) Validation
+                      </span>
+                      <h3 className="font-serif text-lg sm:text-xl font-bold text-parchment-50">
+                        Coherence Grid (C<sub>v</sub> vs. U<sub>Mass</sub>)
+                      </h3>
+                    </div>
+                    <TrendingUp className="w-4 h-4 text-emerald-400" />
+                  </div>
+                  <table className="w-full text-left border-collapse font-mono text-[11px]">
+                    <thead>
+                      <tr className="border-b border-white/10 text-parchment-300 text-[9px] uppercase">
+                        <th className="py-1.5 px-2">K</th>
+                        <th className="py-1.5 px-2">Cv (NPMI)</th>
+                        <th className="py-1.5 px-2">UMass</th>
+                        <th className="py-1.5 px-2 text-right">Regime</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-white/[0.05]">
+                      {coherenceGrid.map((row) => {
+                        const isActive = row.k === numTopics;
+                        const isPeak = row.k === 25;
+                        return (
+                          <tr
+                            key={row.k}
+                            onClick={() => handleRegimeSelect(row.k)}
+                            className={clsx(
+                              'cursor-pointer transition-colors',
+                              isActive
+                                ? 'bg-traditional/15 text-traditional font-bold'
+                                : 'hover:bg-white/[0.04] text-parchment-200'
+                            )}
+                          >
+                            <td className="py-1.5 px-2 tabular-nums">K={row.k}</td>
+                            <td className="py-1.5 px-2 tabular-nums text-emerald-300">
+                              {row.c_v.toFixed(4)}
+                            </td>
+                            <td className="py-1.5 px-2 tabular-nums text-neoliberal">
+                              {row.u_mass.toFixed(3)}
+                            </td>
+                            <td className="py-1.5 px-2 text-right">
+                              {isPeak ? (
+                                <span className="px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-300 text-[9px]">
+                                  Optimum
+                                </span>
+                              ) : row.k === 12 ? (
+                                <span className="px-1.5 py-0.5 rounded bg-traditional/15 text-traditional text-[9px]">
+                                  Meso
+                                </span>
+                              ) : (
+                                <span className="text-parchment-300 text-[9px]">
+                                  {row.k <= 8 ? 'Macro' : 'Micro'}
+                                </span>
+                              )}
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <TrendsGraph
+                data={trendsData}
+                publishers={publishersList}
+                onYearClick={handleYearClick}
+                selectedYear={selectedYear}
+                onResetYear={handleResetYear}
+                compact={false}
+              />
+            </div>
+          )}
+        </main>
+
+        {/* -------------------------------------------------------------------
+            PANE 3: RIGHT DOCKED MARC21 & APA 7th INSPECTOR DRAWER
+           ------------------------------------------------------------------- */}
+        <AnimatePresence initial={false}>
+          {rightInspectorOpen && (
+            <motion.aside
+              initial={{ width: 0, opacity: 0 }}
+              animate={{ width: 370, opacity: 1 }}
+              exit={{ width: 0, opacity: 0 }}
+              transition={{ duration: 0.2, ease: 'easeOut' }}
+              className="w-full lg:w-[360px] xl:w-[385px] shrink-0 border-t lg:border-t-0 lg:border-l border-white/[0.08] bg-obsidian-900/90 flex flex-col lg:h-full lg:overflow-y-auto custom-scrollbar"
+            >
+              {/* Sticky Inspector Header */}
+              <div className="p-3.5 border-b border-white/[0.08] bg-obsidian-950/90 sticky top-0 z-10 space-y-2.5">
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-1.5">
+                    <FileText className="w-3.5 h-3.5 text-traditional" />
+                    <span className="font-mono text-[10px] uppercase tracking-widest text-parchment-200">
+                      MARC21 & APA 7th Inspector
+                    </span>
+                  </div>
+                  <button
+                    onClick={handleCopyAllTopicCitations}
+                    title="Copy all APA 7th citations for this topic"
+                    className="inline-flex items-center gap-1 px-2 py-1 rounded bg-traditional/15 hover:bg-traditional/25 border border-traditional/40 font-mono text-[10px] text-traditional transition-colors cursor-pointer"
+                  >
+                    {copiedCitationKey === 'batch-topic-apa' ? (
+                      <>
+                        <Check className="w-3 h-3 text-emerald-400" />
+                        <span>Copied All!</span>
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="w-3 h-3" />
+                        <span>Copy All APA</span>
+                      </>
+                    )}
+                  </button>
+                </div>
+
+                {/* Currently Inspected Topic Summary Pill */}
+                {activeTopic && (
+                  <div className="p-2.5 rounded-lg bg-obsidian-900 border border-white/[0.07] flex items-center justify-between gap-2">
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-1.5">
+                        <span
+                          className="w-2 h-2 rounded-full shrink-0"
+                          style={{ backgroundColor: activeTopicTheme.hex }}
+                        />
+                        <span className="font-serif font-bold text-sm text-parchment-50 truncate">
+                          Topic #{activeTopic.id + 1}: {activeTopicTheme.shortLabel}
+                        </span>
+                      </div>
+                      <p className="font-mono text-[10px] text-parchment-300 truncate mt-0.5">
+                        {activeTopic.keywords
+                          .slice(0, 4)
+                          .map((k: Keyword) => k.word)
+                          .join(' · ')}
+                      </p>
+                    </div>
+                    <span className="font-mono text-[10px] px-1.5 py-0.5 rounded bg-white/[0.05] text-parchment-200 shrink-0">
+                      {filteredInspectorDocs.length} Docs
+                    </span>
+                  </div>
+                )}
+
+                {/* Search Input inside Inspector */}
+                <div className="relative">
+                  <Search className="w-3.5 h-3.5 text-parchment-300 absolute left-2.5 top-1/2 -translate-y-1/2" />
+                  <input
+                    type="text"
+                    value={inspectorSearch}
+                    onChange={(e) => setInspectorSearch(e.target.value)}
+                    placeholder="Search MARC21 titles, publishers, blurbs..."
+                    className="w-full bg-obsidian-900 border border-white/10 rounded-lg pl-8 pr-3 py-1.5 text-xs font-mono text-parchment-100 placeholder:text-parchment-300/50 focus:outline-none focus:border-traditional"
+                  />
+                </div>
+              </div>
+
+              {/* Inspector Body: Publisher Imprint Concentration + MARC21 Cards */}
+              <div className="p-3.5 space-y-3 flex-1">
+                {activeTopic?.top_publishers &&
+                  Object.keys(activeTopic.top_publishers).length > 0 && (
+                    <div className="p-3 rounded-xl bg-obsidian-950/70 border border-white/[0.06]">
+                      <div className="flex items-center gap-1.5 mb-2">
+                        <Building2 className="w-3.5 h-3.5 text-traditional" />
+                        <span className="font-mono text-[10px] uppercase tracking-widest text-parchment-300">
+                          Topic Imprint Concentration
+                        </span>
+                      </div>
+                      <div className="flex flex-wrap gap-1.5">
+                        {Object.entries(activeTopic.top_publishers).map(([pub, count]) => (
+                          <span
+                            key={pub}
+                            className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-obsidian-900 border border-white/[0.08] text-[10px] text-parchment-100"
+                          >
+                            <span>{pub}</span>
+                            <span
+                              className="font-mono font-bold"
+                              style={{ color: activeTopicTheme.hex }}
+                            >
+                              {Number(count)}
+                            </span>
+                          </span>
+                        ))}
                       </div>
                     </div>
                   )}
-                </div>
-              )}
-            </motion.section>
-          </div>
-        </motion.main>
 
-        {/* Majestic Author Attribution Colophon */}
-        <motion.footer
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.8, duration: 0.7 }}
-          className="w-full text-center mt-16 pt-8 pb-4 relative z-10 border-t border-white/[0.07]"
-        >
-          <div className="mx-auto inline-flex items-center gap-3 py-2.5 px-6 rounded-full bg-midnight-900/90 backdrop-blur-xl border border-white/10 shadow-xl">
-            <span className="w-2 h-2 rounded-full bg-gold" />
-            <BlurText
-              text="Dissertation Observatory by Paul Marandi · Ph.D. Scholar, CGS, SLL&CS, JNU"
-              delay={30}
-              className="text-neutral-300 font-mono uppercase text-[10px] sm:text-xs tracking-[0.22em] font-semibold"
-            />
-          </div>
-        </motion.footer>
+                {/* Representative MARC21 Cards */}
+                <div className="space-y-2.5">
+                  {filteredInspectorDocs.length > 0 ? (
+                    filteredInspectorDocs.map((doc: RepresentativeDoc, idx: number) => {
+                      const apaText =
+                        doc.apa_citation || `${doc.publisher}. (${doc.year}). ${doc.title}.`;
+                      const copyKey = `inspector-doc-${idx}`;
+                      const isCopied = copiedCitationKey === copyKey;
+
+                      return (
+                        <div
+                          key={idx}
+                          className="p-3 rounded-xl bg-obsidian-950/90 border border-white/[0.07] hover:border-white/20 transition-all space-y-2"
+                        >
+                          <div className="flex items-center justify-between gap-2">
+                            <span
+                              className="px-2 py-0.5 rounded font-mono text-[9px] font-semibold border border-white/10 bg-white/[0.03]"
+                              style={{ color: activeTopicTheme.hex }}
+                            >
+                              {doc.publisher}
+                            </span>
+                            <span className="font-mono text-[10px] text-parchment-300">
+                              Tag 264$c · {doc.year}
+                            </span>
+                          </div>
+
+                          <h4 className="font-serif text-sm font-bold text-parchment-50 leading-snug">
+                            {doc.title}
+                          </h4>
+
+                          {doc.snippet && (
+                            <p className="text-[11px] text-parchment-200 leading-relaxed line-clamp-3 italic border-l-2 border-white/15 pl-2.5">
+                              „{doc.snippet}“
+                            </p>
+                          )}
+
+                          <div className="pt-2 border-t border-white/[0.06] flex items-center justify-between gap-2">
+                            <p className="font-mono text-[9px] text-parchment-300 truncate">
+                              {apaText}
+                            </p>
+                            <button
+                              onClick={() => copyText(copyKey, apaText)}
+                              className="shrink-0 inline-flex items-center gap-1 px-2 py-1 rounded bg-white/[0.05] hover:bg-white/[0.12] border border-white/10 font-mono text-[9px] text-parchment-100 cursor-pointer"
+                            >
+                              {isCopied ? (
+                                <>
+                                  <Check className="w-2.5 h-2.5 text-emerald-400" />
+                                  <span className="text-emerald-300">Copied</span>
+                                </>
+                              ) : (
+                                <>
+                                  <Copy className="w-2.5 h-2.5 text-traditional" />
+                                  <span>APA 7th</span>
+                                </>
+                              )}
+                            </button>
+                          </div>
+                        </div>
+                      );
+                    })
+                  ) : (
+                    <div className="p-6 rounded-xl bg-obsidian-950/50 border border-white/[0.05] text-center">
+                      <p className="font-mono text-xs text-parchment-300">
+                        No MARC21 monographs match "{inspectorSearch}".
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </motion.aside>
+          )}
+        </AnimatePresence>
       </div>
     </div>
   );
