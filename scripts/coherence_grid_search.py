@@ -15,7 +15,9 @@ from gensim.models.coherencemodel import CoherenceModel
 # Add parent directory to path so we can import config and lda_pipeline
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 import config
-from lda_pipeline import preprocess_text
+from lda_pipeline import preprocess_corpus_batch
+
+csv.field_size_limit(10 * 1024 * 1024)
 
 
 def prepare_corpus(data_path: str):
@@ -23,15 +25,16 @@ def prepare_corpus(data_path: str):
     Loads and preprocesses the German corpus with lemmatization, POS filtering,
     domain stopword removal, religious keyword weighting, and bigram detection.
     """
-    processed_docs = []
+    raw_texts = []
     with open(data_path, mode='r', encoding='utf-8') as f:
         reader = csv.DictReader(f)
         for row in reader:
             text = row.get('text', '')
-            if text:
-                tokens = preprocess_text(text)
-                if tokens:
-                    processed_docs.append(tokens)
+            if text and text.strip():
+                raw_texts.append(text)
+
+    batch_tokens = preprocess_corpus_batch(raw_texts)
+    processed_docs = [t for t in batch_tokens if t]
 
     bigram = Phrases(processed_docs, min_count=2, threshold=5)
     bigram_mod = Phraser(bigram)

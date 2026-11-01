@@ -1,0 +1,1719 @@
+{
+  "corpus_documents": 1863,
+  "vocabulary_size": 10279,
+  "coherence_score": -2.9771,
+  "topics": [
+    {
+      "topic_id": 1,
+      "archetype": {
+        "label": "Traditional / Ecclesiastical",
+        "confidence": 100.0,
+        "scores": {
+          "Traditional / Ecclesiastical": 100.0,
+          "Neoliberal / Self-Optimization": 0.0,
+          "Critical / Secular-Humanist": 0.0
+        }
+      },
+      "top_terms": [
+        {
+          "term": "frau",
+          "weight": 0.01519
+        },
+        {
+          "term": "kirche_kirche",
+          "weight": 0.0127
+        },
+        {
+          "term": "jahrhundert",
+          "weight": 0.01134
+        },
+        {
+          "term": "christ",
+          "weight": 0.01016
+        },
+        {
+          "term": "katholisch",
+          "weight": 0.00835
+        },
+        {
+          "term": "bischof",
+          "weight": 0.00665
+        },
+        {
+          "term": "kaiser",
+          "weight": 0.0066
+        },
+        {
+          "term": "daz",
+          "weight": 0.00659
+        },
+        {
+          "term": "herr",
+          "weight": 0.00655
+        },
+        {
+          "term": "land",
+          "weight": 0.006
+        },
+        {
+          "term": "brief",
+          "weight": 0.0059
+        },
+        {
+          "term": "mann",
+          "weight": 0.0058
+        },
+        {
+          "term": "mönch",
+          "weight": 0.00574
+        },
+        {
+          "term": "jesuit",
+          "weight": 0.00508
+        },
+        {
+          "term": "christlich_christlich",
+          "weight": 0.00505
+        }
+      ],
+      "top_publishers": [
+        {
+          "publisher": "Rowohlt",
+          "share": 23.9
+        },
+        {
+          "publisher": "Fischer",
+          "share": 19.9
+        },
+        {
+          "publisher": "Alibri",
+          "share": 14.5
+        },
+        {
+          "publisher": "Herder",
+          "share": 6.8
+        },
+        {
+          "publisher": "Gütersloher Verlagshaus",
+          "share": 6.3
+        },
+        {
+          "publisher": "Patmos",
+          "share": 4.7
+        }
+      ],
+      "representative_docs": [
+        {
+          "title": "Urkundenbuch des Klosters Paulinzelle [Forschungsbuch-Abschnitt 40/100]",
+          "author": "Anemüller, Ernst",
+          "publisher": "Fischer",
+          "date": "2019",
+          "corpus_layer": "archive_org_fulltext_book",
+          "probability": 98.0,
+          "keywords": [],
+          "snippet": "des Klosters Paulinzelle. 253 Mdschr.: SA. Rudolstadt, P. D. N. 126 (126). Or. Perg. Von den beiden angeh. runden kleinen Siegeln zeigt da» eine, von dem ein Stückchen fehlt, den Abt in »Uzender Gestalt, Umschrift: S. Onr. d[ei gratia abbatis] Celle Pavline, das andere einen dreieckigen Schild mit zwei gekreuzten Lilien- »täben, Umschrift: 8. Reinhardi [de] Holbach. Aufschr.: In Nedirn Swarza super 1 talentum. Abschr",
+          "apa_citation": "Anemüller, Ernst (2019). Urkundenbuch des Klosters Paulinzelle [Forschungsbuch-Abschnitt 40/100]. Fischer."
+        },
+        {
+          "title": "Karlheinz Deschner und seine große Kriminalgeschichte des Christentums: Leben, Werke, Wirkungen ; zum Erscheinen von Band 9 im Juli 2008",
+          "author": "Gieselbusch, Hermann",
+          "publisher": "Rowohlt",
+          "date": "2008",
+          "corpus_layer": "drm_fallback_multi_api_enriched",
+          "probability": 83.9,
+          "keywords": [],
+          "snippet": "Karlheinz Deschner und seine große Kriminalgeschichte des Christentums: Leben, Werke, Wirkungen ; zum Erscheinen von Band 9 im Juli 2008. Gieselbusch, Hermann. Rowohlt.",
+          "apa_citation": "Gieselbusch, Hermann (2008). Karlheinz Deschner und seine große Kriminalgeschichte des Christentums: Leben, Werke, Wirkungen ; zum Erscheinen von Band 9 im Juli 2008. Rowohlt."
+        },
+        {
+          "title": "Über Karlheinz Deschner und seine große Kriminalgeschichte des Christentums: zum Erscheinen von Band 8 und zum 80. Geburtstag des Autors am 23. Mai 2004",
+          "author": "Gieselbusch, Hermann",
+          "publisher": "Rowohlt",
+          "date": "2004",
+          "corpus_layer": "drm_fallback_multi_api_enriched",
+          "probability": 83.9,
+          "keywords": [],
+          "snippet": "Über Karlheinz Deschner und seine große Kriminalgeschichte des Christentums: zum Erscheinen von Band 8 und zum 80. Geburtstag des Autors am 23. Mai 2004. Gieselbusch, Hermann. Rowohlt.",
+          "apa_citation": "Gieselbusch, Hermann (2004). Über Karlheinz Deschner und seine große Kriminalgeschichte des Christentums: zum Erscheinen von Band 8 und zum 80. Geburtstag des Autors am 23. Mai 2004. Rowohlt."
+        }
+      ]
+    },
+    {
+      "topic_id": 2,
+      "archetype": {
+        "label": "Traditional / Ecclesiastical",
+        "confidence": 100.0,
+        "scores": {
+          "Traditional / Ecclesiastical": 100.0,
+          "Neoliberal / Self-Optimization": 0.0,
+          "Critical / Secular-Humanist": 0.0
+        }
+      },
+      "top_terms": [
+        {
+          "term": "kirche_kirche",
+          "weight": 0.10697
+        },
+        {
+          "term": "evangelisch",
+          "weight": 0.03656
+        },
+        {
+          "term": "kmu",
+          "weight": 0.02332
+        },
+        {
+          "term": "item",
+          "weight": 0.01803
+        },
+        {
+          "term": "befragter",
+          "weight": 0.01762
+        },
+        {
+          "term": "abbildung",
+          "weight": 0.01597
+        },
+        {
+          "term": "religiosität",
+          "weight": 0.01536
+        },
+        {
+          "term": "kapitel",
+          "weight": 0.01224
+        },
+        {
+          "term": "relevanz_religion",
+          "weight": 0.01079
+        },
+        {
+          "term": "kirche",
+          "weight": 0.01008
+        },
+        {
+          "term": "kirchenmitglied",
+          "weight": 0.00996
+        },
+        {
+          "term": "analyse_kirchenmitgliedschaftsuntersuchung",
+          "weight": 0.00975
+        },
+        {
+          "term": "deutschland",
+          "weight": 0.0094
+        },
+        {
+          "term": "befund",
+          "weight": 0.00903
+        },
+        {
+          "term": "konfessionslosen",
+          "weight": 0.00873
+        }
+      ],
+      "top_publishers": [
+        {
+          "publisher": "Evangelische Verlagsanstalt",
+          "share": 78.1
+        },
+        {
+          "publisher": "Patmos",
+          "share": 4.2
+        },
+        {
+          "publisher": "Herder",
+          "share": 2.9
+        },
+        {
+          "publisher": "Gütersloher Verlagshaus",
+          "share": 2.9
+        },
+        {
+          "publisher": "Kösel",
+          "share": 2.9
+        },
+        {
+          "publisher": "Fischer",
+          "share": 2.8
+        }
+      ],
+      "representative_docs": [
+        {
+          "title": "Wie hältst du’s mit der Kirche?: Zur Relevanz von Religion und Kirche in der pluralen Gesellschaft. Analysen zur 6. Kirchenmitgliedschaftsuntersuchung [Forschungsbuch-Abschnitt 25/127]",
+          "author": "o. V.",
+          "publisher": "Evangelische Verlagsanstalt",
+          "date": "2024",
+          "corpus_layer": "gbv_direct_fulltext_pdf",
+          "probability": 77.3,
+          "keywords": [],
+          "snippet": "Mustern, von denen zwei als überdauernd betrachtet werden können: „Kritik/Ärger“ und „Gleichgültigkeit“ 2 Im ehemals protestantisch geprägten östlichen Bundesgebiet, wo die kirchenfeindliche Politik des DDR-Regimes schon in den 1950er Jahren zu starken Einbrüchen bei der Kirchenmitgliedschaft geführt hat, liegt dieser Anteil sogar bei 46 %. 78 Detlef Pollack, Petra-Angela Ahrens, Edgar Wunder, David Gutmann, Fabian P",
+          "apa_citation": "o. V. (2024). Wie hältst du’s mit der Kirche?: Zur Relevanz von Religion und Kirche in der pluralen Gesellschaft. Analysen zur 6. Kirchenmitgliedschaftsuntersuchung [Forschungsbuch-Abschnitt 25/127]. Evangelische Verlagsanstalt."
+        },
+        {
+          "title": "Wie hältst du’s mit der Kirche?: Zur Relevanz von Religion und Kirche in der pluralen Gesellschaft : Analysen zur 6. Kirchenmitgliedschaftsuntersuchung",
+          "author": "Wunder, Edgar",
+          "publisher": "Evangelische Verlagsanstalt",
+          "date": "2024",
+          "corpus_layer": "drm_fallback_multi_api_enriched",
+          "probability": 65.0,
+          "keywords": [],
+          "snippet": "Wie hältst du’s mit der Kirche?: Zur Relevanz von Religion und Kirche in der pluralen Gesellschaft : Analysen zur 6. Kirchenmitgliedschaftsuntersuchung. Wunder, Edgar. Evangelische Verlagsanstalt. Auf den 2023 veröffentlichten Überblicksband über erste zentrale Auswertungsergebnisse zur 6. Kirchenmitgliedschaftsuntersuchung folgt mit dem Auswertungsband eine tiefere empirische Analyse der Ergebnisse. In ca. 20 Einzel",
+          "apa_citation": "Wunder, Edgar (2024). Wie hältst du’s mit der Kirche?: Zur Relevanz von Religion und Kirche in der pluralen Gesellschaft : Analysen zur 6. Kirchenmitgliedschaftsuntersuchung. Evangelische Verlagsanstalt."
+        },
+        {
+          "title": "Religion und Kirche: zwischen persönlicher Religiosität und kirchlichem Glauben",
+          "author": "Boenke, Michael",
+          "publisher": "Kösel",
+          "date": "2009",
+          "corpus_layer": "drm_fallback_multi_api_enriched",
+          "probability": 55.0,
+          "keywords": [],
+          "snippet": "Religion und Kirche: zwischen persönlicher Religiosität und kirchlichem Glauben. Boenke, Michael. Kösel.",
+          "apa_citation": "Boenke, Michael (2009). Religion und Kirche: zwischen persönlicher Religiosität und kirchlichem Glauben. Kösel."
+        }
+      ]
+    },
+    {
+      "topic_id": 3,
+      "archetype": {
+        "label": "Critical / Secular-Humanist",
+        "confidence": 67.0,
+        "scores": {
+          "Traditional / Ecclesiastical": 0.0,
+          "Neoliberal / Self-Optimization": 33.0,
+          "Critical / Secular-Humanist": 67.0
+        }
+      },
+      "top_terms": [
+        {
+          "term": "politisch",
+          "weight": 0.02233
+        },
+        {
+          "term": "the",
+          "weight": 0.01934
+        },
+        {
+          "term": "and",
+          "weight": 0.01537
+        },
+        {
+          "term": "indien",
+          "weight": 0.00956
+        },
+        {
+          "term": "neu",
+          "weight": 0.00935
+        },
+        {
+          "term": "gesellschaft",
+          "weight": 0.0071
+        },
+        {
+          "term": "sinn_sinn",
+          "weight": 0.00573
+        },
+        {
+          "term": "religiös_religiös",
+          "weight": 0.00564
+        },
+        {
+          "term": "hinduismus",
+          "weight": 0.00546
+        },
+        {
+          "term": "fundamentalismus",
+          "weight": 0.00531
+        },
+        {
+          "term": "kulturell",
+          "weight": 0.00527
+        },
+        {
+          "term": "gütersloh",
+          "weight": 0.00485
+        },
+        {
+          "term": "land",
+          "weight": 0.00467
+        },
+        {
+          "term": "indisch",
+          "weight": 0.00457
+        },
+        {
+          "term": "staat",
+          "weight": 0.00451
+        }
+      ],
+      "top_publishers": [
+        {
+          "publisher": "Herder",
+          "share": 48.7
+        },
+        {
+          "publisher": "Open Access Book (DE)",
+          "share": 10.8
+        },
+        {
+          "publisher": "Evangelische Verlagsanstalt",
+          "share": 6.5
+        },
+        {
+          "publisher": "Gütersloher Verlagshaus",
+          "share": 5.3
+        },
+        {
+          "publisher": "Rowohlt",
+          "share": 4.4
+        },
+        {
+          "publisher": "Patmos",
+          "share": 4.0
+        }
+      ],
+      "representative_docs": [
+        {
+          "title": "Fundamentalismus: radikale Strömungen in den Weltreligionen [Forschungsbuch-Abschnitt 52/90]",
+          "author": "Wippermann, Wolfgang",
+          "publisher": "Herder",
+          "date": "2013",
+          "corpus_layer": "green_oa_repository_fulltext",
+          "probability": 97.2,
+          "keywords": [],
+          "snippet": "million at present residing in 80 countries, aspire to revitalize the eternal Hindu Society by rearranging the code of conduct of our old Dharma to meet the needs of the changed times. 7) To eradicate the concept of untouchability from the Hindu society\".465 Zu Anfang der siebziger Jahre konnte der VHP seine zahlreichen politischen und sozialen Aktivitäten, zu denen auch die Gründung eigener Schulen, Krankenhäuser un",
+          "apa_citation": "Wippermann, Wolfgang (2013). Fundamentalismus: radikale Strömungen in den Weltreligionen [Forschungsbuch-Abschnitt 52/90]. Herder."
+        },
+        {
+          "title": "Die 21: eine Reise ins Land der koptischen Martyrer [Forschungsbuch-Abschnitt 1/2]",
+          "author": "Mosebach, Martin",
+          "publisher": "Rowohlt",
+          "date": "2018",
+          "corpus_layer": "gbv_direct_fulltext_pdf",
+          "probability": 84.1,
+          "keywords": [],
+          "snippet": "with the shorter knives used in the original – an army arrives to save him. The men in black fall amid rapid gunfire, and Al-Armouti is spared. Laughter in the dark cinema proved people found the scene funny. There’s not a hint of real-world religious conflict, the Egyptian civil war, or the cross – none of that plays even the slightest part in this comedy – but the symbolic weight of black and orange and the act of",
+          "apa_citation": "Mosebach, Martin (2018). Die 21: eine Reise ins Land der koptischen Martyrer [Forschungsbuch-Abschnitt 1/2]. Rowohlt."
+        },
+        {
+          "title": "Iran: Weltreich des Geistes ; von Zoroaster bis heute",
+          "author": "Axworthy, Michael",
+          "publisher": "Wagenbach",
+          "date": "2014",
+          "corpus_layer": "drm_fallback_multi_api_enriched",
+          "probability": 82.8,
+          "keywords": [],
+          "snippet": "Iran: Weltreich des Geistes ; von Zoroaster bis heute. Axworthy, Michael. Wagenbach. Michael George Andrew Axworthy (* 26. September 1962 in Woking; † 16. März 2019) war ein britischer Wissenschaftler und Schriftsteller, der von 1998 bis 2000 die Iran-Abteilung des britischen Foreign and Commonwealth Office leitete. Außer durch die Veröffentlichung von Sachbüchern war er durch Beiträge für Prospect und The Independen",
+          "apa_citation": "Axworthy, Michael (2014). Iran: Weltreich des Geistes ; von Zoroaster bis heute. Wagenbach."
+        }
+      ]
+    },
+    {
+      "topic_id": 4,
+      "archetype": {
+        "label": "Traditional / Ecclesiastical",
+        "confidence": 72.2,
+        "scores": {
+          "Traditional / Ecclesiastical": 72.2,
+          "Neoliberal / Self-Optimization": 0.0,
+          "Critical / Secular-Humanist": 27.8
+        }
+      },
+      "top_terms": [
+        {
+          "term": "kirche_kirche",
+          "weight": 0.01557
+        },
+        {
+          "term": "religiös_religiös",
+          "weight": 0.01512
+        },
+        {
+          "term": "frage",
+          "weight": 0.01116
+        },
+        {
+          "term": "anderer",
+          "weight": 0.00887
+        },
+        {
+          "term": "religion",
+          "weight": 0.00821
+        },
+        {
+          "term": "gesellschaft",
+          "weight": 0.00809
+        },
+        {
+          "term": "mensch",
+          "weight": 0.00582
+        },
+        {
+          "term": "christlich_christlich",
+          "weight": 0.00547
+        },
+        {
+          "term": "blick",
+          "weight": 0.00496
+        },
+        {
+          "term": "mädchen",
+          "weight": 0.0049
+        },
+        {
+          "term": "neu",
+          "weight": 0.00466
+        },
+        {
+          "term": "leben",
+          "weight": 0.00442
+        },
+        {
+          "term": "religionsunterricht",
+          "weight": 0.00428
+        },
+        {
+          "term": "gesellschaftlich",
+          "weight": 0.00425
+        },
+        {
+          "term": "frau",
+          "weight": 0.00413
+        }
+      ],
+      "top_publishers": [
+        {
+          "publisher": "Evangelische Verlagsanstalt",
+          "share": 23.1
+        },
+        {
+          "publisher": "Gütersloher Verlagshaus",
+          "share": 22.0
+        },
+        {
+          "publisher": "Open Access Book (DE)",
+          "share": 14.1
+        },
+        {
+          "publisher": "Patmos",
+          "share": 10.0
+        },
+        {
+          "publisher": "Herder",
+          "share": 6.8
+        },
+        {
+          "publisher": "Kösel",
+          "share": 5.4
+        }
+      ],
+      "representative_docs": [
+        {
+          "title": "Gender, Religion, Bildung: Beiträge zu einer Religionspädagogik der Vielfalt [Forschungsbuch-Abschnitt 123/154]",
+          "author": "Pithan, Annebelle",
+          "publisher": "Gütersloher Verlagshaus",
+          "date": "2009",
+          "corpus_layer": "gbv_direct_fulltext_pdf",
+          "probability": 91.4,
+          "keywords": [],
+          "snippet": "in Organisationen. Auch die Umsetzung gendertheoretischer Konzepte in die spezifische Praxis der Kinder- und Jugendarbeit verläuft nicht ohne Reibungsverluste. Doch wie in Punxsutawney/Pennsylvania, um im plot des Spielfilms zu bleiben, gibt es auch hier durchaus erfreuliche Abweichungen und wohltuende Veränderungen im Lauf der Dinge, so dass die »Sache mit dem Gender« zwar vielleicht nicht unbedingt ein cineastische",
+          "apa_citation": "Pithan, Annebelle (2009). Gender, Religion, Bildung: Beiträge zu einer Religionspädagogik der Vielfalt [Forschungsbuch-Abschnitt 123/154]. Gütersloher Verlagshaus."
+        },
+        {
+          "title": "Spiritualität und Selbstsorge Zeit für das, was trägt. Interdisziplinäre Beiträge",
+          "author": "Johannes Jungbauer",
+          "publisher": "Verlag Barbara Budrich",
+          "date": "2024",
+          "corpus_layer": "primary_cloud_oa_abstract",
+          "probability": 89.8,
+          "keywords": [],
+          "snippet": "Spiritualität geht mit einer achtsamen inneren Haltung einher – unserer Umwelt, unseren Mitmenschen und auch uns selbst gegenüber. Sie hilft, das eigene berufliche Handeln zu reflektieren, gut für sich selbst zu sorgen und zu erkennen, was am Ende wirklich wichtig ist. In den Beiträgen des vorliegenden Bandes wird deutlich, warum die Themen Spiritualität, Achtsamkeit und Selbstsorge so eminent wichtig für professione",
+          "apa_citation": "Johannes Jungbauer (2024). Spiritualität und Selbstsorge Zeit für das, was trägt. Interdisziplinäre Beiträge. Verlag Barbara Budrich."
+        },
+        {
+          "title": "Religion und Gesellschaft [Buch-Abschnitt 33/84]",
+          "author": "Michael E. Durst",
+          "publisher": "Open Access Book (DE)",
+          "date": "2007",
+          "corpus_layer": "entire_fulltext_book_cloud",
+          "probability": 88.8,
+          "keywords": [],
+          "snippet": "keine Abmeldemöglichkeit besteht. Er wird vom Staat verantwortet, finanziert und durchgeführt. Staatlich ausgebildete Religionslehrerinnen und Religionslehrer erteilen das einstündige Teilfach. Ein «Religionsunterricht für alle» nimmt die Situation ernst, dass zum einen die traditionellen Orte religiöser Sozialisierung, Familie und Kirche, einen rapiden Bedeutungsverlust erfahren haben und dass zum anderen das Phänom",
+          "apa_citation": "Michael E. Durst (2007). Religion und Gesellschaft [Buch-Abschnitt 33/84]. Open Access Book (DE)."
+        }
+      ]
+    },
+    {
+      "topic_id": 5,
+      "archetype": {
+        "label": "Traditional / Ecclesiastical",
+        "confidence": 65.6,
+        "scores": {
+          "Traditional / Ecclesiastical": 65.6,
+          "Neoliberal / Self-Optimization": 34.4,
+          "Critical / Secular-Humanist": 0.0
+        }
+      },
+      "top_terms": [
+        {
+          "term": "mensch",
+          "weight": 0.01933
+        },
+        {
+          "term": "welt",
+          "weight": 0.01138
+        },
+        {
+          "term": "anderer",
+          "weight": 0.00964
+        },
+        {
+          "term": "gott_gott",
+          "weight": 0.00825
+        },
+        {
+          "term": "leben",
+          "weight": 0.00825
+        },
+        {
+          "term": "steiner",
+          "weight": 0.00726
+        },
+        {
+          "term": "kind",
+          "weight": 0.0066
+        },
+        {
+          "term": "rudolf_steiner",
+          "weight": 0.00652
+        },
+        {
+          "term": "wesen",
+          "weight": 0.00555
+        },
+        {
+          "term": "geschichte",
+          "weight": 0.00509
+        },
+        {
+          "term": "frage",
+          "weight": 0.00446
+        },
+        {
+          "term": "neu",
+          "weight": 0.00441
+        },
+        {
+          "term": "grund",
+          "weight": 0.00433
+        },
+        {
+          "term": "sinn_sinn",
+          "weight": 0.00433
+        },
+        {
+          "term": "menschlich",
+          "weight": 0.00433
+        }
+      ],
+      "top_publishers": [
+        {
+          "publisher": "Alibri",
+          "share": 16.4
+        },
+        {
+          "publisher": "Patmos",
+          "share": 13.8
+        },
+        {
+          "publisher": "Rowohlt",
+          "share": 12.5
+        },
+        {
+          "publisher": "Kösel",
+          "share": 9.5
+        },
+        {
+          "publisher": "Suhrkamp",
+          "share": 8.6
+        },
+        {
+          "publisher": "Fischer",
+          "share": 7.8
+        }
+      ],
+      "representative_docs": [
+        {
+          "title": "Waldorf Connection: Rudolf Steiner und die Anthroposophen [Forschungsbuch-Abschnitt 69/100]",
+          "author": "Grandt, Guido",
+          "publisher": "Alibri",
+          "date": "1998",
+          "corpus_layer": "archive_org_fulltext_book",
+          "probability": 90.7,
+          "keywords": [],
+          "snippet": "das losgelöste Denken hineinschlüpfen und sich so aus dem Leibe herausziehen kann. Wie kann man es nun machen, daß man sein Denken gewissermaßen von seinem gewöhnlichen Wesen loslöst? Das kann man dadurch zustandebringen, daß man gewisse Gedanken ... inenergischer Meditation, in energischer Konzentration durchdenkt. Solch eine Übung muß allerdings oftmals gemacht werden. Dadurch aber, daß man solche Übungen wiederhol",
+          "apa_citation": "Grandt, Guido (1998). Waldorf Connection: Rudolf Steiner und die Anthroposophen [Forschungsbuch-Abschnitt 69/100]. Alibri."
+        },
+        {
+          "title": "Religionskritik [Forschungsbuch-Abschnitt 40/66]",
+          "author": "Zirker, Hans",
+          "publisher": "Patmos",
+          "date": "1982",
+          "corpus_layer": "gbv_direct_fulltext_pdf",
+          "probability": 88.9,
+          "keywords": [],
+          "snippet": "bleiben muß. Der Grund dafür, daß wir die Welt dennoch immer so nehmen, liegt nahe: Wir machen sie uns so handlicher und fügen sie in unsere Gewohnheiten ein. Nur in einer anthropomorphen Welt können wir heimisch werden, weil wir in ihr die Orientierungsmarken finden, die wir selbst gesetzt haben. Von solcher »Perspektiven-Optik des Lebens« können wir grundsätzlich nicht lassen (ebd. 576). Wenn wir in einer bestimmte",
+          "apa_citation": "Zirker, Hans (1982). Religionskritik [Forschungsbuch-Abschnitt 40/66]. Patmos."
+        },
+        {
+          "title": "Elemente zu einer Religionsphilosophie auf phänomenologischer Grundlage [Forschungsbuch-Abschnitt 5/46]",
+          "author": "Gründler, Otto",
+          "publisher": "Kösel",
+          "date": "1922",
+          "corpus_layer": "archive_org_fulltext_book",
+          "probability": 88.8,
+          "keywords": [],
+          "snippet": "Erkenntnis übersteigt. Wirbrauchen also eine Offenbarung. Nicht nur die Massen verlangen nach autoritativer Führung, auch unsere größten Geister könnten nicht leben ohne eine höchste Autorität, deren Wort ihnen Aufschluß gibt über Rätsel, die zu lösen sie selbst nicht vermögen. So weist uns das Wissen um die letzten Dinge, jenes not* wendigste und edelste Wissen, selbst auf den Glauben hin als auf seine Quelle. Eine",
+          "apa_citation": "Gründler, Otto (1922). Elemente zu einer Religionsphilosophie auf phänomenologischer Grundlage [Forschungsbuch-Abschnitt 5/46]. Kösel."
+        }
+      ]
+    },
+    {
+      "topic_id": 6,
+      "archetype": {
+        "label": "Critical / Secular-Humanist",
+        "confidence": 85.8,
+        "scores": {
+          "Traditional / Ecclesiastical": 14.2,
+          "Neoliberal / Self-Optimization": 0.0,
+          "Critical / Secular-Humanist": 85.8
+        }
+      },
+      "top_terms": [
+        {
+          "term": "vernunft",
+          "weight": 0.02097
+        },
+        {
+          "term": "mensch",
+          "weight": 0.01823
+        },
+        {
+          "term": "atheismus_atheismus",
+          "weight": 0.01675
+        },
+        {
+          "term": "daf",
+          "weight": 0.01613
+        },
+        {
+          "term": "voltaire",
+          "weight": 0.01521
+        },
+        {
+          "term": "religion",
+          "weight": 0.015
+        },
+        {
+          "term": "kant",
+          "weight": 0.01314
+        },
+        {
+          "term": "hegel",
+          "weight": 0.01069
+        },
+        {
+          "term": "geist",
+          "weight": 0.01049
+        },
+        {
+          "term": "philosophie",
+          "weight": 0.0103
+        },
+        {
+          "term": "feuerbach",
+          "weight": 0.00948
+        },
+        {
+          "term": "atheist",
+          "weight": 0.00853
+        },
+        {
+          "term": "wesen",
+          "weight": 0.00837
+        },
+        {
+          "term": "schrift",
+          "weight": 0.00818
+        },
+        {
+          "term": "gott_gott",
+          "weight": 0.00792
+        }
+      ],
+      "top_publishers": [
+        {
+          "publisher": "Alibri",
+          "share": 53.4
+        },
+        {
+          "publisher": "Patmos",
+          "share": 7.8
+        },
+        {
+          "publisher": "Evangelische Verlagsanstalt",
+          "share": 7.8
+        },
+        {
+          "publisher": "Herder",
+          "share": 7.2
+        },
+        {
+          "publisher": "Rowohlt",
+          "share": 5.0
+        },
+        {
+          "publisher": "Suhrkamp",
+          "share": 5.0
+        }
+      ],
+      "representative_docs": [
+        {
+          "title": "Der Atheismus und seine Geschichte im Abendlande [Forschungsbuch-Abschnitt 25/100]",
+          "author": "Mauthner, Fritz",
+          "publisher": "Alibri",
+          "date": "2011",
+          "corpus_layer": "archive_org_fulltext_book",
+          "probability": 76.7,
+          "keywords": [],
+          "snippet": "neue zu bilden sucht. Er kiifit den Freund zum Abschied im Namen von Konfuzius, Sokrates, Lucretius, Cicero, Julianus, von Collins, Hume, Shaftesbury, Middleton, Bolingbroke usw. usw. Es handelt sich um lauter Manner, die dem 18.Jahrhundert fiir ganze oder halbe Atheisten galten; freilich: die englischen Begriinder des Deismus befinden sich unter ihnen. | Wie also Voltaire vor seinem ‘lode nicht ein letztes Wort gefo",
+          "apa_citation": "Mauthner, Fritz (2011). Der Atheismus und seine Geschichte im Abendlande [Forschungsbuch-Abschnitt 25/100]. Alibri."
+        },
+        {
+          "title": "Religion, Konfessionslosigkeit und Atheismus",
+          "author": "Thörner, Katja",
+          "publisher": "Herder",
+          "date": "2016",
+          "corpus_layer": "drm_fallback_multi_api_enriched",
+          "probability": 74.7,
+          "keywords": [],
+          "snippet": "Religion, Konfessionslosigkeit und Atheismus. Thörner, Katja. Herder.",
+          "apa_citation": "Thörner, Katja (2016). Religion, Konfessionslosigkeit und Atheismus. Herder."
+        },
+        {
+          "title": "Martin Luther: Studienausgabe",
+          "author": "Delius, Hans-Ulrich",
+          "publisher": "Evangelische Verlagsanstalt",
+          "date": "1979",
+          "corpus_layer": "drm_fallback_multi_api_enriched",
+          "probability": 66.8,
+          "keywords": [],
+          "snippet": "Martin Luther: Studienausgabe. Delius, Hans-Ulrich. Evangelische Verlagsanstalt.",
+          "apa_citation": "Delius, Hans-Ulrich (1979). Martin Luther: Studienausgabe. Evangelische Verlagsanstalt."
+        }
+      ]
+    },
+    {
+      "topic_id": 7,
+      "archetype": {
+        "label": "Traditional / Ecclesiastical",
+        "confidence": 100.0,
+        "scores": {
+          "Traditional / Ecclesiastical": 100.0,
+          "Neoliberal / Self-Optimization": 0.0,
+          "Critical / Secular-Humanist": 0.0
+        }
+      },
+      "top_terms": [
+        {
+          "term": "gott_gott",
+          "weight": 0.08394
+        },
+        {
+          "term": "mensch",
+          "weight": 0.0254
+        },
+        {
+          "term": "bibel",
+          "weight": 0.01124
+        },
+        {
+          "term": "kirche_kirche",
+          "weight": 0.01059
+        },
+        {
+          "term": "wort",
+          "weight": 0.01027
+        },
+        {
+          "term": "leben",
+          "weight": 0.00935
+        },
+        {
+          "term": "jesus",
+          "weight": 0.00911
+        },
+        {
+          "term": "christlich_christlich",
+          "weight": 0.00896
+        },
+        {
+          "term": "glaube_glaube",
+          "weight": 0.00727
+        },
+        {
+          "term": "geschichte",
+          "weight": 0.00667
+        },
+        {
+          "term": "biblisch",
+          "weight": 0.00659
+        },
+        {
+          "term": "jesu",
+          "weight": 0.00623
+        },
+        {
+          "term": "tod",
+          "weight": 0.0061
+        },
+        {
+          "term": "herr",
+          "weight": 0.00581
+        },
+        {
+          "term": "liebe",
+          "weight": 0.00578
+        }
+      ],
+      "top_publishers": [
+        {
+          "publisher": "Rowohlt",
+          "share": 22.8
+        },
+        {
+          "publisher": "Patmos",
+          "share": 11.7
+        },
+        {
+          "publisher": "Herder",
+          "share": 9.6
+        },
+        {
+          "publisher": "Kösel",
+          "share": 8.8
+        },
+        {
+          "publisher": "Alibri",
+          "share": 8.0
+        },
+        {
+          "publisher": "Fischer",
+          "share": 7.8
+        }
+      ],
+      "representative_docs": [
+        {
+          "title": "Bibel für die Grundschule [Forschungsbuch-Abschnitt 2/2]",
+          "author": "Dalenoord, Jenny",
+          "publisher": "Kösel",
+          "date": "1979",
+          "corpus_layer": "drm_fallback_multi_api_enriched",
+          "probability": 98.1,
+          "keywords": [],
+          "snippet": "erscheint den Jüngern in Jerusalem Der Vater nimmt seinen Sohn in den Himmel auf Wie die anderen Evangelisten Jesus Christus verkündigen Matthäus und Markus Die Weisen aus dem Osten ehren Jesus Die Flucht nach Ägypten Johannes der Täufer wird hingerichtet Jesus segnet die Kinder Jesus lehrt die Jünger beten Das Gleichnis vom Sämann Der unbarmherzige Knecht Die Arbeiter im Weinberg Das Gleichnis von den Talenten . . .",
+          "apa_citation": "Dalenoord, Jenny (1979). Bibel für die Grundschule [Forschungsbuch-Abschnitt 2/2]. Kösel."
+        },
+        {
+          "title": "Schulbibel: für 10 - 14jährige [Forschungsbuch-Abschnitt 2/2]",
+          "author": "o. V.",
+          "publisher": "Kösel",
+          "date": "1979",
+          "corpus_layer": "drm_fallback_multi_api_enriched",
+          "probability": 91.2,
+          "keywords": [],
+          "snippet": "Reinundunrein KanaanäischeFrau Speisung der Viertausend Verweigerung eines Zeichens Pharisäer und Sadduzäer Bekenntnis des Petrus Leidensankündigung Verklärung Jesu Heilung eines Mondsüchtigen Tempelsteuer Rangstreit Verantwortung für den Bruder Vom unbarmherzigen Knecht . Jesu Wirken in Judäa und Jerusalem Ehescheidung und Ehelosigkeit Kindersegnung Reichtum und Nachfolge Vom gütigen Arbeitgeber Herrschen und Dienen",
+          "apa_citation": "o. V. (1979). Schulbibel: für 10 - 14jährige [Forschungsbuch-Abschnitt 2/2]. Kösel."
+        },
+        {
+          "title": "Die Botschaft des Koran: Übersetzung und Kommentar",
+          "author": "Asad, Muhammad",
+          "publisher": "Patmos",
+          "date": "2009",
+          "corpus_layer": "drm_fallback_multi_api_enriched",
+          "probability": 88.7,
+          "keywords": [],
+          "snippet": "Die Botschaft des Koran: Übersetzung und Kommentar. Asad, Muhammad. Patmos. Inhalt Vorwort Literaturhinweise Sura al-Fatiha (Die Eröffnung) - Verse i viUl al-Baqara (Die Kuh) - Verse i> ÄJI AI 'Imran (Das Haus von ìmran) - Verse o W - -J' an-Nisa' (Frauen) - Verse J -LJI al-Ma'ida (Das Mahl) - Verse L=_^LJI al-An'am (Das Vieh) - Verse ji »i\\) <j/-A'ra/(Die Unterscheidungsfáhigkeit) - Verse -* >-^d1 al-Anfal (Kriegsbe",
+          "apa_citation": "Asad, Muhammad (2009). Die Botschaft des Koran: Übersetzung und Kommentar. Patmos."
+        }
+      ]
+    },
+    {
+      "topic_id": 8,
+      "archetype": {
+        "label": "Critical / Secular-Humanist",
+        "confidence": 64.3,
+        "scores": {
+          "Traditional / Ecclesiastical": 35.7,
+          "Neoliberal / Self-Optimization": 0.0,
+          "Critical / Secular-Humanist": 64.3
+        }
+      },
+      "top_terms": [
+        {
+          "term": "religion",
+          "weight": 0.10111
+        },
+        {
+          "term": "religiös_religiös",
+          "weight": 0.03479
+        },
+        {
+          "term": "adorno",
+          "weight": 0.0243
+        },
+        {
+          "term": "religionskritik_religionskritik",
+          "weight": 0.0143
+        },
+        {
+          "term": "glaube_glaube",
+          "weight": 0.0136
+        },
+        {
+          "term": "gesellschaft",
+          "weight": 0.0102
+        },
+        {
+          "term": "freud",
+          "weight": 0.00966
+        },
+        {
+          "term": "autor",
+          "weight": 0.00946
+        },
+        {
+          "term": "form",
+          "weight": 0.00838
+        },
+        {
+          "term": "sozial",
+          "weight": 0.0082
+        },
+        {
+          "term": "theorie",
+          "weight": 0.00811
+        },
+        {
+          "term": "moderne",
+          "weight": 0.0078
+        },
+        {
+          "term": "modern",
+          "weight": 0.00702
+        },
+        {
+          "term": "glauben",
+          "weight": 0.00695
+        },
+        {
+          "term": "welt",
+          "weight": 0.00631
+        }
+      ],
+      "top_publishers": [
+        {
+          "publisher": "Herder",
+          "share": 18.4
+        },
+        {
+          "publisher": "Open Access Book (DE)",
+          "share": 14.6
+        },
+        {
+          "publisher": "Patmos",
+          "share": 14.2
+        },
+        {
+          "publisher": "Suhrkamp",
+          "share": 13.5
+        },
+        {
+          "publisher": "Gütersloher Verlagshaus",
+          "share": 9.2
+        },
+        {
+          "publisher": "Kösel",
+          "share": 5.8
+        }
+      ],
+      "representative_docs": [
+        {
+          "title": "Gottesglaube und Religionskritik",
+          "author": "Ulrich H.J. Körtner",
+          "publisher": "Open Access (DE)",
+          "date": "2025",
+          "corpus_layer": "primary_cloud_oa_abstract",
+          "probability": 87.9,
+          "keywords": [],
+          "snippet": "Parallel zum Wiedererstarken von Religion im öffentlichen Raum formiert sich auch ein neuer Atheismus. Beide Entwicklungen führen zu einer Renaissance der Religionskritik. In Auseinandersetzung mit heutigen Formen des Atheismus soll das komplexe Verhältnis von christlichem Glauben und Religionskritik untersucht werden. Komplex ist dieses Verhältnis zum einen, weil der Begriff der Religionskritik eine mehrfache Bedeut",
+          "apa_citation": "Ulrich H.J. Körtner (2025). Gottesglaube und Religionskritik. Open Access (DE)."
+        },
+        {
+          "title": "Abendmahl mit Kindern: Versuch einer Grundlegung unter Berücksichtigung der geschichtlichen Wurzeln der gegenwärtigen Diskussion in Deutschland [Forschungsbuch-Abschnitt 1/5]",
+          "author": "Kenntner, Eberhard",
+          "publisher": "Gütersloher Verlagshaus",
+          "date": "1989",
+          "corpus_layer": "drm_fallback_multi_api_enriched",
+          "probability": 87.0,
+          "keywords": [],
+          "snippet": "Abendmahl mit Kindern: Versuch einer Grundlegung unter Berücksichtigung der geschichtlichen Wurzeln der gegenwärtigen Diskussion in Deutschland. Kenntner, Eberhard. Gütersloher Verlagshaus. Inhalt V o r w o r t . T h e m a k l ä r u n g u n d A n l a g e d e r A r b e i t n . K i r d i e n k u n d l i c h e Ü b e r s i c h t ü b e r d e n g e g e n w ä r t i g e n S t a n d d e r P r a x i s d e r T e i l n a h m e v",
+          "apa_citation": "Kenntner, Eberhard (1989). Abendmahl mit Kindern: Versuch einer Grundlegung unter Berücksichtigung der geschichtlichen Wurzeln der gegenwärtigen Diskussion in Deutschland [Forschungsbuch-Abschnitt 1/5]. Gütersloher Verlagshaus."
+        },
+        {
+          "title": "Religiöses Handeln in moderner Welt: Talcott Parsons' Religionssoziologie im Rahmen seiner allgemeinen Handlungs- und Systemtheorie",
+          "author": "Brandt, Sigrid",
+          "publisher": "Suhrkamp",
+          "date": "1993",
+          "corpus_layer": "drm_fallback_multi_api_enriched",
+          "probability": 78.0,
+          "keywords": [],
+          "snippet": "Religiöses Handeln in moderner Welt: Talcott Parsons' Religionssoziologie im Rahmen seiner allgemeinen Handlungs- und Systemtheorie. Brandt, Sigrid. Suhrkamp.",
+          "apa_citation": "Brandt, Sigrid (1993). Religiöses Handeln in moderner Welt: Talcott Parsons' Religionssoziologie im Rahmen seiner allgemeinen Handlungs- und Systemtheorie. Suhrkamp."
+        }
+      ]
+    },
+    {
+      "topic_id": 9,
+      "archetype": {
+        "label": "Traditional / Ecclesiastical",
+        "confidence": 100.0,
+        "scores": {
+          "Traditional / Ecclesiastical": 100.0,
+          "Neoliberal / Self-Optimization": 0.0,
+          "Critical / Secular-Humanist": 0.0
+        }
+      },
+      "top_terms": [
+        {
+          "term": "theologie_theologie",
+          "weight": 0.02784
+        },
+        {
+          "term": "frau",
+          "weight": 0.01268
+        },
+        {
+          "term": "kirche_kirche",
+          "weight": 0.00974
+        },
+        {
+          "term": "theologisch",
+          "weight": 0.00929
+        },
+        {
+          "term": "geschichte",
+          "weight": 0.00859
+        },
+        {
+          "term": "text",
+          "weight": 0.00739
+        },
+        {
+          "term": "pluralismus",
+          "weight": 0.00733
+        },
+        {
+          "term": "religionspädagogik",
+          "weight": 0.00694
+        },
+        {
+          "term": "perspektive",
+          "weight": 0.0067
+        },
+        {
+          "term": "münchen",
+          "weight": 0.00641
+        },
+        {
+          "term": "religion",
+          "weight": 0.00635
+        },
+        {
+          "term": "neu",
+          "weight": 0.00634
+        },
+        {
+          "term": "evangelisch",
+          "weight": 0.00623
+        },
+        {
+          "term": "christlich_christlich",
+          "weight": 0.0061
+        },
+        {
+          "term": "theologie",
+          "weight": 0.00588
+        }
+      ],
+      "top_publishers": [
+        {
+          "publisher": "Gütersloher Verlagshaus",
+          "share": 21.3
+        },
+        {
+          "publisher": "Herder",
+          "share": 14.0
+        },
+        {
+          "publisher": "Evangelische Verlagsanstalt",
+          "share": 11.0
+        },
+        {
+          "publisher": "Open Access Book (DE)",
+          "share": 9.9
+        },
+        {
+          "publisher": "Patmos",
+          "share": 7.6
+        },
+        {
+          "publisher": "Kösel",
+          "share": 7.4
+        }
+      ],
+      "representative_docs": [
+        {
+          "title": "Christliche Identität in pluraler Gesellschaft: Reflexionen zu einer Lebensfrage von Theologie und Kirche heute [Buch-Abschnitt 2/71]",
+          "author": "Hans J. Münk",
+          "publisher": "Open Access Book (DE)",
+          "date": "2005",
+          "corpus_layer": "entire_fulltext_book_cloud",
+          "probability": 93.4,
+          "keywords": [],
+          "snippet": ". . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 88 Wolfgang Müller Der eine Glaube – die vielen Theologien. Grundlinien der Pluralismusdebatte in der dogmatischen Theologie . . . . . . . . . . . . . . . . . . . . . . . . . . . . 89 1. Identität . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 90 1.1. Pluralismus . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .",
+          "apa_citation": "Hans J. Münk (2005). Christliche Identität in pluraler Gesellschaft: Reflexionen zu einer Lebensfrage von Theologie und Kirche heute [Buch-Abschnitt 2/71]. Open Access Book (DE)."
+        },
+        {
+          "title": "Die Theologie Dietrich Bonhoeffers: Hermeneutik, Christologie, Weltverständnis",
+          "author": "Feil, Ernst",
+          "publisher": "Evangelische Verlagsanstalt",
+          "date": "1979",
+          "corpus_layer": "drm_fallback_multi_api_enriched",
+          "probability": 89.0,
+          "keywords": [],
+          "snippet": "Die Theologie Dietrich Bonhoeffers: Hermeneutik, Christologie, Weltverständnis. Feil, Ernst. Evangelische Verlagsanstalt.",
+          "apa_citation": "Feil, Ernst (1979). Die Theologie Dietrich Bonhoeffers: Hermeneutik, Christologie, Weltverständnis. Evangelische Verlagsanstalt."
+        },
+        {
+          "title": "Nachfolge",
+          "author": "Bonhoeffer, Dietrich",
+          "publisher": "Gütersloher Verlagshaus",
+          "date": "1989",
+          "corpus_layer": "",
+          "probability": 88.9,
+          "keywords": [
+            "RELIGION / Christian Theology / General",
+            "Bonhoeffer",
+            "Dietrich",
+            "Christliche Ethik",
+            "Systematische Theologie"
+          ],
+          "snippet": "Frontmatter -- Inhalt -- Vorwort der Herausgeber -- Dietrich Bonhoeffer NACHFOLGE -- Vorwort -- I . -- II. Die Kirche Jesu Christi und die Nachfolge. -- Nachwort der Herausgeber -- Quellenverzeichnis -- Literaturverzeichnis -- Abkürzungsverzeichnis -- Register -- DIE HERAUSGEBER",
+          "apa_citation": "Bonhoeffer, Dietrich (1989). Nachfolge. Gütersloher Verlagshaus."
+        }
+      ]
+    },
+    {
+      "topic_id": 10,
+      "archetype": {
+        "label": "Traditional / Ecclesiastical",
+        "confidence": 100.0,
+        "scores": {
+          "Traditional / Ecclesiastical": 100.0,
+          "Neoliberal / Self-Optimization": 0.0,
+          "Critical / Secular-Humanist": 0.0
+        }
+      },
+      "top_terms": [
+        {
+          "term": "mensch",
+          "weight": 0.08894
+        },
+        {
+          "term": "mensch_behinderung",
+          "weight": 0.06015
+        },
+        {
+          "term": "kind",
+          "weight": 0.05251
+        },
+        {
+          "term": "jugendliche",
+          "weight": 0.03376
+        },
+        {
+          "term": "schule",
+          "weight": 0.02971
+        },
+        {
+          "term": "familie",
+          "weight": 0.02236
+        },
+        {
+          "term": "unterstützung",
+          "weight": 0.02033
+        },
+        {
+          "term": "angebot",
+          "weight": 0.01954
+        },
+        {
+          "term": "eltern",
+          "weight": 0.01334
+        },
+        {
+          "term": "kind_jugendliche",
+          "weight": 0.01303
+        },
+        {
+          "term": "einrichtung",
+          "weight": 0.01074
+        },
+        {
+          "term": "jung_mensch",
+          "weight": 0.00974
+        },
+        {
+          "term": "thema",
+          "weight": 0.00918
+        },
+        {
+          "term": "gemeinde",
+          "weight": 0.00897
+        },
+        {
+          "term": "diakonie",
+          "weight": 0.00823
+        }
+      ],
+      "top_publishers": [
+        {
+          "publisher": "Evangelische Verlagsanstalt",
+          "share": 56.8
+        },
+        {
+          "publisher": "Gütersloher Verlagshaus",
+          "share": 14.4
+        },
+        {
+          "publisher": "Patmos",
+          "share": 5.5
+        },
+        {
+          "publisher": "Alibri",
+          "share": 5.2
+        },
+        {
+          "publisher": "Rowohlt",
+          "share": 3.2
+        },
+        {
+          "publisher": "Herder",
+          "share": 3.1
+        }
+      ],
+      "representative_docs": [
+        {
+          "title": "23 Jahre: die Karriere des Propheten Muhammad",
+          "author": "Daštī, ʿAlī",
+          "publisher": "Alibri",
+          "date": "1997",
+          "corpus_layer": "drm_fallback_multi_api_enriched",
+          "probability": 66.7,
+          "keywords": [],
+          "snippet": "23 Jahre: die Karriere des Propheten Muhammad. Daštī, ʿAlī. Alibri.",
+          "apa_citation": "Daštī, ʿAlī (1997). 23 Jahre: die Karriere des Propheten Muhammad. Alibri."
+        },
+        {
+          "title": "Es ist normal, verschieden zu sein: wir wollen Inklusion [Forschungsbuch-Abschnitt 22/41]",
+          "author": "o. V.",
+          "publisher": "Evangelische Verlagsanstalt",
+          "date": "2019",
+          "corpus_layer": "gbv_direct_fulltext_pdf",
+          "probability": 65.5,
+          "keywords": [],
+          "snippet": "Standards gelten, wenn junge Menschen ihre Zeit außerhalb der Schule verbringen, ist in einem Gesetz festgelegt. Das Gesetz heißt Kinder- und Jugendhilfegesetz und steht auch im Sozialgesetz-Buch. Das Gesetz sagt als erstes: Junge Menschen und ihre Familie sollen gute Bedingungen zum Leben haben. Sie sollen in einer kinderfreundlichen und familienfreundlichen Umwelt aufwachsen. Im Alltag heißt das zum Beispiel, dass",
+          "apa_citation": "o. V. (2019). Es ist normal, verschieden zu sein: wir wollen Inklusion [Forschungsbuch-Abschnitt 22/41]. Evangelische Verlagsanstalt."
+        },
+        {
+          "title": "Für immer anders: das Hausbuch für Familien in Zeiten der Trauer und des Abschieds",
+          "author": "Schroeter-Rupieper, Mechthild",
+          "publisher": "Patmos",
+          "date": "2018",
+          "corpus_layer": "drm_fallback_multi_api_enriched",
+          "probability": 60.2,
+          "keywords": [],
+          "snippet": "Für immer anders: das Hausbuch für Familien in Zeiten der Trauer und des Abschieds. Schroeter-Rupieper, Mechthild. Patmos.",
+          "apa_citation": "Schroeter-Rupieper, Mechthild (2018). Für immer anders: das Hausbuch für Familien in Zeiten der Trauer und des Abschieds. Patmos."
+        }
+      ]
+    },
+    {
+      "topic_id": 11,
+      "archetype": {
+        "label": "Critical / Secular-Humanist",
+        "confidence": 100.0,
+        "scores": {
+          "Traditional / Ecclesiastical": 0.0,
+          "Neoliberal / Self-Optimization": 0.0,
+          "Critical / Secular-Humanist": 100.0
+        }
+      },
+      "top_terms": [
+        {
+          "term": "kapitel",
+          "weight": 0.10814
+        },
+        {
+          "term": "küng",
+          "weight": 0.0467
+        },
+        {
+          "term": "mohammed",
+          "weight": 0.03648
+        },
+        {
+          "term": "exkurs",
+          "weight": 0.03302
+        },
+        {
+          "term": "weizsäcker",
+          "weight": 0.01443
+        },
+        {
+          "term": "polen",
+          "weight": 0.01361
+        },
+        {
+          "term": "hiob",
+          "weight": 0.01348
+        },
+        {
+          "term": "gottesglaube",
+          "weight": 0.01167
+        },
+        {
+          "term": "hans_küng",
+          "weight": 0.01051
+        },
+        {
+          "term": "genesis",
+          "weight": 0.00975
+        },
+        {
+          "term": "holocaust",
+          "weight": 0.0084
+        },
+        {
+          "term": "wunschdenken",
+          "weight": 0.00809
+        },
+        {
+          "term": "syrien",
+          "weight": 0.0075
+        },
+        {
+          "term": "apologetik_kritik",
+          "weight": 0.00718
+        },
+        {
+          "term": "strategie",
+          "weight": 0.00555
+        }
+      ],
+      "top_publishers": [
+        {
+          "publisher": "Rowohlt",
+          "share": 31.1
+        },
+        {
+          "publisher": "Alibri",
+          "share": 11.7
+        },
+        {
+          "publisher": "Patmos",
+          "share": 8.8
+        },
+        {
+          "publisher": "Wagenbach",
+          "share": 7.9
+        },
+        {
+          "publisher": "Evangelische Verlagsanstalt",
+          "share": 7.4
+        },
+        {
+          "publisher": "Fischer",
+          "share": 7.3
+        }
+      ],
+      "representative_docs": [
+        {
+          "title": "Wozu heilige Kriege?: Anlässe und Motive der Kreuzzüge",
+          "author": "Riley-Smith, Jonathan Simon Christopher",
+          "publisher": "Wagenbach",
+          "date": "2005",
+          "corpus_layer": "drm_fallback_multi_api_enriched",
+          "probability": 73.3,
+          "keywords": [],
+          "snippet": "Wozu heilige Kriege?: Anlässe und Motive der Kreuzzüge. Riley-Smith, Jonathan Simon Christopher. Wagenbach.",
+          "apa_citation": "Riley-Smith, Jonathan Simon Christopher (2005). Wozu heilige Kriege?: Anlässe und Motive der Kreuzzüge. Wagenbach."
+        },
+        {
+          "title": "Mohammed",
+          "author": "Kamphoevener, Elsa Sophia von",
+          "publisher": "Rowohlt",
+          "date": "1989",
+          "corpus_layer": "drm_fallback_multi_api_enriched",
+          "probability": 50.2,
+          "keywords": [],
+          "snippet": "Mohammed. Kamphoevener, Elsa Sophia von. Rowohlt.",
+          "apa_citation": "Kamphoevener, Elsa Sophia von (1989). Mohammed. Rowohlt."
+        },
+        {
+          "title": "Den Alltag unterbrechen: Kurs Gotteslehre",
+          "author": "Haunhorst, Benno",
+          "publisher": "Patmos",
+          "date": "1999",
+          "corpus_layer": "drm_fallback_multi_api_enriched",
+          "probability": 49.9,
+          "keywords": [],
+          "snippet": "Den Alltag unterbrechen: Kurs Gotteslehre. Haunhorst, Benno. Patmos.",
+          "apa_citation": "Haunhorst, Benno (1999). Den Alltag unterbrechen: Kurs Gotteslehre. Patmos."
+        }
+      ]
+    },
+    {
+      "topic_id": 12,
+      "archetype": {
+        "label": "Traditional / Ecclesiastical",
+        "confidence": 85.8,
+        "scores": {
+          "Traditional / Ecclesiastical": 85.8,
+          "Neoliberal / Self-Optimization": 0.0,
+          "Critical / Secular-Humanist": 14.2
+        }
+      },
+      "top_terms": [
+        {
+          "term": "religion",
+          "weight": 0.0556
+        },
+        {
+          "term": "islam",
+          "weight": 0.02755
+        },
+        {
+          "term": "christlich_christlich",
+          "weight": 0.01881
+        },
+        {
+          "term": "christentum",
+          "weight": 0.0175
+        },
+        {
+          "term": "europa",
+          "weight": 0.01349
+        },
+        {
+          "term": "religiös_religiös",
+          "weight": 0.0128
+        },
+        {
+          "term": "muslim",
+          "weight": 0.01249
+        },
+        {
+          "term": "europäisch",
+          "weight": 0.00865
+        },
+        {
+          "term": "islamisch",
+          "weight": 0.00828
+        },
+        {
+          "term": "muslimisch",
+          "weight": 0.00694
+        },
+        {
+          "term": "christ",
+          "weight": 0.00653
+        },
+        {
+          "term": "koran",
+          "weight": 0.00652
+        },
+        {
+          "term": "autor",
+          "weight": 0.00611
+        },
+        {
+          "term": "aufklärung",
+          "weight": 0.00602
+        },
+        {
+          "term": "religionsfreiheit",
+          "weight": 0.006
+        }
+      ],
+      "top_publishers": [
+        {
+          "publisher": "Open Access Book (DE)",
+          "share": 17.2
+        },
+        {
+          "publisher": "Rowohlt",
+          "share": 16.8
+        },
+        {
+          "publisher": "Patmos",
+          "share": 8.7
+        },
+        {
+          "publisher": "Herder",
+          "share": 7.7
+        },
+        {
+          "publisher": "Suhrkamp",
+          "share": 7.4
+        },
+        {
+          "publisher": "Alibri",
+          "share": 7.0
+        }
+      ],
+      "representative_docs": [
+        {
+          "title": "Max Webers Sicht des Islams: Interpretation und Kritik",
+          "author": "Schluchter, Wolfgang",
+          "publisher": "Suhrkamp",
+          "date": "1987",
+          "corpus_layer": "drm_fallback_multi_api_enriched",
+          "probability": 91.6,
+          "keywords": [],
+          "snippet": "Max Webers Sicht des Islams: Interpretation und Kritik. Schluchter, Wolfgang. Suhrkamp. Wolfgang Schluchter (Hrsg.): \"Max Webers Sicht des Islam\". Interpretation und Kritik. Suhrkamp Verlag (stw. Bd. 638), Frankfurt am Main 1987. 365 Seiten, kart., 24,- DM Inhalt Vorwort Wolfgang Schluchter Einleitung. Zwischen Welteroberung und Weltanpassung. Überlegungen zu Max Webers Sicht des frühen Islams . . . Ira M. Lapidus Di",
+          "apa_citation": "Schluchter, Wolfgang (1987). Max Webers Sicht des Islams: Interpretation und Kritik. Suhrkamp."
+        },
+        {
+          "title": "Max Webers Sicht des antiken Christentums: Interpretation und Kritik",
+          "author": "Schluchter, Wolfgang",
+          "publisher": "Suhrkamp",
+          "date": "1985",
+          "corpus_layer": "drm_fallback_multi_api_enriched",
+          "probability": 86.2,
+          "keywords": [],
+          "snippet": "Max Webers Sicht des antiken Christentums: Interpretation und Kritik. Schluchter, Wolfgang. Suhrkamp.",
+          "apa_citation": "Schluchter, Wolfgang (1985). Max Webers Sicht des antiken Christentums: Interpretation und Kritik. Suhrkamp."
+        },
+        {
+          "title": "Zeitzeichen 2000: Herausforderung für Religion und Gesellschaft",
+          "author": "Hahn, Udo",
+          "publisher": "Gütersloher Verlagshaus",
+          "date": "1999",
+          "corpus_layer": "drm_fallback_multi_api_enriched",
+          "probability": 80.5,
+          "keywords": [],
+          "snippet": "Zeitzeichen 2000: Herausforderung für Religion und Gesellschaft. Hahn, Udo. Gütersloher Verlagshaus.",
+          "apa_citation": "Hahn, Udo (1999). Zeitzeichen 2000: Herausforderung für Religion und Gesellschaft. Gütersloher Verlagshaus."
+        }
+      ]
+    }
+  ],
+  "diachronic_decade_shares": {
+    "1970s": {
+      "Topic 1": 10.1,
+      "Topic 2": 2.8,
+      "Topic 3": 5.0,
+      "Topic 4": 21.9,
+      "Topic 5": 16.4,
+      "Topic 6": 2.3,
+      "Topic 7": 14.9,
+      "Topic 8": 4.9,
+      "Topic 9": 17.5,
+      "Topic 10": 0.8,
+      "Topic 11": 0.7,
+      "Topic 12": 2.5
+    },
+    "1980s": {
+      "Topic 1": 8.1,
+      "Topic 2": 1.3,
+      "Topic 3": 2.6,
+      "Topic 4": 14.1,
+      "Topic 5": 23.4,
+      "Topic 6": 2.4,
+      "Topic 7": 17.1,
+      "Topic 8": 8.9,
+      "Topic 9": 16.0,
+      "Topic 10": 0.8,
+      "Topic 11": 0.8,
+      "Topic 12": 4.6
+    },
+    "1990s": {
+      "Topic 1": 6.1,
+      "Topic 2": 1.0,
+      "Topic 3": 3.4,
+      "Topic 4": 13.8,
+      "Topic 5": 28.4,
+      "Topic 6": 1.0,
+      "Topic 7": 21.1,
+      "Topic 8": 3.2,
+      "Topic 9": 12.2,
+      "Topic 10": 1.4,
+      "Topic 11": 1.4,
+      "Topic 12": 7.0
+    },
+    "2000s": {
+      "Topic 1": 3.2,
+      "Topic 2": 0.9,
+      "Topic 3": 6.3,
+      "Topic 4": 33.8,
+      "Topic 5": 13.5,
+      "Topic 6": 1.2,
+      "Topic 7": 8.7,
+      "Topic 8": 4.5,
+      "Topic 9": 20.2,
+      "Topic 10": 1.4,
+      "Topic 11": 0.4,
+      "Topic 12": 5.9
+    },
+    "2010s": {
+      "Topic 1": 7.9,
+      "Topic 2": 0.8,
+      "Topic 3": 21.9,
+      "Topic 4": 15.8,
+      "Topic 5": 9.2,
+      "Topic 6": 8.9,
+      "Topic 7": 12.6,
+      "Topic 8": 4.2,
+      "Topic 9": 10.4,
+      "Topic 10": 5.1,
+      "Topic 11": 0.6,
+      "Topic 12": 2.7
+    },
+    "2020s": {
+      "Topic 1": 2.0,
+      "Topic 2": 18.3,
+      "Topic 3": 5.1,
+      "Topic 4": 37.3,
+      "Topic 5": 8.0,
+      "Topic 6": 0.8,
+      "Topic 7": 6.8,
+      "Topic 8": 4.1,
+      "Topic 9": 10.1,
+      "Topic 10": 3.1,
+      "Topic 11": 0.6,
+      "Topic 12": 3.6
+    }
+  }
+}

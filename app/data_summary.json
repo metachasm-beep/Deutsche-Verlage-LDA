@@ -1,1 +1,32 @@
-{"count": 20, "source": "religion_voices_mock.csv", "publishers": ["Suhrkamp", "G\u00fctersloher Verlagshaus", "Herder", "Ariston", "Alibri", "EVA", "Ullstein", "Scorpios", "Goldmann", "Rowohlt", "Patmos", "Mabuse"]}
+{
+  "count": 1863,
+  "vocabulary_size": 10279,
+  "coherence_score": -2.9771,
+  "source": "dnb_metadata.csv",
+  "publishers": [
+    "Alibri",
+    "DOAJ (DOAJ: Directory of Open Access Journals)",
+    "De Gruyter",
+    "Erich-Brost-Institut",
+    "Evangelische Verlagsanstalt",
+    "Fischer",
+    "Gütersloher Verlagshaus",
+    "Herder",
+    "Kiepenheuer",
+    "Klett",
+    "Kösel",
+    "Nomos",
+    "Open Access (DE)",
+    "Open Access Book (DE)",
+    "PERSON",
+    "Patmos",
+    "Rowohlt",
+    "Springer Nature",
+    "Springer Science+Business Media",
+    "Suhrkamp",
+    "Vandenhoeck & Ruprecht",
+    "Verlag Barbara Budrich",
+    "Wagenbach",
+    "ZTS Zeitschrift für Theoretische Soziologie"
+  ]
+}
