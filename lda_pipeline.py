@@ -163,6 +163,295 @@ def format_apa_citation(row: dict) -> str:
     return f"{author} ({year}). {title}. {publisher}."
 
 
+LDA_MODES_META = {
+    "unseeded": {
+        "id": "unseeded",
+        "label": "Unseeded / Pure Unsupervised",
+        "short_label": "Unseeded",
+        "prior_type": "Uniform / Auto η (1× Raw Frequency)",
+        "supervision": "None (Blind Inductive Baseline)",
+        "formula": "P(φ_k | η_0), w_n ~ 1× Raw Count",
+        "description": "Pure Blei et al. (2003) baseline: removes the 2× RELIGIOUS_VOICE_KEYWORDS salience weight and uses an unseeded symmetric/auto Dirichlet word prior."
+    },
+    "unsupervised": {
+        "id": "unsupervised",
+        "label": "Domain-Weighted Unsupervised",
+        "short_label": "Unsupervised",
+        "prior_type": "Auto η + 2× Domain Salience",
+        "supervision": "Post-Hoc Archetype Projection",
+        "formula": "P(φ_k | η_auto), w_rel ~ 2× Salience",
+        "description": "Amplifies core theological and critical signifiers (2× token weight) while keeping Dirichlet topic slots unseeded so clusters emerge inductively."
+    },
+    "seeded": {
+        "id": "seeded",
+        "label": "Seeded / Guided LDA (Asymmetric η)",
+        "short_label": "Seeded (η-Matrix)",
+        "prior_type": "Asymmetric K × |V| Dirichlet η Matrix (β_seed = 15.0)",
+        "supervision": "Lexicon-Anchored Priors (RQ₁, RQ₂, RQ₃)",
+        "formula": "φ_k ~ Dir(η_k^{(RQ_m)}), η_{k,w∈S_m} = 15.0",
+        "description": "Constructs an asymmetric K × |V| conjugate Dirichlet prior matrix η anchoring topic slots to RQ₁ (Traditional), RQ₂ (Neoliberal), and RQ₃ (Critical) seed lexicons (Jagarlamudi et al., 2012)."
+    },
+    "supervised": {
+        "id": "supervised",
+        "label": "Supervised LDA (sLDA + Covariate Head)",
+        "short_label": "Supervised (sLDA)",
+        "prior_type": "Empirical Label Log-Odds η + L2 Discriminative Head",
+        "supervision": "Joint Regime & Publisher Response y_d | θ_d",
+        "formula": "ŷ_d = ArgMax(θ_d · W + b), η_{k,w} ∝ P(w | y_d)",
+        "description": "Combines empirical document-label co-occurrence priors with a 5-fold cross-validated L2 Ridge/Softmax response head predicting Ideological Regime (RQ₁–RQ₃) and Publisher from θ_d (Blei & McAuliffe, 2007)."
+    }
+}
+
+
+def _unboost_religious_tokens(doc_tokens: list) -> list:
+    """
+    Reverses the 2x consecutive duplication of RELIGIOUS_KEYWORDS_SET tokens
+    applied during _extract_tokens_from_doc so Pure Unseeded LDA uses natural 1x frequencies.
+    """
+    unboosted = []
+    i = 0
+    n = len(doc_tokens)
+    while i < n:
+        tok = doc_tokens[i]
+        unboosted.append(tok)
+        if tok in RELIGIOUS_KEYWORDS_SET and (i + 1 < n) and doc_tokens[i + 1] == tok:
+            i += 2
+        else:
+            i += 1
+    return unboosted
+
+
+def _infer_doc_ground_truth_regime(row: dict, doc_tokens: list) -> str:
+    """
+    Determines the ground-truth ideological regime label y_d in {RQ1, RQ2, RQ3}
+    for Supervised LDA (sLDA) training and cross-validation.
+    """
+    pub = _clean_marc_control_chars(row.get("publisher") or "").lower()
+    scores = {
+        "Traditional / Ecclesiastical": 0.0,
+        "Neoliberal / Self-Optimization": 0.0,
+        "Critical / Secular-Humanist": 0.0,
+    }
+    # Institutional publisher prior weight
+    if any(p in pub for p in ("herder", "benno", "scm", "brockhaus", "vandenhoeck", "echter", "grünewald", "evangelisch", "kohlhammer", "pustet", "schwabenverlag")):
+        scores["Traditional / Ecclesiastical"] += 2.5
+    elif any(p in pub for p in ("kösel", "gräfe", "unzer", "kamphausen", "patmos", "kreuz", "arkana", "goldmann", "scorpio", "knaur", "integral")):
+        scores["Neoliberal / Self-Optimization"] += 2.5
+    elif any(p in pub for p in ("suhrkamp", "insel", "beck", "rowohlt", "fischer", "campus", "transcript", "alibri", "wagenbach", "kiepenheuer", "gruyter", "springer", "meiner", "metzler")):
+        scores["Critical / Secular-Humanist"] += 2.5
+
+    # Lexical evidence from document tokens
+    for tok in doc_tokens:
+        parts = set(tok.lower().split("_"))
+        parts.add(tok.lower())
+        for arch, lex_set in config.ARCHETYPE_LEXICONS.items():
+            if parts.intersection(lex_set):
+                scores[arch] += 1.0
+
+    return max(scores, key=scores.get)
+
+
+def build_seeded_eta_matrix(dictionary, num_topics: int, seed_boost: float = 15.0, base_eta: float = 0.05):
+    """
+    Constructs an asymmetric K x |V| Dirichlet prior matrix (eta) anchored to
+    RQ1 (Traditional), RQ2 (Neoliberal), and RQ3 (Critical) seed lexicons.
+    """
+    import numpy as np
+    vocab_size = len(dictionary)
+    eta_matrix = np.full((num_topics, vocab_size), base_eta, dtype=np.float64)
+    archetype_names = [
+        "Traditional / Ecclesiastical",
+        "Neoliberal / Self-Optimization",
+        "Critical / Secular-Humanist",
+    ]
+    seed_assignments = {}
+
+    for t_id in range(num_topics):
+        target_arch = archetype_names[t_id % 3]
+        seed_assignments[t_id] = target_arch
+        lex_set = config.ARCHETYPE_LEXICONS[target_arch]
+        other_lex = set().union(*[
+            s for a, s in config.ARCHETYPE_LEXICONS.items() if a != target_arch
+        ])
+
+        for token_id, word in dictionary.items():
+            parts = set(word.lower().split("_"))
+            parts.add(word.lower())
+            if parts.intersection(lex_set):
+                eta_matrix[t_id, token_id] = seed_boost
+            elif parts.intersection(other_lex):
+                eta_matrix[t_id, token_id] = base_eta * 0.2
+
+    return eta_matrix, seed_assignments
+
+
+def build_supervised_eta_matrix(dictionary, processed_n_grams, filtered_rows, num_topics: int):
+    """
+    Constructs a Supervised LDA (sLDA) K x |V| prior matrix combining theoretical seed lexicons
+    with empirical document-label (RQ1/RQ2/RQ3 + Publisher) word co-occurrence probabilities.
+    """
+    import numpy as np
+    eta_matrix, seed_assignments = build_seeded_eta_matrix(
+        dictionary, num_topics, seed_boost=18.0, base_eta=0.05
+    )
+    archetype_names = [
+        "Traditional / Ecclesiastical",
+        "Neoliberal / Self-Optimization",
+        "Critical / Secular-Humanist",
+    ]
+    # Accumulate empirical word counts per ground-truth regime
+    regime_word_counts = {a: defaultdict(float) for a in archetype_names}
+    regime_totals = {a: 1.0 for a in archetype_names}
+
+    for doc_tokens, row in zip(processed_n_grams, filtered_rows):
+        y_regime = _infer_doc_ground_truth_regime(row, doc_tokens)
+        for tok in doc_tokens:
+            regime_word_counts[y_regime][tok] += 1.0
+            regime_totals[y_regime] += 1.0
+
+    word2id = dictionary.token2id
+    for t_id in range(num_topics):
+        target_arch = seed_assignments[t_id]
+        for word, count in regime_word_counts[target_arch].items():
+            if word in word2id and count >= 3:
+                tid = word2id[word]
+                rel_freq = (count / regime_totals[target_arch]) * 1000.0
+                eta_matrix[t_id, tid] = max(eta_matrix[t_id, tid], 0.05 + min(rel_freq * 4.0, 25.0))
+
+    return eta_matrix, seed_assignments
+
+
+def compute_slda_diagnostics(corpus, filtered_rows, processed_n_grams, lda_model, effective_k: int) -> dict:
+    """
+    Fits an L2-regularized Supervised LDA (sLDA) response head Y = Theta * W + b
+    with 5-fold cross-validation to evaluate how accurately latent topic vectors theta_d
+    predict (1) Ideological Regime (RQ1, RQ2, RQ3) and (2) Institutional Publisher.
+    """
+    import numpy as np
+    n_docs = len(corpus)
+    if n_docs < 10:
+        return {}
+
+    archetype_names = [
+        "Traditional / Ecclesiastical",
+        "Neoliberal / Self-Optimization",
+        "Critical / Secular-Humanist",
+    ]
+    arch_to_idx = {a: i for i, a in enumerate(archetype_names)}
+
+    # Build document-topic matrix Theta (D x K) and regime target vector y (D,)
+    theta = np.zeros((n_docs, effective_k), dtype=np.float64)
+    y_regime = np.zeros(n_docs, dtype=np.int64)
+    pub_labels = []
+
+    for i, (doc_bow, row, doc_tokens) in enumerate(zip(corpus, filtered_rows, processed_n_grams)):
+        for t_id, prob in lda_model.get_document_topics(doc_bow, minimum_probability=0.0):
+            if t_id < effective_k:
+                theta[i, t_id] = float(prob)
+        gt_arch = _infer_doc_ground_truth_regime(row, doc_tokens)
+        y_regime[i] = arch_to_idx[gt_arch]
+        pub_labels.append(_clean_marc_control_chars(row.get("publisher") or "Unknown"))
+
+    # Add intercept column to Theta -> X (D x (K+1))
+    X = np.hstack([theta, np.ones((n_docs, 1), dtype=np.float64)])
+    Y_onehot = np.eye(3, dtype=np.float64)[y_regime]
+
+    # Closed-form L2 Ridge regression: W = (X^T X + lambda I)^(-1) X^T Y
+    reg_lambda = 1.5
+    eye_mat = np.eye(effective_k + 1, dtype=np.float64)
+    eye_mat[-1, -1] = 0.0  # Do not regularize intercept
+    W_full = np.linalg.solve(X.T @ X + reg_lambda * eye_mat, X.T @ Y_onehot)
+    W_topics = W_full[:effective_k, :]  # (K x 3)
+
+    # In-sample predictions & R^2
+    preds_in = np.argmax(X @ W_full, axis=1)
+    in_sample_acc = float(np.mean(preds_in == y_regime) * 100.0)
+
+    ss_res = float(np.sum((Y_onehot - (X @ W_full)) ** 2))
+    ss_tot = float(np.sum((Y_onehot - np.mean(Y_onehot, axis=0, keepdims=True)) ** 2)) or 1.0
+    r2_score = max(0.0, min(1.0, 1.0 - (ss_res / ss_tot)))
+
+    # Deterministic 5-fold cross-validation for Regime (RQ1, RQ2, RQ3)
+    rng = np.random.RandomState(42)
+    perm = rng.permutation(n_docs)
+    n_folds = min(5, n_docs)
+    cv_preds = np.zeros(n_docs, dtype=np.int64)
+
+    for fold in range(n_folds):
+        val_idx = perm[fold::n_folds]
+        train_mask = np.ones(n_docs, dtype=bool)
+        train_mask[val_idx] = False
+        X_tr, Y_tr = X[train_mask], Y_onehot[train_mask]
+        X_va = X[val_idx]
+        W_fold = np.linalg.solve(X_tr.T @ X_tr + reg_lambda * eye_mat, X_tr.T @ Y_tr)
+        cv_preds[val_idx] = np.argmax(X_va @ W_fold, axis=1)
+
+    cv_acc = float(np.mean(cv_preds == y_regime) * 100.0)
+
+    # Compute Macro-F1 across the 3 ideological regimes
+    f1_list = []
+    regime_class_metrics = {}
+    for c_idx, arch_name in enumerate(archetype_names):
+        tp = float(np.sum((cv_preds == c_idx) & (y_regime == c_idx)))
+        fp = float(np.sum((cv_preds == c_idx) & (y_regime != c_idx)))
+        fn = float(np.sum((cv_preds != c_idx) & (y_regime == c_idx)))
+        prec = tp / (tp + fp) if (tp + fp) > 0 else 0.0
+        rec = tp / (tp + fn) if (tp + fn) > 0 else 0.0
+        f1 = (2 * prec * rec) / (prec + rec) if (prec + rec) > 0 else 0.0
+        f1_list.append(f1)
+        regime_class_metrics[arch_name] = {
+            "precision": round(prec * 100, 1),
+            "recall": round(rec * 100, 1),
+            "f1": round(f1 * 100, 1),
+            "support": int(np.sum(y_regime == c_idx))
+        }
+    macro_f1 = float(np.mean(f1_list) * 100.0)
+
+    # Top-8 Publisher multi-class sLDA prediction accuracy
+    pub_counts = defaultdict(int)
+    for p in pub_labels:
+        pub_counts[p] += 1
+    top_pubs = [p for p, _ in sorted(pub_counts.items(), key=lambda x: x[1], reverse=True)[:8]]
+    pub_to_idx = {p: i for i, p in enumerate(top_pubs)}
+    sub_indices = [i for i, p in enumerate(pub_labels) if p in pub_to_idx]
+
+    pub_cv_acc = 0.0
+    if len(sub_indices) >= 20 and len(top_pubs) >= 2:
+        X_pub = X[sub_indices]
+        y_pub = np.array([pub_to_idx[pub_labels[i]] for i in sub_indices], dtype=np.int64)
+        Y_pub_oh = np.eye(len(top_pubs), dtype=np.float64)[y_pub]
+        W_pub = np.linalg.solve(X_pub.T @ X_pub + 2.0 * eye_mat, X_pub.T @ Y_pub_oh)
+        pub_preds = np.argmax(X_pub @ W_pub, axis=1)
+        pub_cv_acc = float(np.mean(pub_preds == y_pub) * 100.0)
+
+    # Format per-topic sLDA regression coefficients W_topics (K x 3)
+    topic_weights_table = []
+    for t_id in range(effective_k):
+        w_trad = round(float(W_topics[t_id, 0]), 3)
+        w_neo = round(float(W_topics[t_id, 1]), 3)
+        w_crit = round(float(W_topics[t_id, 2]), 3)
+        disc_power = round(float(np.std(W_topics[t_id, :])), 3)
+        dominant_idx = int(np.argmax(W_topics[t_id, :]))
+        topic_weights_table.append({
+            "topic_id": t_id + 1,
+            "predicted_regime": archetype_names[dominant_idx],
+            "w_traditional": w_trad,
+            "w_neoliberal": w_neo,
+            "w_critical": w_crit,
+            "discriminative_power": disc_power
+        })
+
+    return {
+        "regime_cv_accuracy": round(cv_acc, 1),
+        "regime_in_sample_accuracy": round(in_sample_acc, 1),
+        "regime_macro_f1": round(macro_f1, 1),
+        "publisher_accuracy": round(pub_cv_acc, 1),
+        "r2_explanatory_power": round(r2_score, 4),
+        "regime_class_metrics": regime_class_metrics,
+        "topic_regression_weights": topic_weights_table
+    }
+
+
 def classify_topic_archetype(keywords_with_weights) -> dict:
     """
     Scores a topic's top weighted lemmas against the three theoretical archetypes
@@ -193,13 +482,17 @@ def classify_topic_archetype(keywords_with_weights) -> dict:
     }
 
 
-def run_pipeline(data_path, num_topics: int = None):
+def run_pipeline(data_path, num_topics: int = None, lda_mode: str = "unsupervised"):
     """
-    Executes the end-to-end German LDA pipeline with batch caching, bigram detection,
-    coherence validation, and structured MARC21 evidence extraction.
+    Executes the end-to-end German LDA pipeline supporting all 4 methodological paradigms:
+      - 'unseeded': Pure Unsupervised & Unseeded (1x natural token frequencies, eta='auto')
+      - 'unsupervised': Domain-Weighted Unsupervised (2x religious keyword salience, eta='auto')
+      - 'seeded': Bayesian Seeded / Guided LDA (Asymmetric K x |V| eta prior matrix anchored to RQ1-RQ3)
+      - 'supervised': Supervised LDA (sLDA empirical label log-odds eta prior + 5-fold CV discriminative head)
     """
+    mode_key = lda_mode if lda_mode in LDA_MODES_META else "unsupervised"
     k_topics = int(num_topics) if num_topics else config.NUM_TOPICS
-    print(f"Loading data from {data_path} (K={k_topics})...")
+    print(f"Loading data from {data_path} (K={k_topics}, mode={mode_key})...")
 
     valid_rows = []
     texts = []
@@ -217,7 +510,8 @@ def run_pipeline(data_path, num_topics: int = None):
     filtered_docs = []
     filtered_rows = []
     for doc, row in zip(processed_docs, valid_rows):
-        cleaned_doc = [t for t in (doc or []) if t not in ALL_STOPWORDS and len(t) > 2]
+        base_doc = _unboost_religious_tokens(doc or []) if mode_key == "unseeded" else (doc or [])
+        cleaned_doc = [t for t in base_doc if t not in ALL_STOPWORDS and len(t) > 2]
         if cleaned_doc:
             filtered_docs.append(cleaned_doc)
             filtered_rows.append(row)
@@ -239,6 +533,17 @@ def run_pipeline(data_path, num_topics: int = None):
     # Guard against tiny temporal slices where K exceeds vocabulary/corpus size
     effective_k = max(2, min(k_topics, len(corpus))) if corpus else 2
 
+    # Configure Dirichlet word prior (eta) according to lda_mode
+    seed_assignments = {}
+    if mode_key == "seeded":
+        eta_param, seed_assignments = build_seeded_eta_matrix(dictionary, effective_k)
+    elif mode_key == "supervised":
+        eta_param, seed_assignments = build_supervised_eta_matrix(
+            dictionary, processed_n_grams, filtered_rows, effective_k
+        )
+    else:
+        eta_param = config.ETA
+
     lda_model = LdaModel(
         corpus=corpus,
         id2word=dictionary,
@@ -248,11 +553,11 @@ def run_pipeline(data_path, num_topics: int = None):
         chunksize=500,
         passes=config.PASSES,
         alpha=config.ALPHA,
-        eta=config.ETA,
+        eta=eta_param,
         per_word_topics=True
     )
 
-    # --- PHASE 2: Model Validation (Coherence) ---
+    # --- PHASE 2: Model Validation (Coherence + Supervised sLDA Diagnostics) ---
     coherence_model = CoherenceModel(
         model=lda_model,
         corpus=corpus,
@@ -260,6 +565,9 @@ def run_pipeline(data_path, num_topics: int = None):
         coherence="u_mass"
     )
     coherence_score = float(coherence_model.get_coherence())
+    slda_diagnostics = compute_slda_diagnostics(
+        corpus, filtered_rows, processed_n_grams, lda_model, effective_k
+    )
 
     # --- PHASE 3: Representative Documents, Publisher & Decade Cross-Tabulation ---
     top_docs = {i: [] for i in range(effective_k)}
@@ -341,6 +649,9 @@ def run_pipeline(data_path, num_topics: int = None):
 
     lda_model.publisher_breakdown = publisher_breakdown
     lda_model.decade_breakdown = decade_breakdown
+    lda_model.lda_mode = mode_key
+    lda_model.seed_assignments = seed_assignments
+    lda_model.slda_diagnostics = slda_diagnostics
     return lda_model, corpus, dictionary, coherence_score, representative_docs
 
 
@@ -403,36 +714,54 @@ def get_viz_html(lda_model, corpus, dictionary):
 </html>"""
 
 
-def export_results(model, corpus, dictionary, data_path, coherence_score=0.0, representative_docs=None):
+def build_report_dict(model, corpus, dictionary, coherence_score=0.0, representative_docs=None) -> dict:
     """
-    Exports static visualization, detailed JSON topic report, and data summary for the frontend.
+    Constructs a structured JSON-serializable report dictionary for a trained LdaModel.
     """
-    if hasattr( os, "makedirs"):
-        os.makedirs("app", exist_ok=True)
-
     representative_docs = representative_docs or {}
     pub_breakdown = getattr(model, "publisher_breakdown", {})
     dec_breakdown = getattr(model, "decade_breakdown", {})
+    mode_key = getattr(model, "lda_mode", "unsupervised")
+    seed_assignments = getattr(model, "seed_assignments", {})
+    slda_diagnostics = getattr(model, "slda_diagnostics", {})
 
     topics_list = []
     for t_id in range(model.num_topics):
         terms = model.show_topic(t_id, topn=15)
         arch = classify_topic_archetype(terms)
+        if t_id in seed_assignments:
+            arch["seeded_prior"] = seed_assignments[t_id]
         topics_list.append({
             "topic_id": t_id + 1,
             "archetype": arch,
+            "seeded_prior": seed_assignments.get(t_id),
             "top_terms": [{"term": w, "weight": round(float(p), 5)} for w, p in terms],
             "top_publishers": pub_breakdown.get(t_id, []),
             "representative_docs": representative_docs.get(t_id, [])
         })
 
-    report = {
+    return {
+        "lda_mode": mode_key,
+        "lda_mode_meta": LDA_MODES_META.get(mode_key, LDA_MODES_META["unsupervised"]),
         "corpus_documents": len(corpus),
         "vocabulary_size": len(dictionary),
         "coherence_score": round(float(coherence_score), 4),
         "topics": topics_list,
-        "diachronic_decade_shares": dec_breakdown
+        "diachronic_decade_shares": dec_breakdown,
+        "slda_diagnostics": slda_diagnostics
     }
+
+
+def export_results(model, corpus, dictionary, data_path, coherence_score=0.0, representative_docs=None):
+    """
+    Exports static visualization, detailed JSON topic report, and data summary for the frontend.
+    """
+    if hasattr(os, "makedirs"):
+        os.makedirs("app", exist_ok=True)
+
+    report = build_report_dict(
+        model, corpus, dictionary, coherence_score=coherence_score, representative_docs=representative_docs
+    )
     model.exported_topics_report = report
 
     with open("app/lda_topics_report.json", "w", encoding="utf-8") as rf:

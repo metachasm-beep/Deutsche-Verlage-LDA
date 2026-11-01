@@ -32,7 +32,7 @@ import {
   ChevronUp,
   Cpu,
 } from 'lucide-react';
-import { useLDA } from './hooks/useLDA';
+import { useLDA, type LDAMode } from './hooks/useLDA';
 import { TrendsGraph } from './components/TrendsGraph';
 import { TopicModelViz, getArchetypeTheme, type Topic, type RepresentativeDoc, type Keyword } from './components/TopicModelViz';
 import { PipelineExplainer } from './components/PipelineExplainer';
@@ -47,6 +47,9 @@ function App() {
     topics,
     numTopics,
     setNumTopics,
+    ldaMode,
+    modesComparison,
+    sldaDiagnostics,
     corpusDocuments,
     vocabSize,
     coherenceScore,
@@ -115,32 +118,36 @@ function App() {
   };
 
   const handleRecalculate = () => {
-    runLDA(selectedYear, selectedDecade, numTopics);
+    runLDA(selectedYear, selectedDecade, numTopics, ldaMode);
+  };
+
+  const handleModeSelect = (nextMode: LDAMode) => {
+    runLDA(selectedYear, selectedDecade, numTopics, nextMode);
   };
 
   const handleRegimeSelect = (kVal: number) => {
     setNumTopics(kVal);
-    runLDA(selectedYear, selectedDecade, kVal);
+    runLDA(selectedYear, selectedDecade, kVal, ldaMode);
   };
 
   const handleYearClick = (year: number) => {
     const nextYear = selectedYear === year ? null : year;
     setSelectedYear(nextYear);
     setSelectedDecade(null);
-    runLDA(nextYear, null, numTopics);
+    runLDA(nextYear, null, numTopics, ldaMode);
   };
 
   const handleDecadeClick = (decade: number) => {
     const nextDecade = selectedDecade === decade ? null : decade;
     setSelectedDecade(nextDecade);
     setSelectedYear(null);
-    runLDA(null, nextDecade, numTopics);
+    runLDA(null, nextDecade, numTopics, ldaMode);
   };
 
   const handleResetTemporal = () => {
     setSelectedYear(null);
     setSelectedDecade(null);
-    runLDA(null, null, numTopics);
+    runLDA(null, null, numTopics, ldaMode);
   };
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -556,8 +563,55 @@ function App() {
                   </div>
                 </div>
 
-                {/* 2. Bayesian K-Granularity Parameter Console */}
+                {/* 2. Bayesian K-Granularity & 4-Mode Paradigm Console */}
                 <div className="bg-obsidian-950/80 border border-white/[0.07] rounded-xl p-3">
+                  {/* 4-Mode Paradigm Selector (Unseeded / Unsupervised / Seeded / Supervised) */}
+                  <div className="mb-3 pb-2.5 border-b border-white/[0.07]">
+                    <div className="flex items-center justify-between mb-1.5">
+                      <span className="font-mono text-[10px] uppercase tracking-widest text-parchment-300 flex items-center gap-1.5">
+                        <Cpu className="w-3 h-3 text-emerald-400" />
+                        LDA Modeling Paradigm
+                      </span>
+                      {sldaDiagnostics?.regime_cv_accuracy && (
+                        <span className="px-1.5 py-0.5 rounded bg-emerald-500/15 border border-emerald-500/30 font-mono text-[9px] text-emerald-300 font-bold">
+                          sLDA CV: {sldaDiagnostics.regime_cv_accuracy}%
+                        </span>
+                      )}
+                    </div>
+                    <div className="grid grid-cols-2 gap-1.5">
+                      {(
+                        [
+                          { id: 'unseeded', label: 'Unseeded', sub: '1× Raw · Auto η' },
+                          { id: 'unsupervised', label: 'Unsupervised', sub: '2× Boost · Auto η' },
+                          { id: 'seeded', label: 'Seeded (η)', sub: 'RQ₁–₃ η-Matrix' },
+                          { id: 'supervised', label: 'Supervised', sub: 'sLDA + Ridge CV' },
+                        ] as { id: LDAMode; label: string; sub: string }[]
+                      ).map((m) => {
+                        const isModeActive = ldaMode === m.id;
+                        return (
+                          <button
+                            key={m.id}
+                            onClick={() => handleModeSelect(m.id)}
+                            disabled={isTraining}
+                            className={clsx(
+                              'p-1.5 rounded-lg border text-left transition-all cursor-pointer disabled:opacity-50',
+                              isModeActive
+                                ? 'bg-traditional/15 border-traditional text-parchment-50 shadow-glow-gold'
+                                : 'bg-obsidian-900/70 border-white/[0.06] text-parchment-300 hover:border-white/20'
+                            )}
+                          >
+                            <div className="font-mono text-[10px] font-bold text-parchment-50 truncate">
+                              {m.label}
+                            </div>
+                            <div className="font-mono text-[8px] text-parchment-300 truncate">
+                              {m.sub}
+                            </div>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+
                   <div className="flex items-center justify-between mb-2">
                     <span className="font-mono text-[10px] uppercase tracking-widest text-parchment-300 flex items-center gap-1.5">
                       <Sliders className="w-3 h-3 text-traditional" />
@@ -623,7 +677,9 @@ function App() {
                   >
                     <Sparkles className={clsx('w-3.5 h-3.5', isTraining && 'animate-spin')} />
                     <span>
-                      {isTraining ? 'Sampling Posterior...' : `Re-Estimate Model (K=${numTopics})`}
+                      {isTraining
+                        ? 'Sampling Posterior...'
+                        : `Re-Estimate (${ldaMode} · K=${numTopics})`}
                     </span>
                   </button>
                 </div>
@@ -1079,7 +1135,11 @@ function App() {
                 coherenceScore={coherenceScore}
                 cvCoherence={cvCoherence}
                 isTraining={isTraining}
-                onRunFullPipeline={() => runLDA(selectedYear, selectedDecade, numTopics)}
+                onRunFullPipeline={() => runLDA(selectedYear, selectedDecade, numTopics, ldaMode)}
+                ldaMode={ldaMode}
+                onSelectLdaMode={handleModeSelect}
+                modesComparison={modesComparison}
+                sldaDiagnostics={sldaDiagnostics}
               />
             </>
           )}
@@ -1095,7 +1155,11 @@ function App() {
               coherenceScore={coherenceScore}
               cvCoherence={cvCoherence}
               isTraining={isTraining}
-              onRunFullPipeline={() => runLDA(selectedYear, selectedDecade, numTopics)}
+              onRunFullPipeline={() => runLDA(selectedYear, selectedDecade, numTopics, ldaMode)}
+              ldaMode={ldaMode}
+              onSelectLdaMode={handleModeSelect}
+              modesComparison={modesComparison}
+              sldaDiagnostics={sldaDiagnostics}
             />
           )}
 

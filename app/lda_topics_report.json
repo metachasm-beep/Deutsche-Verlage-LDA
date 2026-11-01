@@ -1,4 +1,14 @@
 {
+  "lda_mode": "unsupervised",
+  "lda_mode_meta": {
+    "id": "unsupervised",
+    "label": "Domain-Weighted Unsupervised",
+    "short_label": "Unsupervised",
+    "prior_type": "Auto η + 2× Domain Salience",
+    "supervision": "Post-Hoc Archetype Projection",
+    "formula": "P(φ_k | η_auto), w_rel ~ 2× Salience",
+    "description": "Amplifies core theological and critical signifiers (2× token weight) while keeping Dirichlet topic slots unseeded so clusters emerge inductively."
+  },
   "corpus_documents": 1863,
   "vocabulary_size": 10279,
   "coherence_score": -2.9771,
@@ -14,6 +24,7 @@
           "Critical / Secular-Humanist": 0.0
         }
       },
+      "seeded_prior": null,
       "top_terms": [
         {
           "term": "frau",
@@ -149,6 +160,7 @@
           "Critical / Secular-Humanist": 0.0
         }
       },
+      "seeded_prior": null,
       "top_terms": [
         {
           "term": "kirche_kirche",
@@ -284,6 +296,7 @@
           "Critical / Secular-Humanist": 67.0
         }
       },
+      "seeded_prior": null,
       "top_terms": [
         {
           "term": "politisch",
@@ -419,6 +432,7 @@
           "Critical / Secular-Humanist": 27.8
         }
       },
+      "seeded_prior": null,
       "top_terms": [
         {
           "term": "kirche_kirche",
@@ -554,6 +568,7 @@
           "Critical / Secular-Humanist": 0.0
         }
       },
+      "seeded_prior": null,
       "top_terms": [
         {
           "term": "mensch",
@@ -689,6 +704,7 @@
           "Critical / Secular-Humanist": 85.8
         }
       },
+      "seeded_prior": null,
       "top_terms": [
         {
           "term": "vernunft",
@@ -757,12 +773,12 @@
           "share": 53.4
         },
         {
-          "publisher": "Patmos",
+          "publisher": "Evangelische Verlagsanstalt",
           "share": 7.8
         },
         {
-          "publisher": "Evangelische Verlagsanstalt",
-          "share": 7.8
+          "publisher": "Patmos",
+          "share": 7.7
         },
         {
           "publisher": "Herder",
@@ -824,6 +840,7 @@
           "Critical / Secular-Humanist": 0.0
         }
       },
+      "seeded_prior": null,
       "top_terms": [
         {
           "term": "gott_gott",
@@ -959,6 +976,7 @@
           "Critical / Secular-Humanist": 64.3
         }
       },
+      "seeded_prior": null,
       "top_terms": [
         {
           "term": "religion",
@@ -1094,6 +1112,7 @@
           "Critical / Secular-Humanist": 0.0
         }
       },
+      "seeded_prior": null,
       "top_terms": [
         {
           "term": "theologie_theologie",
@@ -1235,6 +1254,7 @@
           "Critical / Secular-Humanist": 0.0
         }
       },
+      "seeded_prior": null,
       "top_terms": [
         {
           "term": "mensch",
@@ -1370,6 +1390,7 @@
           "Critical / Secular-Humanist": 100.0
         }
       },
+      "seeded_prior": null,
       "top_terms": [
         {
           "term": "kapitel",
@@ -1505,6 +1526,7 @@
           "Critical / Secular-Humanist": 14.2
         }
       },
+      "seeded_prior": null,
       "top_terms": [
         {
           "term": "religion",
@@ -1704,16 +1726,141 @@
     "2020s": {
       "Topic 1": 2.0,
       "Topic 2": 18.3,
-      "Topic 3": 5.1,
+      "Topic 3": 5.0,
       "Topic 4": 37.3,
       "Topic 5": 8.0,
       "Topic 6": 0.8,
       "Topic 7": 6.8,
       "Topic 8": 4.1,
-      "Topic 9": 10.1,
+      "Topic 9": 10.2,
       "Topic 10": 3.1,
       "Topic 11": 0.6,
       "Topic 12": 3.6
     }
+  },
+  "slda_diagnostics": {
+    "regime_cv_accuracy": 71.3,
+    "regime_in_sample_accuracy": 71.8,
+    "regime_macro_f1": 45.7,
+    "publisher_accuracy": 52.0,
+    "r2_explanatory_power": 0.1985,
+    "regime_class_metrics": {
+      "Traditional / Ecclesiastical": {
+        "precision": 74.6,
+        "recall": 89.5,
+        "f1": 81.4,
+        "support": 1179
+      },
+      "Neoliberal / Self-Optimization": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "support": 152
+      },
+      "Critical / Secular-Humanist": {
+        "precision": 60.8,
+        "recall": 51.3,
+        "f1": 55.7,
+        "support": 532
+      }
+    },
+    "topic_regression_weights": [
+      {
+        "topic_id": 1,
+        "predicted_regime": "Critical / Secular-Humanist",
+        "w_traditional": -0.109,
+        "w_neoliberal": -0.129,
+        "w_critical": 0.238,
+        "discriminative_power": 0.168
+      },
+      {
+        "topic_id": 2,
+        "predicted_regime": "Traditional / Ecclesiastical",
+        "w_traditional": 0.776,
+        "w_neoliberal": -0.223,
+        "w_critical": -0.554,
+        "discriminative_power": 0.565
+      },
+      {
+        "topic_id": 3,
+        "predicted_regime": "Neoliberal / Self-Optimization",
+        "w_traditional": -0.452,
+        "w_neoliberal": 0.241,
+        "w_critical": 0.21,
+        "discriminative_power": 0.32
+      },
+      {
+        "topic_id": 4,
+        "predicted_regime": "Traditional / Ecclesiastical",
+        "w_traditional": 0.341,
+        "w_neoliberal": 0.05,
+        "w_critical": -0.392,
+        "discriminative_power": 0.301
+      },
+      {
+        "topic_id": 5,
+        "predicted_regime": "Critical / Secular-Humanist",
+        "w_traditional": -0.226,
+        "w_neoliberal": 0.028,
+        "w_critical": 0.198,
+        "discriminative_power": 0.174
+      },
+      {
+        "topic_id": 6,
+        "predicted_regime": "Critical / Secular-Humanist",
+        "w_traditional": -0.061,
+        "w_neoliberal": -0.103,
+        "w_critical": 0.164,
+        "discriminative_power": 0.117
+      },
+      {
+        "topic_id": 7,
+        "predicted_regime": "Traditional / Ecclesiastical",
+        "w_traditional": 0.678,
+        "w_neoliberal": -0.018,
+        "w_critical": -0.66,
+        "discriminative_power": 0.546
+      },
+      {
+        "topic_id": 8,
+        "predicted_regime": "Critical / Secular-Humanist",
+        "w_traditional": -0.553,
+        "w_neoliberal": 0.046,
+        "w_critical": 0.508,
+        "discriminative_power": 0.434
+      },
+      {
+        "topic_id": 9,
+        "predicted_regime": "Traditional / Ecclesiastical",
+        "w_traditional": 0.28,
+        "w_neoliberal": -0.015,
+        "w_critical": -0.265,
+        "discriminative_power": 0.223
+      },
+      {
+        "topic_id": 10,
+        "predicted_regime": "Neoliberal / Self-Optimization",
+        "w_traditional": -0.285,
+        "w_neoliberal": 0.157,
+        "w_critical": 0.127,
+        "discriminative_power": 0.202
+      },
+      {
+        "topic_id": 11,
+        "predicted_regime": "Neoliberal / Self-Optimization",
+        "w_traditional": -0.135,
+        "w_neoliberal": 0.09,
+        "w_critical": 0.045,
+        "discriminative_power": 0.097
+      },
+      {
+        "topic_id": 12,
+        "predicted_regime": "Critical / Secular-Humanist",
+        "w_traditional": -0.256,
+        "w_neoliberal": -0.124,
+        "w_critical": 0.38,
+        "discriminative_power": 0.274
+      }
+    ]
   }
 }

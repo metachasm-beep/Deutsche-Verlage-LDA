@@ -22,6 +22,41 @@ export interface PublisherArchetypeRow {
   Critical: number;
 }
 
+export type LDAMode = 'unseeded' | 'unsupervised' | 'seeded' | 'supervised';
+
+export interface ModeComparisonRow {
+  mode: LDAMode;
+  label: string;
+  short_label: string;
+  prior_type: string;
+  supervision: string;
+  u_mass: number;
+  vocab_size: number;
+  regime_cv_accuracy: number;
+  regime_macro_f1: number;
+  publisher_accuracy: number;
+  r2_explanatory_power: number;
+}
+
+export interface TopicRegressionWeight {
+  topic_id: number;
+  predicted_regime: string;
+  w_traditional: number;
+  w_neoliberal: number;
+  w_critical: number;
+  discriminative_power: number;
+}
+
+export interface SLDADiagnostics {
+  regime_cv_accuracy?: number;
+  regime_in_sample_accuracy?: number;
+  regime_macro_f1?: number;
+  publisher_accuracy?: number;
+  r2_explanatory_power?: number;
+  regime_class_metrics?: Record<string, { precision: number; recall: number; f1: number; support: number }>;
+  topic_regression_weights?: TopicRegressionWeight[];
+}
+
 export const useLDA = () => {
   const [isTraining, setIsTraining] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
@@ -29,6 +64,10 @@ export const useLDA = () => {
   const [summary, setSummary] = useState<any>(null);
   const [topics, setTopics] = useState<any[]>([]);
   const [numTopics, setNumTopics] = useState<number>(12);
+  const [ldaMode, setLdaMode] = useState<LDAMode>('unsupervised');
+  const [ldaModeMeta, setLdaModeMeta] = useState<any>(null);
+  const [modesComparison, setModesComparison] = useState<ModeComparisonRow[]>([]);
+  const [sldaDiagnostics, setSldaDiagnostics] = useState<SLDADiagnostics | null>(null);
   const [corpusDocuments, setCorpusDocuments] = useState<number>(1863);
   const [vocabSize, setVocabSize] = useState<number>(10279);
   const [coherenceScore, setCoherenceScore] = useState<number>(-2.9771);
@@ -60,11 +99,16 @@ export const useLDA = () => {
     }
   };
 
-  const fetchTopics = async () => {
+  const fetchTopics = async (modeOverride?: LDAMode) => {
     try {
-      const res = await fetch(`${API_BASE}/api/topics`);
+      const targetMode = modeOverride ?? ldaMode;
+      const res = await fetch(`${API_BASE}/api/topics?lda_mode=${targetMode}`);
       const data = await res.json();
       setTopics(data.topics || []);
+      if (data.lda_mode) setLdaMode(data.lda_mode as LDAMode);
+      if (data.lda_mode_meta) setLdaModeMeta(data.lda_mode_meta);
+      if (data.modes_comparison) setModesComparison(data.modes_comparison);
+      if (data.slda_diagnostics) setSldaDiagnostics(data.slda_diagnostics);
       if (data.num_topics) setNumTopics(data.num_topics);
       if (data.corpus_documents) setCorpusDocuments(data.corpus_documents);
       if (data.vocab_size) setVocabSize(data.vocab_size);
@@ -88,21 +132,29 @@ export const useLDA = () => {
     }
   };
 
-  const runLDA = async (year?: number | null, decade?: number | null, kOverride?: number) => {
+  const runLDA = async (
+    year?: number | null,
+    decade?: number | null,
+    kOverride?: number,
+    modeOverride?: LDAMode
+  ) => {
     setIsTraining(true);
     try {
       const activeK = kOverride ?? numTopics;
+      const activeMode = modeOverride ?? ldaMode;
       if (kOverride) setNumTopics(kOverride);
+      if (modeOverride) setLdaMode(modeOverride);
 
       let url = `${API_BASE}/api/run-lda`;
       const params = new URLSearchParams();
       if (year) params.append('year', year.toString());
       if (decade) params.append('decade', decade.toString());
       if (activeK) params.append('num_topics', activeK.toString());
+      if (activeMode) params.append('lda_mode', activeMode);
       if (params.toString()) url += `?${params.toString()}`;
 
       await fetch(url, { method: 'POST' });
-      await fetchTopics();
+      await fetchTopics(activeMode);
     } catch (e) {
       console.error("LDA training failed", e);
     } finally {
@@ -127,7 +179,7 @@ export const useLDA = () => {
 
       await fetchSummary();
       await fetchTrends();
-      await runLDA(null, null, numTopics);
+      await runLDA(null, null, numTopics, ldaMode);
       return true;
     } catch (e) {
       console.error("Failed to upload dataset", e);
@@ -143,7 +195,7 @@ export const useLDA = () => {
       await fetch(`${API_BASE}/api/reset-to-mock`, { method: 'POST' });
       await fetchSummary();
       await fetchTrends();
-      await runLDA(null, null, numTopics);
+      await runLDA(null, null, numTopics, 'unsupervised');
       return true;
     } catch (e) {
       console.error("Failed to reset to default corpus", e);
@@ -161,6 +213,11 @@ export const useLDA = () => {
     topics,
     numTopics,
     setNumTopics,
+    ldaMode,
+    setLdaMode,
+    ldaModeMeta,
+    modesComparison,
+    sldaDiagnostics,
     corpusDocuments,
     vocabSize,
     coherenceScore,

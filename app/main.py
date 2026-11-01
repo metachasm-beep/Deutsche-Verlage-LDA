@@ -28,6 +28,7 @@ current_dictionary = None
 current_coherence = 0.0
 current_top_docs = {}
 current_num_topics = config.NUM_TOPICS
+current_lda_mode = "unsupervised"
 current_viz_html = ""
 
 # In-memory memoization cache for instant switching across (dataset, K, year, decade)
@@ -148,7 +149,7 @@ async def reset_to_mock():
     """
     Resets the model state and reloads the default DNB Harvest / Demo Corpus.
     """
-    global current_model, current_corpus, current_dictionary, current_viz_html, current_coherence, current_top_docs
+    global current_model, current_corpus, current_dictionary, current_viz_html, current_coherence, current_top_docs, current_lda_mode
 
     try:
         current_model = None
@@ -156,6 +157,7 @@ async def reset_to_mock():
         current_dictionary = None
         current_coherence = 0.0
         current_top_docs = {}
+        current_lda_mode = "unsupervised"
         current_viz_html = ""
         _MODEL_RUN_CACHE.clear()
         return {"status": "success", "message": "Reverted to Default Research Corpus."}
@@ -163,16 +165,46 @@ async def reset_to_mock():
         raise HTTPException(status_code=500, detail=str(e))
 
 
+def _load_modes_report_cache() -> dict:
+    modes_path = os.path.join(config.BASE_DIR, "app", "lda_modes_report.json")
+    if os.path.exists(modes_path):
+        try:
+            import json
+            with open(modes_path, mode="r", encoding="utf-8") as mf:
+                return json.load(mf)
+        except Exception:
+            pass
+    return {}
+
+
 @app.post("/api/run-lda")
 async def run_lda(
     year: int = Query(None),
     decade: int = Query(None),
-    num_topics: int = Query(None)
+    num_topics: int = Query(None),
+    lda_mode: str = Query("unsupervised")
 ):
-    global current_model, current_corpus, current_dictionary, current_viz_html, current_coherence, current_top_docs, current_num_topics
+    global current_model, current_corpus, current_dictionary, current_viz_html, current_coherence, current_top_docs, current_num_topics, current_lda_mode
 
+    mode_key = lda_mode if lda_mode in lda_pipeline.LDA_MODES_META else "unsupervised"
+    current_lda_mode = mode_key
     data_path = _get_active_data_path()
     k_target = int(num_topics) if num_topics else config.NUM_TOPICS
+    current_num_topics = k_target
+
+    # Fast-path if full-corpus K=12 mode is precomputed in app/lda_modes_report.json (or on Vercel serverless)
+    modes_cache = _load_modes_report_cache()
+    if (not year and not decade and k_target == config.NUM_TOPICS and mode_key in modes_cache.get("modes", {})) or not os.path.exists(data_path):
+        current_model = None
+        current_corpus = None
+        return {
+            "status": "success",
+            "year_filtered": year,
+            "decade_filtered": decade,
+            "num_topics": k_target,
+            "lda_mode": mode_key,
+            "cached": True
+        }
 
     try:
         if year or decade:
@@ -205,14 +237,15 @@ async def run_lda(
             data_path = filtered_path
 
         mtime = os.path.getmtime(data_path) if os.path.exists(data_path) else 0
-        cache_key = (data_path, mtime, year, decade, k_target)
+        cache_key = (data_path, mtime, year, decade, k_target, mode_key)
 
         if cache_key in _MODEL_RUN_CACHE:
             current_model, current_corpus, current_dictionary, current_coherence, current_top_docs = _MODEL_RUN_CACHE[cache_key]
         else:
             current_model, current_corpus, current_dictionary, current_coherence, current_top_docs = lda_pipeline.run_pipeline(
                 data_path,
-                num_topics=k_target
+                num_topics=k_target,
+                lda_mode=mode_key
             )
             _MODEL_RUN_CACHE[cache_key] = (
                 current_model,
@@ -229,6 +262,7 @@ async def run_lda(
             "year_filtered": year,
             "decade_filtered": decade,
             "num_topics": current_num_topics,
+            "lda_mode": mode_key,
             "cached": cache_key in _MODEL_RUN_CACHE
         }
     except HTTPException:
@@ -300,16 +334,32 @@ async def get_viz():
 
 
 @app.get("/api/topics")
-async def get_topics():
-    global current_model, current_corpus, current_dictionary, current_coherence, current_top_docs
+async def get_topics(lda_mode: str = Query(None)):
+    global current_model, current_corpus, current_dictionary, current_coherence, current_top_docs, current_lda_mode
 
-    # Fast-path on cold start if precomputed full-corpus report exists in app/lda_topics_report.json
+    if lda_mode and lda_mode in lda_pipeline.LDA_MODES_META:
+        current_lda_mode = lda_mode
+    active_mode = current_lda_mode or "unsupervised"
+
+    modes_cache = _load_modes_report_cache()
+    modes_comparison = modes_cache.get("comparison", [])
+    available_modes = list(lda_pipeline.LDA_MODES_META.values())
+
+    # Fast-path if current_model is None (cold start or precomputed full-corpus K=12 mode switch)
     report_path = os.path.join(config.BASE_DIR, "app", "lda_topics_report.json")
-    if (not current_model or not current_corpus) and os.path.exists(report_path):
-        try:
-            import json
-            with open(report_path, mode="r", encoding="utf-8") as rf:
-                rep = json.load(rf)
+    if not current_model or not current_corpus:
+        rep = None
+        if active_mode in modes_cache.get("modes", {}):
+            rep = modes_cache["modes"][active_mode]
+        elif os.path.exists(report_path):
+            try:
+                import json
+                with open(report_path, mode="r", encoding="utf-8") as rf:
+                    rep = json.load(rf)
+            except Exception:
+                rep = None
+
+        if rep:
             rep_topics = []
             pub_arch_accum = defaultdict(lambda: defaultdict(float))
             rep_docs_map = {}
@@ -339,6 +389,7 @@ async def get_topics():
                     "id": t_id,
                     "prevalence": prev,
                     "archetype": arch_info,
+                    "seeded_prior": t.get("seeded_prior") or arch_info.get("seeded_prior"),
                     "publishers": t_pubs,
                     "top_publishers": top_pubs_dict,
                     "representative_docs": formatted_docs,
@@ -366,6 +417,11 @@ async def get_topics():
             k_val = len(rep_topics) or config.NUM_TOPICS
 
             return {
+                "lda_mode": active_mode,
+                "lda_mode_meta": lda_pipeline.LDA_MODES_META.get(active_mode, lda_pipeline.LDA_MODES_META["unsupervised"]),
+                "available_modes": available_modes,
+                "modes_comparison": modes_comparison,
+                "slda_diagnostics": rep.get("slda_diagnostics", {}),
                 "topics": rep_topics,
                 "num_topics": k_val,
                 "corpus_documents": rep.get("corpus_documents", 1863),
@@ -376,12 +432,10 @@ async def get_topics():
                 "decade_breakdown": rep.get("diachronic_decade_shares", {}),
                 "representative_docs": rep_docs_map
             }
-        except Exception:
-            pass
 
     if not current_model or not current_corpus:
         try:
-            await run_lda(year=None, decade=None, num_topics=config.NUM_TOPICS)
+            await run_lda(year=None, decade=None, num_topics=config.NUM_TOPICS, lda_mode=active_mode)
         except Exception:
             return {"topics": [], "vocab_size": 0, "publisher_archetypes": [], "decade_breakdown": {}}
 
@@ -399,6 +453,9 @@ async def get_topics():
 
     pub_breakdown = getattr(current_model, "publisher_breakdown", {})
     dec_breakdown = getattr(current_model, "decade_breakdown", {})
+    seed_assignments = getattr(current_model, "seed_assignments", {})
+    slda_diagnostics = getattr(current_model, "slda_diagnostics", {})
+    model_mode = getattr(current_model, "lda_mode", active_mode)
 
     topics = []
     pub_arch_accum = defaultdict(lambda: defaultdict(float))
@@ -409,6 +466,8 @@ async def get_topics():
         formatted=False
     ):
         archetype_info = lda_pipeline.classify_topic_archetype(words)
+        if topic_id in seed_assignments:
+            archetype_info["seeded_prior"] = seed_assignments[topic_id]
         prev = round(topic_prevalence.get(topic_id, 0), 2)
         t_pubs = pub_breakdown.get(topic_id, [])
         top_pubs_dict = {p["publisher"]: p["share"] for p in t_pubs}
@@ -430,6 +489,7 @@ async def get_topics():
             "id": topic_id,
             "prevalence": prev,
             "archetype": archetype_info,
+            "seeded_prior": seed_assignments.get(topic_id),
             "publishers": t_pubs,
             "top_publishers": top_pubs_dict,
             "representative_docs": formatted_docs,
@@ -456,6 +516,11 @@ async def get_topics():
     cv_score = cv_lookup.get(current_model.num_topics)
 
     return {
+        "lda_mode": model_mode,
+        "lda_mode_meta": lda_pipeline.LDA_MODES_META.get(model_mode, lda_pipeline.LDA_MODES_META["unsupervised"]),
+        "available_modes": available_modes,
+        "modes_comparison": modes_comparison,
+        "slda_diagnostics": slda_diagnostics,
         "topics": topics,
         "num_topics": current_model.num_topics,
         "corpus_documents": doc_count,

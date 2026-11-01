@@ -22,6 +22,7 @@ export interface ArchetypeInfo {
   label: string;
   confidence: number;
   scores?: Record<string, number>;
+  seeded_prior?: string;
 }
 
 export interface RepresentativeDoc {
@@ -40,6 +41,7 @@ export interface Topic {
   id: number;
   keywords: Keyword[];
   archetype?: ArchetypeInfo;
+  seeded_prior?: string;
   top_publishers?: Record<string, number>;
   representative_docs?: RepresentativeDoc[];
 }
@@ -246,10 +248,15 @@ export const TopicModelViz: React.FC<TopicModelVizProps> = ({
             </h3>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-wrap">
             {selectedYear && (
               <span className="px-2 py-0.5 rounded bg-traditional/15 border border-traditional/40 font-mono text-[10px] text-traditional">
                 Slice: {selectedYear}
+              </span>
+            )}
+            {(currentTopic?.seeded_prior || currentTopic?.archetype?.seeded_prior) && (
+              <span className="px-2 py-0.5 rounded bg-emerald-500/15 border border-emerald-500/40 font-mono text-[10px] text-emerald-300 font-semibold">
+                η-Seed: {(currentTopic?.seeded_prior || currentTopic?.archetype?.seeded_prior || '').split(' / ')[0]}
               </span>
             )}
             <span
