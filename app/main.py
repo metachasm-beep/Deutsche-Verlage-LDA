@@ -69,6 +69,16 @@ def _load_coherence_grid():
                     })
         except Exception:
             pass
+    if not grid:
+        summary_json_path = os.path.join(config.BASE_DIR, "app", "data_summary.json")
+        if os.path.exists(summary_json_path):
+            try:
+                import json
+                with open(summary_json_path, "r", encoding="utf-8") as sf:
+                    sdata = json.load(sf)
+                    grid = sdata.get("coherence_grid", [])
+            except Exception:
+                pass
     return grid
 
 
@@ -233,6 +243,15 @@ async def get_trends():
     Returns year-by-year counts for the 'Live Graph'.
     """
     data_path = _get_active_data_path()
+    if not os.path.exists(data_path):
+        summary_json_path = os.path.join(config.BASE_DIR, "app", "data_summary.json")
+        if os.path.exists(summary_json_path):
+            import json
+            with open(summary_json_path, "r", encoding="utf-8") as sf:
+                sdata = json.load(sf)
+                return sdata.get("trends", [])
+        return []
+
     data_map = defaultdict(lambda: defaultdict(int))
     publishers = set()
 
@@ -535,6 +554,17 @@ async def data_summary():
                 "lda_eta": str(config.ETA)
             }
         }
+    summary_json_path = os.path.join(config.BASE_DIR, "app", "data_summary.json")
+    if os.path.exists(summary_json_path):
+        try:
+            import json
+            with open(summary_json_path, "r", encoding="utf-8") as sf:
+                sdata = json.load(sf)
+                if "summary" in sdata:
+                    return sdata["summary"]
+                return sdata
+        except Exception:
+            pass
     return {"source": "Unknown Data", "count": 0, "publishers": []}
 
 
