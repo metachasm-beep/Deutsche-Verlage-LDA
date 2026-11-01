@@ -244,13 +244,20 @@ async def get_trends():
                 match = re.search(r"(\d{4})", date_str)
                 year = match.group(1) if match else "Unknown"
 
-                pub = row.get("publisher", "N/A")
+                pub = lda_pipeline._clean_marc_control_chars(row.get("publisher") or "N/A")
+                if not pub or pub == "PERSON":
+                    continue
                 data_map[year][pub] += 1
                 publishers.add(pub)
 
         result = []
         for year in sorted(data_map.keys()):
-            item = {"year_clean": year}
+            if year == "Unknown":
+                continue
+            item = {
+                "year": int(year) if year.isdigit() else year,
+                "year_clean": year
+            }
             for pub in sorted(publishers):
                 item[pub] = data_map[year][pub]
             result.append(item)
@@ -276,12 +283,88 @@ async def get_viz():
 @app.get("/api/topics")
 async def get_topics():
     global current_model, current_corpus, current_dictionary, current_coherence, current_top_docs
+
+    # Fast-path on cold start if precomputed full-corpus report exists in app/lda_topics_report.json
+    report_path = os.path.join(config.BASE_DIR, "app", "lda_topics_report.json")
+    if (not current_model or not current_corpus) and os.path.exists(report_path):
+        try:
+            import json
+            with open(report_path, mode="r", encoding="utf-8") as rf:
+                rep = json.load(rf)
+            rep_topics = []
+            pub_arch_accum = defaultdict(lambda: defaultdict(float))
+            rep_docs_map = {}
+
+            for idx, t in enumerate(rep.get("topics", [])):
+                t_id = int(t.get("topic_id", idx + 1)) - 1
+                t_pubs = t.get("top_publishers", [])
+                top_pubs_dict = {p["publisher"]: p["share"] for p in t_pubs}
+                arch_info = t.get("archetype", {})
+                arch_label = arch_info.get("label", "Hybrid / Discursive Mediation")
+                prev = round(100.0 / max(1, len(rep.get("topics", []))), 2)
+
+                for p_item in t_pubs:
+                    pub_arch_accum[p_item["publisher"]][arch_label] += (p_item["share"] * prev) / 100.0
+
+                raw_docs = t.get("representative_docs", [])
+                formatted_docs = [
+                    {
+                        **d,
+                        "year": d.get("date") or d.get("year") or "o. J."
+                    }
+                    for d in raw_docs
+                ]
+                rep_docs_map[t_id] = formatted_docs
+
+                rep_topics.append({
+                    "id": t_id,
+                    "prevalence": prev,
+                    "archetype": arch_info,
+                    "publishers": t_pubs,
+                    "top_publishers": top_pubs_dict,
+                    "representative_docs": formatted_docs,
+                    "keywords": [
+                        {"word": kw["term"], "weight": round(float(kw["weight"]), 4)}
+                        for kw in t.get("top_terms", [])
+                    ]
+                })
+
+            publisher_archetypes = []
+            for pub, arch_map in sorted(pub_arch_accum.items()):
+                total_w = sum(arch_map.values()) or 1.0
+                trad = round((arch_map.get("Traditional / Ecclesiastical", 0.0) / total_w) * 100, 1)
+                neolib = round((arch_map.get("Neoliberal / Self-Optimization", 0.0) / total_w) * 100, 1)
+                crit = round((arch_map.get("Critical / Secular-Humanist", 0.0) / total_w) * 100, 1)
+                publisher_archetypes.append({
+                    "publisher": pub,
+                    "Traditional": trad,
+                    "Neoliberal": neolib,
+                    "Critical": crit
+                })
+
+            grid = _load_coherence_grid()
+            cv_lookup = {g["k"]: g["c_v"] for g in grid}
+            k_val = len(rep_topics) or config.NUM_TOPICS
+
+            return {
+                "topics": rep_topics,
+                "num_topics": k_val,
+                "corpus_documents": rep.get("corpus_documents", 1863),
+                "vocab_size": rep.get("vocabulary_size", 10279),
+                "coherence_score": round(float(rep.get("coherence_score", -2.9771)), 4),
+                "cv_coherence": cv_lookup.get(k_val),
+                "publisher_archetypes": publisher_archetypes,
+                "decade_breakdown": rep.get("diachronic_decade_shares", {}),
+                "representative_docs": rep_docs_map
+            }
+        except Exception:
+            pass
+
     if not current_model or not current_corpus:
-        # Auto-initialize default model on first load so the observatory is immediately populated
         try:
             await run_lda(year=None, decade=None, num_topics=config.NUM_TOPICS)
         except Exception:
-            return {"topics": [], "vocab_size": 0, "publisher_archetypes": []}
+            return {"topics": [], "vocab_size": 0, "publisher_archetypes": [], "decade_breakdown": {}}
 
     topic_prevalence = defaultdict(float)
     doc_count = len(current_corpus)
@@ -296,6 +379,7 @@ async def get_topics():
             topic_prevalence[tid] = (topic_prevalence[tid] / doc_count) * 100
 
     pub_breakdown = getattr(current_model, "publisher_breakdown", {})
+    dec_breakdown = getattr(current_model, "decade_breakdown", {})
 
     topics = []
     pub_arch_accum = defaultdict(lambda: defaultdict(float))
@@ -308,23 +392,33 @@ async def get_topics():
         archetype_info = lda_pipeline.classify_topic_archetype(words)
         prev = round(topic_prevalence.get(topic_id, 0), 2)
         t_pubs = pub_breakdown.get(topic_id, [])
+        top_pubs_dict = {p["publisher"]: p["share"] for p in t_pubs}
 
-        # Accumulate publisher x ideological archetype matrix
         arch_label = archetype_info.get("label", "Hybrid / Discursive Mediation")
         for p_item in t_pubs:
             pub_arch_accum[p_item["publisher"]][arch_label] += (p_item["share"] * prev) / 100.0
+
+        raw_docs = current_top_docs.get(topic_id, [])
+        formatted_docs = [
+            {
+                **d,
+                "year": d.get("date") or d.get("year") or "o. J."
+            }
+            for d in raw_docs
+        ]
 
         topics.append({
             "id": topic_id,
             "prevalence": prev,
             "archetype": archetype_info,
             "publishers": t_pubs,
+            "top_publishers": top_pubs_dict,
+            "representative_docs": formatted_docs,
             "keywords": [{"word": w, "weight": round(float(p), 4)} for w, p in words]
         })
 
     topics = sorted(topics, key=lambda x: x["prevalence"], reverse=True)
 
-    # Normalize publisher_archetypes for the Institutional Matrix view
     publisher_archetypes = []
     for pub, arch_map in sorted(pub_arch_accum.items()):
         total_w = sum(arch_map.values()) or 1.0
@@ -338,7 +432,6 @@ async def get_topics():
             "Critical": crit
         })
 
-    # Match C_v score from grid search if available
     grid = _load_coherence_grid()
     cv_lookup = {g["k"]: g["c_v"] for g in grid}
     cv_score = cv_lookup.get(current_model.num_topics)
@@ -346,10 +439,12 @@ async def get_topics():
     return {
         "topics": topics,
         "num_topics": current_model.num_topics,
-        "vocab_size": len(current_dictionary) if current_dictionary else 3712,
+        "corpus_documents": doc_count,
+        "vocab_size": len(current_dictionary) if current_dictionary else 10279,
         "coherence_score": round(current_coherence, 4),
         "cv_coherence": cv_score,
         "publisher_archetypes": publisher_archetypes,
+        "decade_breakdown": dec_breakdown,
         "representative_docs": current_top_docs
     }
 
@@ -360,26 +455,85 @@ async def data_summary():
     if os.path.exists(data_path):
         years = set()
         publishers = set()
+        pub_counts = defaultdict(int)
+        layer_counts = defaultdict(int)
+        decade_counts = defaultdict(int)
+        unique_base_titles = set()
+        total_words = 0
         count = 0
+
         with open(data_path, mode="r", encoding="utf-8") as f:
             reader = csv.DictReader(f)
             for row in reader:
                 count += 1
-                y = row.get("year") or row.get("date")
-                if y:
+                raw_title = lda_pipeline._clean_marc_control_chars(row.get("title") or "")
+                if raw_title:
+                    base_t = re.sub(r"\[.*?\]", "", raw_title).strip().lower()
+                    if base_t:
+                        unique_base_titles.add(base_t)
+
+                wc_val = row.get("word_count")
+                if wc_val:
                     try:
-                        years.add(int(str(y).strip()[:4]))
+                        total_words += int(float(wc_val))
                     except Exception:
                         pass
+
+                layer = lda_pipeline._clean_marc_control_chars(row.get("corpus_layer") or "dnb_sru_marc21")
+                layer_counts[layer] += 1
+
+                dec = lda_pipeline._clean_marc_control_chars(row.get("decade") or "")
+                y = row.get("year") or row.get("date")
+                if y:
+                    m = re.search(r"(\d{4})", str(y))
+                    if m:
+                        yr_int = int(m.group(1))
+                        years.add(yr_int)
+                        if not dec:
+                            dec = f"{m.group(1)[:3]}0s"
+                if dec:
+                    decade_counts[dec] += 1
+
                 if "publisher" in row and row["publisher"]:
-                    publishers.add(row["publisher"])
+                    clean_pub = lda_pipeline._clean_marc_control_chars(row["publisher"])
+                    if clean_pub and clean_pub != "PERSON":
+                        publishers.add(clean_pub)
+                        pub_counts[clean_pub] += 1
+
+        top_publishers_sorted = [
+            p for p, _ in sorted(pub_counts.items(), key=lambda x: x[1], reverse=True)
+        ]
 
         is_dnb = os.path.basename(data_path) == "dnb_metadata.csv"
         return {
-            "source": "DNB SRU Harvest (DDC 200/230)" if is_dnb else "Mock Proxy Corpus",
+            "source": "DNB SRU v1.1 + Multi-Layer OA Full-Text Corpus" if is_dnb else "Custom Corpus",
             "count": count,
-            "publishers": sorted(list(publishers)),
-            "year_range": f"{min(years)}–{max(years)}" if years else "N/A"
+            "total_records": count,
+            "unique_books": len(unique_base_titles),
+            "total_words": total_words,
+            "publishers": top_publishers_sorted[:14] if top_publishers_sorted else sorted(list(publishers)),
+            "all_publishers_count": len(publishers),
+            "publisher_counts": dict(sorted(pub_counts.items(), key=lambda x: x[1], reverse=True)[:15]),
+            "corpus_layers": dict(sorted(layer_counts.items(), key=lambda x: x[1], reverse=True)),
+            "decade_counts": dict(sorted(decade_counts.items())),
+            "year_range": f"{min(years)}–{max(years)}" if years else "1970–2025",
+            "pipeline_config": {
+                "spacy_model": config.SPACY_MODEL,
+                "allowed_postags": config.ALLOWED_POSTAGS,
+                "stopwords_total": len(lda_pipeline.ALL_STOPWORDS),
+                "fraktur_noise_count": len(lda_pipeline.FRAKTUR_AND_META_NOISE),
+                "domain_stopwords_count": len(config.DOMAIN_STOPWORDS),
+                "religious_boost_keywords": len(config.RELIGIOUS_VOICE_KEYWORDS),
+                "bigram_min_count": 3,
+                "bigram_threshold": 8,
+                "filter_no_below": 5,
+                "filter_no_above": 0.55,
+                "filter_keep_n": 25000,
+                "lda_passes": config.PASSES,
+                "lda_chunksize": 500,
+                "lda_alpha": str(config.ALPHA),
+                "lda_eta": str(config.ETA)
+            }
         }
     return {"source": "Unknown Data", "count": 0, "publishers": []}
 

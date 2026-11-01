@@ -29,12 +29,14 @@ export const useLDA = () => {
   const [summary, setSummary] = useState<any>(null);
   const [topics, setTopics] = useState<any[]>([]);
   const [numTopics, setNumTopics] = useState<number>(12);
-  const [vocabSize, setVocabSize] = useState<number>(3712);
-  const [coherenceScore, setCoherenceScore] = useState<number>(0);
+  const [corpusDocuments, setCorpusDocuments] = useState<number>(1863);
+  const [vocabSize, setVocabSize] = useState<number>(10279);
+  const [coherenceScore, setCoherenceScore] = useState<number>(-2.9771);
   const [cvCoherence, setCvCoherence] = useState<number | null>(null);
   const [coherenceGrid, setCoherenceGrid] = useState<CoherencePoint[]>([]);
   const [recommendedRegimes, setRecommendedRegimes] = useState<RegimePreset[]>([]);
   const [publisherArchetypes, setPublisherArchetypes] = useState<PublisherArchetypeRow[]>([]);
+  const [decadeBreakdown, setDecadeBreakdown] = useState<Record<string, Record<string, number>>>({});
   const [representativeDocs, setRepresentativeDocs] = useState<Record<number, any[]>>({});
 
   const fetchTrends = async () => {
@@ -64,10 +66,12 @@ export const useLDA = () => {
       const data = await res.json();
       setTopics(data.topics || []);
       if (data.num_topics) setNumTopics(data.num_topics);
+      if (data.corpus_documents) setCorpusDocuments(data.corpus_documents);
       if (data.vocab_size) setVocabSize(data.vocab_size);
       setCoherenceScore(data.coherence_score ?? 0);
       setCvCoherence(data.cv_coherence ?? null);
       setPublisherArchetypes(data.publisher_archetypes || []);
+      setDecadeBreakdown(data.decade_breakdown || {});
       setRepresentativeDocs(data.representative_docs || {});
     } catch (e) {
       console.error("Failed to fetch topics", e);
@@ -157,12 +161,14 @@ export const useLDA = () => {
     topics,
     numTopics,
     setNumTopics,
+    corpusDocuments,
     vocabSize,
     coherenceScore,
     cvCoherence,
     coherenceGrid,
     recommendedRegimes,
     publisherArchetypes,
+    decadeBreakdown,
     representativeDocs,
     fetchTrends,
     fetchSummary,

@@ -30,10 +30,12 @@ import {
   Search,
   ChevronDown,
   ChevronUp,
+  Cpu,
 } from 'lucide-react';
 import { useLDA } from './hooks/useLDA';
 import { TrendsGraph } from './components/TrendsGraph';
 import { TopicModelViz, getArchetypeTheme, type Topic, type RepresentativeDoc, type Keyword } from './components/TopicModelViz';
+import { PipelineExplainer } from './components/PipelineExplainer';
 import clsx from 'clsx';
 
 function App() {
@@ -45,12 +47,14 @@ function App() {
     topics,
     numTopics,
     setNumTopics,
+    corpusDocuments,
     vocabSize,
     coherenceScore,
     cvCoherence,
     coherenceGrid,
     recommendedRegimes,
     publisherArchetypes,
+    decadeBreakdown,
     representativeDocs,
     fetchTrends,
     fetchSummary,
@@ -69,13 +73,14 @@ function App() {
   }, []);
 
   // 3-Pane Split-View IDE State
-  const [workspaceMode, setWorkspaceMode] = useState<'bento' | 'topics' | 'matrix'>('bento');
+  const [workspaceMode, setWorkspaceMode] = useState<'bento' | 'pipeline' | 'topics' | 'matrix'>('bento');
   const [leftSidebarOpen, setLeftSidebarOpen] = useState<boolean>(true);
   const [rightInspectorOpen, setRightInspectorOpen] = useState<boolean>(true);
   const [monographBannerExpanded, setMonographBannerExpanded] = useState<boolean>(false);
 
   // Synchronized Selection & Filter State across Panes 1, 2, and 3
   const [selectedYear, setSelectedYear] = useState<number | null>(null);
+  const [selectedDecade, setSelectedDecade] = useState<number | null>(null);
   const [selectedTopicIndex, setSelectedTopicIndex] = useState<number>(0);
   const [ideologicalFilter, setIdeologicalFilter] = useState<string | null>(null);
   const [inspectorSearch, setInspectorSearch] = useState<string>('');
@@ -110,22 +115,31 @@ function App() {
   };
 
   const handleRecalculate = () => {
-    runLDA(selectedYear, null, numTopics);
+    runLDA(selectedYear, selectedDecade, numTopics);
   };
 
   const handleRegimeSelect = (kVal: number) => {
     setNumTopics(kVal);
-    runLDA(selectedYear, null, kVal);
+    runLDA(selectedYear, selectedDecade, kVal);
   };
 
   const handleYearClick = (year: number) => {
     const nextYear = selectedYear === year ? null : year;
     setSelectedYear(nextYear);
+    setSelectedDecade(null);
     runLDA(nextYear, null, numTopics);
   };
 
-  const handleResetYear = () => {
+  const handleDecadeClick = (decade: number) => {
+    const nextDecade = selectedDecade === decade ? null : decade;
+    setSelectedDecade(nextDecade);
     setSelectedYear(null);
+    runLDA(null, nextDecade, numTopics);
+  };
+
+  const handleResetTemporal = () => {
+    setSelectedYear(null);
+    setSelectedDecade(null);
     runLDA(null, null, numTopics);
   };
 
@@ -201,7 +215,7 @@ function App() {
   const archetypeSummary = computeCorpusArchetypeSummary();
 
   const dissertationCitationAPA =
-    'Marandi, P. (2026). Mediating faith and power: A computational topic modeling (LDA) analysis of German theological, self-help, and secular-academic publishing (2005–2026) [Doctoral dissertation research observatory, Centre for German Studies, Jawaharlal Nehru University].';
+    'Marandi, P. (2026). Mediating faith and power: A computational topic modeling (LDA) analysis of German theological, self-help, and secular-academic publishing (1970–2025) [Doctoral dissertation research observatory, Centre for German Studies, Jawaharlal Nehru University].';
 
   const filteredInspectorDocs = activeTopicDocs.filter((doc: RepresentativeDoc) => {
     if (!inspectorSearch.trim()) return true;
@@ -209,12 +223,11 @@ function App() {
     return (
       doc.title.toLowerCase().includes(q) ||
       doc.publisher.toLowerCase().includes(q) ||
+      Boolean(doc.author && doc.author.toLowerCase().includes(q)) ||
       Boolean(doc.snippet && doc.snippet.toLowerCase().includes(q)) ||
-      String(doc.year).toLowerCase().includes(q)
+      String(doc.year || doc.date || '').toLowerCase().includes(q)
     );
   });
-
-  const displayCv = cvCoherence || coherenceScore || 0.4366;
 
   return (
     <div className="min-h-dvh lg:h-dvh lg:overflow-hidden bg-obsidian-950 text-parchment-50 font-sans antialiased flex flex-col archival-grid-bg">
@@ -270,6 +283,18 @@ function App() {
             <span>Observatory Bento (2×2)</span>
           </button>
           <button
+            onClick={() => setWorkspaceMode('pipeline')}
+            className={clsx(
+              'flex items-center gap-1.5 px-2.5 py-1 rounded-md font-mono text-[11px] transition-all cursor-pointer',
+              workspaceMode === 'pipeline'
+                ? 'bg-traditional text-obsidian-950 font-bold shadow-glow-gold'
+                : 'text-parchment-200 hover:text-parchment-50 hover:bg-white/[0.04]'
+            )}
+          >
+            <Cpu className="w-3.5 h-3.5" />
+            <span>Pipeline & Methodology</span>
+          </button>
+          <button
             onClick={() => setWorkspaceMode('topics')}
             className={clsx(
               'flex items-center gap-1.5 px-2.5 py-1 rounded-md font-mono text-[11px] transition-all cursor-pointer',
@@ -297,13 +322,13 @@ function App() {
 
         {/* Right: Active Filter Pill, Upload, APA Modal, Scholar Badge & Right Inspector Toggle */}
         <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
-          {selectedYear && (
+          {(selectedYear || selectedDecade) && (
             <button
-              onClick={handleResetYear}
-              title="Clear Temporal Year Filter"
+              onClick={handleResetTemporal}
+              title="Clear Temporal Filter"
               className="inline-flex items-center gap-1 px-2 py-1 rounded-md bg-neoliberal/15 border border-neoliberal/40 font-mono text-[10px] text-neoliberal hover:bg-neoliberal/25 transition-colors cursor-pointer"
             >
-              <span>Year: {selectedYear}</span>
+              <span>{selectedYear ? `Year: ${selectedYear}` : `Decade: ${selectedDecade}s`}</span>
               <RotateCcw className="w-3 h-3" />
             </button>
           )}
@@ -695,20 +720,40 @@ function App() {
                   JNU Doctoral Monograph
                 </span>
                 <h1 className="font-serif text-base sm:text-lg font-bold text-parchment-50 truncate">
-                  Ideological Transformation of German Theological, Self-Help & Secular Publishing (2005–2026)
+                  Ideological Transformation of German Theological, Self-Help & Secular Publishing (1970–2025)
                 </h1>
               </div>
-              <button
-                onClick={() => setMonographBannerExpanded((prev) => !prev)}
-                className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 font-mono text-[10px] text-parchment-200 transition-colors cursor-pointer shrink-0"
-              >
-                <span>{monographBannerExpanded ? 'Hide Framing' : 'Research Framing (RQ₁–RQ₃)'}</span>
-                {monographBannerExpanded ? (
-                  <ChevronUp className="w-3 h-3 text-traditional" />
-                ) : (
-                  <ChevronDown className="w-3 h-3 text-traditional" />
-                )}
-              </button>
+              <div className="flex items-center gap-2 shrink-0">
+                <button
+                  onClick={() =>
+                    setWorkspaceMode((prev) => (prev === 'pipeline' ? 'bento' : 'pipeline'))
+                  }
+                  className={clsx(
+                    'inline-flex items-center gap-1.5 px-2.5 py-1 rounded border font-mono text-[10px] transition-colors cursor-pointer',
+                    workspaceMode === 'pipeline'
+                      ? 'bg-traditional text-obsidian-950 border-traditional font-bold'
+                      : 'bg-traditional/15 hover:bg-traditional/25 border-traditional/40 text-traditional'
+                  )}
+                >
+                  <Cpu className="w-3 h-3" />
+                  <span>
+                    {workspaceMode === 'pipeline'
+                      ? 'Back to Bento Grid'
+                      : 'Pipeline & Lemmatization Guide'}
+                  </span>
+                </button>
+                <button
+                  onClick={() => setMonographBannerExpanded((prev) => !prev)}
+                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 font-mono text-[10px] text-parchment-200 transition-colors cursor-pointer"
+                >
+                  <span>{monographBannerExpanded ? 'Hide Framing' : 'Research Framing (RQ₁–RQ₃)'}</span>
+                  {monographBannerExpanded ? (
+                    <ChevronUp className="w-3 h-3 text-traditional" />
+                  ) : (
+                    <ChevronDown className="w-3 h-3 text-traditional" />
+                  )}
+                </button>
+              </div>
             </div>
 
             <AnimatePresence>
@@ -760,13 +805,15 @@ function App() {
                 <Database className="w-3.5 h-3.5 text-traditional" />
               </div>
               <div className="font-serif text-xl font-bold text-parchment-50 tabular-nums">
-                {summary?.total_records || 160}{' '}
-                <span className="text-xs font-sans font-normal text-parchment-300">Docs</span>
+                {(summary?.total_records || corpusDocuments || 1863).toLocaleString()}{' '}
+                <span className="text-xs font-sans font-normal text-parchment-300">Passages</span>
               </div>
               <p className="font-mono text-[9px] text-parchment-300 truncate mt-0.5">
                 {selectedYear
                   ? `Active Slice: ${selectedYear}`
-                  : `${publishersList.length} Publishers · 2005–2026`}
+                  : selectedDecade
+                  ? `Active Cohort: ${selectedDecade}s`
+                  : `${summary?.unique_books || 509} Books · ${summary?.year_range || '1970–2025'}`}
               </p>
             </div>
 
@@ -782,7 +829,7 @@ function App() {
                 <span className="text-xs font-sans font-normal text-parchment-300">Lemmas</span>
               </div>
               <p className="font-mono text-[9px] text-parchment-300 truncate mt-0.5">
-                spaCy de_core_news_lg
+                spaCy de_core_news_lg + Bigrams
               </p>
             </div>
 
@@ -804,15 +851,15 @@ function App() {
             <div className="archival-panel rounded-xl p-3 border-l-2 border-l-emerald-400">
               <div className="flex items-center justify-between mb-1">
                 <span className="font-mono text-[9px] uppercase tracking-widest text-parchment-300">
-                  Coherence (C<sub>v</sub>)
+                  Coherence (C<sub>v</sub> / U<sub>Mass</sub>)
                 </span>
                 <Award className="w-3.5 h-3.5 text-emerald-400" />
               </div>
               <div className="font-serif text-xl font-bold text-emerald-300 tabular-nums">
-                {displayCv.toFixed(4)}
+                {(cvCoherence || 0.4366).toFixed(4)}
               </div>
               <p className="font-mono text-[9px] text-parchment-300 truncate mt-0.5">
-                Optimum: K=25 (0.5177)
+                U_Mass: {(coherenceScore || -2.9771).toFixed(3)} · Peak K=25
               </p>
             </div>
 
@@ -859,9 +906,12 @@ function App() {
                   <TrendsGraph
                     data={trendsData}
                     publishers={publishersList}
+                    decadeBreakdown={decadeBreakdown}
                     onYearClick={handleYearClick}
                     selectedYear={selectedYear}
-                    onResetYear={handleResetYear}
+                    onDecadeClick={handleDecadeClick}
+                    selectedDecade={selectedDecade}
+                    onResetTemporal={handleResetTemporal}
                     compact={true}
                   />
                 </div>
@@ -1020,7 +1070,33 @@ function App() {
                   </div>
                 </div>
               </div>
+
+              {/* Full End-to-End Pipeline & Methodology Explainer Section */}
+              <PipelineExplainer
+                summary={summary}
+                vocabSize={vocabSize}
+                numTopics={numTopics}
+                coherenceScore={coherenceScore}
+                cvCoherence={cvCoherence}
+                isTraining={isTraining}
+                onRunFullPipeline={() => runLDA(selectedYear, selectedDecade, numTopics)}
+              />
             </>
+          )}
+
+          {/* =================================================================
+              WORKSPACE MODE 1B: FULL PIPELINE & METHODOLOGY ARCHITECTURE
+             ================================================================= */}
+          {workspaceMode === 'pipeline' && (
+            <PipelineExplainer
+              summary={summary}
+              vocabSize={vocabSize}
+              numTopics={numTopics}
+              coherenceScore={coherenceScore}
+              cvCoherence={cvCoherence}
+              isTraining={isTraining}
+              onRunFullPipeline={() => runLDA(selectedYear, selectedDecade, numTopics)}
+            />
           )}
 
           {/* =================================================================
@@ -1190,9 +1266,12 @@ function App() {
               <TrendsGraph
                 data={trendsData}
                 publishers={publishersList}
+                decadeBreakdown={decadeBreakdown}
                 onYearClick={handleYearClick}
                 selectedYear={selectedYear}
-                onResetYear={handleResetYear}
+                onDecadeClick={handleDecadeClick}
+                selectedDecade={selectedDecade}
+                onResetTemporal={handleResetTemporal}
                 compact={false}
               />
             </div>
@@ -1312,8 +1391,9 @@ function App() {
                 <div className="space-y-2.5">
                   {filteredInspectorDocs.length > 0 ? (
                     filteredInspectorDocs.map((doc: RepresentativeDoc, idx: number) => {
+                      const docYear = doc.year || doc.date || 'o. J.';
                       const apaText =
-                        doc.apa_citation || `${doc.publisher}. (${doc.year}). ${doc.title}.`;
+                        doc.apa_citation || `${doc.publisher}. (${docYear}). ${doc.title}.`;
                       const copyKey = `inspector-doc-${idx}`;
                       const isCopied = copiedCitationKey === copyKey;
 
@@ -1322,21 +1402,41 @@ function App() {
                           key={idx}
                           className="p-3 rounded-xl bg-obsidian-950/90 border border-white/[0.07] hover:border-white/20 transition-all space-y-2"
                         >
-                          <div className="flex items-center justify-between gap-2">
+                          <div className="flex items-center justify-between gap-2 flex-wrap">
                             <span
                               className="px-2 py-0.5 rounded font-mono text-[9px] font-semibold border border-white/10 bg-white/[0.03]"
                               style={{ color: activeTopicTheme.hex }}
                             >
                               {doc.publisher}
                             </span>
-                            <span className="font-mono text-[10px] text-parchment-300">
-                              Tag 264$c · {doc.year}
-                            </span>
+                            <div className="flex items-center gap-1.5">
+                              {doc.probability !== undefined && (
+                                <span className="px-1.5 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/30 font-mono text-[9px] text-emerald-300 font-bold">
+                                  θ = {doc.probability}%
+                                </span>
+                              )}
+                              <span className="font-mono text-[10px] text-parchment-300">
+                                Tag 264$c · {docYear}
+                              </span>
+                            </div>
                           </div>
 
                           <h4 className="font-serif text-sm font-bold text-parchment-50 leading-snug">
                             {doc.title}
                           </h4>
+
+                          {(doc.author || doc.corpus_layer) && (
+                            <div className="flex flex-wrap items-center justify-between gap-1.5 text-[10px] font-mono text-parchment-300">
+                              {doc.author && doc.author !== 'N/A' && (
+                                <span className="truncate">Tag 100$a · {doc.author}</span>
+                              )}
+                              {doc.corpus_layer && (
+                                <span className="px-1.5 py-0.5 rounded bg-white/[0.04] border border-white/[0.07] text-[9px] text-neoliberal">
+                                  {doc.corpus_layer}
+                                </span>
+                              )}
+                            </div>
+                          )}
 
                           {doc.snippet && (
                             <p className="text-[11px] text-parchment-200 leading-relaxed line-clamp-3 italic border-l-2 border-white/15 pl-2.5">

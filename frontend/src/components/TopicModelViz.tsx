@@ -26,8 +26,12 @@ export interface ArchetypeInfo {
 
 export interface RepresentativeDoc {
   title: string;
+  author?: string;
   publisher: string;
   year: string;
+  date?: string;
+  corpus_layer?: string;
+  probability?: number;
   apa_citation?: string;
   snippet?: string;
 }
@@ -167,9 +171,12 @@ export const TopicModelViz: React.FC<TopicModelVizProps> = ({
     if (!scores) {
       return { trad: 34, neo: 33, crit: 33 };
     }
-    const tradRaw = scores['Traditional / Theological'] || 0;
-    const neoRaw = scores['Neoliberal / Self-Help'] || 0;
-    const critRaw = scores['Critical / Secular-Academic'] || 0;
+    const tradRaw =
+      scores['Traditional / Ecclesiastical'] ?? scores['Traditional / Theological'] ?? 0;
+    const neoRaw =
+      scores['Neoliberal / Self-Optimization'] ?? scores['Neoliberal / Self-Help'] ?? 0;
+    const critRaw =
+      scores['Critical / Secular-Humanist'] ?? scores['Critical / Secular-Academic'] ?? 0;
     const total = tradRaw + neoRaw + critRaw;
     if (total <= 0) {
       return { trad: 34, neo: 33, crit: 33 };
