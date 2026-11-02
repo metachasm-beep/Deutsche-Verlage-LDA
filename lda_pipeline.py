@@ -793,7 +793,7 @@ def export_results(model, corpus, dictionary, data_path, coherence_score=0.0, re
     print("\n======================================================================")
     print(f"LDA MODEL COMPLETE | Documents: {len(corpus):,} | Vocab: {len(dictionary):,} | Coherence (u_mass): {coherence_score:.4f}")
     print("======================================================================")
-    for t in topics_list:
+    for t in report["topics"]:
         top_kw_str = ", ".join([f"{x['term']} ({x['weight']:.3f})" for x in t["top_terms"][:10]])
         top_pub_str = ", ".join([f"{p['publisher']} ({p['share']}%)" for p in t["top_publishers"][:4]])
         print(f"\n--- TOPIC {t['topic_id']}: {t['archetype']['label']} (Confidence: {t['archetype']['confidence']}%) ---")
@@ -802,7 +802,7 @@ def export_results(model, corpus, dictionary, data_path, coherence_score=0.0, re
         for d in t["representative_docs"][:2]:
             print(f"  * [{d['probability']}%] {d['apa_citation']}")
     print("\nDiachronic Topic Trajectory (1970s-2020s):")
-    for dec, shares in dec_breakdown.items():
+    for dec, shares in report["diachronic_decade_shares"].items():
         print(f"  {dec}: {shares}")
     print("\nResults exported to app/lda_topics_report.json, app/lda_viz.html, and app/data_summary.json.")
 

@@ -1,0 +1,1513 @@
+{
+  "architecture": "Neural Contextual Document Embeddings (128-dim PV-DM Doc2Vec) + SVD Manifold + Grootendorst (2022) Class-Based TF-IDF (c-TF-IDF)",
+  "total_documents": 1863,
+  "num_clusters": 12,
+  "clusters": [
+    {
+      "bertopic_cluster_id": 1,
+      "document_count": 53,
+      "corpus_share_pct": 2.8,
+      "archetype": {
+        "label": "Critical / Secular-Humanist",
+        "confidence": 100.0,
+        "scores": {
+          "Traditional / Ecclesiastical": 0.0,
+          "Neoliberal / Self-Optimization": 0.0,
+          "Critical / Secular-Humanist": 100.0
+        }
+      },
+      "c_tfidf_terms": [
+        {
+          "term": "steiner",
+          "c_tfidf": 0.09645
+        },
+        {
+          "term": "rudolf_steiner",
+          "c_tfidf": 0.09364
+        },
+        {
+          "term": "anthroposophie",
+          "c_tfidf": 0.05478
+        },
+        {
+          "term": "waldorfschule",
+          "c_tfidf": 0.04554
+        },
+        {
+          "term": "anthroposophe",
+          "c_tfidf": 0.03712
+        },
+        {
+          "term": "anthroposophisch",
+          "c_tfidf": 0.03264
+        },
+        {
+          "term": "kind",
+          "c_tfidf": 0.0282
+        },
+        {
+          "term": "schwarzbuch_anthroposophie",
+          "c_tfidf": 0.02375
+        },
+        {
+          "term": "geisteswissenschaft_geist",
+          "c_tfidf": 0.02333
+        },
+        {
+          "term": "waldorf_connection",
+          "c_tfidf": 0.02253
+        },
+        {
+          "term": "waldorfpädagogik",
+          "c_tfidf": 0.02214
+        },
+        {
+          "term": "mensch",
+          "c_tfidf": 0.02203
+        },
+        {
+          "term": "wissenschaft",
+          "c_tfidf": 0.02198
+        },
+        {
+          "term": "guido",
+          "c_tfidf": 0.0217
+        },
+        {
+          "term": "lehrer",
+          "c_tfidf": 0.02149
+        }
+      ],
+      "top_publishers": [
+        {
+          "publisher": "Alibri",
+          "share": 98.1,
+          "count": 52
+        },
+        {
+          "publisher": "Kösel",
+          "share": 1.9,
+          "count": 1
+        }
+      ],
+      "centroid_representative_docs": [
+        {
+          "apa_citation": "Grandt, Guido (1998). Waldorf Connection: Rudolf Steiner und die Anthroposophen [Forschungsbuch-Abschnitt 64/100]. Alibri.",
+          "publisher": "Alibri",
+          "cosine_similarity": 0.96
+        },
+        {
+          "apa_citation": "Grom, Bernhard (1989). Anthroposophie und Christentum. Kösel.",
+          "publisher": "Kösel",
+          "cosine_similarity": 0.589
+        }
+      ]
+    },
+    {
+      "bertopic_cluster_id": 2,
+      "document_count": 290,
+      "corpus_share_pct": 15.6,
+      "archetype": {
+        "label": "Hybrid / Discursive Mediation",
+        "confidence": 0.0,
+        "scores": {
+          "Traditional / Ecclesiastical": 33.3,
+          "Neoliberal / Self-Optimization": 33.3,
+          "Critical / Secular-Humanist": 33.3
+        }
+      },
+      "c_tfidf_terms": [
+        {
+          "term": "daz",
+          "c_tfidf": 0.04197
+        },
+        {
+          "term": "vers",
+          "c_tfidf": 0.03833
+        },
+        {
+          "term": "leben",
+          "c_tfidf": 0.02198
+        },
+        {
+          "term": "dez",
+          "c_tfidf": 0.02186
+        },
+        {
+          "term": "deme",
+          "c_tfidf": 0.01816
+        },
+        {
+          "term": "the",
+          "c_tfidf": 0.01767
+        },
+        {
+          "term": "iar",
+          "c_tfidf": 0.0174
+        },
+        {
+          "term": "habin",
+          "c_tfidf": 0.0174
+        },
+        {
+          "term": "islam",
+          "c_tfidf": 0.01697
+        },
+        {
+          "term": "kapitel",
+          "c_tfidf": 0.01691
+        },
+        {
+          "term": "religion",
+          "c_tfidf": 0.01671
+        },
+        {
+          "term": "and",
+          "c_tfidf": 0.01625
+        },
+        {
+          "term": "geschichte",
+          "c_tfidf": 0.01505
+        },
+        {
+          "term": "zcu",
+          "c_tfidf": 0.01469
+        },
+        {
+          "term": "eyn",
+          "c_tfidf": 0.01469
+        }
+      ],
+      "top_publishers": [
+        {
+          "publisher": "Herder",
+          "share": 13.1,
+          "count": 38
+        },
+        {
+          "publisher": "Fischer",
+          "share": 12.8,
+          "count": 37
+        },
+        {
+          "publisher": "Suhrkamp",
+          "share": 10.0,
+          "count": 29
+        },
+        {
+          "publisher": "Gütersloher Verlagshaus",
+          "share": 9.7,
+          "count": 28
+        },
+        {
+          "publisher": "Rowohlt",
+          "share": 9.3,
+          "count": 27
+        }
+      ],
+      "centroid_representative_docs": [
+        {
+          "apa_citation": "Degen, Florentine (2012). Ich könnte das nicht: mein Jahr im Hospiz. Kiepenheuer.",
+          "publisher": "Kiepenheuer",
+          "cosine_similarity": 0.989
+        },
+        {
+          "apa_citation": "Wehr, Gerhard (1989). Meister Eckhart. Rowohlt.",
+          "publisher": "Rowohlt",
+          "cosine_similarity": 0.986
+        },
+        {
+          "apa_citation": "o. V. (1989). Bessarione: la cristologia nei padri della Chiesa ; Bessarionaea. Herder.",
+          "publisher": "Herder",
+          "cosine_similarity": 0.983
+        }
+      ]
+    },
+    {
+      "bertopic_cluster_id": 3,
+      "document_count": 146,
+      "corpus_share_pct": 7.8,
+      "archetype": {
+        "label": "Traditional / Ecclesiastical",
+        "confidence": 68.8,
+        "scores": {
+          "Traditional / Ecclesiastical": 68.8,
+          "Neoliberal / Self-Optimization": 0.0,
+          "Critical / Secular-Humanist": 31.2
+        }
+      },
+      "c_tfidf_terms": [
+        {
+          "term": "religion",
+          "c_tfidf": 0.04564
+        },
+        {
+          "term": "theologie",
+          "c_tfidf": 0.02671
+        },
+        {
+          "term": "pluralismus",
+          "c_tfidf": 0.02345
+        },
+        {
+          "term": "religiös",
+          "c_tfidf": 0.0211
+        },
+        {
+          "term": "ethik",
+          "c_tfidf": 0.01852
+        },
+        {
+          "term": "frage",
+          "c_tfidf": 0.01831
+        },
+        {
+          "term": "gesellschaft",
+          "c_tfidf": 0.01819
+        },
+        {
+          "term": "glaube",
+          "c_tfidf": 0.01787
+        },
+        {
+          "term": "kirche",
+          "c_tfidf": 0.01636
+        },
+        {
+          "term": "kritik",
+          "c_tfidf": 0.01628
+        },
+        {
+          "term": "leben",
+          "c_tfidf": 0.0162
+        },
+        {
+          "term": "theologisch",
+          "c_tfidf": 0.01615
+        },
+        {
+          "term": "gott",
+          "c_tfidf": 0.01502
+        },
+        {
+          "term": "wahrheit",
+          "c_tfidf": 0.01469
+        },
+        {
+          "term": "form",
+          "c_tfidf": 0.01451
+        }
+      ],
+      "top_publishers": [
+        {
+          "publisher": "Open Access Book (DE)",
+          "share": 47.9,
+          "count": 70
+        },
+        {
+          "publisher": "Patmos",
+          "share": 12.3,
+          "count": 18
+        },
+        {
+          "publisher": "Kösel",
+          "share": 12.3,
+          "count": 18
+        },
+        {
+          "publisher": "Gütersloher Verlagshaus",
+          "share": 8.2,
+          "count": 12
+        },
+        {
+          "publisher": "Herder",
+          "share": 6.2,
+          "count": 9
+        }
+      ],
+      "centroid_representative_docs": [
+        {
+          "apa_citation": "Hans J. Münk (2005). Christliche Identität in pluraler Gesellschaft: Reflexionen zu einer Lebensfrage von Theologie und Kirche heute [Buch-Abschnitt 3/71]. Open Access Book (DE).",
+          "publisher": "Open Access Book (DE)",
+          "cosine_similarity": 0.94
+        },
+        {
+          "apa_citation": "Michael E. Durst (2007). Religion und Gesellschaft [Buch-Abschnitt 2/84]. Open Access Book (DE).",
+          "publisher": "Open Access Book (DE)",
+          "cosine_similarity": 0.908
+        },
+        {
+          "apa_citation": "Ernst, Stephan (2009). Grundfragen theologischer Ethik: eine Einführung [Forschungsbuch-Abschnitt 4/7]. Kösel.",
+          "publisher": "Kösel",
+          "cosine_similarity": 0.872
+        }
+      ]
+    },
+    {
+      "bertopic_cluster_id": 4,
+      "document_count": 142,
+      "corpus_share_pct": 7.6,
+      "archetype": {
+        "label": "Traditional / Ecclesiastical",
+        "confidence": 62.5,
+        "scores": {
+          "Traditional / Ecclesiastical": 62.5,
+          "Neoliberal / Self-Optimization": 0.0,
+          "Critical / Secular-Humanist": 37.5
+        }
+      },
+      "c_tfidf_terms": [
+        {
+          "term": "kirche",
+          "c_tfidf": 0.07803
+        },
+        {
+          "term": "mensch",
+          "c_tfidf": 0.05137
+        },
+        {
+          "term": "mensch_behinderung",
+          "c_tfidf": 0.05085
+        },
+        {
+          "term": "staat",
+          "c_tfidf": 0.03322
+        },
+        {
+          "term": "gesellschaft",
+          "c_tfidf": 0.02343
+        },
+        {
+          "term": "behinderung",
+          "c_tfidf": 0.02303
+        },
+        {
+          "term": "unterstützung",
+          "c_tfidf": 0.02109
+        },
+        {
+          "term": "kirchlich",
+          "c_tfidf": 0.02056
+        },
+        {
+          "term": "inklusion",
+          "c_tfidf": 0.0204
+        },
+        {
+          "term": "gemeinde",
+          "c_tfidf": 0.01625
+        },
+        {
+          "term": "gemeinschaft",
+          "c_tfidf": 0.01594
+        },
+        {
+          "term": "leben",
+          "c_tfidf": 0.01546
+        },
+        {
+          "term": "anderer",
+          "c_tfidf": 0.01544
+        },
+        {
+          "term": "kanton",
+          "c_tfidf": 0.01489
+        },
+        {
+          "term": "schule",
+          "c_tfidf": 0.01459
+        }
+      ],
+      "top_publishers": [
+        {
+          "publisher": "Evangelische Verlagsanstalt",
+          "share": 29.6,
+          "count": 42
+        },
+        {
+          "publisher": "Patmos",
+          "share": 26.8,
+          "count": 38
+        },
+        {
+          "publisher": "Open Access Book (DE)",
+          "share": 14.1,
+          "count": 20
+        },
+        {
+          "publisher": "Fischer",
+          "share": 12.0,
+          "count": 17
+        },
+        {
+          "publisher": "Rowohlt",
+          "share": 4.2,
+          "count": 6
+        }
+      ],
+      "centroid_representative_docs": [
+        {
+          "apa_citation": "Klee, Ernst (1989). \"Die SA Jesu Christi\": die Kirchen im Banne Hitlers [Forschungsbuch-Abschnitt 97/100]. Fischer.",
+          "publisher": "Fischer",
+          "cosine_similarity": 0.877
+        },
+        {
+          "apa_citation": "o. V. (2019). Es ist normal, verschieden zu sein: wir wollen Inklusion [Forschungsbuch-Abschnitt 32/41]. Evangelische Verlagsanstalt.",
+          "publisher": "Evangelische Verlagsanstalt",
+          "cosine_similarity": 0.871
+        },
+        {
+          "apa_citation": "Fuchs, Josef (1979). Das Gewissen: vorgegebene Norm verantwortlichen Handelns oder Produkt gesellschaftlicher Zwänge? [Forschungsbuch-Abschnitt 68/89]. Patmos.",
+          "publisher": "Patmos",
+          "cosine_similarity": 0.861
+        }
+      ]
+    },
+    {
+      "bertopic_cluster_id": 5,
+      "document_count": 177,
+      "corpus_share_pct": 9.5,
+      "archetype": {
+        "label": "Traditional / Ecclesiastical",
+        "confidence": 100.0,
+        "scores": {
+          "Traditional / Ecclesiastical": 100.0,
+          "Neoliberal / Self-Optimization": 0.0,
+          "Critical / Secular-Humanist": 0.0
+        }
+      },
+      "c_tfidf_terms": [
+        {
+          "term": "gott",
+          "c_tfidf": 0.03182
+        },
+        {
+          "term": "daf",
+          "c_tfidf": 0.01942
+        },
+        {
+          "term": "voltaire",
+          "c_tfidf": 0.01771
+        },
+        {
+          "term": "christ",
+          "c_tfidf": 0.01674
+        },
+        {
+          "term": "mensch",
+          "c_tfidf": 0.01658
+        },
+        {
+          "term": "herr",
+          "c_tfidf": 0.01512
+        },
+        {
+          "term": "christlich",
+          "c_tfidf": 0.01481
+        },
+        {
+          "term": "kirche",
+          "c_tfidf": 0.01346
+        },
+        {
+          "term": "geschichte",
+          "c_tfidf": 0.01344
+        },
+        {
+          "term": "frau",
+          "c_tfidf": 0.01294
+        },
+        {
+          "term": "jude",
+          "c_tfidf": 0.01235
+        },
+        {
+          "term": "wort",
+          "c_tfidf": 0.0114
+        },
+        {
+          "term": "jahrhundert",
+          "c_tfidf": 0.01138
+        },
+        {
+          "term": "leben",
+          "c_tfidf": 0.01117
+        },
+        {
+          "term": "volk",
+          "c_tfidf": 0.01074
+        }
+      ],
+      "top_publishers": [
+        {
+          "publisher": "Alibri",
+          "share": 32.2,
+          "count": 57
+        },
+        {
+          "publisher": "Rowohlt",
+          "share": 30.5,
+          "count": 54
+        },
+        {
+          "publisher": "Klett",
+          "share": 6.8,
+          "count": 12
+        },
+        {
+          "publisher": "Open Access Book (DE)",
+          "share": 6.2,
+          "count": 11
+        },
+        {
+          "publisher": "Fischer",
+          "share": 4.5,
+          "count": 8
+        }
+      ],
+      "centroid_representative_docs": [
+        {
+          "apa_citation": "Deschner, Karlheinz (1986). Kriminalgeschichte des Christentums [Forschungsbuch-Abschnitt 52/100]. Rowohlt.",
+          "publisher": "Rowohlt",
+          "cosine_similarity": 0.96
+        },
+        {
+          "apa_citation": "Mauthner, Fritz (2011). Der Atheismus und seine Geschichte im Abendlande [Forschungsbuch-Abschnitt 94/100]. Alibri.",
+          "publisher": "Alibri",
+          "cosine_similarity": 0.958
+        },
+        {
+          "apa_citation": "Reik, Theodor (1972). Der eigene und der fremde Gott: zur Psychoanalyse der religiösen Entwicklung [Forschungsbuch-Abschnitt 55/77]. Suhrkamp.",
+          "publisher": "Suhrkamp",
+          "cosine_similarity": 0.916
+        }
+      ]
+    },
+    {
+      "bertopic_cluster_id": 6,
+      "document_count": 151,
+      "corpus_share_pct": 8.1,
+      "archetype": {
+        "label": "Traditional / Ecclesiastical",
+        "confidence": 100.0,
+        "scores": {
+          "Traditional / Ecclesiastical": 100.0,
+          "Neoliberal / Self-Optimization": 0.0,
+          "Critical / Secular-Humanist": 0.0
+        }
+      },
+      "c_tfidf_terms": [
+        {
+          "term": "kirche",
+          "c_tfidf": 0.04381
+        },
+        {
+          "term": "kmu",
+          "c_tfidf": 0.03176
+        },
+        {
+          "term": "evangelisch",
+          "c_tfidf": 0.03135
+        },
+        {
+          "term": "item",
+          "c_tfidf": 0.02557
+        },
+        {
+          "term": "befragter",
+          "c_tfidf": 0.02398
+        },
+        {
+          "term": "religion",
+          "c_tfidf": 0.0227
+        },
+        {
+          "term": "religiosität",
+          "c_tfidf": 0.02194
+        },
+        {
+          "term": "anderer",
+          "c_tfidf": 0.02158
+        },
+        {
+          "term": "mitglied",
+          "c_tfidf": 0.02128
+        },
+        {
+          "term": "frage",
+          "c_tfidf": 0.02126
+        },
+        {
+          "term": "abbildung",
+          "c_tfidf": 0.02122
+        },
+        {
+          "term": "kirchlich",
+          "c_tfidf": 0.02026
+        },
+        {
+          "term": "kirchenmitgliedschaftsuntersuchung_kirche",
+          "c_tfidf": 0.01942
+        },
+        {
+          "term": "mitgliedschaft_untersuchung",
+          "c_tfidf": 0.01942
+        },
+        {
+          "term": "religionsunterricht_religion",
+          "c_tfidf": 0.01829
+        }
+      ],
+      "top_publishers": [
+        {
+          "publisher": "Evangelische Verlagsanstalt",
+          "share": 84.8,
+          "count": 128
+        },
+        {
+          "publisher": "Gütersloher Verlagshaus",
+          "share": 11.3,
+          "count": 17
+        },
+        {
+          "publisher": "Open Access Book (DE)",
+          "share": 1.3,
+          "count": 2
+        },
+        {
+          "publisher": "Herder",
+          "share": 0.7,
+          "count": 1
+        },
+        {
+          "publisher": "Patmos",
+          "share": 0.7,
+          "count": 1
+        }
+      ],
+      "centroid_representative_docs": [
+        {
+          "apa_citation": "o. V. (2024). Wie hältst du’s mit der Kirche?: Zur Relevanz von Religion und Kirche in der pluralen Gesellschaft. Analysen zur 6. Kirchenmitgliedschaftsuntersuchung [Forschungsbuch-Abschnitt 18/127]. Evangelische Verlagsanstalt.",
+          "publisher": "Evangelische Verlagsanstalt",
+          "cosine_similarity": 0.95
+        },
+        {
+          "apa_citation": "Pithan, Annebelle (2009). Gender, Religion, Bildung: Beiträge zu einer Religionspädagogik der Vielfalt [Forschungsbuch-Abschnitt 125/154]. Gütersloher Verlagshaus.",
+          "publisher": "Gütersloher Verlagshaus",
+          "cosine_similarity": 0.87
+        },
+        {
+          "apa_citation": "Fuchs, Josef (1979). Das Gewissen: vorgegebene Norm verantwortlichen Handelns oder Produkt gesellschaftlicher Zwänge? [Forschungsbuch-Abschnitt 8/89]. Patmos.",
+          "publisher": "Patmos",
+          "cosine_similarity": 0.827
+        }
+      ]
+    },
+    {
+      "bertopic_cluster_id": 7,
+      "document_count": 116,
+      "corpus_share_pct": 6.2,
+      "archetype": {
+        "label": "Critical / Secular-Humanist",
+        "confidence": 50.4,
+        "scores": {
+          "Traditional / Ecclesiastical": 0.0,
+          "Neoliberal / Self-Optimization": 49.6,
+          "Critical / Secular-Humanist": 50.4
+        }
+      },
+      "c_tfidf_terms": [
+        {
+          "term": "politisch",
+          "c_tfidf": 0.0483
+        },
+        {
+          "term": "indien",
+          "c_tfidf": 0.03615
+        },
+        {
+          "term": "sozial",
+          "c_tfidf": 0.02799
+        },
+        {
+          "term": "religion",
+          "c_tfidf": 0.02351
+        },
+        {
+          "term": "religiös",
+          "c_tfidf": 0.0225
+        },
+        {
+          "term": "neu",
+          "c_tfidf": 0.02123
+        },
+        {
+          "term": "indisch",
+          "c_tfidf": 0.02096
+        },
+        {
+          "term": "hinduismus",
+          "c_tfidf": 0.01919
+        },
+        {
+          "term": "gesellschaft",
+          "c_tfidf": 0.01905
+        },
+        {
+          "term": "kulturell",
+          "c_tfidf": 0.01878
+        },
+        {
+          "term": "sinn",
+          "c_tfidf": 0.01872
+        },
+        {
+          "term": "welt",
+          "c_tfidf": 0.01748
+        },
+        {
+          "term": "bjp",
+          "c_tfidf": 0.01699
+        },
+        {
+          "term": "hinblick",
+          "c_tfidf": 0.0151
+        },
+        {
+          "term": "modernisierung",
+          "c_tfidf": 0.01496
+        }
+      ],
+      "top_publishers": [
+        {
+          "publisher": "Herder",
+          "share": 71.6,
+          "count": 83
+        },
+        {
+          "publisher": "Open Access Book (DE)",
+          "share": 14.7,
+          "count": 17
+        },
+        {
+          "publisher": "ZTS Zeitschrift für Theoretische Soziologie",
+          "share": 5.2,
+          "count": 6
+        },
+        {
+          "publisher": "Suhrkamp",
+          "share": 2.6,
+          "count": 3
+        },
+        {
+          "publisher": "Gütersloher Verlagshaus",
+          "share": 1.7,
+          "count": 2
+        }
+      ],
+      "centroid_representative_docs": [
+        {
+          "apa_citation": "Wippermann, Wolfgang (2013). Fundamentalismus: radikale Strömungen in den Weltreligionen [Forschungsbuch-Abschnitt 72/90]. Herder.",
+          "publisher": "Herder",
+          "cosine_similarity": 0.971
+        },
+        {
+          "apa_citation": "Michael E. Durst (2007). Religion und Gesellschaft [Buch-Abschnitt 74/84]. Open Access Book (DE).",
+          "publisher": "Open Access Book (DE)",
+          "cosine_similarity": 0.825
+        },
+        {
+          "apa_citation": "Michael Kauppert (2022). Eine Entgiftung der Religionssoziologie [Abschnitt 4/7]. ZTS Zeitschrift für Theoretische Soziologie.",
+          "publisher": "ZTS Zeitschrift für Theoretische Soziologie",
+          "cosine_similarity": 0.807
+        }
+      ]
+    },
+    {
+      "bertopic_cluster_id": 8,
+      "document_count": 112,
+      "corpus_share_pct": 6.0,
+      "archetype": {
+        "label": "Traditional / Ecclesiastical",
+        "confidence": 100.0,
+        "scores": {
+          "Traditional / Ecclesiastical": 100.0,
+          "Neoliberal / Self-Optimization": 0.0,
+          "Critical / Secular-Humanist": 0.0
+        }
+      },
+      "c_tfidf_terms": [
+        {
+          "term": "gott",
+          "c_tfidf": 0.04521
+        },
+        {
+          "term": "bibel",
+          "c_tfidf": 0.0412
+        },
+        {
+          "term": "mensch",
+          "c_tfidf": 0.02756
+        },
+        {
+          "term": "küng",
+          "c_tfidf": 0.0251
+        },
+        {
+          "term": "biblisch",
+          "c_tfidf": 0.02297
+        },
+        {
+          "term": "jesus",
+          "c_tfidf": 0.02198
+        },
+        {
+          "term": "christlich",
+          "c_tfidf": 0.02033
+        },
+        {
+          "term": "entsprechend",
+          "c_tfidf": 0.0194
+        },
+        {
+          "term": "aussage",
+          "c_tfidf": 0.01906
+        },
+        {
+          "term": "jesu",
+          "c_tfidf": 0.0179
+        },
+        {
+          "term": "anderer",
+          "c_tfidf": 0.01691
+        },
+        {
+          "term": "frage",
+          "c_tfidf": 0.01521
+        },
+        {
+          "term": "christ_streitschrift",
+          "c_tfidf": 0.01429
+        },
+        {
+          "term": "buggle_franz",
+          "c_tfidf": 0.01414
+        },
+        {
+          "term": "kirche",
+          "c_tfidf": 0.01356
+        }
+      ],
+      "top_publishers": [
+        {
+          "publisher": "Rowohlt",
+          "share": 71.4,
+          "count": 80
+        },
+        {
+          "publisher": "Gütersloher Verlagshaus",
+          "share": 8.0,
+          "count": 9
+        },
+        {
+          "publisher": "Herder",
+          "share": 5.4,
+          "count": 6
+        },
+        {
+          "publisher": "Klett",
+          "share": 3.6,
+          "count": 4
+        },
+        {
+          "publisher": "Kösel",
+          "share": 2.7,
+          "count": 3
+        }
+      ],
+      "centroid_representative_docs": [
+        {
+          "apa_citation": "Buggle, Franz (1992). Denn sie wissen nicht, was sie glauben oder warum man redlicherweise nicht mehr Christ sein kann ; eine Streitschrift [Forschungsbuch-Abschnitt 43/100]. Rowohlt.",
+          "publisher": "Rowohlt",
+          "cosine_similarity": 0.959
+        },
+        {
+          "apa_citation": "Kahl, Joachim (1993). Das Elend des Christentums [Forschungsbuch-Abschnitt 23/55]. Rowohlt.",
+          "publisher": "Rowohlt",
+          "cosine_similarity": 0.894
+        },
+        {
+          "apa_citation": "Deissler, Alfons (2006). Die Grundbotschaft des Alten Testaments. Herder.",
+          "publisher": "Herder",
+          "cosine_similarity": 0.856
+        }
+      ]
+    },
+    {
+      "bertopic_cluster_id": 9,
+      "document_count": 107,
+      "corpus_share_pct": 5.7,
+      "archetype": {
+        "label": "Hybrid / Discursive Mediation",
+        "confidence": 0.0,
+        "scores": {
+          "Traditional / Ecclesiastical": 33.3,
+          "Neoliberal / Self-Optimization": 33.3,
+          "Critical / Secular-Humanist": 33.3
+        }
+      },
+      "c_tfidf_terms": [
+        {
+          "term": "frau",
+          "c_tfidf": 0.0409
+        },
+        {
+          "term": "geschlecht",
+          "c_tfidf": 0.03321
+        },
+        {
+          "term": "junge",
+          "c_tfidf": 0.03019
+        },
+        {
+          "term": "mädchen",
+          "c_tfidf": 0.02875
+        },
+        {
+          "term": "religion_pädagogik",
+          "c_tfidf": 0.02801
+        },
+        {
+          "term": "religionspädagogik_religion",
+          "c_tfidf": 0.02185
+        },
+        {
+          "term": "pädagogik",
+          "c_tfidf": 0.02091
+        },
+        {
+          "term": "kind",
+          "c_tfidf": 0.01987
+        },
+        {
+          "term": "bild",
+          "c_tfidf": 0.01925
+        },
+        {
+          "term": "mann",
+          "c_tfidf": 0.01888
+        },
+        {
+          "term": "mädchen_junge",
+          "c_tfidf": 0.01866
+        },
+        {
+          "term": "gender_religion",
+          "c_tfidf": 0.01827
+        },
+        {
+          "term": "religionspädagogisch_religion",
+          "c_tfidf": 0.01768
+        },
+        {
+          "term": "bildung_religionspädagogik",
+          "c_tfidf": 0.01766
+        },
+        {
+          "term": "männlich",
+          "c_tfidf": 0.01655
+        }
+      ],
+      "top_publishers": [
+        {
+          "publisher": "Gütersloher Verlagshaus",
+          "share": 95.3,
+          "count": 102
+        },
+        {
+          "publisher": "Kösel",
+          "share": 1.9,
+          "count": 2
+        },
+        {
+          "publisher": "Patmos",
+          "share": 0.9,
+          "count": 1
+        },
+        {
+          "publisher": "Herder",
+          "share": 0.9,
+          "count": 1
+        },
+        {
+          "publisher": "Erich-Brost-Institut",
+          "share": 0.9,
+          "count": 1
+        }
+      ],
+      "centroid_representative_docs": [
+        {
+          "apa_citation": "Pithan, Annebelle (2009). Gender, Religion, Bildung: Beiträge zu einer Religionspädagogik der Vielfalt [Forschungsbuch-Abschnitt 23/154]. Gütersloher Verlagshaus.",
+          "publisher": "Gütersloher Verlagshaus",
+          "cosine_similarity": 0.91
+        },
+        {
+          "apa_citation": "Mendl, Hans (2018). Religionsdidaktik kompakt: für Studium, Prüfung und Beruf [Forschungsbuch-Abschnitt 2/13]. Kösel.",
+          "publisher": "Kösel",
+          "cosine_similarity": 0.782
+        },
+        {
+          "apa_citation": "Schambeck, Mirjam (2019). Auf dem Weg zu einer ökumenischen Religionsdidaktik: Grundlegungen im europäischen Kontext. Herder.",
+          "publisher": "Herder",
+          "cosine_similarity": 0.709
+        }
+      ]
+    },
+    {
+      "bertopic_cluster_id": 10,
+      "document_count": 200,
+      "corpus_share_pct": 10.7,
+      "archetype": {
+        "label": "Traditional / Ecclesiastical",
+        "confidence": 89.9,
+        "scores": {
+          "Traditional / Ecclesiastical": 89.9,
+          "Neoliberal / Self-Optimization": 0.0,
+          "Critical / Secular-Humanist": 10.1
+        }
+      },
+      "c_tfidf_terms": [
+        {
+          "term": "gott",
+          "c_tfidf": 0.05732
+        },
+        {
+          "term": "religion",
+          "c_tfidf": 0.03419
+        },
+        {
+          "term": "mensch",
+          "c_tfidf": 0.0284
+        },
+        {
+          "term": "glaube",
+          "c_tfidf": 0.02565
+        },
+        {
+          "term": "welt",
+          "c_tfidf": 0.0243
+        },
+        {
+          "term": "leben",
+          "c_tfidf": 0.02045
+        },
+        {
+          "term": "theologie",
+          "c_tfidf": 0.01939
+        },
+        {
+          "term": "christentum",
+          "c_tfidf": 0.01661
+        },
+        {
+          "term": "geschichte",
+          "c_tfidf": 0.01627
+        },
+        {
+          "term": "adorno",
+          "c_tfidf": 0.01516
+        },
+        {
+          "term": "kritik",
+          "c_tfidf": 0.01507
+        },
+        {
+          "term": "erfahrung",
+          "c_tfidf": 0.01473
+        },
+        {
+          "term": "kirche",
+          "c_tfidf": 0.01457
+        },
+        {
+          "term": "tod",
+          "c_tfidf": 0.01406
+        },
+        {
+          "term": "neu",
+          "c_tfidf": 0.01323
+        }
+      ],
+      "top_publishers": [
+        {
+          "publisher": "Patmos",
+          "share": 19.5,
+          "count": 39
+        },
+        {
+          "publisher": "Herder",
+          "share": 18.5,
+          "count": 37
+        },
+        {
+          "publisher": "Open Access Book (DE)",
+          "share": 9.0,
+          "count": 18
+        },
+        {
+          "publisher": "Klett",
+          "share": 8.5,
+          "count": 17
+        },
+        {
+          "publisher": "Gütersloher Verlagshaus",
+          "share": 8.5,
+          "count": 17
+        }
+      ],
+      "centroid_representative_docs": [
+        {
+          "apa_citation": "Baudler, Georg (2009). Darwin, Einstein - und Jesus: Christsein im Universum der Evolution. Patmos.",
+          "publisher": "Patmos",
+          "cosine_similarity": 0.901
+        },
+        {
+          "apa_citation": "Drewermann, Eugen (1989). Voller Erbarmen rettet er uns: die Tobit-Legende tiefenpsychologisch gedeutet. Herder.",
+          "publisher": "Herder",
+          "cosine_similarity": 0.891
+        },
+        {
+          "apa_citation": "Küng, Hans (2017). Existiert Gott? [Forschungsbuch-Abschnitt 1/2]. Herder.",
+          "publisher": "Herder",
+          "cosine_similarity": 0.885
+        }
+      ]
+    },
+    {
+      "bertopic_cluster_id": 11,
+      "document_count": 217,
+      "corpus_share_pct": 11.6,
+      "archetype": {
+        "label": "Traditional / Ecclesiastical",
+        "confidence": 79.3,
+        "scores": {
+          "Traditional / Ecclesiastical": 79.3,
+          "Neoliberal / Self-Optimization": 0.0,
+          "Critical / Secular-Humanist": 20.7
+        }
+      },
+      "c_tfidf_terms": [
+        {
+          "term": "religion",
+          "c_tfidf": 0.02571
+        },
+        {
+          "term": "the",
+          "c_tfidf": 0.02549
+        },
+        {
+          "term": "and",
+          "c_tfidf": 0.02204
+        },
+        {
+          "term": "kirche",
+          "c_tfidf": 0.01944
+        },
+        {
+          "term": "geschichte",
+          "c_tfidf": 0.01561
+        },
+        {
+          "term": "münchen",
+          "c_tfidf": 0.01483
+        },
+        {
+          "term": "deutsch",
+          "c_tfidf": 0.01425
+        },
+        {
+          "term": "evangelisch",
+          "c_tfidf": 0.01423
+        },
+        {
+          "term": "theologie",
+          "c_tfidf": 0.01408
+        },
+        {
+          "term": "gesellschaft",
+          "c_tfidf": 0.01247
+        },
+        {
+          "term": "welt",
+          "c_tfidf": 0.0119
+        },
+        {
+          "term": "deutschland",
+          "c_tfidf": 0.011
+        },
+        {
+          "term": "frau",
+          "c_tfidf": 0.01054
+        },
+        {
+          "term": "perspektive",
+          "c_tfidf": 0.01019
+        },
+        {
+          "term": "peter",
+          "c_tfidf": 0.00986
+        }
+      ],
+      "top_publishers": [
+        {
+          "publisher": "Herder",
+          "share": 17.1,
+          "count": 37
+        },
+        {
+          "publisher": "Evangelische Verlagsanstalt",
+          "share": 16.6,
+          "count": 36
+        },
+        {
+          "publisher": "Gütersloher Verlagshaus",
+          "share": 13.8,
+          "count": 30
+        },
+        {
+          "publisher": "Open Access Book (DE)",
+          "share": 8.8,
+          "count": 19
+        },
+        {
+          "publisher": "Fischer",
+          "share": 7.8,
+          "count": 17
+        }
+      ],
+      "centroid_representative_docs": [
+        {
+          "apa_citation": "Gabriel, Karl (1996). Christentum zwischen Tradition und Postmoderne. Herder.",
+          "publisher": "Herder",
+          "cosine_similarity": 0.93
+        },
+        {
+          "apa_citation": "Joas, Hans (2007). Säkularisierung und die Weltreligionen: [vom 31. März bis 5. April 2006 fand in der Europäischen Akademie Otzenhausen (Saarland) das fünfte Kolloquium der Stiftung \"Forum für Verantwortung\" statt]. Fischer.",
+          "publisher": "Fischer",
+          "cosine_similarity": 0.924
+        },
+        {
+          "apa_citation": "Michael E. Durst (2007). Religion und Gesellschaft [Buch-Abschnitt 84/84]. Open Access Book (DE).",
+          "publisher": "Open Access Book (DE)",
+          "cosine_similarity": 0.91
+        }
+      ]
+    },
+    {
+      "bertopic_cluster_id": 12,
+      "document_count": 152,
+      "corpus_share_pct": 8.2,
+      "archetype": {
+        "label": "Traditional / Ecclesiastical",
+        "confidence": 100.0,
+        "scores": {
+          "Traditional / Ecclesiastical": 100.0,
+          "Neoliberal / Self-Optimization": 0.0,
+          "Critical / Secular-Humanist": 0.0
+        }
+      },
+      "c_tfidf_terms": [
+        {
+          "term": "mensch",
+          "c_tfidf": 0.03881
+        },
+        {
+          "term": "gott",
+          "c_tfidf": 0.03751
+        },
+        {
+          "term": "welt",
+          "c_tfidf": 0.02616
+        },
+        {
+          "term": "religion",
+          "c_tfidf": 0.02489
+        },
+        {
+          "term": "leben",
+          "c_tfidf": 0.02276
+        },
+        {
+          "term": "freud",
+          "c_tfidf": 0.0209
+        },
+        {
+          "term": "anderer",
+          "c_tfidf": 0.01911
+        },
+        {
+          "term": "wesen",
+          "c_tfidf": 0.01877
+        },
+        {
+          "term": "bewußtsein",
+          "c_tfidf": 0.01833
+        },
+        {
+          "term": "religiös",
+          "c_tfidf": 0.01758
+        },
+        {
+          "term": "menschlich",
+          "c_tfidf": 0.01488
+        },
+        {
+          "term": "natur",
+          "c_tfidf": 0.01416
+        },
+        {
+          "term": "wert",
+          "c_tfidf": 0.01307
+        },
+        {
+          "term": "person",
+          "c_tfidf": 0.01214
+        },
+        {
+          "term": "nietzsche",
+          "c_tfidf": 0.01212
+        }
+      ],
+      "top_publishers": [
+        {
+          "publisher": "Patmos",
+          "share": 26.3,
+          "count": 40
+        },
+        {
+          "publisher": "Suhrkamp",
+          "share": 17.1,
+          "count": 26
+        },
+        {
+          "publisher": "Kösel",
+          "share": 16.4,
+          "count": 25
+        },
+        {
+          "publisher": "Fischer",
+          "share": 10.5,
+          "count": 16
+        },
+        {
+          "publisher": "Open Access Book (DE)",
+          "share": 6.6,
+          "count": 10
+        }
+      ],
+      "centroid_representative_docs": [
+        {
+          "apa_citation": "Leonhardt, Rochus (2019). Ethik [Forschungsbuch-Abschnitt 8/20]. Evangelische Verlagsanstalt.",
+          "publisher": "Evangelische Verlagsanstalt",
+          "cosine_similarity": 0.948
+        },
+        {
+          "apa_citation": "Gründler, Otto (1922). Elemente zu einer Religionsphilosophie auf phänomenologischer Grundlage [Forschungsbuch-Abschnitt 39/46]. Kösel.",
+          "publisher": "Kösel",
+          "cosine_similarity": 0.917
+        },
+        {
+          "apa_citation": "Zirker, Hans (1982). Religionskritik [Forschungsbuch-Abschnitt 47/66]. Patmos.",
+          "publisher": "Patmos",
+          "cosine_similarity": 0.909
+        }
+      ]
+    }
+  ],
+  "topics_over_time_shares": {
+    "1970s": {
+      "Cluster 1": 0.0,
+      "Cluster 2": 21.8,
+      "Cluster 3": 2.8,
+      "Cluster 4": 19.0,
+      "Cluster 5": 7.3,
+      "Cluster 6": 0.6,
+      "Cluster 7": 0.6,
+      "Cluster 8": 1.7,
+      "Cluster 9": 0.0,
+      "Cluster 10": 7.3,
+      "Cluster 11": 13.4,
+      "Cluster 12": 25.7
+    },
+    "1980s": {
+      "Cluster 1": 0.4,
+      "Cluster 2": 22.1,
+      "Cluster 3": 10.0,
+      "Cluster 4": 10.0,
+      "Cluster 5": 16.0,
+      "Cluster 6": 0.0,
+      "Cluster 7": 1.3,
+      "Cluster 8": 1.3,
+      "Cluster 9": 0.0,
+      "Cluster 10": 12.6,
+      "Cluster 11": 6.5,
+      "Cluster 12": 19.9
+    },
+    "1990s": {
+      "Cluster 1": 15.3,
+      "Cluster 2": 18.8,
+      "Cluster 3": 0.9,
+      "Cluster 4": 1.5,
+      "Cluster 5": 10.3,
+      "Cluster 6": 0.0,
+      "Cluster 7": 0.0,
+      "Cluster 8": 25.0,
+      "Cluster 9": 0.0,
+      "Cluster 10": 11.2,
+      "Cluster 11": 8.5,
+      "Cluster 12": 8.5
+    },
+    "2000s": {
+      "Cluster 1": 0.0,
+      "Cluster 2": 12.1,
+      "Cluster 3": 19.3,
+      "Cluster 4": 5.1,
+      "Cluster 5": 2.9,
+      "Cluster 6": 4.1,
+      "Cluster 7": 4.1,
+      "Cluster 8": 3.1,
+      "Cluster 9": 21.1,
+      "Cluster 10": 10.5,
+      "Cluster 11": 15.0,
+      "Cluster 12": 2.9
+    },
+    "2010s": {
+      "Cluster 1": 0.0,
+      "Cluster 2": 14.1,
+      "Cluster 3": 3.7,
+      "Cluster 4": 12.5,
+      "Cluster 5": 19.4,
+      "Cluster 6": 0.5,
+      "Cluster 7": 21.8,
+      "Cluster 8": 1.3,
+      "Cluster 9": 0.8,
+      "Cluster 10": 9.3,
+      "Cluster 11": 12.8,
+      "Cluster 12": 3.7
+    },
+    "2020s": {
+      "Cluster 1": 0.0,
+      "Cluster 2": 9.6,
+      "Cluster 3": 2.8,
+      "Cluster 4": 3.2,
+      "Cluster 5": 2.0,
+      "Cluster 6": 51.4,
+      "Cluster 7": 4.0,
+      "Cluster 8": 0.4,
+      "Cluster 9": 0.4,
+      "Cluster 10": 13.7,
+      "Cluster 11": 11.2,
+      "Cluster 12": 1.2
+    }
+  }
+}
