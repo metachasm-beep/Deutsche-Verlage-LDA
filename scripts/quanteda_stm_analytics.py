@@ -69,10 +69,15 @@ GERMAN_COMPOUND_PREFIXES = [
 ]
 
 SECULAR_PUBLISHERS = {
-    "suhrkamp", "rowohlt", "fischer", "alibri", "wagenbach", "kiepenheuer", "klett", "open access book (de)"
+    "suhrkamp", "rowohlt", "fischer", "alibri", "wagenbach", "kiepenheuer", "klett",
+    "beck", "campus", "insel", "meiner", "wallstein", "transcript", "springer", "gruyter",
+    "budrich", "oekom", "nomos", "open access book (de)"
 }
 CONFESSIONAL_PUBLISHERS = {
-    "herder", "evangelische verlagsanstalt", "gütersloher verlagshaus", "patmos", "kösel"
+    "herder", "evangelische verlagsanstalt", "gütersloher verlagshaus", "patmos", "kösel",
+    "vandenhoeck", "mohr", "kohlhammer", "schöningh", "aschendorff", "pustet", "echter",
+    "bonifatius", "neukirchener", "calwer", "grünewald", "kaiser", "kreuz", "schwabenverlag",
+    "benziger", "tvz", "theologisch"
 }
 
 

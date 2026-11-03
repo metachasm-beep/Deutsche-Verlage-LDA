@@ -110,12 +110,23 @@ def run_bertopic_german_pipeline(data_path: str = "data/dnb_metadata.csv", n_clu
 
     # Bigram phrase detection
     import gensim
-    bigram = gensim.models.Phrases(docs_tokens, min_count=4, threshold=10)
+    bigram = gensim.models.Phrases(docs_tokens, min_count=5, threshold=10)
     bigram_mod = gensim.models.phrases.Phraser(bigram)
-    docs_bigrams = [
-        [tok for tok in bigram_mod[d] if tok not in lda_pipeline.ALL_STOPWORDS]
-        for d in docs_tokens
-    ]
+    docs_bigrams = []
+    for d in docs_tokens:
+        ng = []
+        for tok in bigram_mod[d]:
+            if tok in lda_pipeline.ALL_STOPWORDS:
+                continue
+            if "_" in tok:
+                parts = tok.split("_")
+                if len(set(parts)) == 1:
+                    ng.append(parts[0])
+                    continue
+                if any(p in lda_pipeline.ALL_STOPWORDS for p in parts):
+                    continue
+            ng.append(tok)
+        docs_bigrams.append(ng)
 
     # Step 1: Train Neural Contextual Document Embeddings (PV-DM + DBOW Doc2Vec, 128-dim)
     tagged_docs = [TaggedDocument(words=d, tags=[i]) for i, d in enumerate(docs_bigrams)]
