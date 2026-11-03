@@ -9,31 +9,52 @@ from collections import defaultdict
 warnings.filterwarnings("ignore", category=FutureWarning)
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 
-import gensim
-from gensim import corpora
-from gensim.models import LdaModel
-from gensim.models.coherencemodel import CoherenceModel
-import spacy
+try:
+    import gensim
+    from gensim import corpora
+    from gensim.models import LdaModel
+    from gensim.models.coherencemodel import CoherenceModel
+except ImportError:
+    gensim = None
+    corpora = None
+    LdaModel = None
+    CoherenceModel = None
+
+try:
+    import spacy
+except ImportError:
+    spacy = None
+
 import config
 
 # Allow full-text book chapters and entire monographs in CSV cells (up to 10 MB per cell)
 csv.field_size_limit(10 * 1024 * 1024)
 
-# Load German Spacy model with automatic fallback chain
+# Load German Spacy model with automatic fallback chain (when spacy is installed)
 nlp = None
-for _model_name in getattr(config, "SPACY_FALLBACK_MODELS", [config.SPACY_MODEL]):
-    try:
-        # Disable parser and NER for 4x faster lemmatization and POS tagging
-        nlp = spacy.load(_model_name, disable=["ner", "parser"])
-        break
-    except OSError:
-        continue
+if spacy is not None:
+    for _model_name in getattr(config, "SPACY_FALLBACK_MODELS", [config.SPACY_MODEL]):
+        try:
+            # Disable parser and NER for 4x faster lemmatization and POS tagging
+            nlp = spacy.load(_model_name, disable=["ner", "parser"])
+            break
+        except OSError:
+            continue
 
-if nlp is None:
-    print("Warning: No pre-trained German spaCy model found; falling back to spacy.blank('de').")
-    nlp = spacy.blank("de")
+    if nlp is None:
+        print("Warning: No pre-trained German spaCy model found; falling back to spacy.blank('de').")
+        nlp = spacy.blank("de")
+    nlp.max_length = 5_000_000
 
-nlp.max_length = 5_000_000
+GERMAN_CORE_STOPWORDS = {
+    "der", "die", "das", "und", "in", "den", "von", "zu", "mit", "sich", "auf", "für", "nicht",
+    "ist", "im", "dem", "als", "auch", "es", "an", "werden", "aus", "er", "hat", "dass", "sie",
+    "nach", "wird", "bei", "einer", "um", "am", "sind", "noch", "wie", "einem", "über", "einen",
+    "so", "zum", "war", "haben", "nur", "oder", "aber", "vor", "zur", "bis", "mehr", "durch",
+    "man", "sein", "wurde", "sei", "in", "pro", "vom", "können", "schon", "wenn", "habe", "seine",
+    "ihre", "dann", "unter", "wir", "soll", "ich", "eines", "es", "jahr", "zwei", "machen", "dieser",
+    "diese", "dieses", "ein", "eine", "einer", "einem", "einen", "kein", "keine", "keiner"
+}
 
 # Precompute stopword set and religious keyword set once
 FRAKTUR_AND_META_NOISE = {
@@ -46,6 +67,12 @@ FRAKTUR_AND_META_NOISE = {
     "benziger", "schwabenverlag", "kaiser", "grünewald", "kreuz", "mohr", "siebeck",
     "schöningh", "aschendorff", "pustet", "echter", "bonifatius", "neukirchener", "calwer",
     "campus", "insel", "meiner", "wallstein", "budrich", "oekom", "nomos", "tvz", "ruprecht",
+    "cotta", "klett", "holzboog", "frommann", "fink", "alber", "schwabe", "böhlau", "süß",
+    "münchen", "stuttgart", "leipzig", "freiburg", "frankfurt", "berlin", "wien", "zürich",
+    "tübingen", "göttingen", "heidelberg", "köln", "bonn", "münster", "darmstadt", "mainz",
+    "wilhelm", "johann", "friedrich", "karl", "heinrich", "hans", "peter", "georg", "august",
+    "vnd", "quod", "sed", "est", "non", "cum", "autem", "enim", "etiam", "sunt", "esse",
+    "atque", "neque", "ideo", "tamen", "ergo", "quid", "quae", "quem", "quibus", "cuius",
     "right", "published", "cambridge", "book", "elector", "council", "gospel", "question",
     "concept", "perspective", "university", "press", "london", "new", "york", "oxford",
     "the", "and", "for", "that", "with", "from", "this", "which", "their", "have", "were",
@@ -55,7 +82,8 @@ FRAKTUR_AND_META_NOISE = {
     "ders", "bd", "hrsg", "aufl", "kap", "vgl", "ebd", "ff", "bzw", "usw", "etc", "prof", "dr",
     "ekk", "testament_ekk", "kommentar_neu"
 }
-ALL_STOPWORDS = set(nlp.Defaults.stop_words).union(set(config.DOMAIN_STOPWORDS)).union(FRAKTUR_AND_META_NOISE)
+_BASE_STOPWORDS = set(nlp.Defaults.stop_words) if nlp is not None else GERMAN_CORE_STOPWORDS
+ALL_STOPWORDS = _BASE_STOPWORDS.union(set(config.DOMAIN_STOPWORDS)).union(FRAKTUR_AND_META_NOISE)
 RELIGIOUS_KEYWORDS_SET = set(config.RELIGIOUS_VOICE_KEYWORDS)
 
 # Content-addressed token cache (in-memory + disk persistence)
@@ -541,6 +569,27 @@ def classify_topic_archetype(keywords_with_weights) -> dict:
     }
 
 
+def iter_corpus_rows(data_path: str):
+    """
+    Transparently yields rows from data_path and any accompanying data/dnb_metadata_part*.csv
+    shards so the corpus can scale beyond 40,000+ documents while keeping each file < 85 MB for GitHub.
+    """
+    import glob
+    paths = [data_path]
+    if os.path.basename(data_path) == "dnb_metadata.csv":
+        part_glob = os.path.join(os.path.dirname(data_path) or "data", "dnb_metadata_part*.csv")
+        for p in sorted(glob.glob(part_glob)):
+            if p not in paths:
+                paths.append(p)
+    for p in paths:
+        if not os.path.exists(p):
+            continue
+        with open(p, mode="r", encoding="utf-8") as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                yield row
+
+
 def run_pipeline(data_path, num_topics: int = None, lda_mode: str = "unsupervised"):
     """
     Executes the end-to-end German LDA pipeline supporting all 4 methodological paradigms:
@@ -551,17 +600,15 @@ def run_pipeline(data_path, num_topics: int = None, lda_mode: str = "unsupervise
     """
     mode_key = lda_mode if lda_mode in LDA_MODES_META else "unsupervised"
     k_topics = int(num_topics) if num_topics else config.NUM_TOPICS
-    print(f"Loading data from {data_path} (K={k_topics}, mode={mode_key})...")
+    print(f"Loading data from {data_path} (+ any shards) (K={k_topics}, mode={mode_key})...", flush=True)
 
     valid_rows = []
     texts = []
-    with open(data_path, mode="r", encoding="utf-8") as f:
-        reader = csv.DictReader(f)
-        for row in reader:
-            text = row.get("text", "")
-            if text and text.strip():
-                valid_rows.append(row)
-                texts.append(text)
+    for row in iter_corpus_rows(data_path):
+        text = row.get("text", "")
+        if text and text.strip():
+            valid_rows.append(row)
+            texts.append(text)
 
     processed_docs = preprocess_corpus_batch(texts)
 
@@ -846,24 +893,144 @@ def export_results(model, corpus, dictionary, data_path, coherence_score=0.0, re
     with open("app/lda_viz.html", "w", encoding="utf-8") as f:
         f.write(html)
 
+    years = set()
     publishers = set()
+    pub_counts = defaultdict(int)
+    layer_counts = defaultdict(int)
+    decade_counts = defaultdict(int)
+    unique_base_titles = set()
+    trends_map = defaultdict(lambda: defaultdict(int))
+    total_words = 0
     count = 0
-    with open(data_path, mode="r", encoding="utf-8") as f:
-        reader = csv.DictReader(f)
-        for row in reader:
-            count += 1
-            if "publisher" in row and row["publisher"]:
-                publishers.add(_clean_marc_control_chars(row["publisher"]))
 
-    summary = {
+    for row in iter_corpus_rows(data_path):
+        count += 1
+        raw_title = _clean_marc_control_chars(row.get("title") or "")
+        if raw_title:
+            base_t = re.sub(r"\[.*?\]", "", raw_title).strip().lower()
+            if base_t:
+                unique_base_titles.add(base_t)
+
+        wc_val = row.get("word_count")
+        if wc_val:
+            try:
+                total_words += int(float(wc_val))
+            except Exception:
+                pass
+
+        layer = _clean_marc_control_chars(row.get("corpus_layer") or "dnb_sru_marc21")
+        layer_counts[layer] += 1
+
+        dec = _clean_marc_control_chars(row.get("decade") or "")
+        y = row.get("year") or row.get("date")
+        yr_str = "Unknown"
+        if y:
+            m = re.search(r"(\d{4})", str(y))
+            if m:
+                yr_str = m.group(1)
+                yr_int = int(yr_str)
+                years.add(yr_int)
+                if not dec:
+                    dec = f"{yr_str[:3]}0s"
+        if dec:
+            decade_counts[dec] += 1
+
+        if "publisher" in row and row["publisher"]:
+            clean_pub = _clean_marc_control_chars(row["publisher"])
+            if clean_pub and clean_pub != "PERSON":
+                publishers.add(clean_pub)
+                pub_counts[clean_pub] += 1
+                if yr_str != "Unknown":
+                    trends_map[yr_str][clean_pub] += 1
+
+    top_publishers_sorted = [
+        p for p, _ in sorted(pub_counts.items(), key=lambda x: x[1], reverse=True)
+    ]
+
+    trends_list = []
+    for yr in sorted(trends_map.keys()):
+        item = {"year": int(yr) if yr.isdigit() else yr, "year_clean": yr}
+        for pub in sorted(publishers):
+            item[pub] = trends_map[yr][pub]
+        trends_list.append(item)
+
+    coherence_grid = []
+    if os.path.exists(config.COHERENCE_GRID_PATH):
+        try:
+            with open(config.COHERENCE_GRID_PATH, mode="r", encoding="utf-8") as gf:
+                for grow in csv.DictReader(gf):
+                    coherence_grid.append({
+                        "k": int(grow["k"]),
+                        "c_v": float(grow["c_v"]),
+                        "u_mass": float(grow["u_mass"]),
+                        "log_perplexity": float(grow["log_perplexity"])
+                    })
+        except Exception:
+            pass
+
+    full_summary = {
+        "source": "DNB SRU v1.1 + HathiTrust HTRC + OpenAlex Full-Book Corpus (1970–2025)",
         "count": count,
+        "total_records": count,
+        "unique_books": len(unique_base_titles),
+        "total_words": total_words,
         "vocabulary_size": len(dictionary),
         "coherence_score": round(float(coherence_score), 4),
-        "source": os.path.basename(data_path),
-        "publishers": sorted(list(publishers))
+        "publishers": top_publishers_sorted[:14] if top_publishers_sorted else sorted(list(publishers)),
+        "all_publishers_count": len(publishers),
+        "publisher_counts": dict(sorted(pub_counts.items(), key=lambda x: x[1], reverse=True)[:15]),
+        "corpus_layers": dict(sorted(layer_counts.items(), key=lambda x: x[1], reverse=True)),
+        "decade_counts": dict(sorted(decade_counts.items())),
+        "year_range": f"{min(years)}–{max(years)}" if years else "1970–2025",
+        "pipeline_config": {
+            "spacy_model": config.SPACY_MODEL,
+            "allowed_postags": config.ALLOWED_POSTAGS,
+            "stopwords_total": len(ALL_STOPWORDS),
+            "fraktur_noise_count": len(FRAKTUR_AND_META_NOISE),
+            "domain_stopwords_count": len(config.DOMAIN_STOPWORDS),
+            "religious_boost_keywords": len(config.RELIGIOUS_VOICE_KEYWORDS),
+            "bigram_min_count": 5,
+            "bigram_threshold": 10,
+            "filter_no_below": 5,
+            "filter_no_above": 0.55,
+            "filter_keep_n": 25000,
+            "lda_passes": config.PASSES,
+            "lda_chunksize": 1500,
+            "lda_alpha": str(config.ALPHA),
+            "lda_eta": str(config.ETA)
+        }
+    }
+
+    summary_payload = {
+        **full_summary,
+        "summary": full_summary,
+        "trends": trends_list,
+        "coherence_grid": coherence_grid
     }
     with open("app/data_summary.json", "w", encoding="utf-8") as f:
-        json.dump(summary, f, indent=2, ensure_ascii=False)
+        json.dump(summary_payload, f, indent=2, ensure_ascii=False)
+
+    # Synchronize app/lda_modes_report.json with the full corpus scale
+    modes_path = "app/lda_modes_report.json"
+    if os.path.exists(modes_path):
+        try:
+            with open(modes_path, "r", encoding="utf-8") as mf:
+                modes_data = json.load(mf)
+            if "modes" in modes_data:
+                modes_data["modes"][report["lda_mode"]] = report
+                for m_key, m_obj in modes_data["modes"].items():
+                    m_obj["corpus_documents"] = len(corpus)
+                    m_obj["vocabulary_size"] = len(dictionary)
+            if "comparison" in modes_data:
+                for comp in modes_data["comparison"]:
+                    comp["documents"] = len(corpus)
+                    comp["vocab_size"] = len(dictionary)
+                    if comp.get("mode") == report["lda_mode"]:
+                        comp["u_mass"] = round(float(coherence_score), 4)
+            with open(modes_path, "w", encoding="utf-8") as mf:
+                json.dump(modes_data, mf, indent=2, ensure_ascii=False)
+        except Exception:
+            pass
 
     print("\n======================================================================")
     print(f"LDA MODEL COMPLETE | Documents: {len(corpus):,} | Vocab: {len(dictionary):,} | Coherence (u_mass): {coherence_score:.4f}")

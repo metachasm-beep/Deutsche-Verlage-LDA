@@ -1,7 +1,7 @@
 # Vercel Ignore File
-# Exclude heavy directories that are not needed for builds
+# Exclude heavy directories that are not needed for serverless runtime builds
 
-# Python virtual environments
+# Python virtual environments & caches
 .venv/
 venv/
 ENV/
@@ -17,16 +17,15 @@ react-native-bottom-sheet-master/
 react-native-graph-main/
 react-native-skia-main/
 
-# Docs and scripts
+# Docs, scripts, and raw multi-hundred-MB corpus shards (precomputed reports live in app/*.json)
 docs/
 scripts/
+data/
 *.docx
 *.pdf
+requirements-local.txt
 
-# Local data that shouldn't be bundled if huge (the CSVs we use are fine though)
-# data/
-
-# Git
+# Git & Agent metadata
 .git/
 .agent/
 .gsd/

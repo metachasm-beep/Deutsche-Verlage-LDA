@@ -85,13 +85,11 @@ def run_bertopic_german_pipeline(data_path: str = "data/dnb_metadata.csv", n_clu
 
     valid_rows = []
     texts = []
-    with open(data_path, mode="r", encoding="utf-8") as f:
-        reader = csv.DictReader(f)
-        for row in reader:
-            t = row.get("text", "")
-            if t and t.strip():
-                valid_rows.append(row)
-                texts.append(t)
+    for row in lda_pipeline.iter_corpus_rows(data_path):
+        t = row.get("text", "")
+        if t and t.strip():
+            valid_rows.append(row)
+            texts.append(t)
 
     processed_docs = lda_pipeline.preprocess_corpus_batch(texts)
 
@@ -135,8 +133,8 @@ def run_bertopic_german_pipeline(data_path: str = "data/dnb_metadata.csv", n_clu
         vector_size=128,
         window=8,
         min_count=4,
-        workers=4,
-        epochs=20,
+        workers=8,
+        epochs=12,
         dm=1,
         seed=42
     )

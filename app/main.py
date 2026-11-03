@@ -192,9 +192,14 @@ async def run_lda(
     k_target = int(num_topics) if num_topics else config.NUM_TOPICS
     current_num_topics = k_target
 
-    # Fast-path if full-corpus K=12 mode is precomputed in app/lda_modes_report.json (or on Vercel serverless)
+    # Fast-path if full-corpus K=12 mode is precomputed in app/lda_modes_report.json or running on Vercel serverless without gensim
     modes_cache = _load_modes_report_cache()
-    if (not year and not decade and k_target == config.NUM_TOPICS and mode_key in modes_cache.get("modes", {})) or not os.path.exists(data_path):
+    if (
+        (not year and not decade and k_target == config.NUM_TOPICS and mode_key in modes_cache.get("modes", {}))
+        or lda_pipeline.gensim is None
+        or data_path == config.MOCK_DATA_PATH
+        or not os.path.exists(data_path)
+    ):
         current_model = None
         current_corpus = None
         return {
@@ -209,20 +214,20 @@ async def run_lda(
     try:
         if year or decade:
             rows = []
-            with open(data_path, mode="r", encoding="utf-8") as f:
-                reader = csv.DictReader(f)
-                headers = reader.fieldnames
-                for row in reader:
-                    date_val = str(row.get("date", ""))
-                    match = re.search(r"(\d{4})", date_val)
-                    if not match:
-                        continue
-                    r_year = int(match.group(1))
+            headers = None
+            for row in lda_pipeline.iter_corpus_rows(data_path):
+                if headers is None:
+                    headers = list(row.keys())
+                date_val = str(row.get("date", "") or row.get("year", ""))
+                match = re.search(r"(\d{4})", date_val)
+                if not match:
+                    continue
+                r_year = int(match.group(1))
 
-                    if year and r_year == year:
-                        rows.append(row)
-                    elif decade and (decade <= r_year < decade + 10):
-                        rows.append(row)
+                if year and r_year == year:
+                    rows.append(row)
+                elif decade and (decade <= r_year < decade + 10):
+                    rows.append(row)
 
             if not rows:
                 target = f"year {year}" if year else f"decade {decade}s"
@@ -276,32 +281,35 @@ async def get_trends():
     """
     Returns year-by-year counts for the 'Live Graph'.
     """
-    data_path = _get_active_data_path()
-    if not os.path.exists(data_path):
-        summary_json_path = os.path.join(config.BASE_DIR, "app", "data_summary.json")
-        if os.path.exists(summary_json_path):
+    summary_json_path = os.path.join(config.BASE_DIR, "app", "data_summary.json")
+    if os.path.exists(summary_json_path):
+        try:
             import json
             with open(summary_json_path, "r", encoding="utf-8") as sf:
                 sdata = json.load(sf)
-                return sdata.get("trends", [])
+                if sdata.get("trends"):
+                    return sdata["trends"]
+        except Exception:
+            pass
+
+    data_path = _get_active_data_path()
+    if not os.path.exists(data_path):
         return []
 
     data_map = defaultdict(lambda: defaultdict(int))
     publishers = set()
 
     try:
-        with open(data_path, mode="r", encoding="utf-8") as f:
-            reader = csv.DictReader(f)
-            for row in reader:
-                date_str = str(row.get("date", ""))
-                match = re.search(r"(\d{4})", date_str)
-                year = match.group(1) if match else "Unknown"
+        for row in lda_pipeline.iter_corpus_rows(data_path):
+            date_str = str(row.get("date", "") or row.get("year", ""))
+            match = re.search(r"(\d{4})", date_str)
+            year = match.group(1) if match else "Unknown"
 
-                pub = lda_pipeline._clean_marc_control_chars(row.get("publisher") or "N/A")
-                if not pub or pub == "PERSON":
-                    continue
-                data_map[year][pub] += 1
-                publishers.add(pub)
+            pub = lda_pipeline._clean_marc_control_chars(row.get("publisher") or "N/A")
+            if not pub or pub == "PERSON":
+                continue
+            data_map[year][pub] += 1
+            publishers.add(pub)
 
         result = []
         for year in sorted(data_map.keys()):
@@ -535,6 +543,19 @@ async def get_topics(lda_mode: str = Query(None)):
 
 @app.get("/api/data-summary")
 async def data_summary():
+    summary_json_path = os.path.join(config.BASE_DIR, "app", "data_summary.json")
+    if os.path.exists(summary_json_path):
+        try:
+            import json
+            with open(summary_json_path, "r", encoding="utf-8") as sf:
+                sdata = json.load(sf)
+                if "summary" in sdata and sdata["summary"].get("total_words"):
+                    return sdata["summary"]
+                if sdata.get("total_words"):
+                    return sdata
+        except Exception:
+            pass
+
     data_path = _get_active_data_path()
     if os.path.exists(data_path):
         years = set()
@@ -546,43 +567,41 @@ async def data_summary():
         total_words = 0
         count = 0
 
-        with open(data_path, mode="r", encoding="utf-8") as f:
-            reader = csv.DictReader(f)
-            for row in reader:
-                count += 1
-                raw_title = lda_pipeline._clean_marc_control_chars(row.get("title") or "")
-                if raw_title:
-                    base_t = re.sub(r"\[.*?\]", "", raw_title).strip().lower()
-                    if base_t:
-                        unique_base_titles.add(base_t)
+        for row in lda_pipeline.iter_corpus_rows(data_path):
+            count += 1
+            raw_title = lda_pipeline._clean_marc_control_chars(row.get("title") or "")
+            if raw_title:
+                base_t = re.sub(r"\[.*?\]", "", raw_title).strip().lower()
+                if base_t:
+                    unique_base_titles.add(base_t)
 
-                wc_val = row.get("word_count")
-                if wc_val:
-                    try:
-                        total_words += int(float(wc_val))
-                    except Exception:
-                        pass
+            wc_val = row.get("word_count")
+            if wc_val:
+                try:
+                    total_words += int(float(wc_val))
+                except Exception:
+                    pass
 
-                layer = lda_pipeline._clean_marc_control_chars(row.get("corpus_layer") or "dnb_sru_marc21")
-                layer_counts[layer] += 1
+            layer = lda_pipeline._clean_marc_control_chars(row.get("corpus_layer") or "dnb_sru_marc21")
+            layer_counts[layer] += 1
 
-                dec = lda_pipeline._clean_marc_control_chars(row.get("decade") or "")
-                y = row.get("year") or row.get("date")
-                if y:
-                    m = re.search(r"(\d{4})", str(y))
-                    if m:
-                        yr_int = int(m.group(1))
-                        years.add(yr_int)
-                        if not dec:
-                            dec = f"{m.group(1)[:3]}0s"
-                if dec:
-                    decade_counts[dec] += 1
+            dec = lda_pipeline._clean_marc_control_chars(row.get("decade") or "")
+            y = row.get("year") or row.get("date")
+            if y:
+                m = re.search(r"(\d{4})", str(y))
+                if m:
+                    yr_int = int(m.group(1))
+                    years.add(yr_int)
+                    if not dec:
+                        dec = f"{m.group(1)[:3]}0s"
+            if dec:
+                decade_counts[dec] += 1
 
-                if "publisher" in row and row["publisher"]:
-                    clean_pub = lda_pipeline._clean_marc_control_chars(row["publisher"])
-                    if clean_pub and clean_pub != "PERSON":
-                        publishers.add(clean_pub)
-                        pub_counts[clean_pub] += 1
+            if "publisher" in row and row["publisher"]:
+                clean_pub = lda_pipeline._clean_marc_control_chars(row["publisher"])
+                if clean_pub and clean_pub != "PERSON":
+                    publishers.add(clean_pub)
+                    pub_counts[clean_pub] += 1
 
         top_publishers_sorted = [
             p for p, _ in sorted(pub_counts.items(), key=lambda x: x[1], reverse=True)
@@ -608,28 +627,17 @@ async def data_summary():
                 "fraktur_noise_count": len(lda_pipeline.FRAKTUR_AND_META_NOISE),
                 "domain_stopwords_count": len(config.DOMAIN_STOPWORDS),
                 "religious_boost_keywords": len(config.RELIGIOUS_VOICE_KEYWORDS),
-                "bigram_min_count": 3,
-                "bigram_threshold": 8,
+                "bigram_min_count": 5,
+                "bigram_threshold": 10,
                 "filter_no_below": 5,
                 "filter_no_above": 0.55,
                 "filter_keep_n": 25000,
                 "lda_passes": config.PASSES,
-                "lda_chunksize": 500,
+                "lda_chunksize": 1500,
                 "lda_alpha": str(config.ALPHA),
                 "lda_eta": str(config.ETA)
             }
         }
-    summary_json_path = os.path.join(config.BASE_DIR, "app", "data_summary.json")
-    if os.path.exists(summary_json_path):
-        try:
-            import json
-            with open(summary_json_path, "r", encoding="utf-8") as sf:
-                sdata = json.load(sf)
-                if "summary" in sdata:
-                    return sdata["summary"]
-                return sdata
-        except Exception:
-            pass
     return {"source": "Unknown Data", "count": 0, "publishers": []}
 
 

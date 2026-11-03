@@ -1,4 +1,5 @@
 import argparse
+import glob
 import os
 import re
 import sys
@@ -26,11 +27,11 @@ if hasattr(sys.stdout, "reconfigure"):
         pass
 
 HEADERS = {
-    "User-Agent": "DeutscheVerlageLDA-HTRC-Harvester/3.0 (JNU Centre for German Studies; mailto:paul@jnu.ac.in)"
+    "User-Agent": "DeutscheVerlageLDA-HTRC-Harvester/4.0 (JNU Centre for German Studies; mailto:paul@jnu.ac.in)"
 }
 NS = {"zs": "http://www.loc.gov/zing/srw/", "m": "http://www.loc.gov/MARC21/slim"}
 
-# Core 12 dissertation publishers (Wave 3 deep pagination: startRecord 351..850 for 11.*, 151..400 for 08.*/71.*)
+# Core 12 dissertation publishers (Wave 4 ultra-deep pagination: startRecord 801..1300 for 11.*, 351..650 for 08.*/71.*)
 CORE_12_PUBLISHERS = [
     ("Suhrkamp", "Suhrkamp", ["11.*", "08.*", "71.*"]),
     ("Wagenbach", "Wagenbach", ["11.*", "08.*", "71.*"]),
@@ -46,55 +47,101 @@ CORE_12_PUBLISHERS = [
     ("Patmos", "Patmos", ["11.*"]),
 ]
 
-# Extended German theological, confessional, and academic imprints (Wave 3 deep pagination: startRecord 201..550)
+# Extended German theological, philosophical, and sociological imprints (Wave 4: startRecord 501..850 + new imprints)
 EXTENDED_GERMAN_RELIGION_PUBLISHERS = [
-    ("Herder (Grünewald)", "Grünewald", ["11.*"]),
-    ("Gütersloher Verlagshaus (Chr. Kaiser)", "Kaiser", ["11.*"]),
-    ("Herder (Kreuz)", "Kreuz", ["11.*"]),
-    ("Patmos (Schwabenverlag)", "Schwabenverlag", ["11.*"]),
-    ("Herder (Benziger)", "Benziger", ["11.*"]),
-    ("Vandenhoeck & Ruprecht", "Vandenhoeck", ["11.*"]),
-    ("Mohr Siebeck", "Mohr", ["11.*"]),
-    ("Kohlhammer", "Kohlhammer", ["11.*"]),
-    ("C.H. Beck", "Beck", ["11.*"]),
-    ("Schöningh", "Schöningh", ["11.*"]),
-    ("Aschendorff", "Aschendorff", ["11.*"]),
-    ("Pustet", "Pustet", ["11.*"]),
-    ("Echter", "Echter", ["11.*"]),
-    ("Bonifatius", "Bonifatius", ["11.*"]),
-    ("Neukirchener", "Neukirchener", ["11.*"]),
-    ("Calwer", "Calwer", ["11.*"]),
-    ("Campus", "Campus", ["11.*", "71.*"]),
-    ("Insel", "Insel", ["11.*", "08.*"]),
-    ("Meiner", "Meiner", ["11.*", "08.*"]),
-    ("Wallstein", "Wallstein", ["11.*", "08.*"]),
+    ("Herder (Grünewald)", "Grünewald", ["11.*"], 501, 800),
+    ("Gütersloher Verlagshaus (Chr. Kaiser)", "Kaiser", ["11.*"], 501, 850),
+    ("Herder (Kreuz)", "Kreuz", ["11.*"], 501, 800),
+    ("Patmos (Schwabenverlag)", "Schwabenverlag", ["11.*"], 501, 800),
+    ("Herder (Benziger)", "Benziger", ["11.*"], 501, 800),
+    ("Vandenhoeck & Ruprecht", "Vandenhoeck", ["11.*", "08.*"], 501, 900),
+    ("Mohr Siebeck", "Mohr", ["11.*", "08.*"], 501, 900),
+    ("Kohlhammer", "Kohlhammer", ["11.*", "08.*"], 501, 900),
+    ("C.H. Beck", "Beck", ["11.*", "08.*"], 501, 900),
+    ("Schöningh", "Schöningh", ["11.*", "08.*"], 501, 800),
+    ("Aschendorff", "Aschendorff", ["11.*"], 501, 800),
+    ("Pustet", "Pustet", ["11.*"], 501, 800),
+    ("Echter", "Echter", ["11.*"], 501, 800),
+    ("Bonifatius", "Bonifatius", ["11.*"], 501, 800),
+    ("Neukirchener", "Neukirchener", ["11.*"], 501, 800),
+    ("Calwer", "Calwer", ["11.*"], 501, 750),
+    ("Campus", "Campus", ["11.*", "71.*"], 501, 800),
+    ("Insel", "Insel", ["11.*", "08.*"], 501, 800),
+    ("Meiner", "Meiner", ["11.*", "08.*"], 501, 800),
+    ("Wallstein", "Wallstein", ["11.*", "08.*"], 501, 800),
+    # Brand-new imprints for Wave 4
+    ("Nomos / Alber", "Alber", ["11.*", "08.*"], 1, 350),
+    ("Wilhelm Fink", "Fink", ["11.*", "08.*"], 1, 350),
+    ("Frommann-Holzboog", "Frommann", ["11.*", "08.*"], 1, 300),
+    ("Böhlau", "Böhlau", ["11.*"], 1, 350),
+    ("Schwabe", "Schwabe", ["11.*", "08.*"], 1, 300),
+    ("De Gruyter / Transcript", "Transcript", ["11.*", "71.*"], 1, 350),
+    ("De Gruyter / Transcript", "Gruyter", ["11.*"], 1, 400),
 ]
 
-# Direct BKL Subject Subcodes (1970-2025) for Wave-3 Subject Sweep
-DIRECT_BKL_SUBCODES = [
-    ("11.08", "Religionskritik & Atheismus"),
-    ("11.05", "Religionssoziologie"),
-    ("11.09", "Systematische Religionswissenschaft"),
-    ("08.37", "Religionsphilosophie"),
-    ("08.38", "Ethik & Moralphilosophie"),
-    ("11.60", "Systematische Theologie"),
-    ("11.61", "Dogmatik"),
-    ("11.62", "Christliche Ethik & Soziallehre"),
-    ("11.70", "Praktische Theologie"),
-    ("11.77", "Religionspädagogik"),
-    ("11.50", "Kirchengeschichte"),
-    ("11.55", "Neuzeitliche Kirchengeschichte"),
-    ("11.20", "Judentum"),
-    ("11.80", "Islam"),
-    ("11.90", "Außerchristliche Religionen"),
-    ("71.11", "Gesellschaft & Modernisierung"),
-    ("71.50", "Kultursoziologie"),
+# Wave-4 Direct BKL Subject Subcodes:
+# (a) Pages 251..550 of Wave-3 BKL subcodes
+# (b) Pages 1..300 of 22 brand-new BKL subcodes covering Biblical Exegesis, Liturgics, Pastoral Care,
+#     Psychology of Religion, Critical Theory, Philosophical Anthropology, and Cultural Philosophy
+WAVE4_BKL_SUBCODES = [
+    ("11.08", 251, 550),  # Religionskritik & Atheismus
+    ("11.05", 251, 550),  # Religionssoziologie
+    ("11.09", 251, 500),  # Systematische Religionswissenschaft
+    ("08.37", 251, 550),  # Religionsphilosophie
+    ("11.60", 251, 550),  # Systematische Theologie
+    ("11.61", 251, 550),  # Dogmatik
+    ("11.62", 251, 550),  # Christliche Ethik
+    ("11.70", 251, 550),  # Praktische Theologie
+    ("11.77", 251, 550),  # Religionspädagogik
+    ("11.50", 251, 550),  # Kirchengeschichte
+    ("11.55", 251, 550),  # Neuzeitliche Kirchengeschichte
+    ("11.20", 251, 500),  # Judentum
+    ("11.80", 251, 500),  # Islam
+    # Brand-new BKL subcodes for Wave 4
+    ("11.01", 1, 250),    # Geschichte der Religionswissenschaft & Theologie
+    ("11.02", 1, 250),    # Philosophie und Theorie der Religion
+    ("11.06", 1, 250),    # Religionspsychologie
+    ("11.07", 1, 200),    # Religionsethnologie
+    ("11.30", 1, 250),    # Bibelwissenschaft
+    ("11.31", 1, 250),    # Bibeltext, Bibelübersetzungen
+    ("11.35", 1, 250),    # Altes Testament
+    ("11.40", 1, 250),    # Neues Testament
+    ("11.45", 1, 250),    # Biblische Theologie
+    ("11.51", 1, 250),    # Frühes Christentum
+    ("11.52", 1, 250),    # Mittelalterliches Christentum
+    ("11.53", 1, 250),    # Reformation
+    ("11.54", 1, 250),    # Konfessionalismus & Aufklärung
+    ("11.63", 1, 250),    # Ökumenische Theologie
+    ("11.72", 1, 250),    # Liturgik & Gottesdienst
+    ("11.74", 1, 250),    # Homiletik & Predigt
+    ("11.75", 1, 250),    # Seelsorge & Poimenik
+    ("11.76", 1, 250),    # Diakonie & Caritas
+    ("11.79", 1, 250),    # Kirchenrecht & Staatskirchenrecht
+    ("08.36", 1, 250),    # Philosophische Anthropologie
+    ("08.42", 1, 250),    # Kulturphilosophie
+    ("08.44", 1, 250),    # Sozialphilosophie & Kritische Theorie
 ]
 
-OPENALEX_BOOK_QUERIES = [
+OPENALEX_WAVE4_QUERIES = [
+    # RQ2: Neoliberal Self-Optimization, Mindfulness, Spiritual Care & Lifeworld
+    "Achtsamkeit Meditation Spiritualität Selbstoptimierung",
+    "Lebenskunst Resilienz Selbstsorge Psychologie",
+    "Spiritual Care Seelsorge Gesundheit Krankheit",
+    "Sinnkrise Burnout Lebenshilfe Ratgeber Religion",
+    "Glück Wohlbefinden Positive Psychologie Ethik",
+    "Individualisierung Subjektivierung Religion Spätmoderne",
+    "Esoterik New Age Alternative Spiritualität",
+    "Körper Heilung Ganzheitlichkeit Spiritualität",
+    # RQ3: Secularism, Atheism, Humanism, Critique of Religion & Post-Secularism
+    "Säkularismus Humanismus Atheismus Religionskritik",
+    "Konfessionsfreie Kirchenaustritt Säkularisierung Deutschland",
+    "Naturalismus Evolution Wissenschaft Glaube Kritik",
+    "Aufklärung Vernunft Ideologiekritik Religion",
+    "Postsäkulare Gesellschaft Habermas Öffentliche Religion",
+    "Staatskirchenrecht Trennung Staat Kirche Religionsfreiheit",
+    "Blasphemie Meinungsfreiheit Kunstfreiheit Religion",
+    # RQ1 & Cross-Cutting Theological/Sociological Domains (Pages 3/2)
     "Religion Säkularisierung Moderne",
-    "Religionskritik Atheismus Aufklärung",
-    "Spiritualität Achtsamkeit Lebenshilfe",
     "Theologie Kirche Seelsorge Gesellschaft",
     "Katholizismus Evangelische Kirche Deutschland",
     "Religionssoziologie Glauben Wissen",
@@ -111,38 +158,23 @@ OPENALEX_BOOK_QUERIES = [
     "Diakonie Caritas Sozialethik",
     "Reformation Ökumene Kirchengeschichte",
     "Religionsphilosophie Metaphysik Transzendenz",
-    "Kirchenrecht Staatskirchenrecht Religionsfreiheit",
-    "Christliche Soziallehre Wirtschaftsethik",
-    "Pastoraltheologie Gemeindeaufbau Verkündigung",
-    "Altes Testament Neues Testament Theologie",
-    "Kirchengeschichte Mittelalter Neuzeit",
-    "Sekten Neue Religiöse Bewegungen Esoterik",
-    "Aberglaube Magie Okkultismus Aufklärung",
-    "Papsttum Vatikan Konzil Katholische Kirche",
-    "Protestantismus Luther Calvin Kulturprotestantismus",
-    "Jüdische Geschichte Antisemitismus Shoah Theologie",
-    "Islamwissenschaft Koran Muslime Deutschland",
-    "Buddhismus Hinduismus Weltreligionen Dialog",
-    "Religionspsychologie Tiefenpsychologie Mythos",
-    "Tod Sterben Trauer Eschatologie Hoffnung",
-    "Schöpfung Ökologie Nachhaltigkeit Theologie",
-    "Feministische Theologie Geschlecht Frauen Kirche",
-    "Medien Religion Öffentlichkeit Kultur",
-    "Wertewandel Individualisierung Pluralismus Religion",
-    "Zivilreligion Politische Theologie Demokratie",
-    "Menschenrechte Würde Gerechtigkeit Christentum",
-    "Wissenschaft Glaube Evolution Naturalismus"
-]
-
-ARCHIVE_ORG_SWEEP_QUERIES = [
-    'language:(ger OR deu) AND mediatype:texts AND year:[1970 TO 2025] AND (Suhrkamp OR Rowohlt OR Herder OR Fischer OR Klett OR Wagenbach OR Kösel OR Patmos OR Gütersloher)',
-    'language:(ger OR deu) AND mediatype:texts AND year:[1970 TO 2025] AND (Religionskritik OR Atheismus OR Säkularisierung OR Religionssoziologie OR Kirchenkritik)',
-    'language:(ger OR deu) AND mediatype:texts AND year:[1970 TO 2025] AND (Theologie OR Kirchengeschichte OR Dogmatik OR Christentum OR Spiritualität)',
-    'language:(ger OR deu) AND mediatype:texts AND year:[1970 TO 2025] AND (Religionsphilosophie OR Aufklärung OR Ethik OR Moral OR Weltanschauung)',
 ]
 
 EN_MARKERS = {"the", "and", "for", "that", "with", "from", "this", "which", "their", "have", "were", "been"}
 DE_MARKERS = {"der", "die", "das", "und", "nicht", "ist", "von", "mit", "auf", "für", "eine", "einer", "einem", "sich", "auch", "werden"}
+
+HTRC_FUNCTION_STOPWORDS = {
+    "der", "die", "das", "und", "in", "von", "mit", "den", "des", "dem", "für", "auf",
+    "nicht", "als", "auch", "sich", "aus", "dass", "daß", "er", "es", "sie", "bei", "nach",
+    "um", "am", "im", "zum", "zur", "über", "durch", "vor", "wird", "werden", "wurde",
+    "wurden", "hat", "haben", "hatte", "hatten", "war", "waren", "sind", "ist", "sein",
+    "seine", "seiner", "seinem", "seinen", "ihr", "ihre", "ihrer", "ihrem", "ihren",
+    "eine", "einer", "einem", "einen", "eines", "ein", "oder", "aber", "noch", "wie",
+    "nur", "so", "wir", "was", "wenn", "man", "kann", "können", "konnte", "muss",
+    "müssen", "soll", "sollen", "will", "wollen", "schon", "immer", "wieder", "mehr",
+    "bis", "unter", "gegen", "zwischen", "ohne", "seit", "vom", "ins", "ans", "aufs",
+    "diese", "dieser", "diesem", "diesen", "dieses", "jede", "jeder", "jedem", "jeden"
+}
 
 
 def is_german_passage(text: str) -> bool:
@@ -177,47 +209,41 @@ def isbn_variants(raw_isbn: str) -> list[str]:
     return list(dict.fromkeys(out))
 
 
-def expand_gbv_wave3_isbn_catalog(
+def expand_gbv_wave4_isbn_catalog(
     already_matched_isbns: set[str],
-    core_start: int = 351,
-    core_end: int = 800,
-    ext_start: int = 201,
-    ext_end: int = 500,
-    bkl_max: int = 250
+    core_start: int = 801,
+    core_end: int = 1250
 ) -> pd.DataFrame:
     """
-    Wave-3 Deep GBV K10plus SRU Harvester:
-      1. Deep pagination of the 12 core publishers (records 351..800 for BKL 11.*, 151..350 for 08.*/71.*)
-      2. Deep pagination of 20 extended German religion/academic publishers (records 201..500)
-      3. Direct BKL Subject Subcode harvesting across 17 religion/philosophy/sociology subcodes
+    Wave-4 Ultra-Deep GBV K10plus SRU Harvester:
+      1. Records 801..1250 for the 12 core publishers (BKL 11.*) and 351..600 (BKL 08.*/71.*)
+      2. Records 501..850 for 20 extended publishers + 1..350 for 7 new academic imprints
+      3. Direct BKL Subject Subcode harvesting across 35 theological, philosophical, and sociological subcodes
     """
     books = []
     seen_isbns = set(already_matched_isbns)
     seen_ppns = set()
 
     all_tasks = []
-    # 1. Core 12 publishers deep pagination
     for canonical_pub, gbv_term, bkl_list in CORE_12_PUBLISHERS:
         for bkl in bkl_list:
-            s_start = core_start if bkl == "11.*" else 151
-            s_end = core_end if bkl == "11.*" else 350
+            s_start = core_start if bkl == "11.*" else 351
+            s_end = core_end if bkl == "11.*" else 600
             for start_rec in range(s_start, s_end + 1, 50):
                 all_tasks.append((canonical_pub, f'pica.bkl={bkl} and pica.ver="{gbv_term}"', bkl, start_rec))
 
-    # 2. Extended 20 publishers deep pagination
-    for canonical_pub, gbv_term, bkl_list in EXTENDED_GERMAN_RELIGION_PUBLISHERS:
+    for canonical_pub, gbv_term, bkl_list, s_start, s_end in EXTENDED_GERMAN_RELIGION_PUBLISHERS:
         for bkl in bkl_list:
-            for start_rec in range(ext_start, ext_end + 1, 50):
+            for start_rec in range(s_start, s_end + 1, 50):
                 all_tasks.append((canonical_pub, f'pica.bkl={bkl} and pica.ver="{gbv_term}"', bkl, start_rec))
 
-    # 3. Direct BKL Subject Subcodes (all German publishers 1970-2025)
-    for bkl_code, bkl_label in DIRECT_BKL_SUBCODES:
-        for start_rec in range(1, bkl_max + 1, 50):
+    for bkl_code, s_start, s_end in WAVE4_BKL_SUBCODES:
+        for start_rec in range(s_start, s_end + 1, 50):
             all_tasks.append((None, f'pica.bkl={bkl_code}', bkl_code, start_rec))
 
     print(
-        f"Wave-3 GBV K10plus Deep Harvester: Querying {len(all_tasks)} SRU pages "
-        f"(Deep Publisher Pagination + 17 Direct BKL Subject Codes)...",
+        f"Wave-4 GBV K10plus Ultra-Deep Harvester: Querying {len(all_tasks)} SRU pages "
+        f"(Ultra-Deep Publisher Pagination + 35 Direct BKL Subject Codes)...",
         flush=True
     )
 
@@ -315,7 +341,7 @@ def expand_gbv_wave3_isbn_catalog(
             pass
         return page_books
 
-    with ThreadPoolExecutor(max_workers=10) as ex:
+    with ThreadPoolExecutor(max_workers=12) as ex:
         futs = [ex.submit(_fetch_sru_page, t) for t in all_tasks]
         for fut in as_completed(futs):
             res = fut.result()
@@ -334,7 +360,7 @@ def expand_gbv_wave3_isbn_catalog(
                         books.append(b)
 
     df = pd.DataFrame(books)
-    print(f"Total Wave-3 NEW 1970-2025 printed books queued for HathiTrust ISBN lookup: {len(df):,}", flush=True)
+    print(f"Total Wave-4 NEW 1970-2025 printed books queued for HathiTrust ISBN lookup: {len(df):,}", flush=True)
     return df
 
 
@@ -390,7 +416,7 @@ def batch_resolve_hathitrust_volumes(
             pass
         return local_matches
 
-    print(f"Batch-querying HathiTrust Bibliographic API across {len(valid_rows):,} Wave-3 ISBNs ({len(batches)} batches)...", flush=True)
+    print(f"Batch-querying HathiTrust Bibliographic API across {len(valid_rows):,} Wave-4 ISBNs ({len(batches)} batches)...", flush=True)
     with ThreadPoolExecutor(max_workers=workers) as ex:
         futs = [ex.submit(_query_batch, b) for b in batches]
         for fut in as_completed(futs):
@@ -405,7 +431,7 @@ def batch_resolve_hathitrust_volumes(
                             item["htids"] = unique_htids
                             matched_books.append(item)
 
-    print(f"  -> Matched {len(matched_books):,} NEW Wave-3 in-copyright 1970-2025 printed German books in HathiTrust!", flush=True)
+    print(f"  -> Matched {len(matched_books):,} NEW Wave-4 in-copyright 1970-2025 printed German books in HathiTrust!", flush=True)
     return matched_books
 
 
@@ -467,6 +493,9 @@ def extract_htrc_book_passages(
             passages = []
             source_link = f"https://babel.hathitrust.org/cgi/pt?id={htid}"
             for idx, chunk_str in enumerate(chunks, start=1):
+                # Compact repeated HTRC function words so CSV stays compact (<85 MB per shard)
+                substantive = [w for w in chunk_str.split() if w.lower() not in HTRC_FUNCTION_STOPWORDS][:330]
+                compact_chunk = " ".join(substantive)
                 passages.append({
                     "title": f"{title} [HTRC-Vollbuch-Abschnitt {idx}/{len(chunks)}]",
                     "author": author,
@@ -478,8 +507,8 @@ def extract_htrc_book_passages(
                     "chunk_index": idx,
                     "total_chunks": len(chunks),
                     "word_count": len(chunk_str.split()),
-                    "abstract": chunk_str[:420],
-                    "text": f"{title}. {author}. {publisher}. {chunk_str}"
+                    "abstract": compact_chunk[:240],
+                    "text": f"{title}. {author}. {publisher}. {compact_chunk}"
                 })
 
             summary = {
@@ -501,33 +530,38 @@ def extract_htrc_book_passages(
     return [], {}
 
 
-def harvest_openalex_wave3_books_and_chapters(
+def harvest_openalex_wave4_books_and_chapters(
     already_seen_urls: set[str],
-    books_per_query: int = 12,
+    books_per_query: int = 10,
     chunk_words: int = 1000,
     max_chunks_per_book: int = 55,
     workers: int = 8
 ) -> pd.DataFrame:
     """
-    Wave-3 OpenAlex Streamer:
-      1. Queries pages 2 & 3 of `type:book,language:de,is_oa:true,publication_year:1970-2025`
-      2. Queries `type:book-chapter,language:de,is_oa:true,publication_year:1970-2025` (241,939 records!)
-         and streams full chapters & edited volumes (>= 1,800 words) in RAM.
+    Wave-4 OpenAlex Streamer:
+      Queries RQ2 (Mindfulness/Self-Optimization), RQ3 (Secularism/Atheism/Humanism),
+      and Page 3 of `type:book` + Page 2 of `type:book-chapter` across 32 queries.
     """
     print(
-        f"\nWave-3 OpenAlex Harvester: Querying pages 2-3 of German OA Books + 241,939 German OA Book Chapters...",
+        f"\nWave-4 OpenAlex Harvester: Querying RQ2/RQ3 + Pages 3/2 of German OA Books & Book Chapters...",
         flush=True
     )
     candidates = []
     seen_ids = set()
     seen_urls = set(already_seen_urls)
 
-    for q in OPENALEX_BOOK_QUERIES:
-        # 1. Page 2 of type:book AND Page 1 of type:book-chapter
-        search_configs = [
-            ("language:de,is_oa:true,type:book,publication_year:1970-2025", 2),
-            ("language:de,is_oa:true,type:book-chapter,publication_year:1970-2025", 1),
-        ]
+    for q_idx, q in enumerate(OPENALEX_WAVE4_QUERIES):
+        # First 15 queries are brand-new RQ2/RQ3 queries (page 1), remaining 17 are page 3/2
+        if q_idx < 15:
+            search_configs = [
+                ("language:de,is_oa:true,type:book,publication_year:1970-2025", 1),
+                ("language:de,is_oa:true,type:book-chapter,publication_year:1970-2025", 1),
+            ]
+        else:
+            search_configs = [
+                ("language:de,is_oa:true,type:book,publication_year:1970-2025", 3),
+                ("language:de,is_oa:true,type:book-chapter,publication_year:1970-2025", 2),
+            ]
         for oa_filter, page_num in search_configs:
             try:
                 r = requests.get(
@@ -600,7 +634,7 @@ def harvest_openalex_wave3_books_and_chapters(
             except Exception:
                 continue
 
-    print(f"Queued {len(candidates)} NEW Wave-3 OpenAlex German books & book chapters for in-RAM PDF streaming...", flush=True)
+    print(f"Queued {len(candidates)} NEW Wave-4 OpenAlex German books & book chapters for in-RAM PDF streaming...", flush=True)
     rows = []
     books_ok = 0
 
@@ -617,6 +651,7 @@ def harvest_openalex_wave3_books_and_chapters(
         chunks = [ch for ch in chunk_fulltext_words(txt, chunk_words=chunk_words) if is_german_passage(ch)]
         c_rows = []
         for idx, ch in enumerate(chunks, start=1):
+            compact_ch = " ".join(ch.split()[:420])
             c_rows.append({
                 "title": f"{c['title']} [OpenAlex-Vollbuch-Abschnitt {idx}/{len(chunks)}]",
                 "author": c["author"],
@@ -628,8 +663,8 @@ def harvest_openalex_wave3_books_and_chapters(
                 "chunk_index": idx,
                 "total_chunks": len(chunks),
                 "word_count": len(ch.split()),
-                "abstract": ch[:420],
-                "text": f"{c['title']}. {c['author']}. {c['publisher']}. {ch}"
+                "abstract": compact_ch[:240],
+                "text": f"{c['title']}. {c['author']}. {c['publisher']}. {compact_ch}"
             })
         return c_rows
 
@@ -643,7 +678,7 @@ def harvest_openalex_wave3_books_and_chapters(
                 rows.extend(res)
                 w_sum = sum(r["word_count"] for r in res)
                 print(
-                    f"  + [OPENALEX WAVE-3 #{books_ok}] ({c['date']} | {c['publisher'][:28]}) "
+                    f"  + [OPENALEX WAVE-4 #{books_ok}] ({c['date']} | {c['publisher'][:28]}) "
                     f"{c['title'][:48]}... -> {w_sum:,} words ({len(res)} passages)",
                     flush=True
                 )
@@ -651,128 +686,42 @@ def harvest_openalex_wave3_books_and_chapters(
     return pd.DataFrame(rows)
 
 
-def harvest_archive_org_1970_2025_german_books(
-    already_seen_urls: set[str],
-    rows_per_query: int = 80,
-    chunk_words: int = 1000,
-    max_chunks_per_book: int = 55,
-    workers: int = 6
-) -> pd.DataFrame:
+def load_all_dnb_shards(base_path: str = "data/dnb_metadata.csv") -> pd.DataFrame:
+    """Loads data/dnb_metadata.csv plus any data/dnb_metadata_part*.csv shards."""
+    dfs = []
+    if os.path.exists(base_path):
+        dfs.append(pd.read_csv(base_path, encoding="utf-8", low_memory=False))
+    for p in sorted(glob.glob("data/dnb_metadata_part*.csv")):
+        dfs.append(pd.read_csv(p, encoding="utf-8", low_memory=False))
+    return pd.concat(dfs, ignore_index=True) if dfs else pd.DataFrame()
+
+
+def save_sharded_dnb_corpus(merged_df: pd.DataFrame, rows_per_shard: int = 24000):
     """
-    Broad 1970-2025 German Monograph Sweep on Internet Archive (archive.org),
-    streaming plain-text OCR (_djvu.txt) in RAM and filtering with `is_clean_modern_german()`.
+    Saves the master corpus across data/dnb_metadata.csv (first 24,000 rows, ~80 MB)
+    and data/dnb_metadata_part2.csv (and part3 if needed) so EVERY single file stays
+    safely under GitHub's 100 MB per-file limit!
     """
-    print("\nWave-3 Internet Archive Sweep: Searching 1970-2025 German monographs (_djvu.txt streams)...", flush=True)
-    docs_to_check = []
-    seen_idents = set()
+    first_chunk = merged_df.iloc[:rows_per_shard]
+    first_chunk.to_csv("data/dnb_metadata.csv", index=False, encoding="utf-8")
+    mb1 = os.path.getsize("data/dnb_metadata.csv") / (1024 * 1024)
+    print(f"  -> Saved shard 1: data/dnb_metadata.csv ({len(first_chunk):,} rows, {mb1:.2f} MB)", flush=True)
 
-    for q in ARCHIVE_ORG_SWEEP_QUERIES:
-        try:
-            r = requests.get(
-                "https://archive.org/advancedsearch.php",
-                params={
-                    "q": q,
-                    "fl[]": ["identifier", "title", "creator", "year", "publisher"],
-                    "rows": rows_per_query,
-                    "output": "json"
-                },
-                headers=HEADERS,
-                verify=False,
-                timeout=18
-            )
-            if r.status_code != 200:
-                continue
-            for d in r.json().get("response", {}).get("docs", []):
-                ident = d.get("identifier")
-                if not ident or ident in seen_idents:
-                    continue
-                seen_idents.add(ident)
-                docs_to_check.append(d)
-        except Exception:
-            continue
-
-    print(f"Found {len(docs_to_check)} Internet Archive 1970-2025 German text candidates. Streaming _djvu.txt in RAM...", flush=True)
-    rows = []
-    books_ok = 0
-
-    def _stream_ia(d):
-        ident = d.get("identifier")
-        try:
-            meta_r = requests.get(f"https://archive.org/metadata/{ident}", headers=HEADERS, verify=False, timeout=12)
-            if meta_r.status_code != 200:
-                return []
-            files = meta_r.json().get("files", [])
-            djvu = [f["name"] for f in files if f.get("name", "").endswith("_djvu.txt")]
-            if not djvu:
-                return []
-            txt_url = f"https://archive.org/download/{ident}/{djvu[0]}"
-            if txt_url in already_seen_urls:
-                return []
-            txt_r = requests.get(txt_url, headers=HEADERS, verify=False, timeout=22)
-            if txt_r.status_code != 200:
-                return []
-            norm = normalize_german_text(txt_r.text)
-            if not is_clean_modern_german(norm) or not is_german_passage(norm):
-                return []
-            words = norm.split()
-            if len(words) < 3000:
-                return []
-            max_w = max_chunks_per_book * chunk_words
-            if len(words) > max_w:
-                norm = " ".join(words[:max_w])
-
-            title = normalize_german_text(str(d.get("title") or ident))
-            creator_raw = d.get("creator")
-            author = normalize_german_text(creator_raw[0] if isinstance(creator_raw, list) else str(creator_raw or "o. V."))
-            year = str(d.get("year") or "1995")[:4]
-            if not year.isdigit() or int(year) < 1970:
-                year = "1995"
-            decade = f"{year[:3]}0s"
-            pub_raw = d.get("publisher")
-            publisher = normalize_german_text(pub_raw[0] if isinstance(pub_raw, list) else str(pub_raw or "Archive.org Monograph (DE)"))
-
-            chunks = [ch for ch in chunk_fulltext_words(norm, chunk_words=chunk_words) if is_german_passage(ch)]
-            c_rows = []
-            for idx, ch in enumerate(chunks, start=1):
-                c_rows.append({
-                    "title": f"{title} [Archive-Vollbuch-Abschnitt {idx}/{len(chunks)}]",
-                    "author": author,
-                    "date": year,
-                    "decade": decade,
-                    "publisher": publisher,
-                    "corpus_layer": "archive_org_fulltext_book",
-                    "source_file": txt_url,
-                    "chunk_index": idx,
-                    "total_chunks": len(chunks),
-                    "word_count": len(ch.split()),
-                    "abstract": ch[:420],
-                    "text": f"{title}. {author}. {publisher}. {ch}"
-                })
-            return c_rows
-        except Exception:
-            return []
-
-    with ThreadPoolExecutor(max_workers=workers) as ex:
-        futs = {ex.submit(_stream_ia, d): d for d in docs_to_check}
-        for fut in as_completed(futs):
-            res = fut.result()
-            if res:
-                books_ok += 1
-                rows.extend(res)
-                w_sum = sum(r["word_count"] for r in res)
-                r0 = res[0]
-                print(
-                    f"  + [ARCHIVE.ORG WAVE-3 #{books_ok}] ({r0['date']} | {r0['publisher'][:28]}) "
-                    f"{r0['title'][:48]}... -> {w_sum:,} words ({len(res)} passages)",
-                    flush=True
-                )
-
-    return pd.DataFrame(rows)
+    rem = merged_df.iloc[rows_per_shard:]
+    part_idx = 2
+    while not rem.empty:
+        part_df = rem.iloc[:rows_per_shard]
+        part_path = f"data/dnb_metadata_part{part_idx}.csv"
+        part_df.to_csv(part_path, index=False, encoding="utf-8")
+        mb_p = os.path.getsize(part_path) / (1024 * 1024)
+        print(f"  -> Saved shard {part_idx}: {part_path} ({len(part_df):,} rows, {mb_p:.2f} MB)", flush=True)
+        rem = rem.iloc[rows_per_shard:]
+        part_idx += 1
 
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Wave-3 Deep Full-Book German Corpus Harvester (HTRC Deep GBV + OpenAlex Books/Chapters + Archive.org)"
+        description="Wave-4 Ultra-Deep Full-Book German Corpus Harvester (HTRC + OpenAlex RQ2/RQ3 + Auto-Sharding)"
     )
     parser.add_argument("--oa-books-per-query", type=int, default=10)
     parser.add_argument("--chunk-words", type=int, default=1000)
@@ -798,22 +747,22 @@ def main():
                 for v in isbn_variants(str(r["isbn"])):
                     already_matched_isbns.add(v)
 
+    dnb_prev = load_all_dnb_shards("data/dnb_metadata.csv")
     already_seen_urls = set()
-    if os.path.exists("data/dnb_metadata.csv"):
-        dnb_prev = pd.read_csv("data/dnb_metadata.csv", encoding="utf-8", low_memory=False)
+    if not dnb_prev.empty:
         for u in dnb_prev["source_file"].dropna().unique():
             already_seen_urls.add(str(u).strip())
 
     print(
-        f"Starting Wave-3 Deep Expansion (Skipping {len(already_seen_htids)} existing HTRC books "
+        f"Starting Wave-4 Ultra-Deep Expansion (Skipping {len(already_seen_htids)} existing HTRC books "
         f"and {len(already_seen_urls)} existing URLs)...",
         flush=True
     )
 
     new_dfs = []
 
-    # 1. Deep GBV Publisher Pagination + Direct BKL Subject Harvesting -> HathiTrust HTRC
-    expanded_books_df = expand_gbv_wave3_isbn_catalog(
+    # 1. Wave-4 Ultra-Deep GBV Publisher Pagination + 35 Direct BKL Subject Subcodes -> HathiTrust HTRC
+    expanded_books_df = expand_gbv_wave4_isbn_catalog(
         already_matched_isbns=already_matched_isbns
     )
     matched_ht_books = batch_resolve_hathitrust_volumes(
@@ -823,7 +772,7 @@ def main():
         workers=args.workers
     )
 
-    print(f"\nStreaming full-book page-by-page tokens from HTRC EF-API for {len(matched_ht_books)} NEW Wave-3 printed books...", flush=True)
+    print(f"\nStreaming full-book page-by-page tokens from HTRC EF-API for {len(matched_ht_books)} NEW Wave-4 printed books...", flush=True)
     htrc_passages = []
     htrc_summaries = []
     with ThreadPoolExecutor(max_workers=args.workers) as ex:
@@ -837,7 +786,7 @@ def main():
                 htrc_passages.extend(p_list)
                 htrc_summaries.append(summ)
                 print(
-                    f"  + [WAVE-3 HTRC PRINTED BOOK #{len(htrc_summaries)}] ({summ['date']} | {summ['publisher'][:28]}) "
+                    f"  + [WAVE-4 HTRC PRINTED BOOK #{len(htrc_summaries)}] ({summ['date']} | {summ['publisher'][:28]}) "
                     f"{summ['title'][:45]}... [{summ['htid']}] -> {summ['pages']} pages | "
                     f"{summ['extracted_words']:,} words ({summ['passages']} passages)",
                     flush=True
@@ -848,8 +797,8 @@ def main():
         all_summaries = existing_ht_summaries + htrc_summaries
         pd.DataFrame(all_summaries).to_csv(ht_csv, index=False, encoding="utf-8")
 
-    # 2. Wave-3 OpenAlex Books (Page 2) + Book Chapters (241,939 German OA records)
-    df_oa = harvest_openalex_wave3_books_and_chapters(
+    # 2. Wave-4 OpenAlex Books & Chapters (RQ2/RQ3 + Pages 3/2)
+    df_oa = harvest_openalex_wave4_books_and_chapters(
         already_seen_urls=already_seen_urls,
         books_per_query=args.oa_books_per_query,
         chunk_words=args.chunk_words,
@@ -858,17 +807,6 @@ def main():
     )
     if not df_oa.empty:
         new_dfs.append(df_oa)
-
-    # 3. Wave-3 Broad Internet Archive 1970-2025 German Monograph Sweep
-    df_ia = harvest_archive_org_1970_2025_german_books(
-        already_seen_urls=already_seen_urls,
-        rows_per_query=80,
-        chunk_words=args.chunk_words,
-        max_chunks_per_book=55,
-        workers=6
-    )
-    if not df_ia.empty:
-        new_dfs.append(df_ia)
 
     if not new_dfs:
         print("No additional full-book passages found beyond existing harvest.", flush=True)
@@ -883,31 +821,27 @@ def main():
         full_ht = new_combined
     full_ht.to_csv(args.output, index=False, encoding="utf-8")
 
-    total_new_words = new_combined["word_count"].sum()
+    total_new_words = pd.to_numeric(new_combined["word_count"], errors="coerce").fillna(1000).sum()
     elapsed = time.time() - start_t
     print("\n======================================================================", flush=True)
-    print(f"WAVE-3 DEEP FULL-BOOK EXPANSION COMPLETE in {elapsed:.1f}s!", flush=True)
-    print(f"  - NEW Wave-3 HTRC In-Copyright Printed Books: {len(htrc_summaries)} full books ({len(htrc_passages):,} passages)", flush=True)
+    print(f"WAVE-4 ULTRA-DEEP FULL-BOOK EXPANSION COMPLETE in {elapsed:.1f}s!", flush=True)
+    print(f"  - NEW Wave-4 HTRC In-Copyright Printed Books: {len(htrc_summaries)} full books ({len(htrc_passages):,} passages)", flush=True)
     print(f"  - Cumulative HTRC Printed Books in Corpus: {len(existing_ht_summaries) + len(htrc_summaries)} full books", flush=True)
     print(f"  - NEW OpenAlex German OA Books & Chapters Passages: {len(df_oa):,}", flush=True)
-    print(f"  - NEW Archive.org 1970-2025 German Monograph Passages: {len(df_ia):,}", flush=True)
-    print(f"  - TOTAL NEW PASSAGES ADDED IN WAVE 3: {len(new_combined):,} ({total_new_words:,} German words!)", flush=True)
+    print(f"  - TOTAL NEW PASSAGES ADDED IN WAVE 4: {len(new_combined):,} ({int(total_new_words):,} German words!)", flush=True)
     print("======================================================================", flush=True)
 
     if not args.no_merge:
-        dnb_path = "data/dnb_metadata.csv"
-        if os.path.exists(dnb_path):
-            dnb_df = pd.read_csv(dnb_path, encoding="utf-8", low_memory=False)
-            existing_titles = set(dnb_df["title"].dropna().str.lower().str.strip())
-            new_rows = new_combined[~new_combined["title"].fillna("").str.lower().str.strip().isin(existing_titles)]
-            merged = pd.concat([dnb_df, new_rows], ignore_index=True)
-            merged.to_csv(dnb_path, index=False, encoding="utf-8")
-            total_corpus_words = merged["text"].fillna("").apply(lambda s: len(str(s).split())).sum()
-            print(
-                f"Merged into {dnb_path}: Total Master Corpus = {len(merged):,} documents "
-                f"({total_corpus_words:,} total German words!)",
-                flush=True
-            )
+        existing_titles = set(dnb_prev["title"].dropna().str.lower().str.strip()) if not dnb_prev.empty else set()
+        new_rows = new_combined[~new_combined["title"].fillna("").str.lower().str.strip().isin(existing_titles)]
+        merged = pd.concat([dnb_prev, new_rows], ignore_index=True)
+        save_sharded_dnb_corpus(merged, rows_per_shard=24000)
+        total_est_words = pd.to_numeric(merged.get("word_count"), errors="coerce").fillna(950).sum()
+        print(
+            f"Total Master Corpus Across Shards = {len(merged):,} documents "
+            f"(~{int(total_est_words):,} original German words!)",
+            flush=True
+        )
 
 
 if __name__ == "__main__":

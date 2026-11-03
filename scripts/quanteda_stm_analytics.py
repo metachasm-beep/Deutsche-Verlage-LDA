@@ -71,7 +71,8 @@ GERMAN_COMPOUND_PREFIXES = [
 SECULAR_PUBLISHERS = {
     "suhrkamp", "rowohlt", "fischer", "alibri", "wagenbach", "kiepenheuer", "klett",
     "beck", "campus", "insel", "meiner", "wallstein", "transcript", "springer", "gruyter",
-    "budrich", "oekom", "nomos", "open access book (de)"
+    "budrich", "oekom", "nomos", "alber", "fink", "frommann", "böhlau", "schwabe",
+    "open access book (de)"
 }
 CONFESSIONAL_PUBLISHERS = {
     "herder", "evangelische verlagsanstalt", "gütersloher verlagshaus", "patmos", "kösel",
@@ -289,13 +290,11 @@ def run_quanteda_stm_suite(data_path: str = "data/dnb_metadata.csv"):
     # Reload valid rows and cached tokens
     valid_rows = []
     texts = []
-    with open(data_path, mode="r", encoding="utf-8") as f:
-        reader = csv.DictReader(f)
-        for row in reader:
-            t = row.get("text", "")
-            if t and t.strip():
-                valid_rows.append(row)
-                texts.append(t)
+    for row in lda_pipeline.iter_corpus_rows(data_path):
+        t = row.get("text", "")
+        if t and t.strip():
+            valid_rows.append(row)
+            texts.append(t)
 
     processed_docs = lda_pipeline.preprocess_corpus_batch(texts)
 
@@ -382,12 +381,12 @@ def run_quanteda_stm_suite(data_path: str = "data/dnb_metadata.csv"):
     os.makedirs("data", exist_ok=True)
     pd.DataFrame(kwic_rows).to_csv("data/kwic_concordances.csv", index=False, encoding="utf-8")
 
-    # 4. Export Pre-Tokenized Quanteda + STM CSV for R (scripts/run_quanteda_stm.R)
+    # 4. Export Pre-Tokenized Quanteda + STM CSV for R (scripts/run_quanteda_stm.R) (<65 MB for GitHub)
     r_export_rows = []
     for dv, exp_tokens in zip(docvars, compound_expanded_docs):
         r_export_rows.append({
             **dv,
-            "spacy_compound_tokens": " ".join(exp_tokens[:800])
+            "spacy_compound_tokens": " ".join(exp_tokens[:80])
         })
     pd.DataFrame(r_export_rows).to_csv("data/quanteda_tokens_export.csv", index=False, encoding="utf-8")
 
