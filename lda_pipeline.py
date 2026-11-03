@@ -93,7 +93,21 @@ FRAKTUR_AND_META_NOISE = {
     "spirit", "nature", "reason", "state", "society", "power", "authority", "tradition",
     "reform", "reformation", "enlightenment", "secular", "secularization", "approaches", "toward",
     "ders", "bd", "hrsg", "aufl", "kap", "vgl", "ebd", "ff", "bzw", "usw", "etc", "prof", "dr",
-    "ekk", "testament_ekk", "kommentar_neu"
+    "ekk", "testament_ekk", "kommentar_neu", "thesoz", "stw", "gnd", "ddc", "rvk", "bkl", "swd",
+    "artikeltyp", "produktgruppe", "artikeltyp_produktgruppe", "lesebuch", "studienausgabe",
+    "its", "category", "ethics", "general", "how", "they", "well", "que", "what", "del", "old",
+    "old_testament", "context", "pour", "son", "les", "elle", "une", "des", "dans", "par", "sur",
+    "plus", "aux", "ces", "mais", "pas", "qui", "leur", "avec", "sont", "cette", "tout", "tous",
+    "comme", "sans", "sous", "entre", "vers", "chez", "dont", "leurs", "meme", "etre", "avoir",
+    "fait", "faire", "peut", "deux", "trois", "siècle", "histoire", "église", "dieu", "monde",
+    "when", "where", "who", "whom", "whose", "why", "both", "each", "few", "most", "many", "much",
+    "own", "same", "very", "just", "now", "only", "also", "even", "still", "yet", "already",
+    "always", "never", "often", "however", "therefore", "thus", "within", "without", "against",
+    "among", "around", "across", "towards", "upon", "whether", "while", "since", "until", "Because",
+    "because", "although", "though", "unless", "whereas", "publikation", "publikationen",
+    "veröffentlichung", "veröffentlichungen", "sammelband", "beitrag", "beiträge", "aufsatz",
+    "aufsätze", "monographie", "dissertation", "habilitation", "festschrift", "tagungsband",
+    "handbuch", "lehrbuch", "wörterbuch", "lexikon", "kommentar", "einführung", "überblick"
 }
 _BASE_STOPWORDS = set(nlp.Defaults.stop_words) if nlp is not None else GERMAN_CORE_STOPWORDS
 ALL_STOPWORDS = _BASE_STOPWORDS.union(set(config.DOMAIN_STOPWORDS)).union(FRAKTUR_AND_META_NOISE)

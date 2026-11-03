@@ -1,1379 +1,1379 @@
 {
-  "total_documents": 114624,
-  "secular_documents": 67180,
-  "confessional_documents": 47444,
+  "total_documents": 169756,
+  "secular_documents": 99095,
+  "confessional_documents": 70661,
   "top_german_compound_splits": [
     {
       "decomposition": "moralisch -> moral + isch",
-      "count": 17683
+      "count": 23519
     },
     {
       "decomposition": "gottesdienst -> gott + dienst",
-      "count": 4518
+      "count": 9088
     },
     {
       "decomposition": "weltkrieg -> welt + krieg",
-      "count": 4084
-    },
-    {
-      "decomposition": "selbstbewußtsein -> selbst + bewußtsein",
-      "count": 3507
-    },
-    {
-      "decomposition": "selbstverständnis -> selbst + verständnis",
-      "count": 3492
-    },
-    {
-      "decomposition": "jugendliche -> jugend + liche",
-      "count": 3095
-    },
-    {
-      "decomposition": "kirchengeschichte -> kirche + geschichte",
-      "count": 3051
-    },
-    {
-      "decomposition": "lebensform -> leben + form",
-      "count": 3023
-    },
-    {
-      "decomposition": "wissenschaftslehre -> wissenschaft + lehre",
-      "count": 2947
-    },
-    {
-      "decomposition": "religionsphilosophie -> religion + philosophie",
-      "count": 2722
-    },
-    {
-      "decomposition": "religionskritik -> religion + kritik",
-      "count": 2680
+      "count": 6342
     },
     {
       "decomposition": "religionsunterricht -> religion + unterricht",
-      "count": 2565
+      "count": 6031
+    },
+    {
+      "decomposition": "kirchengeschichte -> kirche + geschichte",
+      "count": 5763
+    },
+    {
+      "decomposition": "religionskritik -> religion + kritik",
+      "count": 5524
+    },
+    {
+      "decomposition": "jugendliche -> jugend + liche",
+      "count": 5022
+    },
+    {
+      "decomposition": "selbstverständnis -> selbst + verständnis",
+      "count": 4903
+    },
+    {
+      "decomposition": "selbstbewußtsein -> selbst + bewußtsein",
+      "count": 4211
+    },
+    {
+      "decomposition": "lebensform -> leben + form",
+      "count": 3861
     },
     {
       "decomposition": "sozialismus -> sozial + ismus",
-      "count": 2508
-    },
-    {
-      "decomposition": "sozialistisch -> sozial + istisch",
-      "count": 2402
+      "count": 3805
     },
     {
       "decomposition": "weltanschauung -> welt + anschauung",
-      "count": 2323
+      "count": 3719
+    },
+    {
+      "decomposition": "religionsphilosophie -> religion + philosophie",
+      "count": 3705
+    },
+    {
+      "decomposition": "sozialistisch -> sozial + istisch",
+      "count": 3250
     },
     {
       "decomposition": "lebenswelt -> leben + welt",
-      "count": 2210
+      "count": 3220
     },
     {
-      "decomposition": "moralität -> moral + ität",
-      "count": 2156
+      "decomposition": "wissenschaftslehre -> wissenschaft + lehre",
+      "count": 3194
     },
     {
       "decomposition": "selbständig -> selbst + ändig",
-      "count": 2117
+      "count": 3106
     },
     {
-      "decomposition": "geisteswissenschaft -> geist + wissenschaft",
-      "count": 1869
-    },
-    {
-      "decomposition": "selbstbestimmung -> selbst + bestimmung",
-      "count": 1860
-    },
-    {
-      "decomposition": "lebensführung -> leben + führung",
-      "count": 1675
-    },
-    {
-      "decomposition": "selbständigkeit -> selbst + ändigkeit",
-      "count": 1539
+      "decomposition": "moralität -> moral + ität",
+      "count": 2787
     },
     {
       "decomposition": "religionsgeschichte -> religion + geschichte",
-      "count": 1479
-    },
-    {
-      "decomposition": "weltgeschichte -> welt + geschichte",
-      "count": 1425
+      "count": 2606
     },
     {
       "decomposition": "religionspädagogik -> religion + pädagogik",
-      "count": 1386
+      "count": 2559
+    },
+    {
+      "decomposition": "selbstbestimmung -> selbst + bestimmung",
+      "count": 2493
+    },
+    {
+      "decomposition": "lebensführung -> leben + führung",
+      "count": 2442
+    },
+    {
+      "decomposition": "geisteswissenschaft -> geist + wissenschaft",
+      "count": 2322
+    },
+    {
+      "decomposition": "kirchenkampf -> kirche + kampf",
+      "count": 2230
     },
     {
       "decomposition": "christenheit -> christ + heit",
-      "count": 1367
+      "count": 2176
+    },
+    {
+      "decomposition": "kirchenpolitisch -> kirche + politisch",
+      "count": 2158
+    },
+    {
+      "decomposition": "selbständigkeit -> selbst + ändigkeit",
+      "count": 2083
     },
     {
       "decomposition": "religionssoziologie -> religion + soziologie",
-      "count": 1264
+      "count": 2024
     },
     {
-      "decomposition": "kulturgeschichte -> kultur + geschichte",
-      "count": 1238
+      "decomposition": "weltgeschichte -> welt + geschichte",
+      "count": 1891
     },
     {
-      "decomposition": "religionsgemeinschaft -> religion + gemeinschaft",
-      "count": 1138
-    },
-    {
-      "decomposition": "lebensweise -> leben + weise",
-      "count": 1064
+      "decomposition": "kirchengemeinde -> kirche + gemeinde",
+      "count": 1882
     }
   ],
   "keyness_secular_vs_confessional": {
     "top_target_keyness": [
       {
-        "feature": "fichte",
-        "g2_keyness": 4294.55,
-        "log_odds_ratio": 1.61,
+        "feature": "benn",
+        "g2_keyness": 5574.78,
+        "log_odds_ratio": 3.952,
         "p_value": 0.0,
-        "n_target": 9183,
-        "n_reference": 1313,
-        "rate_target_per_10k": 6.75,
-        "rate_ref_per_10k": 1.35
-      },
-      {
-        "feature": "kant",
-        "g2_keyness": 3221.39,
-        "log_odds_ratio": 0.721,
-        "p_value": 0.0,
-        "n_target": 21742,
-        "n_reference": 7569,
-        "rate_target_per_10k": 15.98,
-        "rate_ref_per_10k": 7.78
+        "n_target": 5919,
+        "n_reference": 79,
+        "rate_target_per_10k": 2.96,
+        "rate_ref_per_10k": 0.06
       },
       {
         "feature": "moral",
-        "g2_keyness": 3211.55,
-        "log_odds_ratio": 0.553,
+        "g2_keyness": 5556.11,
+        "log_odds_ratio": 0.633,
         "p_value": 0.0,
-        "n_target": 33756,
-        "n_reference": 13903,
-        "rate_target_per_10k": 24.8,
-        "rate_ref_per_10k": 14.28
+        "n_target": 47114,
+        "n_reference": 17504,
+        "rate_target_per_10k": 23.53,
+        "rate_ref_per_10k": 12.5
       },
       {
-        "feature": "hegel",
-        "g2_keyness": 2647.56,
-        "log_odds_ratio": 0.857,
+        "feature": "kant",
+        "g2_keyness": 4282.65,
+        "log_odds_ratio": 0.774,
         "p_value": 0.0,
-        "n_target": 13579,
-        "n_reference": 4126,
-        "rate_target_per_10k": 9.98,
-        "rate_ref_per_10k": 4.24
+        "n_target": 26143,
+        "n_reference": 8432,
+        "rate_target_per_10k": 13.06,
+        "rate_ref_per_10k": 6.02
       },
       {
-        "feature": "benn",
-        "g2_keyness": 2554.91,
-        "log_odds_ratio": 3.737,
+        "feature": "fichte",
+        "g2_keyness": 3926.59,
+        "log_odds_ratio": 1.381,
         "p_value": 0.0,
-        "n_target": 2727,
-        "n_reference": 46,
-        "rate_target_per_10k": 2.0,
-        "rate_ref_per_10k": 0.05
-      },
-      {
-        "feature": "philosophie",
-        "g2_keyness": 2296.47,
-        "log_odds_ratio": 0.421,
-        "p_value": 0.0,
-        "n_target": 38856,
-        "n_reference": 18258,
-        "rate_target_per_10k": 28.55,
-        "rate_ref_per_10k": 18.76
-      },
-      {
-        "feature": "leibniz",
-        "g2_keyness": 1898.8,
-        "log_odds_ratio": 1.487,
-        "p_value": 0.0,
-        "n_target": 4472,
-        "n_reference": 723,
-        "rate_target_per_10k": 3.29,
-        "rate_ref_per_10k": 0.74
-      },
-      {
-        "feature": "transcript",
-        "g2_keyness": 1848.44,
-        "log_odds_ratio": 5.634,
-        "p_value": 0.0,
-        "n_target": 1759,
-        "n_reference": 4,
-        "rate_target_per_10k": 1.29,
-        "rate_ref_per_10k": 0.0
-      },
-      {
-        "feature": "vernunft",
-        "g2_keyness": 1835.88,
-        "log_odds_ratio": 0.508,
-        "p_value": 0.0,
-        "n_target": 22292,
-        "n_reference": 9596,
-        "rate_target_per_10k": 16.38,
-        "rate_ref_per_10k": 9.86
-      },
-      {
-        "feature": "fichtes",
-        "g2_keyness": 1712.09,
-        "log_odds_ratio": 2.259,
-        "p_value": 0.0,
-        "n_target": 2563,
-        "n_reference": 191,
-        "rate_target_per_10k": 1.88,
-        "rate_ref_per_10k": 0.2
+        "n_target": 10320,
+        "n_reference": 1814,
+        "rate_target_per_10k": 5.15,
+        "rate_ref_per_10k": 1.3
       },
       {
         "feature": "handlung",
-        "g2_keyness": 1700.1,
-        "log_odds_ratio": 0.732,
+        "g2_keyness": 3212.42,
+        "log_odds_ratio": 0.843,
         "p_value": 0.0,
-        "n_target": 11184,
-        "n_reference": 3848,
-        "rate_target_per_10k": 8.22,
-        "rate_ref_per_10k": 3.95
+        "n_target": 17155,
+        "n_reference": 5166,
+        "rate_target_per_10k": 8.57,
+        "rate_ref_per_10k": 3.69
       },
       {
-        "feature": "isch",
-        "g2_keyness": 1573.59,
-        "log_odds_ratio": 0.64,
+        "feature": "hegel",
+        "g2_keyness": 2808.66,
+        "log_odds_ratio": 0.8,
         "p_value": 0.0,
-        "n_target": 12924,
-        "n_reference": 4878,
-        "rate_target_per_10k": 9.5,
-        "rate_ref_per_10k": 5.01
+        "n_target": 16261,
+        "n_reference": 5108,
+        "rate_target_per_10k": 8.12,
+        "rate_ref_per_10k": 3.65
       },
       {
-        "feature": "moralisch",
-        "g2_keyness": 1562.74,
-        "log_odds_ratio": 0.639,
+        "feature": "lessing",
+        "g2_keyness": 2725.62,
+        "log_odds_ratio": 1.085,
         "p_value": 0.0,
-        "n_target": 12861,
-        "n_reference": 4858,
-        "rate_target_per_10k": 9.45,
-        "rate_ref_per_10k": 4.99
-      },
-      {
-        "feature": "foucault",
-        "g2_keyness": 1561.76,
-        "log_odds_ratio": 1.883,
-        "p_value": 0.0,
-        "n_target": 2798,
-        "n_reference": 304,
-        "rate_target_per_10k": 2.06,
-        "rate_ref_per_10k": 0.31
-      },
-      {
-        "feature": "natur",
-        "g2_keyness": 1405.99,
-        "log_odds_ratio": 0.419,
-        "p_value": 1.0495630750953613e-307,
-        "n_target": 24020,
-        "n_reference": 11310,
-        "rate_target_per_10k": 17.65,
-        "rate_ref_per_10k": 11.62
-      },
-      {
-        "feature": "thesoz",
-        "g2_keyness": 1314.48,
-        "log_odds_ratio": 3.875,
-        "p_value": 8.063496496289215e-288,
-        "n_target": 1380,
-        "n_reference": 20,
-        "rate_target_per_10k": 1.01,
-        "rate_ref_per_10k": 0.02
+        "n_target": 9959,
+        "n_reference": 2353,
+        "rate_target_per_10k": 4.97,
+        "rate_ref_per_10k": 1.68
       },
       {
         "feature": "mozart",
-        "g2_keyness": 1225.18,
-        "log_odds_ratio": 2.402,
-        "p_value": 2.060505124414786e-268,
-        "n_target": 1737,
-        "n_reference": 112,
-        "rate_target_per_10k": 1.28,
-        "rate_ref_per_10k": 0.12
+        "g2_keyness": 2710.73,
+        "log_odds_ratio": 2.931,
+        "p_value": 0.0,
+        "n_target": 3364,
+        "n_reference": 125,
+        "rate_target_per_10k": 1.68,
+        "rate_ref_per_10k": 0.09
       },
       {
-        "feature": "technik",
-        "g2_keyness": 1167.03,
-        "log_odds_ratio": 1.049,
-        "p_value": 8.920320404889644e-256,
-        "n_target": 4410,
-        "n_reference": 1105,
-        "rate_target_per_10k": 3.24,
-        "rate_ref_per_10k": 1.14
+        "feature": "vernunft",
+        "g2_keyness": 2509.16,
+        "log_odds_ratio": 0.531,
+        "p_value": 0.0,
+        "n_target": 28661,
+        "n_reference": 11788,
+        "rate_target_per_10k": 14.31,
+        "rate_ref_per_10k": 8.42
       },
       {
-        "feature": "ermland",
-        "g2_keyness": 1128.83,
-        "log_odds_ratio": 3.417,
-        "p_value": 1.7868161242819306e-247,
-        "n_target": 1256,
-        "n_reference": 29,
-        "rate_target_per_10k": 0.92,
-        "rate_ref_per_10k": 0.03
+        "feature": "isch",
+        "g2_keyness": 2481.9,
+        "log_odds_ratio": 0.704,
+        "p_value": 0.0,
+        "n_target": 17644,
+        "n_reference": 6101,
+        "rate_target_per_10k": 8.81,
+        "rate_ref_per_10k": 4.36
       },
       {
-        "feature": "gla",
-        "g2_keyness": 1111.94,
-        "log_odds_ratio": 3.433,
-        "p_value": 8.395147576762515e-244,
-        "n_target": 1234,
-        "n_reference": 28,
-        "rate_target_per_10k": 0.91,
-        "rate_ref_per_10k": 0.03
+        "feature": "moralisch",
+        "g2_keyness": 2481.56,
+        "log_odds_ratio": 0.707,
+        "p_value": 0.0,
+        "n_target": 17520,
+        "n_reference": 6040,
+        "rate_target_per_10k": 8.75,
+        "rate_ref_per_10k": 4.31
       },
       {
-        "feature": "wissenschaftslehre",
-        "g2_keyness": 1101.46,
-        "log_odds_ratio": 1.509,
-        "p_value": 1.592588472826699e-241,
-        "n_target": 2545,
-        "n_reference": 402,
-        "rate_target_per_10k": 1.87,
-        "rate_ref_per_10k": 0.41
+        "feature": "philosophie",
+        "g2_keyness": 2246.6,
+        "log_odds_ratio": 0.376,
+        "p_value": 0.0,
+        "n_target": 47174,
+        "n_reference": 22656,
+        "rate_target_per_10k": 23.56,
+        "rate_ref_per_10k": 16.19
       },
       {
-        "feature": "begriff",
-        "g2_keyness": 1071.16,
-        "log_odds_ratio": 0.309,
-        "p_value": 6.1171571828568285e-235,
-        "n_target": 31632,
-        "n_reference": 16612,
-        "rate_target_per_10k": 23.24,
-        "rate_ref_per_10k": 17.07
+        "feature": "natur",
+        "g2_keyness": 2119.77,
+        "log_odds_ratio": 0.449,
+        "p_value": 0.0,
+        "n_target": 32464,
+        "n_reference": 14496,
+        "rate_target_per_10k": 16.21,
+        "rate_ref_per_10k": 10.36
       },
       {
-        "feature": "türkisch",
-        "g2_keyness": 1044.81,
-        "log_odds_ratio": 1.89,
-        "p_value": 3.2748693457611904e-229,
-        "n_target": 1864,
-        "n_reference": 201,
-        "rate_target_per_10k": 1.37,
-        "rate_ref_per_10k": 0.21
+        "feature": "hoffmann",
+        "g2_keyness": 2066.76,
+        "log_odds_ratio": 1.357,
+        "p_value": 0.0,
+        "n_target": 5556,
+        "n_reference": 1000,
+        "rate_target_per_10k": 2.77,
+        "rate_ref_per_10k": 0.71
       },
       {
-        "feature": "frau",
-        "g2_keyness": 958.08,
-        "log_odds_ratio": 0.3,
-        "p_value": 2.3258901181120097e-210,
-        "n_target": 29906,
-        "n_reference": 15850,
-        "rate_target_per_10k": 21.98,
-        "rate_ref_per_10k": 16.29
+        "feature": "leibniz",
+        "g2_keyness": 2024.41,
+        "log_odds_ratio": 1.427,
+        "p_value": 0.0,
+        "n_target": 5101,
+        "n_reference": 856,
+        "rate_target_per_10k": 2.55,
+        "rate_ref_per_10k": 0.61
+      },
+      {
+        "feature": "gottfried",
+        "g2_keyness": 1585.7,
+        "log_odds_ratio": 1.031,
+        "p_value": 0.0,
+        "n_target": 6235,
+        "n_reference": 1554,
+        "rate_target_per_10k": 3.11,
+        "rate_ref_per_10k": 1.11
+      },
+      {
+        "feature": "foucault",
+        "g2_keyness": 1526.69,
+        "log_odds_ratio": 1.766,
+        "p_value": 0.0,
+        "n_target": 2981,
+        "n_reference": 356,
+        "rate_target_per_10k": 1.49,
+        "rate_ref_per_10k": 0.25
+      },
+      {
+        "feature": "bloch",
+        "g2_keyness": 1520.61,
+        "log_odds_ratio": 1.535,
+        "p_value": 0.0,
+        "n_target": 3496,
+        "n_reference": 526,
+        "rate_target_per_10k": 1.75,
+        "rate_ref_per_10k": 0.38
+      },
+      {
+        "feature": "bürgerlich",
+        "g2_keyness": 1372.98,
+        "log_odds_ratio": 0.783,
+        "p_value": 1.5602583753768338e-300,
+        "n_target": 8234,
+        "n_reference": 2632,
+        "rate_target_per_10k": 4.11,
+        "rate_ref_per_10k": 1.88
+      },
+      {
+        "feature": "urkunde",
+        "g2_keyness": 1355.84,
+        "log_odds_ratio": 1.1,
+        "p_value": 8.284933094907533e-297,
+        "n_target": 4854,
+        "n_reference": 1129,
+        "rate_target_per_10k": 2.42,
+        "rate_ref_per_10k": 0.81
       },
       {
         "feature": "theorie",
-        "g2_keyness": 931.95,
-        "log_odds_ratio": 0.39,
-        "p_value": 1.1117791164027602e-204,
-        "n_target": 18027,
-        "n_reference": 8729,
-        "rate_target_per_10k": 13.25,
-        "rate_ref_per_10k": 8.97
+        "g2_keyness": 1322.78,
+        "log_odds_ratio": 0.404,
+        "p_value": 1.2673193322767886e-289,
+        "n_target": 24384,
+        "n_reference": 11382,
+        "rate_target_per_10k": 12.18,
+        "rate_ref_per_10k": 8.13
+      },
+      {
+        "feature": "technik",
+        "g2_keyness": 1274.24,
+        "log_odds_ratio": 0.959,
+        "p_value": 4.4892999640177936e-279,
+        "n_target": 5580,
+        "n_reference": 1495,
+        "rate_target_per_10k": 2.79,
+        "rate_ref_per_10k": 1.07
+      },
+      {
+        "feature": "kunst",
+        "g2_keyness": 1255.64,
+        "log_odds_ratio": 0.471,
+        "p_value": 4.933834788793226e-275,
+        "n_target": 17626,
+        "n_reference": 7692,
+        "rate_target_per_10k": 8.8,
+        "rate_ref_per_10k": 5.5
+      },
+      {
+        "feature": "türkisch",
+        "g2_keyness": 1207.97,
+        "log_odds_ratio": 1.83,
+        "p_value": 1.1328695680756217e-264,
+        "n_target": 2268,
+        "n_reference": 254,
+        "rate_target_per_10k": 1.13,
+        "rate_ref_per_10k": 0.18
+      },
+      {
+        "feature": "ermland",
+        "g2_keyness": 1157.35,
+        "log_odds_ratio": 2.756,
+        "p_value": 1.133720245339664e-253,
+        "n_target": 1497,
+        "n_reference": 66,
+        "rate_target_per_10k": 0.75,
+        "rate_ref_per_10k": 0.05
       }
     ],
     "top_reference_keyness": [
       {
         "feature": "gott",
-        "g2_keyness": -42513.96,
-        "log_odds_ratio": -0.814,
+        "g2_keyness": -58976.84,
+        "log_odds_ratio": -0.79,
         "p_value": 0.0,
-        "n_target": 101883,
-        "n_reference": 162872,
-        "rate_target_per_10k": 74.87,
-        "rate_ref_per_10k": 167.34
-      },
-      {
-        "feature": "kirche",
-        "g2_keyness": -21106.11,
-        "log_odds_ratio": -0.723,
-        "p_value": 0.0,
-        "n_target": 66696,
-        "n_reference": 97817,
-        "rate_target_per_10k": 49.01,
-        "rate_ref_per_10k": 100.5
+        "n_target": 153631,
+        "n_reference": 234481,
+        "rate_target_per_10k": 76.72,
+        "rate_ref_per_10k": 167.51
       },
       {
         "feature": "theologie",
-        "g2_keyness": -20146.78,
-        "log_odds_ratio": -1.021,
+        "g2_keyness": -32789.11,
+        "log_odds_ratio": -1.026,
         "p_value": 0.0,
-        "n_target": 27174,
-        "n_reference": 53764,
-        "rate_target_per_10k": 19.97,
-        "rate_ref_per_10k": 55.24
+        "n_target": 44209,
+        "n_reference": 85887,
+        "rate_target_per_10k": 22.08,
+        "rate_ref_per_10k": 61.36
+      },
+      {
+        "feature": "kirche",
+        "g2_keyness": -18818.3,
+        "log_odds_ratio": -0.509,
+        "p_value": 0.0,
+        "n_target": 136312,
+        "n_reference": 157819,
+        "rate_target_per_10k": 68.07,
+        "rate_ref_per_10k": 112.74
       },
       {
         "feature": "christlich",
-        "g2_keyness": -9187.02,
-        "log_odds_ratio": -0.725,
+        "g2_keyness": -10417.83,
+        "log_odds_ratio": -0.629,
         "p_value": 0.0,
-        "n_target": 28713,
-        "n_reference": 42304,
-        "rate_target_per_10k": 21.1,
-        "rate_ref_per_10k": 43.47
-      },
-      {
-        "feature": "jesus",
-        "g2_keyness": -8459.98,
-        "log_odds_ratio": -1.51,
-        "p_value": 0.0,
-        "n_target": 4007,
-        "n_reference": 12965,
-        "rate_target_per_10k": 2.94,
-        "rate_ref_per_10k": 13.32
-      },
-      {
-        "feature": "bonhoeffer",
-        "g2_keyness": -6929.65,
-        "log_odds_ratio": -2.562,
-        "p_value": 0.0,
-        "n_target": 645,
-        "n_reference": 5980,
-        "rate_target_per_10k": 0.47,
-        "rate_ref_per_10k": 6.14
-      },
-      {
-        "feature": "jesu",
-        "g2_keyness": -6919.06,
-        "log_odds_ratio": -1.541,
-        "p_value": 0.0,
-        "n_target": 3096,
-        "n_reference": 10332,
-        "rate_target_per_10k": 2.28,
-        "rate_ref_per_10k": 10.62
-      },
-      {
-        "feature": "glaube",
-        "g2_keyness": -6752.09,
-        "log_odds_ratio": -0.673,
-        "p_value": 0.0,
-        "n_target": 25180,
-        "n_reference": 35225,
-        "rate_target_per_10k": 18.5,
-        "rate_ref_per_10k": 36.19
+        "n_target": 45986,
+        "n_reference": 60202,
+        "rate_target_per_10k": 22.96,
+        "rate_ref_per_10k": 43.01
       },
       {
         "feature": "israel",
-        "g2_keyness": -5694.73,
-        "log_odds_ratio": -1.463,
+        "g2_keyness": -10190.0,
+        "log_odds_ratio": -1.574,
         "p_value": 0.0,
-        "n_target": 2949,
-        "n_reference": 9100,
+        "n_target": 4344,
+        "n_reference": 14637,
         "rate_target_per_10k": 2.17,
-        "rate_ref_per_10k": 9.35
+        "rate_ref_per_10k": 10.46
       },
       {
-        "feature": "christus",
-        "g2_keyness": -5404.71,
-        "log_odds_ratio": -1.145,
+        "feature": "jesus",
+        "g2_keyness": -9703.71,
+        "log_odds_ratio": -1.238,
         "p_value": 0.0,
-        "n_target": 5403,
-        "n_reference": 12137,
-        "rate_target_per_10k": 3.97,
-        "rate_ref_per_10k": 12.47
+        "n_target": 7998,
+        "n_reference": 19259,
+        "rate_target_per_10k": 3.99,
+        "rate_ref_per_10k": 13.76
+      },
+      {
+        "feature": "glaube",
+        "g2_keyness": -9640.13,
+        "log_odds_ratio": -0.653,
+        "p_value": 0.0,
+        "n_target": 39042,
+        "n_reference": 52335,
+        "rate_target_per_10k": 19.5,
+        "rate_ref_per_10k": 37.39
+      },
+      {
+        "feature": "jesu",
+        "g2_keyness": -8676.41,
+        "log_odds_ratio": -1.329,
+        "p_value": 0.0,
+        "n_target": 5903,
+        "n_reference": 15581,
+        "rate_target_per_10k": 2.95,
+        "rate_ref_per_10k": 11.13
       },
       {
         "feature": "testament",
-        "g2_keyness": -5039.67,
-        "log_odds_ratio": -1.382,
+        "g2_keyness": -8156.75,
+        "log_odds_ratio": -1.368,
         "p_value": 0.0,
-        "n_target": 3049,
-        "n_reference": 8683,
-        "rate_target_per_10k": 2.24,
-        "rate_ref_per_10k": 8.92
+        "n_target": 5134,
+        "n_reference": 14085,
+        "rate_target_per_10k": 2.56,
+        "rate_ref_per_10k": 10.06
       },
       {
-        "feature": "jes",
-        "g2_keyness": -4807.35,
-        "log_odds_ratio": -2.96,
+        "feature": "bonhoeffer",
+        "g2_keyness": -7943.17,
+        "log_odds_ratio": -2.473,
         "p_value": 0.0,
-        "n_target": 268,
-        "n_reference": 3704,
-        "rate_target_per_10k": 0.2,
-        "rate_ref_per_10k": 3.81
-      },
-      {
-        "feature": "theologisch",
-        "g2_keyness": -4785.91,
-        "log_odds_ratio": -0.997,
-        "p_value": 0.0,
-        "n_target": 6834,
-        "n_reference": 13232,
-        "rate_target_per_10k": 5.02,
-        "rate_ref_per_10k": 13.6
-      },
-      {
-        "feature": "jahwe",
-        "g2_keyness": -4717.9,
-        "log_odds_ratio": -2.802,
-        "p_value": 0.0,
-        "n_target": 321,
-        "n_reference": 3786,
-        "rate_target_per_10k": 0.24,
-        "rate_ref_per_10k": 3.89
-      },
-      {
-        "feature": "barth",
-        "g2_keyness": -3955.2,
-        "log_odds_ratio": -1.713,
-        "p_value": 0.0,
-        "n_target": 1305,
-        "n_reference": 5177,
-        "rate_target_per_10k": 0.96,
-        "rate_ref_per_10k": 5.32
-      },
-      {
-        "feature": "sokrat",
-        "g2_keyness": -3923.53,
-        "log_odds_ratio": -1.719,
-        "p_value": 0.0,
-        "n_target": 1282,
-        "n_reference": 5115,
-        "rate_target_per_10k": 0.94,
-        "rate_ref_per_10k": 5.26
-      },
-      {
-        "feature": "chr",
-        "g2_keyness": -3886.82,
-        "log_odds_ratio": -1.551,
-        "p_value": 0.0,
-        "n_target": 1707,
-        "n_reference": 5756,
-        "rate_target_per_10k": 1.25,
-        "rate_ref_per_10k": 5.91
-      },
-      {
-        "feature": "evangelisch",
-        "g2_keyness": -3843.92,
-        "log_odds_ratio": -1.112,
-        "p_value": 0.0,
-        "n_target": 4147,
-        "n_reference": 9013,
-        "rate_target_per_10k": 3.05,
-        "rate_ref_per_10k": 9.26
+        "n_target": 841,
+        "n_reference": 6974,
+        "rate_target_per_10k": 0.42,
+        "rate_ref_per_10k": 4.98
       },
       {
         "feature": "paulus",
-        "g2_keyness": -3672.46,
-        "log_odds_ratio": -1.247,
+        "g2_keyness": -7422.38,
+        "log_odds_ratio": -1.41,
         "p_value": 0.0,
-        "n_target": 2935,
-        "n_reference": 7299,
-        "rate_target_per_10k": 2.16,
-        "rate_ref_per_10k": 7.5
+        "n_target": 4298,
+        "n_reference": 12301,
+        "rate_target_per_10k": 2.15,
+        "rate_ref_per_10k": 8.79
+      },
+      {
+        "feature": "jahwe",
+        "g2_keyness": -7282.7,
+        "log_odds_ratio": -2.594,
+        "p_value": 0.0,
+        "n_target": 656,
+        "n_reference": 6136,
+        "rate_target_per_10k": 0.33,
+        "rate_ref_per_10k": 4.38
+      },
+      {
+        "feature": "christus",
+        "g2_keyness": -6604.38,
+        "log_odds_ratio": -1.017,
+        "p_value": 0.0,
+        "n_target": 9058,
+        "n_reference": 17499,
+        "rate_target_per_10k": 4.52,
+        "rate_ref_per_10k": 12.5
+      },
+      {
+        "feature": "jes",
+        "g2_keyness": -6452.62,
+        "log_odds_ratio": -2.62,
+        "p_value": 0.0,
+        "n_target": 561,
+        "n_reference": 5390,
+        "rate_target_per_10k": 0.28,
+        "rate_ref_per_10k": 3.85
+      },
+      {
+        "feature": "theologisch",
+        "g2_keyness": -5962.53,
+        "log_odds_ratio": -0.886,
+        "p_value": 0.0,
+        "n_target": 11570,
+        "n_reference": 19595,
+        "rate_target_per_10k": 5.78,
+        "rate_ref_per_10k": 14.0
       },
       {
         "feature": "jer",
-        "g2_keyness": -3368.19,
-        "log_odds_ratio": -3.51,
+        "g2_keyness": -5233.87,
+        "log_odds_ratio": -3.202,
         "p_value": 0.0,
-        "n_target": 97,
-        "n_reference": 2331,
-        "rate_target_per_10k": 0.07,
-        "rate_ref_per_10k": 2.39
-      },
-      {
-        "feature": "biblisch",
-        "g2_keyness": -3175.68,
-        "log_odds_ratio": -1.303,
-        "p_value": 0.0,
-        "n_target": 2255,
-        "n_reference": 5933,
-        "rate_target_per_10k": 1.66,
-        "rate_ref_per_10k": 6.1
+        "n_target": 219,
+        "n_reference": 3771,
+        "rate_target_per_10k": 0.11,
+        "rate_ref_per_10k": 2.69
       },
       {
         "feature": "katholisch",
-        "g2_keyness": -3135.5,
-        "log_odds_ratio": -0.744,
+        "g2_keyness": -4573.22,
+        "log_odds_ratio": -0.652,
         "p_value": 0.0,
-        "n_target": 9174,
-        "n_reference": 13802,
-        "rate_target_per_10k": 6.74,
-        "rate_ref_per_10k": 14.18
+        "n_target": 18524,
+        "n_reference": 24840,
+        "rate_target_per_10k": 9.25,
+        "rate_ref_per_10k": 17.75
+      },
+      {
+        "feature": "chr",
+        "g2_keyness": -4202.7,
+        "log_odds_ratio": -1.369,
+        "p_value": 0.0,
+        "n_target": 2640,
+        "n_reference": 7251,
+        "rate_target_per_10k": 1.32,
+        "rate_ref_per_10k": 5.18
+      },
+      {
+        "feature": "jhwh",
+        "g2_keyness": -4171.88,
+        "log_odds_ratio": -3.842,
+        "p_value": 0.0,
+        "n_target": 83,
+        "n_reference": 2720,
+        "rate_target_per_10k": 0.04,
+        "rate_ref_per_10k": 1.94
+      },
+      {
+        "feature": "sokrat",
+        "g2_keyness": -4033.77,
+        "log_odds_ratio": -1.741,
+        "p_value": 0.0,
+        "n_target": 1283,
+        "n_reference": 5115,
+        "rate_target_per_10k": 0.64,
+        "rate_ref_per_10k": 3.65
+      },
+      {
+        "feature": "gen",
+        "g2_keyness": -3873.88,
+        "log_odds_ratio": -1.648,
+        "p_value": 0.0,
+        "n_target": 1445,
+        "n_reference": 5250,
+        "rate_target_per_10k": 0.72,
+        "rate_ref_per_10k": 3.75
+      },
+      {
+        "feature": "text",
+        "g2_keyness": -3814.44,
+        "log_odds_ratio": -0.53,
+        "p_value": 0.0,
+        "n_target": 24972,
+        "n_reference": 29633,
+        "rate_target_per_10k": 12.47,
+        "rate_ref_per_10k": 21.17
+      },
+      {
+        "feature": "biblisch",
+        "g2_keyness": -3659.07,
+        "log_odds_ratio": -1.102,
+        "p_value": 0.0,
+        "n_target": 4086,
+        "n_reference": 8595,
+        "rate_target_per_10k": 2.04,
+        "rate_ref_per_10k": 6.14
+      },
+      {
+        "feature": "konzil",
+        "g2_keyness": -3638.91,
+        "log_odds_ratio": -1.243,
+        "p_value": 0.0,
+        "n_target": 2966,
+        "n_reference": 7181,
+        "rate_target_per_10k": 1.48,
+        "rate_ref_per_10k": 5.13
       },
       {
         "feature": "bibel",
-        "g2_keyness": -3131.79,
-        "log_odds_ratio": -0.934,
+        "g2_keyness": -3636.7,
+        "log_odds_ratio": -0.774,
         "p_value": 0.0,
-        "n_target": 5264,
-        "n_reference": 9574,
-        "rate_target_per_10k": 3.87,
-        "rate_ref_per_10k": 9.84
-      },
-      {
-        "feature": "christologie",
-        "g2_keyness": -2886.29,
-        "log_odds_ratio": -2.409,
-        "p_value": 0.0,
-        "n_target": 330,
-        "n_reference": 2629,
-        "rate_target_per_10k": 0.24,
-        "rate_ref_per_10k": 2.7
-      },
-      {
-        "feature": "christ",
-        "g2_keyness": -2657.48,
-        "log_odds_ratio": -0.739,
-        "p_value": 0.0,
-        "n_target": 7918,
-        "n_reference": 11846,
-        "rate_target_per_10k": 5.82,
-        "rate_ref_per_10k": 12.17
+        "n_target": 9789,
+        "n_reference": 14836,
+        "rate_target_per_10k": 4.89,
+        "rate_ref_per_10k": 10.6
       }
     ]
   },
   "keyness_2000_2025_vs_1970_1999": {
     "top_target_keyness": [
       {
-        "feature": "subject",
-        "g2_keyness": 21739.66,
-        "log_odds_ratio": 3.871,
-        "p_value": 0.0,
-        "n_target": 15295,
-        "n_reference": 403,
-        "rate_target_per_10k": 14.84,
-        "rate_ref_per_10k": 0.31
-      },
-      {
-        "feature": "heading",
-        "g2_keyness": 16102.67,
-        "log_odds_ratio": 4.75,
-        "p_value": 0.0,
-        "n_target": 10541,
-        "n_reference": 115,
-        "rate_target_per_10k": 10.23,
-        "rate_ref_per_10k": 0.09
-      },
-      {
-        "feature": "bisac",
-        "g2_keyness": 16068.77,
-        "log_odds_ratio": 4.748,
-        "p_value": 0.0,
-        "n_target": 10520,
-        "n_reference": 115,
-        "rate_target_per_10k": 10.21,
-        "rate_ref_per_10k": 0.09
-      },
-      {
-        "feature": "vlb",
-        "g2_keyness": 8247.54,
-        "log_odds_ratio": 5.818,
-        "p_value": 0.0,
-        "n_target": 5184,
-        "n_reference": 19,
-        "rate_target_per_10k": 5.03,
-        "rate_ref_per_10k": 0.01
-      },
-      {
-        "feature": "bic",
-        "g2_keyness": 7025.19,
-        "log_odds_ratio": 4.889,
-        "p_value": 0.0,
-        "n_target": 4564,
-        "n_reference": 43,
-        "rate_target_per_10k": 4.43,
-        "rate_ref_per_10k": 0.03
-      },
-      {
-        "feature": "category",
-        "g2_keyness": 6941.66,
-        "log_odds_ratio": 6.085,
-        "p_value": 0.0,
-        "n_target": 4338,
-        "n_reference": 12,
-        "rate_target_per_10k": 4.21,
-        "rate_ref_per_10k": 0.01
-      },
-      {
         "feature": "theologie",
-        "g2_keyness": 6378.41,
-        "log_odds_ratio": 0.565,
+        "g2_keyness": 15705.52,
+        "log_odds_ratio": 0.699,
         "p_value": 0.0,
-        "n_target": 47052,
-        "n_reference": 33886,
-        "rate_target_per_10k": 45.65,
-        "rate_ref_per_10k": 26.0
+        "n_target": 74703,
+        "n_reference": 55393,
+        "rate_target_per_10k": 54.62,
+        "rate_ref_per_10k": 27.23
       },
       {
         "feature": "spiritualität",
-        "g2_keyness": 3785.6,
-        "log_odds_ratio": 1.747,
+        "g2_keyness": 7544.63,
+        "log_odds_ratio": 1.99,
         "p_value": 0.0,
-        "n_target": 5124,
-        "n_reference": 1130,
-        "rate_target_per_10k": 4.97,
-        "rate_ref_per_10k": 0.87
-      },
-      {
-        "feature": "zielgruppe",
-        "g2_keyness": 3211.62,
-        "log_odds_ratio": 4.115,
-        "p_value": 0.0,
-        "n_target": 2202,
-        "n_reference": 45,
-        "rate_target_per_10k": 2.14,
-        "rate_ref_per_10k": 0.03
-      },
-      {
-        "feature": "transcript",
-        "g2_keyness": 2765.26,
-        "log_odds_ratio": 5.454,
-        "p_value": 0.0,
-        "n_target": 1754,
-        "n_reference": 9,
-        "rate_target_per_10k": 1.7,
-        "rate_ref_per_10k": 0.01
-      },
-      {
-        "feature": "jüdisch",
-        "g2_keyness": 2669.88,
-        "log_odds_ratio": 0.77,
-        "p_value": 0.0,
-        "n_target": 11679,
-        "n_reference": 6843,
-        "rate_target_per_10k": 11.33,
-        "rate_ref_per_10k": 5.25
-      },
-      {
-        "feature": "katholische",
-        "g2_keyness": 2186.99,
-        "log_odds_ratio": 2.195,
-        "p_value": 0.0,
-        "n_target": 2310,
-        "n_reference": 325,
-        "rate_target_per_10k": 2.24,
-        "rate_ref_per_10k": 0.25
+        "n_target": 8040,
+        "n_reference": 1636,
+        "rate_target_per_10k": 5.88,
+        "rate_ref_per_10k": 0.8
       },
       {
         "feature": "religionsunterricht",
-        "g2_keyness": 1943.84,
-        "log_odds_ratio": 2.046,
+        "g2_keyness": 5056.17,
+        "log_odds_ratio": 2.095,
         "p_value": 0.0,
-        "n_target": 2205,
-        "n_reference": 360,
-        "rate_target_per_10k": 2.14,
-        "rate_ref_per_10k": 0.28
+        "n_target": 5098,
+        "n_reference": 933,
+        "rate_target_per_10k": 3.73,
+        "rate_ref_per_10k": 0.46
       },
       {
-        "feature": "text",
-        "g2_keyness": 1925.63,
-        "log_odds_ratio": 0.461,
+        "feature": "unterricht",
+        "g2_keyness": 4659.6,
+        "log_odds_ratio": 1.38,
         "p_value": 0.0,
-        "n_target": 20282,
-        "n_reference": 16190,
-        "rate_target_per_10k": 19.68,
-        "rate_ref_per_10k": 12.42
+        "n_target": 7790,
+        "n_reference": 2916,
+        "rate_target_per_10k": 5.7,
+        "rate_ref_per_10k": 1.43
       },
       {
-        "feature": "islam",
-        "g2_keyness": 1902.91,
-        "log_odds_ratio": 1.027,
+        "feature": "religiös",
+        "g2_keyness": 3474.98,
+        "log_odds_ratio": 0.382,
         "p_value": 0.0,
-        "n_target": 5290,
-        "n_reference": 2396,
-        "rate_target_per_10k": 5.13,
-        "rate_ref_per_10k": 1.84
-      },
-      {
-        "feature": "fachpublikum",
-        "g2_keyness": 1890.14,
-        "log_odds_ratio": 5.81,
-        "p_value": 0.0,
-        "n_target": 1186,
-        "n_reference": 4,
-        "rate_target_per_10k": 1.15,
-        "rate_ref_per_10k": 0.0
-      },
-      {
-        "feature": "bewusstsein",
-        "g2_keyness": 1813.38,
-        "log_odds_ratio": 2.027,
-        "p_value": 0.0,
-        "n_target": 2078,
-        "n_reference": 346,
-        "rate_target_per_10k": 2.02,
-        "rate_ref_per_10k": 0.27
+        "n_target": 47668,
+        "n_reference": 48441,
+        "rate_target_per_10k": 34.85,
+        "rate_ref_per_10k": 23.81
       },
       {
         "feature": "prozess",
-        "g2_keyness": 1780.28,
-        "log_odds_ratio": 2.823,
+        "g2_keyness": 3364.16,
+        "log_odds_ratio": 3.093,
         "p_value": 0.0,
-        "n_target": 1510,
-        "n_reference": 113,
-        "rate_target_per_10k": 1.47,
-        "rate_ref_per_10k": 0.09
+        "n_target": 2421,
+        "n_reference": 163,
+        "rate_target_per_10k": 1.77,
+        "rate_ref_per_10k": 0.08
       },
       {
-        "feature": "jhwh",
-        "g2_keyness": 1728.93,
-        "log_odds_ratio": 2.416,
+        "feature": "evangelisch",
+        "g2_keyness": 3347.61,
+        "log_odds_ratio": 0.721,
         "p_value": 0.0,
-        "n_target": 1668,
-        "n_reference": 188,
-        "rate_target_per_10k": 1.62,
-        "rate_ref_per_10k": 0.14
-      },
-      {
-        "feature": "melanchthon",
-        "g2_keyness": 1632.71,
-        "log_odds_ratio": 1.48,
-        "p_value": 0.0,
-        "n_target": 2713,
-        "n_reference": 781,
-        "rate_target_per_10k": 2.63,
-        "rate_ref_per_10k": 0.6
+        "n_target": 15100,
+        "n_reference": 10933,
+        "rate_target_per_10k": 11.04,
+        "rate_ref_per_10k": 5.37
       },
       {
         "feature": "bibel",
-        "g2_keyness": 1531.91,
-        "log_odds_ratio": 0.648,
+        "g2_keyness": 3272.06,
+        "log_odds_ratio": 0.733,
         "p_value": 0.0,
-        "n_target": 8928,
-        "n_reference": 5910,
-        "rate_target_per_10k": 8.66,
-        "rate_ref_per_10k": 4.53
-      },
-      {
-        "feature": "jes",
-        "g2_keyness": 1520.71,
-        "log_odds_ratio": 1.313,
-        "p_value": 0.0,
-        "n_target": 2964,
-        "n_reference": 1008,
-        "rate_target_per_10k": 2.88,
-        "rate_ref_per_10k": 0.77
-      },
-      {
-        "feature": "christentum",
-        "g2_keyness": 1504.96,
-        "log_odds_ratio": 0.573,
-        "p_value": 0.0,
-        "n_target": 10819,
-        "n_reference": 7719,
+        "n_target": 14356,
+        "n_reference": 10269,
         "rate_target_per_10k": 10.5,
-        "rate_ref_per_10k": 5.92
+        "rate_ref_per_10k": 5.05
+      },
+      {
+        "feature": "bewusstsein",
+        "g2_keyness": 3106.7,
+        "log_odds_ratio": 2.239,
+        "p_value": 0.0,
+        "n_target": 2928,
+        "n_reference": 464,
+        "rate_target_per_10k": 2.14,
+        "rate_ref_per_10k": 0.23
+      },
+      {
+        "feature": "religionspädagogik",
+        "g2_keyness": 3011.64,
+        "log_odds_ratio": 2.779,
+        "p_value": 0.0,
+        "n_target": 2343,
+        "n_reference": 216,
+        "rate_target_per_10k": 1.71,
+        "rate_ref_per_10k": 0.11
+      },
+      {
+        "feature": "kirche",
+        "g2_keyness": 2960.97,
+        "log_odds_ratio": 0.203,
+        "p_value": 0.0,
+        "n_target": 132727,
+        "n_reference": 161404,
+        "rate_target_per_10k": 97.04,
+        "rate_ref_per_10k": 79.33
+      },
+      {
+        "feature": "islam",
+        "g2_keyness": 2923.66,
+        "log_odds_ratio": 1.006,
+        "p_value": 0.0,
+        "n_target": 7728,
+        "n_reference": 4205,
+        "rate_target_per_10k": 5.65,
+        "rate_ref_per_10k": 2.07
       },
       {
         "feature": "einfluss",
-        "g2_keyness": 1495.84,
-        "log_odds_ratio": 2.604,
+        "g2_keyness": 2805.71,
+        "log_odds_ratio": 2.772,
         "p_value": 0.0,
-        "n_target": 1352,
-        "n_reference": 126,
-        "rate_target_per_10k": 1.31,
+        "n_target": 2187,
+        "n_reference": 203,
+        "rate_target_per_10k": 1.6,
         "rate_ref_per_10k": 0.1
       },
       {
-        "feature": "theology",
-        "g2_keyness": 1473.42,
-        "log_odds_ratio": 1.954,
+        "feature": "https",
+        "g2_keyness": 2798.49,
+        "log_odds_ratio": 6.828,
         "p_value": 0.0,
-        "n_target": 1755,
-        "n_reference": 314,
-        "rate_target_per_10k": 1.7,
-        "rate_ref_per_10k": 0.24
+        "n_target": 1551,
+        "n_reference": 2,
+        "rate_target_per_10k": 1.13,
+        "rate_ref_per_10k": 0.0
+      },
+      {
+        "feature": "perspektive",
+        "g2_keyness": 2623.72,
+        "log_odds_ratio": 0.767,
+        "p_value": 0.0,
+        "n_target": 10665,
+        "n_reference": 7368,
+        "rate_target_per_10k": 7.8,
+        "rate_ref_per_10k": 3.62
+      },
+      {
+        "feature": "jüdisch",
+        "g2_keyness": 2593.92,
+        "log_odds_ratio": 0.626,
+        "p_value": 0.0,
+        "n_target": 14842,
+        "n_reference": 11814,
+        "rate_target_per_10k": 10.85,
+        "rate_ref_per_10k": 5.81
+      },
+      {
+        "feature": "kind",
+        "g2_keyness": 2590.08,
+        "log_odds_ratio": 0.493,
+        "p_value": 0.0,
+        "n_target": 22456,
+        "n_reference": 20417,
+        "rate_target_per_10k": 16.42,
+        "rate_ref_per_10k": 10.03
+      },
+      {
+        "feature": "open",
+        "g2_keyness": 2549.53,
+        "log_odds_ratio": 3.374,
+        "p_value": 0.0,
+        "n_target": 1736,
+        "n_reference": 88,
+        "rate_target_per_10k": 1.27,
+        "rate_ref_per_10k": 0.04
+      },
+      {
+        "feature": "katholische",
+        "g2_keyness": 2492.97,
+        "log_odds_ratio": 2.276,
+        "p_value": 0.0,
+        "n_target": 2312,
+        "n_reference": 353,
+        "rate_target_per_10k": 1.69,
+        "rate_ref_per_10k": 0.17
+      },
+      {
+        "feature": "www",
+        "g2_keyness": 2406.26,
+        "log_odds_ratio": 4.472,
+        "p_value": 0.0,
+        "n_target": 1441,
+        "n_reference": 24,
+        "rate_target_per_10k": 1.05,
+        "rate_ref_per_10k": 0.01
+      },
+      {
+        "feature": "pädagogik",
+        "g2_keyness": 2162.03,
+        "log_odds_ratio": 1.359,
+        "p_value": 0.0,
+        "n_target": 3690,
+        "n_reference": 1410,
+        "rate_target_per_10k": 2.7,
+        "rate_ref_per_10k": 0.69
+      },
+      {
+        "feature": "diakonie",
+        "g2_keyness": 2152.72,
+        "log_odds_ratio": 2.419,
+        "p_value": 0.0,
+        "n_target": 1884,
+        "n_reference": 249,
+        "rate_target_per_10k": 1.38,
+        "rate_ref_per_10k": 0.12
+      },
+      {
+        "feature": "digital",
+        "g2_keyness": 2123.81,
+        "log_odds_ratio": 2.94,
+        "p_value": 0.0,
+        "n_target": 1583,
+        "n_reference": 124,
+        "rate_target_per_10k": 1.16,
+        "rate_ref_per_10k": 0.06
+      },
+      {
+        "feature": "muslim",
+        "g2_keyness": 2096.12,
+        "log_odds_ratio": 1.382,
+        "p_value": 0.0,
+        "n_target": 3497,
+        "n_reference": 1306,
+        "rate_target_per_10k": 2.56,
+        "rate_ref_per_10k": 0.64
+      },
+      {
+        "feature": "lehrkraft",
+        "g2_keyness": 2057.16,
+        "log_odds_ratio": 3.461,
+        "p_value": 0.0,
+        "n_target": 1380,
+        "n_reference": 64,
+        "rate_target_per_10k": 1.01,
+        "rate_ref_per_10k": 0.03
       }
     ],
     "top_reference_keyness": [
       {
         "feature": "bewußtsein",
-        "g2_keyness": -5551.39,
-        "log_odds_ratio": -1.155,
+        "g2_keyness": -6245.28,
+        "log_odds_ratio": -1.138,
         "p_value": 0.0,
-        "n_target": 4265,
-        "n_reference": 17112,
-        "rate_target_per_10k": 4.14,
-        "rate_ref_per_10k": 13.13
-      },
-      {
-        "feature": "hegel",
-        "g2_keyness": -3162.76,
-        "log_odds_ratio": -0.927,
-        "p_value": 0.0,
-        "n_target": 4223,
-        "n_reference": 13482,
-        "rate_target_per_10k": 4.1,
-        "rate_ref_per_10k": 10.34
-      },
-      {
-        "feature": "bonhoeffer",
-        "g2_keyness": -3158.82,
-        "log_odds_ratio": -1.728,
-        "p_value": 0.0,
-        "n_target": 816,
-        "n_reference": 5809,
-        "rate_target_per_10k": 0.79,
-        "rate_ref_per_10k": 4.46
-      },
-      {
-        "feature": "begriff",
-        "g2_keyness": -3158.32,
-        "log_odds_ratio": -0.536,
-        "p_value": 0.0,
-        "n_target": 15275,
-        "n_reference": 32969,
-        "rate_target_per_10k": 14.82,
-        "rate_ref_per_10k": 25.29
-      },
-      {
-        "feature": "sinn",
-        "g2_keyness": -3105.51,
-        "log_odds_ratio": -0.349,
-        "p_value": 0.0,
-        "n_target": 38738,
-        "n_reference": 69363,
-        "rate_target_per_10k": 37.59,
-        "rate_ref_per_10k": 53.21
+        "n_target": 4718,
+        "n_reference": 21890,
+        "rate_target_per_10k": 3.45,
+        "rate_ref_per_10k": 10.76
       },
       {
         "feature": "satz",
-        "g2_keyness": -2727.91,
-        "log_odds_ratio": -0.812,
+        "g2_keyness": -3179.76,
+        "log_odds_ratio": -0.779,
         "p_value": 0.0,
-        "n_target": 5013,
-        "n_reference": 14273,
-        "rate_target_per_10k": 4.86,
-        "rate_ref_per_10k": 10.95
+        "n_target": 6074,
+        "n_reference": 19692,
+        "rate_target_per_10k": 4.44,
+        "rate_ref_per_10k": 9.68
       },
       {
-        "feature": "absolut",
-        "g2_keyness": -2664.3,
-        "log_odds_ratio": -0.898,
+        "feature": "sinn",
+        "g2_keyness": -2841.01,
+        "log_odds_ratio": -0.291,
         "p_value": 0.0,
-        "n_target": 3837,
-        "n_reference": 11909,
-        "rate_target_per_10k": 3.72,
-        "rate_ref_per_10k": 9.14
+        "n_target": 49080,
+        "n_reference": 97586,
+        "rate_target_per_10k": 35.89,
+        "rate_ref_per_10k": 47.96
       },
       {
         "feature": "einheit",
-        "g2_keyness": -2569.45,
-        "log_odds_ratio": -0.742,
+        "g2_keyness": -2405.13,
+        "log_odds_ratio": -0.64,
         "p_value": 0.0,
-        "n_target": 5855,
-        "n_reference": 15539,
-        "rate_target_per_10k": 5.68,
-        "rate_ref_per_10k": 11.92
+        "n_target": 7267,
+        "n_reference": 20503,
+        "rate_target_per_10k": 5.31,
+        "rate_ref_per_10k": 10.08
+      },
+      {
+        "feature": "begriff",
+        "g2_keyness": -2340.5,
+        "log_odds_ratio": -0.402,
+        "p_value": 0.0,
+        "n_target": 20091,
+        "n_reference": 44651,
+        "rate_target_per_10k": 14.69,
+        "rate_ref_per_10k": 21.95
+      },
+      {
+        "feature": "mozart",
+        "g2_keyness": -2308.12,
+        "log_odds_ratio": -2.506,
+        "p_value": 0.0,
+        "n_target": 181,
+        "n_reference": 3308,
+        "rate_target_per_10k": 0.13,
+        "rate_ref_per_10k": 1.63
+      },
+      {
+        "feature": "lessing",
+        "g2_keyness": -2194.47,
+        "log_odds_ratio": -0.963,
+        "p_value": 0.0,
+        "n_target": 2514,
+        "n_reference": 9798,
+        "rate_target_per_10k": 1.84,
+        "rate_ref_per_10k": 4.82
       },
       {
         "feature": "wahrheit",
-        "g2_keyness": -2485.27,
-        "log_odds_ratio": -0.564,
+        "g2_keyness": -2194.07,
+        "log_odds_ratio": -0.481,
         "p_value": 0.0,
-        "n_target": 10669,
-        "n_reference": 23706,
-        "rate_target_per_10k": 10.35,
-        "rate_ref_per_10k": 18.19
+        "n_target": 12682,
+        "n_reference": 30500,
+        "rate_target_per_10k": 9.27,
+        "rate_ref_per_10k": 14.99
       },
       {
-        "feature": "denken",
-        "g2_keyness": -2082.41,
-        "log_odds_ratio": -0.58,
+        "feature": "absolut",
+        "g2_keyness": -2178.07,
+        "log_odds_ratio": -0.739,
         "p_value": 0.0,
-        "n_target": 8390,
-        "n_reference": 18943,
-        "rate_target_per_10k": 8.14,
-        "rate_ref_per_10k": 14.53
-      },
-      {
-        "feature": "geist",
-        "g2_keyness": -2052.27,
-        "log_odds_ratio": -0.464,
-        "p_value": 0.0,
-        "n_target": 13664,
-        "n_reference": 27470,
-        "rate_target_per_10k": 13.26,
-        "rate_ref_per_10k": 21.07
-      },
-      {
-        "feature": "platon",
-        "g2_keyness": -2034.21,
-        "log_odds_ratio": -0.914,
-        "p_value": 0.0,
-        "n_target": 2808,
-        "n_reference": 8854,
-        "rate_target_per_10k": 2.72,
-        "rate_ref_per_10k": 6.79
-      },
-      {
-        "feature": "natur",
-        "g2_keyness": -1881.28,
-        "log_odds_ratio": -0.48,
-        "p_value": 0.0,
-        "n_target": 11610,
-        "n_reference": 23720,
-        "rate_target_per_10k": 11.26,
-        "rate_ref_per_10k": 18.2
-      },
-      {
-        "feature": "fichte",
-        "g2_keyness": -1856.89,
-        "log_odds_ratio": -0.921,
-        "p_value": 0.0,
-        "n_target": 2513,
-        "n_reference": 7983,
-        "rate_target_per_10k": 2.44,
-        "rate_ref_per_10k": 6.12
+        "n_target": 4715,
+        "n_reference": 14684,
+        "rate_target_per_10k": 3.45,
+        "rate_ref_per_10k": 7.22
       },
       {
         "feature": "wesen",
-        "g2_keyness": -1829.24,
-        "log_odds_ratio": -0.562,
+        "g2_keyness": -2167.46,
+        "log_odds_ratio": -0.544,
         "p_value": 0.0,
-        "n_target": 7927,
-        "n_reference": 17574,
-        "rate_target_per_10k": 7.69,
-        "rate_ref_per_10k": 13.48
+        "n_target": 9503,
+        "n_reference": 24344,
+        "rate_target_per_10k": 6.95,
+        "rate_ref_per_10k": 11.96
+      },
+      {
+        "feature": "hegel",
+        "g2_keyness": -2142.58,
+        "log_odds_ratio": -0.694,
+        "p_value": 0.0,
+        "n_target": 5373,
+        "n_reference": 15996,
+        "rate_target_per_10k": 3.93,
+        "rate_ref_per_10k": 7.86
+      },
+      {
+        "feature": "natur",
+        "g2_keyness": -2060.83,
+        "log_odds_ratio": -0.445,
+        "p_value": 0.0,
+        "n_target": 14143,
+        "n_reference": 32817,
+        "rate_target_per_10k": 10.34,
+        "rate_ref_per_10k": 16.13
+      },
+      {
+        "feature": "geist",
+        "g2_keyness": -1933.7,
+        "log_odds_ratio": -0.392,
+        "p_value": 0.0,
+        "n_target": 17501,
+        "n_reference": 38525,
+        "rate_target_per_10k": 12.8,
+        "rate_ref_per_10k": 18.93
       },
       {
         "feature": "vernunft",
-        "g2_keyness": -1795.14,
-        "log_odds_ratio": -0.494,
+        "g2_keyness": -1808.83,
+        "log_odds_ratio": -0.449,
         "p_value": 0.0,
-        "n_target": 10379,
-        "n_reference": 21509,
-        "rate_target_per_10k": 10.07,
-        "rate_ref_per_10k": 16.5
+        "n_target": 12144,
+        "n_reference": 28305,
+        "rate_target_per_10k": 8.88,
+        "rate_ref_per_10k": 13.91
       },
       {
-        "feature": "mensch",
-        "g2_keyness": -1753.92,
-        "log_odds_ratio": -0.231,
+        "feature": "fichte",
+        "g2_keyness": -1714.77,
+        "log_odds_ratio": -0.842,
         "p_value": 0.0,
-        "n_target": 52920,
-        "n_reference": 84222,
-        "rate_target_per_10k": 51.35,
-        "rate_ref_per_10k": 64.61
+        "n_target": 2726,
+        "n_reference": 9408,
+        "rate_target_per_10k": 1.99,
+        "rate_ref_per_10k": 4.62
       },
       {
-        "feature": "theorie",
-        "g2_keyness": -1743.06,
-        "log_odds_ratio": -0.534,
+        "feature": "tieck",
+        "g2_keyness": -1687.71,
+        "log_odds_ratio": -2.769,
         "p_value": 0.0,
-        "n_target": 8478,
-        "n_reference": 18278,
-        "rate_target_per_10k": 8.23,
-        "rate_ref_per_10k": 14.02
+        "n_target": 94,
+        "n_reference": 2241,
+        "rate_target_per_10k": 0.07,
+        "rate_ref_per_10k": 1.1
       },
       {
-        "feature": "wissen",
-        "g2_keyness": -1728.2,
-        "log_odds_ratio": -0.603,
+        "feature": "marx",
+        "g2_keyness": -1592.67,
+        "log_odds_ratio": -0.93,
         "p_value": 0.0,
-        "n_target": 6377,
-        "n_reference": 14730,
-        "rate_target_per_10k": 6.19,
-        "rate_ref_per_10k": 11.3
+        "n_target": 1989,
+        "n_reference": 7498,
+        "rate_target_per_10k": 1.45,
+        "rate_ref_per_10k": 3.69
+      },
+      {
+        "feature": "platon",
+        "g2_keyness": -1586.67,
+        "log_odds_ratio": -0.775,
+        "p_value": 0.0,
+        "n_target": 3074,
+        "n_reference": 9921,
+        "rate_target_per_10k": 2.25,
+        "rate_ref_per_10k": 4.88
+      },
+      {
+        "feature": "feuerbach",
+        "g2_keyness": -1540.99,
+        "log_odds_ratio": -1.521,
+        "p_value": 0.0,
+        "n_target": 541,
+        "n_reference": 3684,
+        "rate_target_per_10k": 0.4,
+        "rate_ref_per_10k": 1.81
       },
       {
         "feature": "logisch",
-        "g2_keyness": -1716.93,
-        "log_odds_ratio": -1.114,
+        "g2_keyness": -1508.94,
+        "log_odds_ratio": -0.974,
         "p_value": 0.0,
-        "n_target": 1445,
-        "n_reference": 5569,
-        "rate_target_per_10k": 1.4,
-        "rate_ref_per_10k": 4.27
+        "n_target": 1683,
+        "n_reference": 6629,
+        "rate_target_per_10k": 1.23,
+        "rate_ref_per_10k": 3.26
       },
       {
-        "feature": "erkenntnis",
-        "g2_keyness": -1658.73,
-        "log_odds_ratio": -0.556,
-        "p_value": 0.0,
-        "n_target": 7365,
-        "n_reference": 16231,
-        "rate_target_per_10k": 7.15,
-        "rate_ref_per_10k": 12.45
+        "feature": "theorie",
+        "g2_keyness": -1417.14,
+        "log_odds_ratio": -0.422,
+        "p_value": 3.962668609319e-310,
+        "n_target": 10947,
+        "n_reference": 24819,
+        "rate_target_per_10k": 8.0,
+        "rate_ref_per_10k": 12.2
       },
       {
-        "feature": "aristoteles",
-        "g2_keyness": -1587.39,
-        "log_odds_ratio": -0.805,
-        "p_value": 0.0,
-        "n_target": 2977,
-        "n_reference": 8419,
-        "rate_target_per_10k": 2.89,
-        "rate_ref_per_10k": 6.46
+        "feature": "bonhoeffer",
+        "g2_keyness": -1373.1,
+        "log_odds_ratio": -0.955,
+        "p_value": 1.4684435780376605e-300,
+        "n_target": 1606,
+        "n_reference": 6209,
+        "rate_target_per_10k": 1.17,
+        "rate_ref_per_10k": 3.05
+      },
+      {
+        "feature": "denken",
+        "g2_keyness": -1317.96,
+        "log_odds_ratio": -0.427,
+        "p_value": 1.4137863542611575e-288,
+        "n_target": 9882,
+        "n_reference": 22534,
+        "rate_target_per_10k": 7.23,
+        "rate_ref_per_10k": 11.08
+      },
+      {
+        "feature": "prinzip",
+        "g2_keyness": -1296.27,
+        "log_odds_ratio": -0.465,
+        "p_value": 7.296520159917522e-284,
+        "n_target": 8063,
+        "n_reference": 19093,
+        "rate_target_per_10k": 5.9,
+        "rate_ref_per_10k": 9.38
       },
       {
         "feature": "gegenstand",
-        "g2_keyness": -1470.87,
-        "log_odds_ratio": -0.6,
-        "p_value": 0.0,
-        "n_target": 5495,
-        "n_reference": 12652,
-        "rate_target_per_10k": 5.33,
-        "rate_ref_per_10k": 9.71
-      },
-      {
-        "feature": "system",
-        "g2_keyness": -1410.35,
-        "log_odds_ratio": -0.625,
-        "p_value": 1.184178958641807e-308,
-        "n_target": 4789,
-        "n_reference": 11311,
-        "rate_target_per_10k": 4.65,
-        "rate_ref_per_10k": 8.68
-      },
-      {
-        "feature": "logik",
-        "g2_keyness": -1380.35,
-        "log_odds_ratio": -0.816,
-        "p_value": 3.915501877166092e-302,
-        "n_target": 2502,
-        "n_reference": 7158,
-        "rate_target_per_10k": 2.43,
-        "rate_ref_per_10k": 5.49
+        "g2_keyness": -1275.76,
+        "log_odds_ratio": -0.503,
+        "p_value": 2.0963649668918786e-279,
+        "n_target": 6668,
+        "n_reference": 16398,
+        "rate_target_per_10k": 4.88,
+        "rate_ref_per_10k": 8.06
       }
     ]
   },
   "stm_covariate_regressions": [
     {
       "topic_id": 1,
-      "topic_label": "Topic 1 (Traditional / Ecclesiastical: kirche, katholisch, bischof, evangelisch)",
-      "secular_vs_confessional_effect_pct": -2.47,
+      "topic_label": "Topic 1 (Hybrid / Discursive Mediation: kind, frau, mann, leben)",
+      "secular_vs_confessional_effect_pct": 2.89,
       "secular_ci_95": [
-        -2.62,
-        -2.32
+        2.78,
+        3.01
       ],
-      "secular_t_stat": -31.62,
+      "secular_t_stat": 48.77,
       "secular_p_value": 0.0,
       "secular_significant": true,
-      "diachronic_1970_2025_shift_pct": 4.26,
+      "diachronic_1970_2025_shift_pct": -1.56,
       "diachronic_ci_95": [
-        3.93,
-        4.58
+        -1.8,
+        -1.33
       ],
-      "diachronic_t_stat": 25.6,
+      "diachronic_t_stat": -13.08,
       "diachronic_p_value": 0.0,
       "diachronic_significant": true
     },
     {
       "topic_id": 2,
-      "topic_label": "Topic 2 (Traditional / Ecclesiastical: text, jüdisch, bibel, alt)",
-      "secular_vs_confessional_effect_pct": -4.26,
+      "topic_label": "Topic 2 (Traditional / Ecclesiastical: gott, theologie, mensch, glaube)",
+      "secular_vs_confessional_effect_pct": -7.28,
       "secular_ci_95": [
-        -4.39,
-        -4.14
+        -7.39,
+        -7.16
       ],
-      "secular_t_stat": -67.99,
+      "secular_t_stat": -122.3,
       "secular_p_value": 0.0,
       "secular_significant": true,
-      "diachronic_1970_2025_shift_pct": 2.06,
+      "diachronic_1970_2025_shift_pct": 4.66,
       "diachronic_ci_95": [
-        1.8,
-        2.32
+        4.43,
+        4.9
       ],
-      "diachronic_t_stat": 15.44,
+      "diachronic_t_stat": 38.88,
       "diachronic_p_value": 0.0,
       "diachronic_significant": true
     },
     {
       "topic_id": 3,
-      "topic_label": "Topic 3 (Neoliberal / Self-Optimization: sinn, mensch, frage, begriff)",
-      "secular_vs_confessional_effect_pct": 1.77,
+      "topic_label": "Topic 3 (Critical / Secular-Humanist: sinn, philosophie, begriff, mensch)",
+      "secular_vs_confessional_effect_pct": 2.91,
       "secular_ci_95": [
-        1.59,
-        1.96
+        2.73,
+        3.08
       ],
-      "secular_t_stat": 18.78,
+      "secular_t_stat": 32.73,
       "secular_p_value": 0.0,
       "secular_significant": true,
-      "diachronic_1970_2025_shift_pct": -16.55,
+      "diachronic_1970_2025_shift_pct": -20.73,
       "diachronic_ci_95": [
-        -16.95,
-        -16.16
+        -21.09,
+        -20.38
       ],
-      "diachronic_t_stat": -82.21,
+      "diachronic_t_stat": -115.75,
       "diachronic_p_value": 0.0,
       "diachronic_significant": true
     },
     {
       "topic_id": 4,
-      "topic_label": "Topic 4 (Traditional / Ecclesiastical: gott, mensch, glaube, leben)",
-      "secular_vs_confessional_effect_pct": -4.29,
+      "topic_label": "Topic 4 (Traditional / Ecclesiastical: kirche, katholisch, kirchlich, evangelisch)",
+      "secular_vs_confessional_effect_pct": -2.03,
       "secular_ci_95": [
-        -4.41,
-        -4.16
+        -2.15,
+        -1.91
       ],
-      "secular_t_stat": -66.06,
+      "secular_t_stat": -32.54,
       "secular_p_value": 0.0,
       "secular_significant": true,
-      "diachronic_1970_2025_shift_pct": -2.06,
+      "diachronic_1970_2025_shift_pct": 2.24,
       "diachronic_ci_95": [
-        -2.34,
-        -1.79
+        1.99,
+        2.48
       ],
-      "diachronic_t_stat": -14.93,
+      "diachronic_t_stat": 17.83,
       "diachronic_p_value": 0.0,
       "diachronic_significant": true
     },
     {
       "topic_id": 5,
-      "topic_label": "Topic 5 (Traditional / Ecclesiastical: praktische_theologie, theology, philosophy, studies)",
-      "secular_vs_confessional_effect_pct": 0.09,
+      "topic_label": "Topic 5 (Traditional / Ecclesiastical: geschichte, deutsch, theologie, brief)",
+      "secular_vs_confessional_effect_pct": 0.23,
       "secular_ci_95": [
-        0.03,
-        0.16
+        0.15,
+        0.31
       ],
-      "secular_t_stat": 2.71,
-      "secular_p_value": 0.006688,
+      "secular_t_stat": 5.33,
+      "secular_p_value": 0.0,
       "secular_significant": true,
-      "diachronic_1970_2025_shift_pct": 4.18,
+      "diachronic_1970_2025_shift_pct": 3.59,
       "diachronic_ci_95": [
-        4.04,
-        4.33
+        3.42,
+        3.76
       ],
-      "diachronic_t_stat": 56.82,
+      "diachronic_t_stat": 41.28,
       "diachronic_p_value": 0.0,
       "diachronic_significant": true
     },
     {
       "topic_id": 6,
-      "topic_label": "Topic 6 (Traditional / Ecclesiastical: theologie, bisac_subject, subject_heading, christlich)",
-      "secular_vs_confessional_effect_pct": -1.33,
+      "topic_label": "Topic 6 (Hybrid / Discursive Mediation: religiös, frage, perspektive, thema)",
+      "secular_vs_confessional_effect_pct": 0.83,
       "secular_ci_95": [
-        -1.41,
-        -1.25
+        0.7,
+        0.96
       ],
-      "secular_t_stat": -33.26,
+      "secular_t_stat": 12.91,
       "secular_p_value": 0.0,
       "secular_significant": true,
-      "diachronic_1970_2025_shift_pct": 10.57,
+      "diachronic_1970_2025_shift_pct": 14.93,
       "diachronic_ci_95": [
-        10.4,
-        10.74
+        14.68,
+        15.19
       ],
-      "diachronic_t_stat": 123.92,
+      "diachronic_t_stat": 115.15,
       "diachronic_p_value": 0.0,
       "diachronic_significant": true
     },
     {
       "topic_id": 7,
-      "topic_label": "Topic 7 (Critical / Secular-Humanist: philosophie, ethik, kant, vernunft)",
-      "secular_vs_confessional_effect_pct": 2.56,
+      "topic_label": "Topic 7 (Hybrid / Discursive Mediation: luther, viii, johannes, domkapitel)",
+      "secular_vs_confessional_effect_pct": -0.08,
       "secular_ci_95": [
-        2.43,
-        2.69
+        -0.16,
+        -0.01
       ],
-      "secular_t_stat": 39.19,
-      "secular_p_value": 0.0,
+      "secular_t_stat": -2.09,
+      "secular_p_value": 0.036435,
       "secular_significant": true,
-      "diachronic_1970_2025_shift_pct": -9.99,
+      "diachronic_1970_2025_shift_pct": -1.23,
       "diachronic_ci_95": [
-        -10.27,
-        -9.72
+        -1.39,
+        -1.07
       ],
-      "diachronic_t_stat": -71.85,
+      "diachronic_t_stat": -15.48,
       "diachronic_p_value": 0.0,
       "diachronic_significant": true
     },
     {
       "topic_id": 8,
-      "topic_label": "Topic 8 (Critical / Secular-Humanist: sozial, gesellschaft, entwicklung, arbeit)",
-      "secular_vs_confessional_effect_pct": 1.63,
+      "topic_label": "Topic 8 (Critical / Secular-Humanist: ethik, mensch, ethisch, leben)",
+      "secular_vs_confessional_effect_pct": 1.91,
       "secular_ci_95": [
-        1.51,
-        1.75
+        1.82,
+        2.0
       ],
-      "secular_t_stat": 27.19,
+      "secular_t_stat": 40.48,
       "secular_p_value": 0.0,
       "secular_significant": true,
-      "diachronic_1970_2025_shift_pct": 5.06,
+      "diachronic_1970_2025_shift_pct": 0.1,
       "diachronic_ci_95": [
-        4.81,
-        5.31
+        -0.08,
+        0.29
       ],
-      "diachronic_t_stat": 39.66,
-      "diachronic_p_value": 0.0,
-      "diachronic_significant": true
+      "diachronic_t_stat": 1.1,
+      "diachronic_p_value": 0.27076,
+      "diachronic_significant": false
     },
     {
       "topic_id": 9,
-      "topic_label": "Topic 9 (Critical / Secular-Humanist: geschichte, jahrhundert, deutsch, schrift)",
-      "secular_vs_confessional_effect_pct": 0.96,
+      "topic_label": "Topic 9 (Hybrid / Discursive Mediation: bild, leben, kunst, mensch)",
+      "secular_vs_confessional_effect_pct": 1.96,
       "secular_ci_95": [
-        0.85,
-        1.08
+        1.88,
+        2.04
       ],
-      "secular_t_stat": 16.2,
+      "secular_t_stat": 48.6,
       "secular_p_value": 0.0,
       "secular_significant": true,
-      "diachronic_1970_2025_shift_pct": 4.25,
+      "diachronic_1970_2025_shift_pct": -1.32,
       "diachronic_ci_95": [
-        4.01,
-        4.5
+        -1.48,
+        -1.17
       ],
-      "diachronic_t_stat": 33.58,
+      "diachronic_t_stat": -16.3,
       "diachronic_p_value": 0.0,
       "diachronic_significant": true
     },
     {
       "topic_id": 10,
-      "topic_label": "Topic 10 (Hybrid / Discursive Mediation: leben, tod, mensch, alt)",
-      "secular_vs_confessional_effect_pct": 2.25,
+      "topic_label": "Topic 10 (Critical / Secular-Humanist: deutsch, politisch, deutschland, islam)",
+      "secular_vs_confessional_effect_pct": 1.28,
       "secular_ci_95": [
-        2.12,
-        2.38
+        1.2,
+        1.35
       ],
-      "secular_t_stat": 33.41,
+      "secular_t_stat": 32.63,
       "secular_p_value": 0.0,
       "secular_significant": true,
-      "diachronic_1970_2025_shift_pct": -3.42,
+      "diachronic_1970_2025_shift_pct": 1.4,
       "diachronic_ci_95": [
-        -3.71,
-        -3.14
+        1.25,
+        1.56
       ],
-      "diachronic_t_stat": -23.87,
+      "diachronic_t_stat": 17.75,
       "diachronic_p_value": 0.0,
       "diachronic_significant": true
     },
     {
       "topic_id": 11,
-      "topic_label": "Topic 11 (Hybrid / Discursive Mediation: frau, kind, mann, predigt)",
-      "secular_vs_confessional_effect_pct": 1.49,
+      "topic_label": "Topic 11 (Traditional / Ecclesiastical: geschichte, jahrhundert, christentum, religiös)",
+      "secular_vs_confessional_effect_pct": 0.48,
       "secular_ci_95": [
-        1.39,
-        1.58
+        0.42,
+        0.54
       ],
-      "secular_t_stat": 30.72,
+      "secular_t_stat": 15.5,
       "secular_p_value": 0.0,
       "secular_significant": true,
-      "diachronic_1970_2025_shift_pct": 2.45,
+      "diachronic_1970_2025_shift_pct": 1.14,
       "diachronic_ci_95": [
-        2.24,
-        2.65
+        1.01,
+        1.26
       ],
-      "diachronic_t_stat": 23.75,
+      "diachronic_t_stat": 18.12,
       "diachronic_p_value": 0.0,
       "diachronic_significant": true
     },
     {
       "topic_id": 12,
-      "topic_label": "Topic 12 (Critical / Secular-Humanist: politisch, staat, deutschland, politik)",
-      "secular_vs_confessional_effect_pct": 1.6,
+      "topic_label": "Topic 12 (Hybrid / Discursive Mediation: text, alt, name, stelle)",
+      "secular_vs_confessional_effect_pct": -3.11,
       "secular_ci_95": [
-        1.48,
-        1.72
+        -3.22,
+        -3.0
       ],
-      "secular_t_stat": 26.49,
+      "secular_t_stat": -56.33,
       "secular_p_value": 0.0,
       "secular_significant": true,
-      "diachronic_1970_2025_shift_pct": -0.81,
+      "diachronic_1970_2025_shift_pct": -3.22,
       "diachronic_ci_95": [
-        -1.06,
-        -0.56
+        -3.43,
+        -3.0
       ],
-      "diachronic_t_stat": -6.28,
+      "diachronic_t_stat": -28.93,
       "diachronic_p_value": 0.0,
       "diachronic_significant": true
     }
