@@ -1,732 +1,492 @@
 {
   "architecture": "Neural Contextual Document Embeddings (128-dim PV-DM Doc2Vec) + SVD Manifold + Grootendorst (2022) Class-Based TF-IDF (c-TF-IDF)",
-  "total_documents": 169756,
+  "total_documents": 233589,
   "num_clusters": 12,
   "clusters": [
     {
       "bertopic_cluster_id": 1,
-      "document_count": 13799,
-      "corpus_share_pct": 8.1,
+      "document_count": 14961,
+      "corpus_share_pct": 6.4,
       "archetype": {
         "label": "Traditional / Ecclesiastical",
-        "confidence": 90.7,
+        "confidence": 83.0,
         "scores": {
-          "Traditional / Ecclesiastical": 90.7,
-          "Neoliberal / Self-Optimization": 0.0,
-          "Critical / Secular-Humanist": 9.3
+          "Traditional / Ecclesiastical": 83.0,
+          "Neoliberal / Self-Optimization": 17.0,
+          "Critical / Secular-Humanist": 0.0
         }
       },
       "c_tfidf_terms": [
         {
+          "term": "gott",
+          "c_tfidf": 0.01522
+        },
+        {
+          "term": "mensch",
+          "c_tfidf": 0.01
+        },
+        {
           "term": "kirche",
-          "c_tfidf": 0.025
+          "c_tfidf": 0.00824
         },
         {
-          "term": "katholisch",
-          "c_tfidf": 0.01671
+          "term": "schrift",
+          "c_tfidf": 0.00774
         },
         {
-          "term": "deutsch",
-          "c_tfidf": 0.014
+          "term": "wort",
+          "c_tfidf": 0.00674
         },
         {
-          "term": "kirchlich",
-          "c_tfidf": 0.01177
+          "term": "text",
+          "c_tfidf": 0.00668
         },
         {
-          "term": "pfarrer",
-          "c_tfidf": 0.01107
+          "term": "heilig",
+          "c_tfidf": 0.0064
         },
         {
-          "term": "evangelisch",
-          "c_tfidf": 0.01067
+          "term": "luther",
+          "c_tfidf": 0.00604
         },
         {
-          "term": "gemeinde",
-          "c_tfidf": 0.01063
+          "term": "christi",
+          "c_tfidf": 0.00576
         },
         {
-          "term": "bischof",
-          "c_tfidf": 0.01049
+          "term": "geist",
+          "c_tfidf": 0.00555
         },
         {
-          "term": "politisch",
-          "c_tfidf": 0.01042
+          "term": "alt",
+          "c_tfidf": 0.00519
         },
         {
-          "term": "staat",
-          "c_tfidf": 0.00868
+          "term": "brief",
+          "c_tfidf": 0.00506
         },
         {
-          "term": "frage",
-          "c_tfidf": 0.0084
+          "term": "konzil",
+          "c_tfidf": 0.00501
         },
         {
-          "term": "mitglied",
-          "c_tfidf": 0.0075
+          "term": "leben",
+          "c_tfidf": 0.00497
         },
         {
-          "term": "krieg",
-          "c_tfidf": 0.0073
-        },
-        {
-          "term": "deutschland",
-          "c_tfidf": 0.00722
-        },
-        {
-          "term": "frau",
-          "c_tfidf": 0.00684
+          "term": "sinn",
+          "c_tfidf": 0.00481
         }
       ],
       "top_publishers": [
         {
-          "publisher": "Böhlau",
-          "share": 17.1,
-          "count": 2362
+          "publisher": "Schöningh",
+          "share": 12.6,
+          "count": 1881
         },
         {
-          "publisher": "Schöningh",
-          "share": 11.2,
-          "count": 1551
+          "publisher": "Böhlau",
+          "share": 12.0,
+          "count": 1798
         },
         {
           "publisher": "Aschendorff",
-          "share": 7.2,
-          "count": 996
+          "share": 10.7,
+          "count": 1594
         },
         {
-          "publisher": "Kohlhammer",
-          "share": 5.7,
-          "count": 788
+          "publisher": "Gütersloher Verlagshaus",
+          "share": 6.9,
+          "count": 1036
         },
         {
-          "publisher": "Fischer",
-          "share": 4.8,
-          "count": 665
+          "publisher": "Frommann-Holzboog",
+          "share": 6.9,
+          "count": 1028
         }
       ],
       "centroid_representative_docs": [
         {
-          "apa_citation": "Lächele, Rainer (1995). Das evangelische Württemberg zwischen Weltkrieg und Wiederaufbau [HTRC-Vollbuch-Abschnitt 34/75]. Calwer.",
-          "publisher": "Calwer",
-          "cosine_similarity": 0.959
+          "apa_citation": "Raeder, Siegfried (1977). Grammatica theologica: Studien zu Luthers Operationes in Psalmos [HTRC-Vollbuch-Abschnitt 73/74]. Mohr Siebeck.",
+          "publisher": "Mohr Siebeck",
+          "cosine_similarity": 0.986
         },
         {
-          "apa_citation": "Krimmer, Ansgar (1994). Der Katholische Gesellenverein in der Diözese Rottenburg von 1852 bis 1945: ein Beitrag zur Geschichte des Katholizismus in Württemberg [HTRC-Vollbuch-Abschnitt 8/75]. Schöningh.",
-          "publisher": "Schöningh",
-          "cosine_similarity": 0.958
+          "apa_citation": "o. V. (2000). Akten der deutschen Reichsreligionsgespräche im 16. Jahrhundert [HTRC-Vollbuch-Abschnitt 33/66]. Vandenhoeck & Ruprecht.",
+          "publisher": "Vandenhoeck & Ruprecht",
+          "cosine_similarity": 0.984
         },
         {
-          "apa_citation": "Tischner, Wolfgang (2001). Katholische Kirche in der SBZ, DDR 1945 - 1951: die Formierung einer Subgesellschaft im entstehenden sozialistischen Staat [HTRC-Vollbuch-Abschnitt 43/75]. Schöningh.",
-          "publisher": "Schöningh",
-          "cosine_similarity": 0.955
+          "apa_citation": "Gerhard, Johann (2007). Tractatus de legitima scripturae sacrae interpretatione: (1610) ; lateinisch-deutsch [HTRC-Vollbuch-Abschnitt 24/70]. Frommann-Holzboog.",
+          "publisher": "Frommann-Holzboog",
+          "cosine_similarity": 0.982
         }
       ]
     },
     {
       "bertopic_cluster_id": 2,
-      "document_count": 14672,
-      "corpus_share_pct": 8.6,
+      "document_count": 15422,
+      "corpus_share_pct": 6.6,
       "archetype": {
         "label": "Critical / Secular-Humanist",
-        "confidence": 64.3,
+        "confidence": 55.5,
         "scores": {
-          "Traditional / Ecclesiastical": 35.7,
+          "Traditional / Ecclesiastical": 44.5,
           "Neoliberal / Self-Optimization": 0.0,
-          "Critical / Secular-Humanist": 64.3
+          "Critical / Secular-Humanist": 55.5
         }
       },
       "c_tfidf_terms": [
         {
-          "term": "politisch",
-          "c_tfidf": 0.0278
-        },
-        {
-          "term": "staat",
-          "c_tfidf": 0.01917
-        },
-        {
-          "term": "sozial",
-          "c_tfidf": 0.0149
-        },
-        {
-          "term": "kirche",
-          "c_tfidf": 0.01465
-        },
-        {
-          "term": "gesellschaft",
-          "c_tfidf": 0.01353
-        },
-        {
-          "term": "mensch",
-          "c_tfidf": 0.01268
-        },
-        {
-          "term": "religiös",
-          "c_tfidf": 0.01005
-        },
-        {
-          "term": "welt",
-          "c_tfidf": 0.01001
-        },
-        {
           "term": "geschichte",
-          "c_tfidf": 0.00977
+          "c_tfidf": 0.01733
+        },
+        {
+          "term": "philosophie",
+          "c_tfidf": 0.01371
+        },
+        {
+          "term": "theologie",
+          "c_tfidf": 0.01163
         },
         {
           "term": "deutsch",
-          "c_tfidf": 0.00966
+          "c_tfidf": 0.01076
         },
         {
-          "term": "politik",
-          "c_tfidf": 0.00953
-        },
-        {
-          "term": "frage",
-          "c_tfidf": 0.00916
-        },
-        {
-          "term": "krieg",
-          "c_tfidf": 0.00899
+          "term": "wissenschaft",
+          "c_tfidf": 0.01052
         },
         {
           "term": "jahrhundert",
-          "c_tfidf": 0.00887
+          "c_tfidf": 0.0101
         },
         {
-          "term": "katholisch",
-          "c_tfidf": 0.00879
+          "term": "studie",
+          "c_tfidf": 0.00866
+        },
+        {
+          "term": "text",
+          "c_tfidf": 0.00822
+        },
+        {
+          "term": "kirche",
+          "c_tfidf": 0.00778
+        },
+        {
+          "term": "schrift",
+          "c_tfidf": 0.0077
+        },
+        {
+          "term": "politisch",
+          "c_tfidf": 0.00744
+        },
+        {
+          "term": "theorie",
+          "c_tfidf": 0.00723
+        },
+        {
+          "term": "welt",
+          "c_tfidf": 0.00686
+        },
+        {
+          "term": "leben",
+          "c_tfidf": 0.00685
+        },
+        {
+          "term": "historisch",
+          "c_tfidf": 0.00685
         }
       ],
       "top_publishers": [
         {
-          "publisher": "Böhlau",
-          "share": 9.3,
-          "count": 1364
-        },
-        {
-          "publisher": "Suhrkamp",
-          "share": 8.6,
-          "count": 1258
-        },
-        {
           "publisher": "Schöningh",
-          "share": 7.3,
-          "count": 1072
+          "share": 8.9,
+          "count": 1368
         },
         {
-          "publisher": "Fischer",
-          "share": 5.6,
-          "count": 828
+          "publisher": "De Gruyter / Transcript",
+          "share": 7.8,
+          "count": 1207
         },
         {
-          "publisher": "Rowohlt",
-          "share": 5.6,
-          "count": 820
+          "publisher": "Vandenhoeck & Ruprecht",
+          "share": 7.4,
+          "count": 1147
+        },
+        {
+          "publisher": "Böhlau",
+          "share": 5.0,
+          "count": 767
+        },
+        {
+          "publisher": "Mohr Siebeck",
+          "share": 4.7,
+          "count": 728
         }
       ],
       "centroid_representative_docs": [
         {
-          "apa_citation": "Oelmüller, Willi (1983). Diskurs: Politik [HTRC-Vollbuch-Abschnitt 57/75]. Schöningh.",
-          "publisher": "Schöningh",
+          "apa_citation": "Sandvoss, Ernst (1981). Aristoteles [HTRC-Vollbuch-Abschnitt 57/60]. Kohlhammer.",
+          "publisher": "Kohlhammer",
           "cosine_similarity": 0.965
         },
         {
-          "apa_citation": "Battegay, Raymond (1990). Menschliche Autonomie [HTRC-Vollbuch-Abschnitt 23/74]. Vandenhoeck & Ruprecht.",
+          "apa_citation": "Germer, Andrea (1994). Wissenschaft und Leben: Max Webers Antwort auf eine Frage Friedrich Nietzsches [HTRC-Vollbuch-Abschnitt 70/71]. Vandenhoeck & Ruprecht.",
           "publisher": "Vandenhoeck & Ruprecht",
-          "cosine_similarity": 0.964
+          "cosine_similarity": 0.965
         },
         {
-          "apa_citation": "Loth, Wilfried (1991). Deutscher Katholizismus im Umbruch zur Moderne [HTRC-Vollbuch-Abschnitt 73/75]. Kohlhammer.",
-          "publisher": "Kohlhammer",
-          "cosine_similarity": 0.959
+          "apa_citation": "Brauer-Figueiredo, Maria de Fátima Viegas (1983). Antonio Vieiras Sermão do esposo da Mãe de Deus S[anto] José: krit. Text u. Kommentar [HTRC-Vollbuch-Abschnitt 33/33]. Aschendorff.",
+          "publisher": "Aschendorff",
+          "cosine_similarity": 0.958
         }
       ]
     },
     {
       "bertopic_cluster_id": 3,
-      "document_count": 31296,
-      "corpus_share_pct": 18.4,
+      "document_count": 48732,
+      "corpus_share_pct": 20.9,
       "archetype": {
         "label": "Traditional / Ecclesiastical",
-        "confidence": 87.0,
+        "confidence": 86.0,
         "scores": {
-          "Traditional / Ecclesiastical": 87.0,
-          "Neoliberal / Self-Optimization": 13.0,
+          "Traditional / Ecclesiastical": 86.0,
+          "Neoliberal / Self-Optimization": 14.0,
           "Critical / Secular-Humanist": 0.0
         }
       },
       "c_tfidf_terms": [
         {
           "term": "gott",
-          "c_tfidf": 0.02523
+          "c_tfidf": 0.0217
         },
         {
           "term": "mensch",
-          "c_tfidf": 0.02195
+          "c_tfidf": 0.01933
         },
         {
           "term": "leben",
-          "c_tfidf": 0.0157
+          "c_tfidf": 0.01391
         },
         {
           "term": "kirche",
-          "c_tfidf": 0.0125
-        },
-        {
-          "term": "welt",
-          "c_tfidf": 0.01189
+          "c_tfidf": 0.01324
         },
         {
           "term": "frage",
-          "c_tfidf": 0.01163
+          "c_tfidf": 0.01207
+        },
+        {
+          "term": "welt",
+          "c_tfidf": 0.01048
         },
         {
           "term": "sinn",
-          "c_tfidf": 0.00969
-        },
-        {
-          "term": "geschichte",
-          "c_tfidf": 0.00935
-        },
-        {
-          "term": "wort",
-          "c_tfidf": 0.00932
-        },
-        {
-          "term": "geist",
-          "c_tfidf": 0.00924
-        },
-        {
-          "term": "glaube",
-          "c_tfidf": 0.0092
-        },
-        {
-          "term": "christlich",
-          "c_tfidf": 0.00915
+          "c_tfidf": 0.0099
         },
         {
           "term": "begriff",
-          "c_tfidf": 0.00887
+          "c_tfidf": 0.00918
         },
         {
-          "term": "menschlich",
-          "c_tfidf": 0.00858
+          "term": "geschichte",
+          "c_tfidf": 0.00901
         },
         {
           "term": "theologie",
-          "c_tfidf": 0.0085
+          "c_tfidf": 0.00868
+        },
+        {
+          "term": "glaube",
+          "c_tfidf": 0.00849
+        },
+        {
+          "term": "christlich",
+          "c_tfidf": 0.00848
+        },
+        {
+          "term": "wort",
+          "c_tfidf": 0.00846
+        },
+        {
+          "term": "form",
+          "c_tfidf": 0.00794
+        },
+        {
+          "term": "menschlich",
+          "c_tfidf": 0.00787
         }
       ],
       "top_publishers": [
         {
-          "publisher": "Klett-Cotta",
-          "share": 6.2,
-          "count": 1949
+          "publisher": "Schöningh",
+          "share": 8.4,
+          "count": 4114
         },
         {
           "publisher": "Vandenhoeck & Ruprecht",
-          "share": 5.4,
-          "count": 1696
+          "share": 5.7,
+          "count": 2801
         },
         {
-          "publisher": "Böhlau",
-          "share": 5.3,
-          "count": 1644
-        },
-        {
-          "publisher": "Schöningh",
-          "share": 5.2,
-          "count": 1628
+          "publisher": "Kohlhammer",
+          "share": 5.5,
+          "count": 2672
         },
         {
           "publisher": "Suhrkamp",
-          "share": 5.2,
-          "count": 1627
+          "share": 4.9,
+          "count": 2393
+        },
+        {
+          "publisher": "Klett-Cotta",
+          "share": 4.8,
+          "count": 2358
         }
       ],
       "centroid_representative_docs": [
         {
-          "apa_citation": "Delius, Hans-Ulrich (1979). Martin Luther: Studienausgabe. Evangelische Verlagsanstalt.",
-          "publisher": "Evangelische Verlagsanstalt",
+          "apa_citation": "Küng, Hans (1990). Die Hoffnung bewahren: Schriften zur Reform der Kirche [HTRC-Vollbuch-Abschnitt 26/60]. Herder (Benziger).",
+          "publisher": "Herder (Benziger)",
+          "cosine_similarity": 0.99
+        },
+        {
+          "apa_citation": "Grom, Bernhard (1996). Religionspsychologie. Kösel.",
+          "publisher": "Kösel",
+          "cosine_similarity": 0.99
+        },
+        {
+          "apa_citation": "Thomas (2006). Über den Lehrer: = De magistro : quaestiones disputatae de veritate, quaestio XI : summa theologiae, pars I, quaestio 117, articulus 1 : lateinisch - deutsch [HTRC-Vollbuch-Abschnitt 24/58]. Meiner.",
+          "publisher": "Meiner",
           "cosine_similarity": 0.989
-        },
-        {
-          "apa_citation": "Metz, Johann Baptist (1979). Zeit der Orden?: zur Mystik und Politik der Nachfolge. Herder.",
-          "publisher": "Herder",
-          "cosine_similarity": 0.988
-        },
-        {
-          "apa_citation": "Geerlings, Wilhelm (2002). Tradition und Innovation : Denkanstösse für Kirche und Theologie. Schöningh.",
-          "publisher": "Schöningh",
-          "cosine_similarity": 0.987
         }
       ]
     },
     {
       "bertopic_cluster_id": 4,
-      "document_count": 19733,
-      "corpus_share_pct": 11.6,
+      "document_count": 23266,
+      "corpus_share_pct": 10.0,
       "archetype": {
         "label": "Critical / Secular-Humanist",
-        "confidence": 56.4,
+        "confidence": 51.1,
         "scores": {
-          "Traditional / Ecclesiastical": 0.0,
-          "Neoliberal / Self-Optimization": 43.6,
-          "Critical / Secular-Humanist": 56.4
+          "Traditional / Ecclesiastical": 25.3,
+          "Neoliberal / Self-Optimization": 23.6,
+          "Critical / Secular-Humanist": 51.1
         }
       },
       "c_tfidf_terms": [
         {
-          "term": "begriff",
-          "c_tfidf": 0.01626
-        },
-        {
           "term": "mensch",
-          "c_tfidf": 0.01603
+          "c_tfidf": 0.02121
         },
         {
-          "term": "sinn",
-          "c_tfidf": 0.01509
+          "term": "begriff",
+          "c_tfidf": 0.01636
         },
         {
-          "term": "frage",
-          "c_tfidf": 0.01284
+          "term": "gott",
+          "c_tfidf": 0.01629
         },
         {
           "term": "welt",
-          "c_tfidf": 0.01203
+          "c_tfidf": 0.01597
         },
         {
-          "term": "form",
-          "c_tfidf": 0.01167
-        },
-        {
-          "term": "bestimmt",
-          "c_tfidf": 0.01124
-        },
-        {
-          "term": "theorie",
-          "c_tfidf": 0.0109
-        },
-        {
-          "term": "menschlich",
-          "c_tfidf": 0.01055
+          "term": "sinn",
+          "c_tfidf": 0.01524
         },
         {
           "term": "philosophie",
-          "c_tfidf": 0.0104
+          "c_tfidf": 0.01374
         },
         {
           "term": "leben",
-          "c_tfidf": 0.01021
+          "c_tfidf": 0.01291
         },
         {
-          "term": "grund",
-          "c_tfidf": 0.0099
+          "term": "menschlich",
+          "c_tfidf": 0.01179
+        },
+        {
+          "term": "frage",
+          "c_tfidf": 0.01161
+        },
+        {
+          "term": "form",
+          "c_tfidf": 0.01095
+        },
+        {
+          "term": "natur",
+          "c_tfidf": 0.01016
         },
         {
           "term": "kant",
-          "c_tfidf": 0.00946
+          "c_tfidf": 0.00993
+        },
+        {
+          "term": "vernunft",
+          "c_tfidf": 0.00964
         },
         {
           "term": "wissenschaft",
-          "c_tfidf": 0.00909
+          "c_tfidf": 0.00957
         },
         {
-          "term": "gegenstand",
-          "c_tfidf": 0.00908
+          "term": "theorie",
+          "c_tfidf": 0.00928
         }
       ],
       "top_publishers": [
         {
+          "publisher": "Schöningh",
+          "share": 9.6,
+          "count": 2245
+        },
+        {
           "publisher": "Suhrkamp",
-          "share": 11.4,
-          "count": 2254
+          "share": 7.8,
+          "count": 1814
         },
         {
           "publisher": "Klett-Cotta",
-          "share": 8.2,
-          "count": 1613
+          "share": 6.4,
+          "count": 1484
         },
         {
           "publisher": "Nomos / Alber",
-          "share": 7.3,
-          "count": 1436
-        },
-        {
-          "publisher": "Schöningh",
-          "share": 6.9,
-          "count": 1363
+          "share": 5.3,
+          "count": 1234
         },
         {
           "publisher": "Vandenhoeck & Ruprecht",
-          "share": 6.9,
-          "count": 1357
+          "share": 5.0,
+          "count": 1152
         }
       ],
       "centroid_representative_docs": [
         {
-          "apa_citation": "Schüler, Wolfgang (1983). Grundlegungen der Mathematik in transzendentaler Kritik: Frege u. Hilbert [HTRC-Vollbuch-Abschnitt 32/70]. Meiner.",
-          "publisher": "Meiner",
-          "cosine_similarity": 0.979
+          "apa_citation": "Sandkaulen, Birgit (1990). Ausgang vom Unbedingten: über den Anfang in der Philosophie Schellings [HTRC-Vollbuch-Abschnitt 19/73]. Vandenhoeck & Ruprecht.",
+          "publisher": "Vandenhoeck & Ruprecht",
+          "cosine_similarity": 0.972
         },
         {
-          "apa_citation": "Schaper, Eva (1984). Bedingungen der Möglichkeit: \"transcendental arguments\" und transzendentales Denken [HTRC-Vollbuch-Abschnitt 38/75]. Klett-Cotta.",
-          "publisher": "Klett-Cotta",
-          "cosine_similarity": 0.974
+          "apa_citation": "Daiber, Jürgen (2001). Experimentalphysik des Geistes: Novalis und das romantische Experiment [HTRC-Vollbuch-Abschnitt 34/75]. Vandenhoeck & Ruprecht.",
+          "publisher": "Vandenhoeck & Ruprecht",
+          "cosine_similarity": 0.965
         },
         {
-          "apa_citation": "Wittekind, Folkart (1993). Religiosität als Bewusstseinsform: Fichtes Religionsphilosophie 1795 - 1800 [HTRC-Vollbuch-Abschnitt 13/75]. Gütersloher Verlagshaus (Chr. Kaiser).",
-          "publisher": "Gütersloher Verlagshaus (Chr. Kaiser)",
-          "cosine_similarity": 0.971
+          "apa_citation": "Thiede, Werner (2004). Glauben aus eigener Vernunft?: Kants Religionsphilosophie und die Theologie [HTRC-Vollbuch-Abschnitt 6/73]. Vandenhoeck & Ruprecht.",
+          "publisher": "Vandenhoeck & Ruprecht",
+          "cosine_similarity": 0.962
         }
       ]
     },
     {
       "bertopic_cluster_id": 5,
-      "document_count": 10495,
-      "corpus_share_pct": 6.2,
-      "archetype": {
-        "label": "Traditional / Ecclesiastical",
-        "confidence": 55.2,
-        "scores": {
-          "Traditional / Ecclesiastical": 55.2,
-          "Neoliberal / Self-Optimization": 0.0,
-          "Critical / Secular-Humanist": 44.8
-        }
-      },
-      "c_tfidf_terms": [
-        {
-          "term": "sozial",
-          "c_tfidf": 0.01727
-        },
-        {
-          "term": "mensch",
-          "c_tfidf": 0.01345
-        },
-        {
-          "term": "frage",
-          "c_tfidf": 0.01296
-        },
-        {
-          "term": "kirche",
-          "c_tfidf": 0.01279
-        },
-        {
-          "term": "frau",
-          "c_tfidf": 0.01161
-        },
-        {
-          "term": "leben",
-          "c_tfidf": 0.01076
-        },
-        {
-          "term": "religiös",
-          "c_tfidf": 0.0105
-        },
-        {
-          "term": "gesellschaft",
-          "c_tfidf": 0.01038
-        },
-        {
-          "term": "kind",
-          "c_tfidf": 0.01022
-        },
-        {
-          "term": "arbeit",
-          "c_tfidf": 0.00945
-        },
-        {
-          "term": "entwicklung",
-          "c_tfidf": 0.00856
-        },
-        {
-          "term": "form",
-          "c_tfidf": 0.0082
-        },
-        {
-          "term": "gesellschaftlich",
-          "c_tfidf": 0.0079
-        },
-        {
-          "term": "gruppe",
-          "c_tfidf": 0.00775
-        },
-        {
-          "term": "problem",
-          "c_tfidf": 0.00755
-        }
-      ],
-      "top_publishers": [
-        {
-          "publisher": "Suhrkamp",
-          "share": 4.9,
-          "count": 511
-        },
-        {
-          "publisher": "Nomos / Alber",
-          "share": 4.7,
-          "count": 494
-        },
-        {
-          "publisher": "De Gruyter / Transcript",
-          "share": 4.6,
-          "count": 480
-        },
-        {
-          "publisher": "Kohlhammer",
-          "share": 4.4,
-          "count": 460
-        },
-        {
-          "publisher": "Schöningh",
-          "share": 4.2,
-          "count": 441
-        }
-      ],
-      "centroid_representative_docs": [
-        {
-          "apa_citation": "Rehberg, Frank (2002). Frauen in der Medienwirtschaft: Chancen und Hemmnisse für Frauenerwerbstätgkeit in einer prosperierenden Zukunftsbranche [HTRC-Vollbuch-Abschnitt 37/61]. Fischer.",
-          "publisher": "Fischer",
-          "cosine_similarity": 0.934
-        },
-        {
-          "apa_citation": "Franke, Edith (2002). Frauen, Leben, Religion: ein Handbuch empirischer Forschungsmethoden ; eine Veröffentlichung in Kooperation mit dem Frauenstudien- und bildungszentrum der EKD, Gelnhausen [HTRC-Vollbuch-Abschnitt 59/62]. Kohlhammer.",
-          "publisher": "Kohlhammer",
-          "cosine_similarity": 0.934
-        },
-        {
-          "apa_citation": "Simon, Jeannine (2004). Wirkungen von Daily Soaps auf Jugendliche [HTRC-Vollbuch-Abschnitt 2/71]. Fischer.",
-          "publisher": "Fischer",
-          "cosine_similarity": 0.932
-        }
-      ]
-    },
-    {
-      "bertopic_cluster_id": 6,
-      "document_count": 8817,
-      "corpus_share_pct": 5.2,
-      "archetype": {
-        "label": "Traditional / Ecclesiastical",
-        "confidence": 71.4,
-        "scores": {
-          "Traditional / Ecclesiastical": 71.4,
-          "Neoliberal / Self-Optimization": 12.4,
-          "Critical / Secular-Humanist": 16.2
-        }
-      },
-      "c_tfidf_terms": [
-        {
-          "term": "gott",
-          "c_tfidf": 0.03177
-        },
-        {
-          "term": "mensch",
-          "c_tfidf": 0.02546
-        },
-        {
-          "term": "welt",
-          "c_tfidf": 0.01783
-        },
-        {
-          "term": "philosophie",
-          "c_tfidf": 0.01614
-        },
-        {
-          "term": "theologie",
-          "c_tfidf": 0.01589
-        },
-        {
-          "term": "leben",
-          "c_tfidf": 0.0152
-        },
-        {
-          "term": "begriff",
-          "c_tfidf": 0.01253
-        },
-        {
-          "term": "geschichte",
-          "c_tfidf": 0.01247
-        },
-        {
-          "term": "sinn",
-          "c_tfidf": 0.01235
-        },
-        {
-          "term": "frage",
-          "c_tfidf": 0.01209
-        },
-        {
-          "term": "christlich",
-          "c_tfidf": 0.01206
-        },
-        {
-          "term": "geist",
-          "c_tfidf": 0.01161
-        },
-        {
-          "term": "glaube",
-          "c_tfidf": 0.01125
-        },
-        {
-          "term": "menschlich",
-          "c_tfidf": 0.01093
-        },
-        {
-          "term": "religiös",
-          "c_tfidf": 0.0103
-        }
-      ],
-      "top_publishers": [
-        {
-          "publisher": "Klett-Cotta",
-          "share": 6.3,
-          "count": 553
-        },
-        {
-          "publisher": "Suhrkamp",
-          "share": 5.8,
-          "count": 507
-        },
-        {
-          "publisher": "Schöningh",
-          "share": 5.5,
-          "count": 489
-        },
-        {
-          "publisher": "Nomos / Alber",
-          "share": 4.8,
-          "count": 426
-        },
-        {
-          "publisher": "Vandenhoeck & Ruprecht",
-          "share": 4.7,
-          "count": 410
-        }
-      ],
-      "centroid_representative_docs": [
-        {
-          "apa_citation": "Bondeli, Martin (2001). Kantianismus und Fichteanismus in Bern: zur philosophischen Geistesgeschichte der Helvetik sowie zur Entstehung des nachkantischen Idealismus [HTRC-Vollbuch-Abschnitt 35/75]. Schwabe.",
-          "publisher": "Schwabe",
-          "cosine_similarity": 0.91
-        },
-        {
-          "apa_citation": "Rahner, Karl (1979). Rechenschaft des Glaubens: Karl Rahner-Lesebuch [HTRC-Vollbuch-Abschnitt 32/75]. Herder (Benziger).",
-          "publisher": "Herder (Benziger)",
-          "cosine_similarity": 0.908
-        },
-        {
-          "apa_citation": "Wehr, Gerhard (1987). Rudolf Steiner: Leben - Erkenntnis - Kulturimpuls [HTRC-Vollbuch-Abschnitt 17/75]. Kösel.",
-          "publisher": "Kösel",
-          "cosine_similarity": 0.904
-        }
-      ]
-    },
-    {
-      "bertopic_cluster_id": 7,
-      "document_count": 18059,
-      "corpus_share_pct": 10.6,
+      "document_count": 24245,
+      "corpus_share_pct": 10.4,
       "archetype": {
         "label": "Traditional / Ecclesiastical",
         "confidence": 100.0,
@@ -739,795 +499,1035 @@
       "c_tfidf_terms": [
         {
           "term": "mensch",
-          "c_tfidf": 0.01673
+          "c_tfidf": 0.01777
         },
         {
           "term": "leben",
-          "c_tfidf": 0.0166
+          "c_tfidf": 0.0177
         },
         {
           "term": "gott",
-          "c_tfidf": 0.01332
-        },
-        {
-          "term": "mann",
-          "c_tfidf": 0.01181
+          "c_tfidf": 0.0166
         },
         {
           "term": "welt",
-          "c_tfidf": 0.01164
-        },
-        {
-          "term": "frau",
-          "c_tfidf": 0.0113
+          "c_tfidf": 0.01217
         },
         {
           "term": "kind",
-          "c_tfidf": 0.0107
+          "c_tfidf": 0.01164
+        },
+        {
+          "term": "mann",
+          "c_tfidf": 0.01151
+        },
+        {
+          "term": "frau",
+          "c_tfidf": 0.01116
         },
         {
           "term": "alt",
-          "c_tfidf": 0.01064
-        },
-        {
-          "term": "wort",
-          "c_tfidf": 0.00834
-        },
-        {
-          "term": "herr",
-          "c_tfidf": 0.00776
-        },
-        {
-          "term": "liebe",
-          "c_tfidf": 0.00758
+          "c_tfidf": 0.01053
         },
         {
           "term": "bild",
-          "c_tfidf": 0.00751
+          "c_tfidf": 0.00838
         },
         {
-          "term": "haus",
-          "c_tfidf": 0.00723
+          "term": "liebe",
+          "c_tfidf": 0.00818
         },
         {
-          "term": "jung",
-          "c_tfidf": 0.0072
+          "term": "wort",
+          "c_tfidf": 0.00818
         },
         {
           "term": "geschichte",
-          "c_tfidf": 0.00693
+          "c_tfidf": 0.00794
+        },
+        {
+          "term": "herr",
+          "c_tfidf": 0.00781
+        },
+        {
+          "term": "haus",
+          "c_tfidf": 0.00702
+        },
+        {
+          "term": "jung",
+          "c_tfidf": 0.00695
         }
       ],
       "top_publishers": [
         {
           "publisher": "Rowohlt",
-          "share": 9.7,
-          "count": 1746
-        },
-        {
-          "publisher": "Suhrkamp",
-          "share": 8.7,
-          "count": 1576
+          "share": 7.8,
+          "count": 1900
         },
         {
           "publisher": "Fischer",
-          "share": 8.5,
-          "count": 1541
+          "share": 7.6,
+          "count": 1845
+        },
+        {
+          "publisher": "Suhrkamp",
+          "share": 6.7,
+          "count": 1627
         },
         {
           "publisher": "Böhlau",
-          "share": 7.0,
-          "count": 1270
+          "share": 5.6,
+          "count": 1368
         },
         {
-          "publisher": "Klett-Cotta",
-          "share": 6.1,
-          "count": 1109
+          "publisher": "Schöningh",
+          "share": 5.0,
+          "count": 1218
         }
       ],
       "centroid_representative_docs": [
         {
-          "apa_citation": "Koeppen, Wolfgang (1972). Das Treibhaus [HTRC-Vollbuch-Abschnitt 3/48]. Suhrkamp.",
+          "apa_citation": "Wührl, Paul-Wolfgang (1988). E. T. A. Hoffmann, Der goldne Topf: d. Utopie e. ästhet. Existenz [HTRC-Vollbuch-Abschnitt 4/45]. Schöningh.",
+          "publisher": "Schöningh",
+          "cosine_similarity": 0.965
+        },
+        {
+          "apa_citation": "Wysling, Hans (1990). Gottfried Keller: elf Essays zu seinem Werk ; [die Vorträge wurden am Internationalen Gottfried-Keller-Kolloquium gehalten, das am 13./14. Juli 1990 an der Universität Zürich stattfand] [HTRC-Vollbuch-Abschnitt 47/63]. Wilhelm Fink.",
+          "publisher": "Wilhelm Fink",
+          "cosine_similarity": 0.963
+        },
+        {
+          "apa_citation": "Wawrzyn, Lienhard (1976). Der  Automaten-Mensch: E. T. A. Hoffmanns Erzählung vom \"Sandmann\" ; mit Bildern aus Alltag u. Wahnsinn [HTRC-Vollbuch-Abschnitt 19/39]. Wagenbach.",
+          "publisher": "Wagenbach",
+          "cosine_similarity": 0.963
+        }
+      ]
+    },
+    {
+      "bertopic_cluster_id": 6,
+      "document_count": 19189,
+      "corpus_share_pct": 8.2,
+      "archetype": {
+        "label": "Critical / Secular-Humanist",
+        "confidence": 61.8,
+        "scores": {
+          "Traditional / Ecclesiastical": 38.2,
+          "Neoliberal / Self-Optimization": 0.0,
+          "Critical / Secular-Humanist": 61.8
+        }
+      },
+      "c_tfidf_terms": [
+        {
+          "term": "politisch",
+          "c_tfidf": 0.02557
+        },
+        {
+          "term": "staat",
+          "c_tfidf": 0.0183
+        },
+        {
+          "term": "kirche",
+          "c_tfidf": 0.01563
+        },
+        {
+          "term": "sozial",
+          "c_tfidf": 0.01456
+        },
+        {
+          "term": "gesellschaft",
+          "c_tfidf": 0.01313
+        },
+        {
+          "term": "mensch",
+          "c_tfidf": 0.01231
+        },
+        {
+          "term": "religiös",
+          "c_tfidf": 0.01055
+        },
+        {
+          "term": "geschichte",
+          "c_tfidf": 0.01038
+        },
+        {
+          "term": "welt",
+          "c_tfidf": 0.01031
+        },
+        {
+          "term": "jahrhundert",
+          "c_tfidf": 0.00971
+        },
+        {
+          "term": "katholisch",
+          "c_tfidf": 0.00949
+        },
+        {
+          "term": "deutsch",
+          "c_tfidf": 0.00948
+        },
+        {
+          "term": "politik",
+          "c_tfidf": 0.0092
+        },
+        {
+          "term": "volk",
+          "c_tfidf": 0.00888
+        },
+        {
+          "term": "krieg",
+          "c_tfidf": 0.00885
+        }
+      ],
+      "top_publishers": [
+        {
+          "publisher": "Schöningh",
+          "share": 9.7,
+          "count": 1869
+        },
+        {
+          "publisher": "Böhlau",
+          "share": 7.3,
+          "count": 1399
+        },
+        {
           "publisher": "Suhrkamp",
+          "share": 6.6,
+          "count": 1268
+        },
+        {
+          "publisher": "Fischer",
+          "share": 5.4,
+          "count": 1039
+        },
+        {
+          "publisher": "Kohlhammer",
+          "share": 5.2,
+          "count": 999
+        }
+      ],
+      "centroid_representative_docs": [
+        {
+          "apa_citation": "Loth, Wilfried (1991). Deutscher Katholizismus im Umbruch zur Moderne [HTRC-Vollbuch-Abschnitt 73/75]. Kohlhammer.",
+          "publisher": "Kohlhammer",
           "cosine_similarity": 0.97
         },
         {
-          "apa_citation": "Wawrzyn, Lienhard (1976). Der  Automaten-Mensch: E. T. A. Hoffmanns Erzählung vom \"Sandmann\" ; mit Bildern aus Alltag u. Wahnsinn [HTRC-Vollbuch-Abschnitt 14/39]. Wagenbach.",
-          "publisher": "Wagenbach",
-          "cosine_similarity": 0.969
+          "apa_citation": "Leggewie, Claus (1993). Alhambra - der Islam im Westen [HTRC-Vollbuch-Abschnitt 45/51]. Rowohlt.",
+          "publisher": "Rowohlt",
+          "cosine_similarity": 0.967
         },
         {
-          "apa_citation": "Härtling, Peter (2001). Hoffmann oder die vielfältige Liebe: eine Romanze [HTRC-Vollbuch-Abschnitt 42/48]. Kiepenheuer.",
-          "publisher": "Kiepenheuer",
-          "cosine_similarity": 0.969
+          "apa_citation": "Winkler, Heinrich August (1978). Revolution, Staat, Faschismus: zur Revision des historischen Materialismus [HTRC-Vollbuch-Abschnitt 9/46]. Vandenhoeck & Ruprecht.",
+          "publisher": "Vandenhoeck & Ruprecht",
+          "cosine_similarity": 0.961
+        }
+      ]
+    },
+    {
+      "bertopic_cluster_id": 7,
+      "document_count": 12201,
+      "corpus_share_pct": 5.2,
+      "archetype": {
+        "label": "Traditional / Ecclesiastical",
+        "confidence": 100.0,
+        "scores": {
+          "Traditional / Ecclesiastical": 100.0,
+          "Neoliberal / Self-Optimization": 0.0,
+          "Critical / Secular-Humanist": 0.0
+        }
+      },
+      "c_tfidf_terms": [
+        {
+          "term": "gott",
+          "c_tfidf": 0.03451
+        },
+        {
+          "term": "kirche",
+          "c_tfidf": 0.02922
+        },
+        {
+          "term": "theologie",
+          "c_tfidf": 0.02556
+        },
+        {
+          "term": "mensch",
+          "c_tfidf": 0.02029
+        },
+        {
+          "term": "christlich",
+          "c_tfidf": 0.01944
+        },
+        {
+          "term": "glaube",
+          "c_tfidf": 0.01623
+        },
+        {
+          "term": "theologisch",
+          "c_tfidf": 0.01605
+        },
+        {
+          "term": "geschichte",
+          "c_tfidf": 0.0141
+        },
+        {
+          "term": "leben",
+          "c_tfidf": 0.014
+        },
+        {
+          "term": "frage",
+          "c_tfidf": 0.01348
+        },
+        {
+          "term": "welt",
+          "c_tfidf": 0.01215
+        },
+        {
+          "term": "christentum",
+          "c_tfidf": 0.01116
+        },
+        {
+          "term": "jesus",
+          "c_tfidf": 0.01043
+        },
+        {
+          "term": "religiös",
+          "c_tfidf": 0.01024
+        },
+        {
+          "term": "schrift",
+          "c_tfidf": 0.01004
+        }
+      ],
+      "top_publishers": [
+        {
+          "publisher": "Mohr Siebeck",
+          "share": 7.4,
+          "count": 898
+        },
+        {
+          "publisher": "Schöningh",
+          "share": 6.6,
+          "count": 808
+        },
+        {
+          "publisher": "Gütersloher Verlagshaus",
+          "share": 6.3,
+          "count": 772
+        },
+        {
+          "publisher": "Vandenhoeck & Ruprecht",
+          "share": 6.2,
+          "count": 752
+        },
+        {
+          "publisher": "Herder",
+          "share": 5.5,
+          "count": 669
+        }
+      ],
+      "centroid_representative_docs": [
+        {
+          "apa_citation": "Klaiber, Walter (2000). Gerecht vor Gott: Rechtfertigung in der Bibel und heute [HTRC-Vollbuch-Abschnitt 43/63]. Vandenhoeck & Ruprecht.",
+          "publisher": "Vandenhoeck & Ruprecht",
+          "cosine_similarity": 0.931
+        },
+        {
+          "apa_citation": "Dassmann, Ernst (1979). Der Stachel im Fleisch: Paulus in d. frühchristl. Literatur bis Irenäus [HTRC-Vollbuch-Abschnitt 3/75]. Aschendorff.",
+          "publisher": "Aschendorff",
+          "cosine_similarity": 0.924
+        },
+        {
+          "apa_citation": "Burbach, Hartmut (1984). Das ethische Bewußtsein: Studien zur Systematik der theologischen Ethik Schleiermachers [HTRC-Vollbuch-Abschnitt 36/39]. Vandenhoeck & Ruprecht.",
+          "publisher": "Vandenhoeck & Ruprecht",
+          "cosine_similarity": 0.921
         }
       ]
     },
     {
       "bertopic_cluster_id": 8,
-      "document_count": 7286,
-      "corpus_share_pct": 4.3,
+      "document_count": 13952,
+      "corpus_share_pct": 6.0,
       "archetype": {
         "label": "Traditional / Ecclesiastical",
-        "confidence": 90.8,
+        "confidence": 100.0,
         "scores": {
-          "Traditional / Ecclesiastical": 90.8,
+          "Traditional / Ecclesiastical": 100.0,
           "Neoliberal / Self-Optimization": 0.0,
-          "Critical / Secular-Humanist": 9.2
+          "Critical / Secular-Humanist": 0.0
         }
       },
       "c_tfidf_terms": [
         {
-          "term": "geschichte",
-          "c_tfidf": 0.01917
-        },
-        {
-          "term": "gott",
-          "c_tfidf": 0.01903
+          "term": "jahrhundert",
+          "c_tfidf": 0.01715
         },
         {
           "term": "kirche",
-          "c_tfidf": 0.01783
-        },
-        {
-          "term": "mensch",
-          "c_tfidf": 0.01579
-        },
-        {
-          "term": "leben",
-          "c_tfidf": 0.01463
-        },
-        {
-          "term": "theologie",
-          "c_tfidf": 0.0136
-        },
-        {
-          "term": "welt",
-          "c_tfidf": 0.0119
-        },
-        {
-          "term": "christlich",
-          "c_tfidf": 0.01165
-        },
-        {
-          "term": "frage",
-          "c_tfidf": 0.01005
-        },
-        {
-          "term": "jahrhundert",
-          "c_tfidf": 0.01005
-        },
-        {
-          "term": "glaube",
-          "c_tfidf": 0.00956
-        },
-        {
-          "term": "religiös",
-          "c_tfidf": 0.00952
-        },
-        {
-          "term": "christentum",
-          "c_tfidf": 0.00849
-        },
-        {
-          "term": "text",
-          "c_tfidf": 0.00842
-        },
-        {
-          "term": "philosophie",
-          "c_tfidf": 0.00811
-        }
-      ],
-      "top_publishers": [
-        {
-          "publisher": "Gütersloher Verlagshaus",
-          "share": 5.4,
-          "count": 397
-        },
-        {
-          "publisher": "Vandenhoeck & Ruprecht",
-          "share": 5.1,
-          "count": 368
-        },
-        {
-          "publisher": "Böhlau",
-          "share": 4.0,
-          "count": 291
-        },
-        {
-          "publisher": "Suhrkamp",
-          "share": 4.0,
-          "count": 290
-        },
-        {
-          "publisher": "Mohr Siebeck",
-          "share": 3.7,
-          "count": 270
-        }
-      ],
-      "centroid_representative_docs": [
-        {
-          "apa_citation": "Goss-Mayr, Hildegard (2012). Jean Goss - Mystiker und Zeuge der Gewaltfreiheit. Patmos.",
-          "publisher": "Patmos",
-          "cosine_similarity": 0.728
-        },
-        {
-          "apa_citation": "Weiß, Otto (1995). Der Modernismus in Deutschland: ein Beitrag zur Theologiegeschichte [HTRC-Vollbuch-Abschnitt 2/75]. Pustet.",
-          "publisher": "Pustet",
-          "cosine_similarity": 0.716
-        },
-        {
-          "apa_citation": "Schmidinger, Heinrich (1999). Die Bibel in der deutschsprachigen Literatur des 20. Jahrhunderts [HTRC-Vollbuch-Abschnitt 47/75]. Herder (Grünewald).",
-          "publisher": "Herder (Grünewald)",
-          "cosine_similarity": 0.71
-        }
-      ]
-    },
-    {
-      "bertopic_cluster_id": 9,
-      "document_count": 11892,
-      "corpus_share_pct": 7.0,
-      "archetype": {
-        "label": "Traditional / Ecclesiastical",
-        "confidence": 100.0,
-        "scores": {
-          "Traditional / Ecclesiastical": 100.0,
-          "Neoliberal / Self-Optimization": 0.0,
-          "Critical / Secular-Humanist": 0.0
-        }
-      },
-      "c_tfidf_terms": [
-        {
-          "term": "gott",
-          "c_tfidf": 0.02534
-        },
-        {
-          "term": "text",
-          "c_tfidf": 0.02111
-        },
-        {
-          "term": "israel",
-          "c_tfidf": 0.01341
-        },
-        {
-          "term": "alt",
-          "c_tfidf": 0.01153
-        },
-        {
-          "term": "jesus",
-          "c_tfidf": 0.01024
-        },
-        {
-          "term": "volk",
-          "c_tfidf": 0.01006
-        },
-        {
-          "term": "mensch",
-          "c_tfidf": 0.00994
-        },
-        {
-          "term": "wort",
-          "c_tfidf": 0.00987
-        },
-        {
-          "term": "jüdisch",
-          "c_tfidf": 0.00971
-        },
-        {
-          "term": "stelle",
-          "c_tfidf": 0.00836
-        },
-        {
-          "term": "testament",
-          "c_tfidf": 0.00834
-        },
-        {
-          "term": "jahwe",
-          "c_tfidf": 0.00825
-        },
-        {
-          "term": "paulus",
-          "c_tfidf": 0.00815
-        },
-        {
-          "term": "jesu",
-          "c_tfidf": 0.00811
-        },
-        {
-          "term": "geschichte",
-          "c_tfidf": 0.00792
-        }
-      ],
-      "top_publishers": [
-        {
-          "publisher": "Neukirchener",
-          "share": 13.2,
-          "count": 1565
-        },
-        {
-          "publisher": "Mohr Siebeck",
-          "share": 11.1,
-          "count": 1315
-        },
-        {
-          "publisher": "Vandenhoeck & Ruprecht",
-          "share": 10.7,
-          "count": 1267
-        },
-        {
-          "publisher": "Kohlhammer",
-          "share": 6.0,
-          "count": 712
-        },
-        {
-          "publisher": "Aschendorff",
-          "share": 5.0,
-          "count": 590
-        }
-      ],
-      "centroid_representative_docs": [
-        {
-          "apa_citation": "Klauck, Hans-Josef (1978). Allegorie und Allegorese in synoptischen Gleichnistexten [HTRC-Vollbuch-Abschnitt 32/73]. Aschendorff.",
-          "publisher": "Aschendorff",
-          "cosine_similarity": 0.968
-        },
-        {
-          "apa_citation": "Smend, Rudolf (1989). Die Entstehung des Alten Testaments [HTRC-Vollbuch-Abschnitt 27/74]. Kohlhammer.",
-          "publisher": "Kohlhammer",
-          "cosine_similarity": 0.96
-        },
-        {
-          "apa_citation": "Pesch, Rudolf (1995). Evangelisch-Katholischer Kommentar zum Neuen Testament: EKK [HTRC-Vollbuch-Abschnitt 44/60]. Herder (Benziger).",
-          "publisher": "Herder (Benziger)",
-          "cosine_similarity": 0.957
-        }
-      ]
-    },
-    {
-      "bertopic_cluster_id": 10,
-      "document_count": 10608,
-      "corpus_share_pct": 6.2,
-      "archetype": {
-        "label": "Traditional / Ecclesiastical",
-        "confidence": 100.0,
-        "scores": {
-          "Traditional / Ecclesiastical": 100.0,
-          "Neoliberal / Self-Optimization": 0.0,
-          "Critical / Secular-Humanist": 0.0
-        }
-      },
-      "c_tfidf_terms": [
-        {
-          "term": "jahrhundert",
-          "c_tfidf": 0.01677
+          "c_tfidf": 0.01639
         },
         {
           "term": "kloster",
-          "c_tfidf": 0.01559
-        },
-        {
-          "term": "kirche",
-          "c_tfidf": 0.01459
+          "c_tfidf": 0.01619
         },
         {
           "term": "geschichte",
-          "c_tfidf": 0.01078
+          "c_tfidf": 0.01265
         },
         {
           "term": "bischof",
-          "c_tfidf": 0.01015
-        },
-        {
-          "term": "alt",
-          "c_tfidf": 0.00887
+          "c_tfidf": 0.01156
         },
         {
           "term": "stadt",
-          "c_tfidf": 0.00882
+          "c_tfidf": 0.00945
+        },
+        {
+          "term": "alt",
+          "c_tfidf": 0.00913
         },
         {
           "term": "heilig",
-          "c_tfidf": 0.00681
+          "c_tfidf": 0.00669
         },
         {
           "term": "urkunde",
-          "c_tfidf": 0.00666
-        },
-        {
-          "term": "römisch",
-          "c_tfidf": 0.00621
+          "c_tfidf": 0.00655
         },
         {
           "term": "quelle",
-          "c_tfidf": 0.00591
+          "c_tfidf": 0.00624
         },
         {
-          "term": "reich",
-          "c_tfidf": 0.00569
+          "term": "stift",
+          "c_tfidf": 0.00615
         },
         {
           "term": "johannes",
-          "c_tfidf": 0.00546
+          "c_tfidf": 0.00601
         },
         {
-          "term": "mittelalter",
-          "c_tfidf": 0.00545
+          "term": "reich",
+          "c_tfidf": 0.00558
         },
         {
-          "term": "spät",
-          "c_tfidf": 0.00531
+          "term": "deutsch",
+          "c_tfidf": 0.00556
+        },
+        {
+          "term": "geistlich",
+          "c_tfidf": 0.00556
         }
       ],
       "top_publishers": [
         {
           "publisher": "Böhlau",
-          "share": 28.9,
-          "count": 3067
+          "share": 22.9,
+          "count": 3200
+        },
+        {
+          "publisher": "Schöningh",
+          "share": 8.4,
+          "count": 1174
         },
         {
           "publisher": "Aschendorff",
           "share": 8.4,
-          "count": 890
+          "count": 1172
+        },
+        {
+          "publisher": "De Gruyter / Transcript",
+          "share": 4.8,
+          "count": 672
         },
         {
           "publisher": "C.H. Beck",
-          "share": 6.6,
-          "count": 696
-        },
-        {
-          "publisher": "Wilhelm Fink",
-          "share": 5.7,
-          "count": 605
-        },
-        {
-          "publisher": "Klett-Cotta",
-          "share": 4.8,
-          "count": 504
+          "share": 4.5,
+          "count": 624
         }
       ],
       "centroid_representative_docs": [
         {
           "apa_citation": "Pöppel, Diether (1996). Das Hochstift Paderborn: Entstehung und Entwicklung der Landeshoheit [HTRC-Vollbuch-Abschnitt 26/35]. Bonifatius.",
           "publisher": "Bonifatius",
-          "cosine_similarity": 0.974
+          "cosine_similarity": 0.978
         },
         {
           "apa_citation": "Brandt, Hans Jürgen (1984). Die Bischöfe und Erzbischöfe von Paderborn [HTRC-Vollbuch-Abschnitt 9/75]. Bonifatius.",
           "publisher": "Bonifatius",
-          "cosine_similarity": 0.971
+          "cosine_similarity": 0.968
         },
         {
-          "apa_citation": "Barton, Peter F. (1997). Im Karolingerreich 788 - 911: von den Avarenkriegen zum Ungarnsturm [HTRC-Vollbuch-Abschnitt 65/68]. Böhlau.",
+          "apa_citation": "Meyer, Fredy (2002). Sankt Pelagius und Gregor der Grosse: ihre Verehrung im Bistum Konstanz [HTRC-Vollbuch-Abschnitt 23/75]. Nomos / Alber.",
+          "publisher": "Nomos / Alber",
+          "cosine_similarity": 0.968
+        }
+      ]
+    },
+    {
+      "bertopic_cluster_id": 9,
+      "document_count": 17486,
+      "corpus_share_pct": 7.5,
+      "archetype": {
+        "label": "Traditional / Ecclesiastical",
+        "confidence": 89.6,
+        "scores": {
+          "Traditional / Ecclesiastical": 89.6,
+          "Neoliberal / Self-Optimization": 0.0,
+          "Critical / Secular-Humanist": 10.4
+        }
+      },
+      "c_tfidf_terms": [
+        {
+          "term": "kirche",
+          "c_tfidf": 0.02535
+        },
+        {
+          "term": "katholisch",
+          "c_tfidf": 0.01797
+        },
+        {
+          "term": "deutsch",
+          "c_tfidf": 0.01559
+        },
+        {
+          "term": "kirchlich",
+          "c_tfidf": 0.0126
+        },
+        {
+          "term": "politisch",
+          "c_tfidf": 0.01168
+        },
+        {
+          "term": "pfarrer",
+          "c_tfidf": 0.01093
+        },
+        {
+          "term": "evangelisch",
+          "c_tfidf": 0.01092
+        },
+        {
+          "term": "bischof",
+          "c_tfidf": 0.01086
+        },
+        {
+          "term": "staat",
+          "c_tfidf": 0.00997
+        },
+        {
+          "term": "gemeinde",
+          "c_tfidf": 0.00986
+        },
+        {
+          "term": "frage",
+          "c_tfidf": 0.00863
+        },
+        {
+          "term": "deutschland",
+          "c_tfidf": 0.00831
+        },
+        {
+          "term": "mitglied",
+          "c_tfidf": 0.00763
+        },
+        {
+          "term": "krieg",
+          "c_tfidf": 0.00732
+        },
+        {
+          "term": "geistlich",
+          "c_tfidf": 0.0072
+        }
+      ],
+      "top_publishers": [
+        {
+          "publisher": "Schöningh",
+          "share": 16.1,
+          "count": 2807
+        },
+        {
           "publisher": "Böhlau",
-          "cosine_similarity": 0.969
+          "share": 12.1,
+          "count": 2117
+        },
+        {
+          "publisher": "Kohlhammer",
+          "share": 5.7,
+          "count": 991
+        },
+        {
+          "publisher": "Aschendorff",
+          "share": 5.6,
+          "count": 971
+        },
+        {
+          "publisher": "Vandenhoeck & Ruprecht",
+          "share": 4.3,
+          "count": 748
+        }
+      ],
+      "centroid_representative_docs": [
+        {
+          "apa_citation": "Kremer, Hans-Jürgen (1983). Mit Gott für Wahrheit, Freiheit und Recht: Quellen zur Organisation u. Politik d. Zentrumspartei u.d. polit. Katholizismus in Baden 1888 - 1914 [HTRC-Vollbuch-Abschnitt 6/75]. Kohlhammer.",
+          "publisher": "Kohlhammer",
+          "cosine_similarity": 0.963
+        },
+        {
+          "apa_citation": "Röhm, Eberhard (1985). Sterben für den Frieden: Spurensicherung: Hermann Stöhr (1898 - 1940) und die ökumenische Friedensbewegung [HTRC-Vollbuch-Abschnitt 26/65]. Calwer.",
+          "publisher": "Calwer",
+          "cosine_similarity": 0.957
+        },
+        {
+          "apa_citation": "Röhm, Eberhard (1983). Evangelische Kirche zwischen Kreuz und Hakenkreuz: Bilder und Texte einer Ausstellung ; [Dokumentation und Kommentar zu einer im Auftrag der Evangelischen Kirche in Deutschland für den Reichstag in Berlin erstellten Ausstellung] [HTRC-Vollbuch-Abschnitt 8/38]. Calwer.",
+          "publisher": "Calwer",
+          "cosine_similarity": 0.956
+        }
+      ]
+    },
+    {
+      "bertopic_cluster_id": 10,
+      "document_count": 11104,
+      "corpus_share_pct": 4.8,
+      "archetype": {
+        "label": "Traditional / Ecclesiastical",
+        "confidence": 87.9,
+        "scores": {
+          "Traditional / Ecclesiastical": 87.9,
+          "Neoliberal / Self-Optimization": 0.0,
+          "Critical / Secular-Humanist": 12.1
+        }
+      },
+      "c_tfidf_terms": [
+        {
+          "term": "gott",
+          "c_tfidf": 0.01944
+        },
+        {
+          "term": "geschichte",
+          "c_tfidf": 0.01858
+        },
+        {
+          "term": "mensch",
+          "c_tfidf": 0.01674
+        },
+        {
+          "term": "kirche",
+          "c_tfidf": 0.01445
+        },
+        {
+          "term": "leben",
+          "c_tfidf": 0.01438
+        },
+        {
+          "term": "welt",
+          "c_tfidf": 0.01287
+        },
+        {
+          "term": "theologie",
+          "c_tfidf": 0.01254
+        },
+        {
+          "term": "philosophie",
+          "c_tfidf": 0.00998
+        },
+        {
+          "term": "frage",
+          "c_tfidf": 0.00989
+        },
+        {
+          "term": "christlich",
+          "c_tfidf": 0.00975
+        },
+        {
+          "term": "jahrhundert",
+          "c_tfidf": 0.00932
+        },
+        {
+          "term": "glaube",
+          "c_tfidf": 0.00882
+        },
+        {
+          "term": "religiös",
+          "c_tfidf": 0.00845
+        },
+        {
+          "term": "text",
+          "c_tfidf": 0.00791
+        },
+        {
+          "term": "christentum",
+          "c_tfidf": 0.00774
+        }
+      ],
+      "top_publishers": [
+        {
+          "publisher": "Gütersloher Verlagshaus",
+          "share": 5.1,
+          "count": 562
+        },
+        {
+          "publisher": "Vandenhoeck & Ruprecht",
+          "share": 4.9,
+          "count": 543
+        },
+        {
+          "publisher": "Schöningh",
+          "share": 4.9,
+          "count": 542
+        },
+        {
+          "publisher": "Mohr Siebeck",
+          "share": 4.5,
+          "count": 499
+        },
+        {
+          "publisher": "Herder",
+          "share": 4.3,
+          "count": 482
+        }
+      ],
+      "centroid_representative_docs": [
+        {
+          "apa_citation": "Schmidinger, Heinrich (1999). Die Bibel in der deutschsprachigen Literatur des 20. Jahrhunderts [HTRC-Vollbuch-Abschnitt 47/75]. Herder (Grünewald).",
+          "publisher": "Herder (Grünewald)",
+          "cosine_similarity": 0.754
+        },
+        {
+          "apa_citation": "Kuschel, Karl-Josef (2024). \"Unser Geist ist Weltgeist\": Stefan Zweig und das Drama eines jüdischen Weltbürgertums. Patmos.",
+          "publisher": "Patmos",
+          "cosine_similarity": 0.754
+        },
+        {
+          "apa_citation": "Kuschel, Karl-Josef (2025). Weltgewissen: religiöser Humanismus in Leben und Werk von Thomas Mann [Forschungsbuch-Abschnitt 1/2]. Patmos.",
+          "publisher": "Patmos",
+          "cosine_similarity": 0.754
         }
       ]
     },
     {
       "bertopic_cluster_id": 11,
-      "document_count": 11086,
-      "corpus_share_pct": 6.5,
+      "document_count": 15487,
+      "corpus_share_pct": 6.6,
       "archetype": {
         "label": "Traditional / Ecclesiastical",
-        "confidence": 82.2,
+        "confidence": 50.4,
         "scores": {
-          "Traditional / Ecclesiastical": 82.2,
-          "Neoliberal / Self-Optimization": 17.8,
+          "Traditional / Ecclesiastical": 50.4,
+          "Neoliberal / Self-Optimization": 0.0,
+          "Critical / Secular-Humanist": 49.6
+        }
+      },
+      "c_tfidf_terms": [
+        {
+          "term": "sozial",
+          "c_tfidf": 0.01868
+        },
+        {
+          "term": "mensch",
+          "c_tfidf": 0.01282
+        },
+        {
+          "term": "frage",
+          "c_tfidf": 0.01243
+        },
+        {
+          "term": "arbeit",
+          "c_tfidf": 0.01059
+        },
+        {
+          "term": "kirche",
+          "c_tfidf": 0.01025
+        },
+        {
+          "term": "gesellschaft",
+          "c_tfidf": 0.01009
+        },
+        {
+          "term": "kind",
+          "c_tfidf": 0.00987
+        },
+        {
+          "term": "leben",
+          "c_tfidf": 0.00971
+        },
+        {
+          "term": "religiös",
+          "c_tfidf": 0.00895
+        },
+        {
+          "term": "entwicklung",
+          "c_tfidf": 0.00864
+        },
+        {
+          "term": "frau",
+          "c_tfidf": 0.00847
+        },
+        {
+          "term": "form",
+          "c_tfidf": 0.00816
+        },
+        {
+          "term": "person",
+          "c_tfidf": 0.00781
+        },
+        {
+          "term": "gesellschaftlich",
+          "c_tfidf": 0.00772
+        },
+        {
+          "term": "problem",
+          "c_tfidf": 0.00762
+        }
+      ],
+      "top_publishers": [
+        {
+          "publisher": "Schöningh",
+          "share": 5.2,
+          "count": 806
+        },
+        {
+          "publisher": "Evangelische Verlagsanstalt",
+          "share": 5.1,
+          "count": 797
+        },
+        {
+          "publisher": "Suhrkamp",
+          "share": 4.5,
+          "count": 698
+        },
+        {
+          "publisher": "Vandenhoeck & Ruprecht",
+          "share": 4.1,
+          "count": 637
+        },
+        {
+          "publisher": "De Gruyter / Transcript",
+          "share": 4.1,
+          "count": 637
+        }
+      ],
+      "centroid_representative_docs": [
+        {
+          "apa_citation": "Anastas Odermatt (2023). Religion und Sozialkapital in der Schweiz [OpenAlex-Vollbuch-Abschnitt 26/55]. Springer Nature (Holtzbrinck).",
+          "publisher": "Springer Nature (Holtzbrinck)",
+          "cosine_similarity": 0.938
+        },
+        {
+          "apa_citation": "Braun, Hans (2001). Familien zwischen Risiken und Chancen: Tagung der Internationalen Stiftung Humanum [HTRC-Vollbuch-Abschnitt 48/58]. Schöningh.",
+          "publisher": "Schöningh",
+          "cosine_similarity": 0.937
+        },
+        {
+          "apa_citation": "Simon, Jeannine (2004). Wirkungen von Daily Soaps auf Jugendliche [HTRC-Vollbuch-Abschnitt 59/71]. Fischer.",
+          "publisher": "Fischer",
+          "cosine_similarity": 0.937
+        }
+      ]
+    },
+    {
+      "bertopic_cluster_id": 12,
+      "document_count": 17544,
+      "corpus_share_pct": 7.5,
+      "archetype": {
+        "label": "Traditional / Ecclesiastical",
+        "confidence": 100.0,
+        "scores": {
+          "Traditional / Ecclesiastical": 100.0,
+          "Neoliberal / Self-Optimization": 0.0,
           "Critical / Secular-Humanist": 0.0
         }
       },
       "c_tfidf_terms": [
         {
           "term": "gott",
-          "c_tfidf": 0.01354
-        },
-        {
-          "term": "mensch",
-          "c_tfidf": 0.0088
-        },
-        {
-          "term": "schrift",
-          "c_tfidf": 0.0075
-        },
-        {
-          "term": "kirche",
-          "c_tfidf": 0.00742
+          "c_tfidf": 0.02286
         },
         {
           "term": "text",
-          "c_tfidf": 0.00673
+          "c_tfidf": 0.02025
         },
         {
-          "term": "wort",
-          "c_tfidf": 0.00648
-        },
-        {
-          "term": "heilig",
-          "c_tfidf": 0.00634
-        },
-        {
-          "term": "geist",
-          "c_tfidf": 0.00585
-        },
-        {
-          "term": "luther",
-          "c_tfidf": 0.00547
-        },
-        {
-          "term": "christi",
-          "c_tfidf": 0.00538
+          "term": "israel",
+          "c_tfidf": 0.01228
         },
         {
           "term": "alt",
-          "c_tfidf": 0.0052
+          "c_tfidf": 0.01178
         },
         {
-          "term": "brief",
-          "c_tfidf": 0.00503
+          "term": "volk",
+          "c_tfidf": 0.00971
         },
         {
-          "term": "leben",
-          "c_tfidf": 0.00469
+          "term": "mensch",
+          "c_tfidf": 0.00955
+        },
+        {
+          "term": "wort",
+          "c_tfidf": 0.00913
+        },
+        {
+          "term": "jahwe",
+          "c_tfidf": 0.00881
         },
         {
           "term": "stelle",
-          "c_tfidf": 0.00458
+          "c_tfidf": 0.00842
         },
         {
-          "term": "sinn",
-          "c_tfidf": 0.00453
+          "term": "name",
+          "c_tfidf": 0.00797
+        },
+        {
+          "term": "jesus",
+          "c_tfidf": 0.00782
+        },
+        {
+          "term": "jüdisch",
+          "c_tfidf": 0.00782
+        },
+        {
+          "term": "könig",
+          "c_tfidf": 0.00776
+        },
+        {
+          "term": "testament",
+          "c_tfidf": 0.00747
+        },
+        {
+          "term": "sohn",
+          "c_tfidf": 0.00731
         }
       ],
       "top_publishers": [
         {
-          "publisher": "Böhlau",
-          "share": 15.7,
-          "count": 1738
-        },
-        {
-          "publisher": "Aschendorff",
-          "share": 11.8,
-          "count": 1303
-        },
-        {
-          "publisher": "Frommann-Holzboog",
-          "share": 9.0,
-          "count": 995
-        },
-        {
-          "publisher": "Schöningh",
-          "share": 7.1,
-          "count": 782
-        },
-        {
-          "publisher": "Gütersloher Verlagshaus",
-          "share": 6.1,
-          "count": 675
-        }
-      ],
-      "centroid_representative_docs": [
-        {
-          "apa_citation": "Gerhard, Johann (2007). Tractatus de legitima scripturae sacrae interpretatione: (1610) ; lateinisch-deutsch [HTRC-Vollbuch-Abschnitt 24/70]. Frommann-Holzboog.",
-          "publisher": "Frommann-Holzboog",
-          "cosine_similarity": 0.987
-        },
-        {
-          "apa_citation": "o. V. (2000). Akten der deutschen Reichsreligionsgespräche im 16. Jahrhundert [HTRC-Vollbuch-Abschnitt 33/66]. Vandenhoeck & Ruprecht.",
-          "publisher": "Vandenhoeck & Ruprecht",
-          "cosine_similarity": 0.982
-        },
-        {
-          "apa_citation": "Immenkötter, Herbert (1979). Die Confutatio der Confessio Augustana vom 3. [dritten] August 1530 [fünfzehnhundertdreissig] [HTRC-Vollbuch-Abschnitt 69/74]. Aschendorff.",
-          "publisher": "Aschendorff",
-          "cosine_similarity": 0.978
-        }
-      ]
-    },
-    {
-      "bertopic_cluster_id": 12,
-      "document_count": 12013,
-      "corpus_share_pct": 7.1,
-      "archetype": {
-        "label": "Critical / Secular-Humanist",
-        "confidence": 53.7,
-        "scores": {
-          "Traditional / Ecclesiastical": 46.3,
-          "Neoliberal / Self-Optimization": 0.0,
-          "Critical / Secular-Humanist": 53.7
-        }
-      },
-      "c_tfidf_terms": [
-        {
-          "term": "geschichte",
-          "c_tfidf": 0.01828
-        },
-        {
-          "term": "philosophie",
-          "c_tfidf": 0.01424
-        },
-        {
-          "term": "theologie",
-          "c_tfidf": 0.01206
-        },
-        {
-          "term": "deutsch",
-          "c_tfidf": 0.01126
-        },
-        {
-          "term": "wissenschaft",
-          "c_tfidf": 0.01084
-        },
-        {
-          "term": "jahrhundert",
-          "c_tfidf": 0.01034
-        },
-        {
-          "term": "kirche",
-          "c_tfidf": 0.0096
-        },
-        {
-          "term": "studie",
-          "c_tfidf": 0.00907
-        },
-        {
-          "term": "text",
-          "c_tfidf": 0.00806
-        },
-        {
-          "term": "schrift",
-          "c_tfidf": 0.00787
-        },
-        {
-          "term": "historisch",
-          "c_tfidf": 0.00769
-        },
-        {
-          "term": "politisch",
-          "c_tfidf": 0.00745
-        },
-        {
-          "term": "leben",
-          "c_tfidf": 0.00735
-        },
-        {
-          "term": "welt",
-          "c_tfidf": 0.00709
-        },
-        {
-          "term": "theorie",
-          "c_tfidf": 0.0068
-        }
-      ],
-      "top_publishers": [
-        {
-          "publisher": "Schöningh",
-          "share": 7.4,
-          "count": 887
+          "publisher": "Neukirchener",
+          "share": 14.9,
+          "count": 2611
         },
         {
           "publisher": "Vandenhoeck & Ruprecht",
-          "share": 7.0,
-          "count": 838
+          "share": 12.6,
+          "count": 2202
         },
         {
-          "publisher": "Böhlau",
-          "share": 6.9,
-          "count": 823
+          "publisher": "Mohr Siebeck",
+          "share": 12.2,
+          "count": 2138
         },
         {
-          "publisher": "De Gruyter / Transcript",
-          "share": 5.5,
-          "count": 666
-        },
-        {
-          "publisher": "Suhrkamp",
-          "share": 4.5,
-          "count": 546
-        }
-      ],
-      "centroid_representative_docs": [
-        {
-          "apa_citation": "Buber, Martin (2009). Gog und Magog: eine Chronik [HTRC-Vollbuch-Abschnitt 55/62]. Gütersloher Verlagshaus.",
-          "publisher": "Gütersloher Verlagshaus",
-          "cosine_similarity": 0.964
-        },
-        {
-          "apa_citation": "Sandvoss, Ernst (1981). Aristoteles [HTRC-Vollbuch-Abschnitt 57/60]. Kohlhammer.",
           "publisher": "Kohlhammer",
-          "cosine_similarity": 0.962
+          "share": 7.7,
+          "count": 1358
         },
         {
-          "apa_citation": "Federlin, Wilhelm-Ludwig (1982). Vom Nutzen des geistlichen Amtes: Ein Beitrag zur Interpretation und Rezeption Johann Gottfried Herders [HTRC-Vollbuch-Abschnitt 74/75]. Vandenhoeck & Ruprecht.",
-          "publisher": "Vandenhoeck & Ruprecht",
-          "cosine_similarity": 0.96
+          "publisher": "Gütersloher Verlagshaus",
+          "share": 4.5,
+          "count": 782
+        }
+      ],
+      "centroid_representative_docs": [
+        {
+          "apa_citation": "Knöppler, Thomas (2001). Sühne im Neuen Testament: Studien zum urchristlichen Verständnis der Heilsbedeutung des Todes Jesu [HTRC-Vollbuch-Abschnitt 22/74]. Neukirchener.",
+          "publisher": "Neukirchener",
+          "cosine_similarity": 0.963
+        },
+        {
+          "apa_citation": "Groß, Walter (1974). Bileam: literar- u. formkrit. Untersuchung d. Prosa in Num 22 - 24 [HTRC-Vollbuch-Abschnitt 66/75]. Kösel.",
+          "publisher": "Kösel",
+          "cosine_similarity": 0.963
+        },
+        {
+          "apa_citation": "Tai, Nicholas Ho Fai (1996). Prophetie als Schriftauslegung in Sacharja 9 - 14: traditions- und kompositionsgeschichtliche Studien [HTRC-Vollbuch-Abschnitt 5/75]. Calwer.",
+          "publisher": "Calwer",
+          "cosine_similarity": 0.961
         }
       ]
     }
   ],
   "topics_over_time_shares": {
     "1970s": {
-      "Cluster 1": 5.8,
-      "Cluster 2": 7.8,
-      "Cluster 3": 22.6,
-      "Cluster 4": 17.9,
-      "Cluster 5": 2.4,
-      "Cluster 6": 5.4,
-      "Cluster 7": 12.0,
-      "Cluster 8": 1.2,
-      "Cluster 9": 6.2,
-      "Cluster 10": 6.8,
-      "Cluster 11": 7.2,
-      "Cluster 12": 4.8
-    },
-    "1980s": {
-      "Cluster 1": 6.6,
-      "Cluster 2": 10.3,
-      "Cluster 3": 21.9,
-      "Cluster 4": 16.4,
-      "Cluster 5": 2.7,
-      "Cluster 6": 5.5,
-      "Cluster 7": 14.3,
-      "Cluster 8": 1.3,
-      "Cluster 9": 4.6,
-      "Cluster 10": 5.0,
-      "Cluster 11": 5.8,
-      "Cluster 12": 5.6
-    },
-    "1990s": {
-      "Cluster 1": 10.2,
-      "Cluster 2": 9.0,
-      "Cluster 3": 19.7,
-      "Cluster 4": 12.0,
-      "Cluster 5": 3.5,
-      "Cluster 6": 4.2,
-      "Cluster 7": 9.4,
-      "Cluster 8": 2.3,
-      "Cluster 9": 7.5,
-      "Cluster 10": 7.6,
-      "Cluster 11": 8.0,
-      "Cluster 12": 6.4
-    },
-    "2000s": {
-      "Cluster 1": 10.8,
-      "Cluster 2": 9.0,
-      "Cluster 3": 16.0,
-      "Cluster 4": 8.8,
-      "Cluster 5": 5.9,
-      "Cluster 6": 4.6,
-      "Cluster 7": 9.7,
-      "Cluster 8": 3.8,
-      "Cluster 9": 9.3,
-      "Cluster 10": 7.3,
-      "Cluster 11": 7.1,
-      "Cluster 12": 7.7
-    },
-    "2010s": {
-      "Cluster 1": 3.9,
-      "Cluster 2": 7.1,
-      "Cluster 3": 16.0,
-      "Cluster 4": 7.0,
-      "Cluster 5": 10.0,
-      "Cluster 6": 7.0,
-      "Cluster 7": 11.6,
-      "Cluster 8": 13.0,
-      "Cluster 9": 6.2,
-      "Cluster 10": 4.4,
-      "Cluster 11": 6.1,
+      "Cluster 1": 8.3,
+      "Cluster 2": 4.4,
+      "Cluster 3": 26.4,
+      "Cluster 4": 13.5,
+      "Cluster 5": 10.4,
+      "Cluster 6": 7.7,
+      "Cluster 7": 4.1,
+      "Cluster 8": 5.4,
+      "Cluster 9": 7.3,
+      "Cluster 10": 1.7,
+      "Cluster 11": 2.8,
       "Cluster 12": 7.9
     },
-    "2020s": {
-      "Cluster 1": 3.5,
-      "Cluster 2": 5.5,
-      "Cluster 3": 12.7,
+    "1980s": {
+      "Cluster 1": 5.9,
+      "Cluster 2": 5.1,
+      "Cluster 3": 25.5,
+      "Cluster 4": 13.8,
+      "Cluster 5": 12.8,
+      "Cluster 6": 9.3,
+      "Cluster 7": 3.8,
+      "Cluster 8": 5.0,
+      "Cluster 9": 6.9,
+      "Cluster 10": 1.9,
+      "Cluster 11": 2.9,
+      "Cluster 12": 7.1
+    },
+    "1990s": {
+      "Cluster 1": 8.2,
+      "Cluster 2": 6.0,
+      "Cluster 3": 22.4,
+      "Cluster 4": 10.0,
+      "Cluster 5": 9.1,
+      "Cluster 6": 8.6,
+      "Cluster 7": 4.6,
+      "Cluster 8": 6.7,
+      "Cluster 9": 8.7,
+      "Cluster 10": 2.4,
+      "Cluster 11": 3.3,
+      "Cluster 12": 9.9
+    },
+    "2000s": {
+      "Cluster 1": 6.9,
+      "Cluster 2": 7.1,
+      "Cluster 3": 17.7,
+      "Cluster 4": 8.0,
+      "Cluster 5": 10.5,
+      "Cluster 6": 8.7,
+      "Cluster 7": 5.0,
+      "Cluster 8": 8.0,
+      "Cluster 9": 9.9,
+      "Cluster 10": 4.4,
+      "Cluster 11": 5.8,
+      "Cluster 12": 7.9
+    },
+    "2010s": {
+      "Cluster 1": 4.5,
+      "Cluster 2": 7.9,
+      "Cluster 3": 16.9,
       "Cluster 4": 6.5,
-      "Cluster 5": 21.7,
+      "Cluster 5": 11.8,
       "Cluster 6": 7.4,
-      "Cluster 7": 7.1,
-      "Cluster 8": 13.4,
-      "Cluster 9": 5.5,
-      "Cluster 10": 2.9,
-      "Cluster 11": 2.0,
-      "Cluster 12": 11.8
+      "Cluster 7": 8.1,
+      "Cluster 8": 4.5,
+      "Cluster 9": 4.4,
+      "Cluster 10": 12.9,
+      "Cluster 11": 10.0,
+      "Cluster 12": 5.0
+    },
+    "2020s": {
+      "Cluster 1": 1.8,
+      "Cluster 2": 10.9,
+      "Cluster 3": 12.9,
+      "Cluster 4": 6.0,
+      "Cluster 5": 7.6,
+      "Cluster 6": 5.7,
+      "Cluster 7": 8.4,
+      "Cluster 8": 3.4,
+      "Cluster 9": 3.2,
+      "Cluster 10": 12.5,
+      "Cluster 11": 23.7,
+      "Cluster 12": 3.9
     }
   }
 }
