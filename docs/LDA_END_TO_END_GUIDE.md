@@ -109,8 +109,8 @@ The hyperparameter settings in [config.py](file:///f:/PhD%20AG/config.py#L12-L16
 
 | Parameter | Current Setting | Methodological Role & Tuning Guidance |
 | :--- | :--- | :--- |
-| [`NUM_TOPICS`](file:///f:/PhD%20AG/config.py#L17) ($K$) | `12` | Defines the number of latent clusters (Meso-Level $C_v$ Inflection across the $67,323$-passage Wave-4 corpus). |
-| [`PASSES`](file:///f:/PhD%20AG/config.py#L18) | `15` | Number of full training sweeps through the $67,323$-document corpus (`chunksize=1500`). |
+| [`NUM_TOPICS`](file:///f:/PhD%20AG/config.py#L17) ($K$) | `12` | Defines the number of latent clusters (Meso-Level $C_v$ Inflection across the $114,624$-document Wave-5 corpus). |
+| [`PASSES`](file:///f:/PhD%20AG/config.py#L18) | `15` | Number of full training sweeps through the $114,624$-document corpus (`chunksize=1500`). |
 | [`ALPHA`](file:///f:/PhD%20AG/config.py#L19) ($\alpha$) | `"auto"` | Learns an asymmetric document-topic prior from the data. High $\alpha$ implies documents contain many topics; low $\alpha$ forces documents to belong to a single dominant voice. |
 | `random_state` | `100` | Fixed random seed in [`LdaModel`](file:///f:/PhD%20AG/lda_pipeline.py) ensuring 100% deterministic reproducibility for doctoral thesis verification. |
 

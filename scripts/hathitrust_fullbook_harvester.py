@@ -699,20 +699,28 @@ def load_all_dnb_shards(base_path: str = "data/dnb_metadata.csv") -> pd.DataFram
 def save_sharded_dnb_corpus(merged_df: pd.DataFrame, rows_per_shard: int = 24000):
     """
     Saves the master corpus across data/dnb_metadata.csv (first 24,000 rows, ~80 MB)
-    and data/dnb_metadata_part2.csv (and part3 if needed) so EVERY single file stays
+    and data/dnb_metadata_part2.csv (and part3+ if needed) so EVERY single file stays
     safely under GitHub's 100 MB per-file limit!
     """
-    first_chunk = merged_df.iloc[:rows_per_shard]
-    first_chunk.to_csv("data/dnb_metadata.csv", index=False, encoding="utf-8")
+    clean_df = merged_df.copy()
+    for col in clean_df.select_dtypes(include=["object"]).columns:
+        clean_df[col] = (
+            clean_df[col]
+            .astype(str)
+            .str.replace(r"[\x00-\x1f\x7f-\x9f]", " ", regex=True)
+        )
+
+    first_chunk = clean_df.iloc[:rows_per_shard]
+    first_chunk.to_csv("data/dnb_metadata.csv", index=False, encoding="utf-8", escapechar="\\")
     mb1 = os.path.getsize("data/dnb_metadata.csv") / (1024 * 1024)
     print(f"  -> Saved shard 1: data/dnb_metadata.csv ({len(first_chunk):,} rows, {mb1:.2f} MB)", flush=True)
 
-    rem = merged_df.iloc[rows_per_shard:]
+    rem = clean_df.iloc[rows_per_shard:]
     part_idx = 2
     while not rem.empty:
         part_df = rem.iloc[:rows_per_shard]
         part_path = f"data/dnb_metadata_part{part_idx}.csv"
-        part_df.to_csv(part_path, index=False, encoding="utf-8")
+        part_df.to_csv(part_path, index=False, encoding="utf-8", escapechar="\\")
         mb_p = os.path.getsize(part_path) / (1024 * 1024)
         print(f"  -> Saved shard {part_idx}: {part_path} ({len(part_df):,} rows, {mb_p:.2f} MB)", flush=True)
         rem = rem.iloc[rows_per_shard:]

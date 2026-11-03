@@ -9,551 +9,575 @@
     "formula": "P(φ_k | η_auto), w_rel ~ 2× Salience",
     "description": "Amplifies core theological and critical signifiers (2× token weight) while keeping Dirichlet topic slots unseeded so clusters emerge inductively."
   },
-  "corpus_documents": 67323,
+  "corpus_documents": 114624,
   "vocabulary_size": 25000,
-  "coherence_score": -2.1562,
+  "coherence_score": -2.3548,
   "topics": [
     {
       "topic_id": 1,
       "archetype": {
-        "label": "Critical / Secular-Humanist",
+        "label": "Traditional / Ecclesiastical",
         "confidence": 100.0,
         "scores": {
-          "Traditional / Ecclesiastical": 0.0,
+          "Traditional / Ecclesiastical": 100.0,
           "Neoliberal / Self-Optimization": 0.0,
-          "Critical / Secular-Humanist": 100.0
+          "Critical / Secular-Humanist": 0.0
         }
       },
       "seeded_prior": null,
       "top_terms": [
         {
-          "term": "gesetz",
-          "weight": 0.00825
+          "term": "kirche",
+          "weight": 0.06398
         },
         {
-          "term": "fall",
-          "weight": 0.0075
+          "term": "katholisch",
+          "weight": 0.01937
         },
         {
-          "term": "folge",
-          "weight": 0.00538
+          "term": "bischof",
+          "weight": 0.01392
         },
         {
-          "term": "grund",
-          "weight": 0.00528
+          "term": "evangelisch",
+          "weight": 0.01182
         },
         {
-          "term": "gewalt",
-          "weight": 0.00498
+          "term": "kirchlich",
+          "weight": 0.01181
         },
         {
-          "term": "staat",
-          "weight": 0.00483
+          "term": "papst",
+          "weight": 0.00733
         },
         {
-          "term": "pflicht",
-          "weight": 0.00481
+          "term": "gemeinde",
+          "weight": 0.00714
         },
         {
-          "term": "herr",
-          "weight": 0.00477
+          "term": "geistlich",
+          "weight": 0.00618
         },
         {
-          "term": "volk",
-          "weight": 0.0046
+          "term": "jahrhundert",
+          "weight": 0.00597
         },
         {
-          "term": "krieg",
-          "weight": 0.00442
+          "term": "kloster",
+          "weight": 0.00585
         },
         {
-          "term": "mensch",
-          "weight": 0.00438
+          "term": "pfarrer",
+          "weight": 0.00552
         },
         {
-          "term": "leben",
-          "weight": 0.00435
+          "term": "reformation",
+          "weight": 0.00539
         },
         {
-          "term": "tugend",
-          "weight": 0.00412
+          "term": "evangelisch_kirche",
+          "weight": 0.00505
         },
         {
-          "term": "herrschaft",
-          "weight": 0.00408
+          "term": "seelsorge",
+          "weight": 0.00493
         },
         {
-          "term": "kampf",
-          "weight": 0.00385
+          "term": "heilig",
+          "weight": 0.0049
         }
       ],
       "top_publishers": [
         {
-          "publisher": "Rowohlt",
-          "share": 11.2
+          "publisher": "Böhlau",
+          "share": 15.6
         },
         {
-          "publisher": "Klett-Cotta",
-          "share": 9.6
-        },
-        {
-          "publisher": "Fischer",
-          "share": 7.7
-        },
-        {
-          "publisher": "Vandenhoeck & Ruprecht",
-          "share": 5.8
-        },
-        {
-          "publisher": "Gütersloher Verlagshaus (Chr. Kaiser)",
-          "share": 4.9
+          "publisher": "Aschendorff",
+          "share": 8.9
         },
         {
           "publisher": "Schöningh",
-          "share": 4.5
+          "share": 5.1
+        },
+        {
+          "publisher": "Gütersloher Verlagshaus",
+          "share": 5.0
+        },
+        {
+          "publisher": "Nomos / Alber",
+          "share": 4.3
+        },
+        {
+          "publisher": "Frommann-Holzboog",
+          "share": 3.7
         }
       ],
       "representative_docs": [
         {
-          "title": "Antiker Geist und moderner Staat bei Justus Lipsius: (1547 - 1606) ; der Neustoizismus als politische Bewegung [HTRC-Vollbuch-Abschnitt 42/74]",
-          "author": "Oestreich, Gerhard",
-          "publisher": "Vandenhoeck & Ruprecht",
-          "date": "1989",
+          "title": "Melchior Zobel von Giebelstadt, Fürstbischof von Würzburg (1544 - 1558): Diözese und Hochstift Würzburg in der Krise [HTRC-Vollbuch-Abschnitt 19/74]",
+          "author": "Bauer, Christoph",
+          "publisher": "Aschendorff",
+          "date": "1998",
           "corpus_layer": "hathitrust_ef_fullbook_print",
-          "probability": 78.3,
-          "keywords": [],
-          "snippet": "Staates Laster Volkswut Bestrafungen zurückkommt vorkommt berücksichtigen subditorum nun Affekte Wohl handeln Fehlern Fehlern Lipsius Lipsius Lipsius Lipsius Lipsius Begriff König König zugehört niederländische solcher rächen Untertanen Lei",
-          "apa_citation": "Oestreich, Gerhard (1989). Antiker Geist und moderner Staat bei Justus Lipsius: (1547 - 1606) ; der Neustoizismus als politische Bewegung [HTRC-Vollbuch-Abschnitt 42/74]. Vandenhoeck & Ruprecht."
+          "probability": 78.0,
+          "keywords": [
+            "nan"
+          ],
+          "snippet": "Juni Domkapitel Gericht geforderte woltenn weitters zeigt verfügte Grafenrheinfeld Rechnungsverhören eins ausgesetzt gnedig Studien verkauft geistlichen sollten Jahre davon darauf Stadt Gegenüber Katholische Zuwiderhandelnde Braun Zeitalter",
+          "apa_citation": "Bauer, Christoph (1998). Melchior Zobel von Giebelstadt, Fürstbischof von Würzburg (1544 - 1558): Diözese und Hochstift Würzburg in der Krise [HTRC-Vollbuch-Abschnitt 19/74]. Aschendorff."
         },
         {
-          "title": "Ewiger Friede?: Dokumente einer deutschen Diskussion um 1800 [HTRC-Vollbuch-Abschnitt 42/60]",
-          "author": "Dietze, Anita",
-          "publisher": "Kiepenheuer",
-          "date": "1989",
+          "title": "Das  Bistum Konstanz [HTRC-Vollbuch-Abschnitt 54/74]",
+          "author": "o. V.",
+          "publisher": "De Gruyter / Transcript",
+          "date": "2003",
           "corpus_layer": "hathitrust_ef_fullbook_print",
-          "probability": 75.0,
-          "keywords": [],
-          "snippet": "Stände Stillstandes Ziel selbst selbst bis ihn errungenen ununterbrochen entstehen wahren sie Gewinnes des des Staaten lassen einen und und und Sorge ihm als Einflusse wird Sphäre getroffenen aufgehoben Rang aus anderen anderen Raub welchem",
-          "apa_citation": "Dietze, Anita (1989). Ewiger Friede?: Dokumente einer deutschen Diskussion um 1800 [HTRC-Vollbuch-Abschnitt 42/60]. Kiepenheuer."
+          "probability": 77.2,
+          "keywords": [
+            "nan"
+          ],
+          "snippet": "Mauritius Mauritius dessen Liste iniustis Kanonikat Kanonikat Kanonikat Kanoniker Kanoniker Kanoniker Johann querimonibus Juli Februar einmal Papst Papst Bitten sowie Münster falsis Vgl Erste Präbende Bischofs quibusdam gleichen Johannes Jo",
+          "apa_citation": "o. V. (2003). Das  Bistum Konstanz [HTRC-Vollbuch-Abschnitt 54/74]. De Gruyter / Transcript."
         },
         {
-          "title": "Politische Philosophie: ein Lesebuch; Texte, Analysen, Kommentare [HTRC-Vollbuch-Abschnitt 31/75]",
-          "author": "Braun, Eberhard",
-          "publisher": "Rowohlt",
-          "date": "2008",
+          "title": "Zerfall und Wiederbeginn: vom Erzbistum zum Bistum Mainz (1792/97 - 1830) ; ein Vergleich ; Festschrift für Friedhelm Jürgensmeier [HTRC-Vollbuch-Abschnitt 24/75]",
+          "author": "Rödel, Walter G.",
+          "publisher": "Echter",
+          "date": "2002",
           "corpus_layer": "hathitrust_ef_fullbook_print",
-          "probability": 71.0,
-          "keywords": [],
-          "snippet": "oder allein Mensch Mensch ansieht verbleiben jeder beiden unter darin Unzuträglichkeiten verstanden Denn den den haben Vergnügens werden werden unregelmäßige Gewalten suchen Gesellschaft Gesellschaft unbestimmte Regeln innen positive einer",
-          "apa_citation": "Braun, Eberhard (2008). Politische Philosophie: ein Lesebuch; Texte, Analysen, Kommentare [HTRC-Vollbuch-Abschnitt 31/75]. Rowohlt."
+          "probability": 76.6,
+          "keywords": [
+            "nan"
+          ],
+          "snippet": "Personaldaten kath anno Conrad Herbipolensis Joh bzw Landkapitel Diözesanarchiv KOHLENBUSCH August Anhang Dorfprozelten Alexander Wirklicher usque Pfvw Bislang Groß-Fischlingen Lorenz Pfarrerbuch Siegelamtsverweser Geistlicher Agatha defunc",
+          "apa_citation": "Rödel, Walter G. (2002). Zerfall und Wiederbeginn: vom Erzbistum zum Bistum Mainz (1792/97 - 1830) ; ein Vergleich ; Festschrift für Friedhelm Jürgensmeier [HTRC-Vollbuch-Abschnitt 24/75]. Echter."
         }
       ]
     },
     {
       "topic_id": 2,
       "archetype": {
-        "label": "Hybrid / Discursive Mediation",
-        "confidence": 0.0,
+        "label": "Traditional / Ecclesiastical",
+        "confidence": 100.0,
         "scores": {
-          "Traditional / Ecclesiastical": 33.3,
-          "Neoliberal / Self-Optimization": 33.3,
-          "Critical / Secular-Humanist": 33.3
+          "Traditional / Ecclesiastical": 100.0,
+          "Neoliberal / Self-Optimization": 0.0,
+          "Critical / Secular-Humanist": 0.0
         }
       },
       "seeded_prior": null,
       "top_terms": [
         {
-          "term": "brief",
-          "weight": 0.01325
-        },
-        {
-          "term": "jahrhundert",
-          "weight": 0.01208
-        },
-        {
-          "term": "geschichte",
-          "weight": 0.01151
-        },
-        {
-          "term": "deutsch",
-          "weight": 0.01067
-        },
-        {
-          "term": "schrift",
-          "weight": 0.00997
-        },
-        {
-          "term": "studie",
-          "weight": 0.00846
-        },
-        {
-          "term": "paris",
-          "weight": 0.00675
-        },
-        {
           "term": "text",
-          "weight": 0.00657
+          "weight": 0.02419
         },
         {
-          "term": "basel",
-          "weight": 0.00631
+          "term": "jüdisch",
+          "weight": 0.01522
         },
         {
-          "term": "universität",
+          "term": "bibel",
+          "weight": 0.0136
+        },
+        {
+          "term": "alt",
+          "weight": 0.00971
+        },
+        {
+          "term": "testament",
+          "weight": 0.00923
+        },
+        {
+          "term": "jude",
+          "weight": 0.00737
+        },
+        {
+          "term": "heilig",
+          "weight": 0.00708
+        },
+        {
+          "term": "israel",
+          "weight": 0.00704
+        },
+        {
+          "term": "paulus",
+          "weight": 0.0063
+        },
+        {
+          "term": "volk",
+          "weight": 0.00619
+        },
+        {
+          "term": "griechisch",
           "weight": 0.00605
         },
         {
-          "term": "christoph",
-          "weight": 0.00518
+          "term": "biblisch",
+          "weight": 0.00602
         },
         {
-          "term": "thomas",
-          "weight": 0.00497
+          "term": "judentum",
+          "weight": 0.00574
         },
         {
-          "term": "martin",
-          "weight": 0.00485
+          "term": "antik",
+          "weight": 0.00563
         },
         {
-          "term": "ludwig",
-          "weight": 0.00467
-        },
-        {
-          "term": "forschung",
-          "weight": 0.00464
+          "term": "könig",
+          "weight": 0.00501
         }
       ],
       "top_publishers": [
         {
-          "publisher": "Rowohlt",
-          "share": 8.7
+          "publisher": "Böhlau",
+          "share": 7.0
         },
         {
-          "publisher": "Klett-Cotta",
-          "share": 7.7
+          "publisher": "Neukirchener",
+          "share": 6.1
         },
         {
           "publisher": "Vandenhoeck & Ruprecht",
-          "share": 7.2
+          "share": 6.0
         },
         {
-          "publisher": "Frommann-Holzboog",
-          "share": 6.7
+          "publisher": "Aschendorff",
+          "share": 4.6
         },
         {
-          "publisher": "Fischer",
-          "share": 6.2
+          "publisher": "Gütersloher Verlagshaus (Chr. Kaiser)",
+          "share": 4.3
         },
         {
-          "publisher": "Gütersloher Verlagshaus",
-          "share": 5.1
+          "publisher": "Suhrkamp",
+          "share": 4.0
         }
       ],
       "representative_docs": [
         {
-          "title": "Bibliographie Romano Guardini: (1885 - 1968) ; Guardinis Werke, Veröffentlichungen über Guardini, Rezensionen [HTRC-Vollbuch-Abschnitt 52/73]",
-          "author": "Mercker, Hans",
-          "publisher": "Schöningh",
-          "date": "1978",
+          "title": "Die  Textfunde vom Toten Meer und der Text der hebräischen Bibel [HTRC-Vollbuch-Abschnitt 13/36]",
+          "author": "Dahmen, Ulrich",
+          "publisher": "Neukirchener",
+          "date": "2000",
           "corpus_layer": "hathitrust_ef_fullbook_print",
-          "probability": 74.6,
-          "keywords": [],
-          "snippet": "Getzeny Wen Gardeil Gerken Karl Karl Friedemann Gierse Goetz Givord Givord Willi Fuhry Gemelli Adanez Michael Gerstner Agostino Agostino Gerl Gerl Guido Philipp Giraudet Giraudet Geurtz Nachw Gervink Horst Erzbischof Neffe Hasenhüttl Gründe",
-          "apa_citation": "Mercker, Hans (1978). Bibliographie Romano Guardini: (1885 - 1968) ; Guardinis Werke, Veröffentlichungen über Guardini, Rezensionen [HTRC-Vollbuch-Abschnitt 52/73]. Schöningh."
+          "probability": 74.8,
+          "keywords": [
+            "nan"
+          ],
+          "snippet": "the the the the the the the erzählerischen Gibeoniter Gibeoniter bietet bietet schließt interessantes UlRlCh Textabfolge Kol Kol Kol Kol Kol Kol Kol Kol Kol Wörter Altarbaunotiz Sichem Erzählung Jordan davon Möchte doch unmittelbar folgt fo",
+          "apa_citation": "Dahmen, Ulrich (2000). Die  Textfunde vom Toten Meer und der Text der hebräischen Bibel [HTRC-Vollbuch-Abschnitt 13/36]. Neukirchener."
         },
         {
-          "title": "Systematische Übersicht über die buddhistische Sanskrit-Literatur = Systematic survey of Buddhist Sanskrit literature [HTRC-Vollbuch-Abschnitt 9/13]",
-          "author": "Steinkellner, Ernst",
+          "title": "Euer Noach, Schiffbauer und Zoodirektor: biblische Gestalten melden sich zu Wort",
+          "author": "Frisch, Hermann-Josef",
+          "publisher": "Patmos",
+          "date": "2009",
+          "corpus_layer": "drm_fallback_multi_api_enriched",
+          "probability": 73.6,
+          "keywords": [
+            "nan"
+          ],
+          "snippet": "Euer Noach, Schiffbauer und Zoodirektor: biblische Gestalten melden sich zu Wort. Frisch, Hermann-Josef. Patmos. Was Eva, Mose und Paulus uns heute zu sagen haben. Was würden sie uns heute für Briefe schreiben? Dreißig biblische Gestalten m",
+          "apa_citation": "Frisch, Hermann-Josef (2009). Euer Noach, Schiffbauer und Zoodirektor: biblische Gestalten melden sich zu Wort. Patmos."
+        },
+        {
+          "title": "Bethel: Geschichte, Kult und Theologie [HTRC-Vollbuch-Abschnitt 60/70]",
+          "author": "Koenen, Klaus",
           "publisher": "Vandenhoeck & Ruprecht",
-          "date": "1995",
+          "date": "2003",
           "corpus_layer": "hathitrust_ef_fullbook_print",
-          "probability": 74.1,
-          "keywords": [],
-          "snippet": "tshig-gi TshulJchrims rnam-par rgya-cher brjed Bhiksuvarsägraprcchä Verfasser Sauträntika Äryamülasarvästivädisrämanerakärikä Glen-gzi mchog mchog viele Dul-ba sdom-pa sdom-pa Sai Jahre Banerjee Banerjee Banerjee Banerjee I-ching Sarv Pat S",
-          "apa_citation": "Steinkellner, Ernst (1995). Systematische Übersicht über die buddhistische Sanskrit-Literatur = Systematic survey of Buddhist Sanskrit literature [HTRC-Vollbuch-Abschnitt 9/13]. Vandenhoeck & Ruprecht."
-        },
-        {
-          "title": "Narratio de vita sua [HTRC-Vollbuch-Abschnitt 8/15]",
-          "author": "Dionysius",
-          "publisher": "De Gruyter",
-          "date": "2026",
-          "corpus_layer": "hathitrust_ef_fullbook_print",
-          "probability": 73.2,
-          "keywords": [],
-          "snippet": "MTh MTh MTh Vaticanus Vaticanus Vaticanus Vaticanus Vaticanus Vaticanus Vaticanus Richard Richard Richard Richard Epp Epp Epp Epp Epp Epp Epp Katalog Cod Cod Cod Cod Cod Cod Cod Vaticana Vaticana Vaticana Vaticana Vaticana Vaticana Vaticana",
-          "apa_citation": "Dionysius (2026). Narratio de vita sua [HTRC-Vollbuch-Abschnitt 8/15]. De Gruyter."
+          "probability": 72.4,
+          "keywords": [
+            "nan"
+          ],
+          "snippet": "zwar Bedeutung Bedeutung anders anders also beruht Kontext Jakobs Einwohnung Blum wahrzunehmende segnet Gross kultischen läßt gedeckt Text Text Feststellung Erscheinung Erscheinung Erscheinung darin Schlußnotiz Präsenz Präsenz glätten Hier",
+          "apa_citation": "Koenen, Klaus (2003). Bethel: Geschichte, Kult und Theologie [HTRC-Vollbuch-Abschnitt 60/70]. Vandenhoeck & Ruprecht."
         }
       ]
     },
     {
       "topic_id": 3,
       "archetype": {
-        "label": "Critical / Secular-Humanist",
+        "label": "Neoliberal / Self-Optimization",
         "confidence": 100.0,
         "scores": {
           "Traditional / Ecclesiastical": 0.0,
-          "Neoliberal / Self-Optimization": 0.0,
-          "Critical / Secular-Humanist": 100.0
+          "Neoliberal / Self-Optimization": 100.0,
+          "Critical / Secular-Humanist": 0.0
         }
       },
       "seeded_prior": null,
       "top_terms": [
         {
-          "term": "politisch",
-          "weight": 0.02865
+          "term": "sinn",
+          "weight": 0.01791
         },
         {
-          "term": "deutsch",
-          "weight": 0.02279
+          "term": "mensch",
+          "weight": 0.01318
         },
         {
-          "term": "deutschland",
-          "weight": 0.01513
+          "term": "frage",
+          "weight": 0.01258
         },
         {
-          "term": "staat",
-          "weight": 0.01457
+          "term": "begriff",
+          "weight": 0.01022
         },
         {
-          "term": "land",
-          "weight": 0.00999
+          "term": "form",
+          "weight": 0.00902
         },
         {
-          "term": "politik",
-          "weight": 0.00908
+          "term": "bestimmt",
+          "weight": 0.00779
         },
         {
-          "term": "französisch",
-          "weight": 0.00707
+          "term": "handeln",
+          "weight": 0.00756
         },
         {
-          "term": "revolution",
-          "weight": 0.00686
+          "term": "welt",
+          "weight": 0.00663
         },
         {
-          "term": "gesellschaft",
-          "weight": 0.00654
+          "term": "möglichkeit",
+          "weight": 0.00644
         },
         {
-          "term": "europa",
-          "weight": 0.00595
+          "term": "erfahrung",
+          "weight": 0.00639
         },
         {
-          "term": "mitglied",
-          "weight": 0.0056
+          "term": "bedeutung",
+          "weight": 0.00603
         },
         {
-          "term": "partei",
-          "weight": 0.00556
+          "term": "verhältnis",
+          "weight": 0.0059
         },
         {
-          "term": "national",
-          "weight": 0.00513
+          "term": "menschlich",
+          "weight": 0.00569
         },
         {
-          "term": "arbeit",
-          "weight": 0.00503
+          "term": "fall",
+          "weight": 0.00516
         },
         {
-          "term": "demokratie",
-          "weight": 0.0048
+          "term": "fichte",
+          "weight": 0.00515
         }
       ],
       "top_publishers": [
         {
-          "publisher": "Rowohlt",
-          "share": 12.6
-        },
-        {
           "publisher": "Klett-Cotta",
-          "share": 11.5
-        },
-        {
-          "publisher": "Fischer",
-          "share": 10.2
-        },
-        {
-          "publisher": "Kiepenheuer",
-          "share": 6.1
+          "share": 9.1
         },
         {
           "publisher": "Suhrkamp",
-          "share": 4.4
+          "share": 8.3
         },
         {
-          "publisher": "Gütersloher Verlagshaus (Chr. Kaiser)",
-          "share": 4.4
+          "publisher": "Vandenhoeck & Ruprecht",
+          "share": 7.6
+        },
+        {
+          "publisher": "Schöningh",
+          "share": 6.9
+        },
+        {
+          "publisher": "Nomos / Alber",
+          "share": 6.4
+        },
+        {
+          "publisher": "Rowohlt",
+          "share": 5.6
         }
       ],
       "representative_docs": [
         {
-          "title": "Lexikon des deutschen Widerstandes [HTRC-Vollbuch-Abschnitt 46/60]",
-          "author": "Benz, Wolfgang",
+          "title": "Die Flucht aus der Beliebigkeit [HTRC-Vollbuch-Abschnitt 22/25]",
+          "author": "Mitterer, Josef",
           "publisher": "Fischer",
-          "date": "1994",
+          "date": "2001",
           "corpus_layer": "hathitrust_ef_fullbook_print",
-          "probability": 60.6,
-          "keywords": [],
-          "snippet": "von Sozialistische Sozialistische Sozialistische Hoffmann Koalitionsregierung untergehen Nationalsozialismus hatte Max vor kann SPD-Linken Arbeiterpartei Auslandskontakte Anschluß gegründet sich Auseinandersetzungen Aktion was Kampf zweifel",
-          "apa_citation": "Benz, Wolfgang (1994). Lexikon des deutschen Widerstandes [HTRC-Vollbuch-Abschnitt 46/60]. Fischer."
+          "probability": 91.0,
+          "keywords": [
+            "nan"
+          ],
+          "snippet": "Unterscheidungen stillschweigend nicht musst musst setzen aktualisierst Das Das Verbindung die die die die die die nachdem voraussetzt oder idealistische Vom Trenne Verhältnis Beschreibung Beschreibung auf Aussage Aussage Diskurs universell",
+          "apa_citation": "Mitterer, Josef (2001). Die Flucht aus der Beliebigkeit [HTRC-Vollbuch-Abschnitt 22/25]. Fischer."
         },
         {
-          "title": "Waldorf Connection: Rudolf Steiner und die Anthroposophen [Forschungsbuch-Abschnitt 75/100]",
-          "author": "Grandt, Guido",
-          "publisher": "Alibri",
-          "date": "1998",
-          "corpus_layer": "archive_org_fulltext_book",
-          "probability": 59.5,
-          "keywords": [],
-          "snippet": "Darstellungen von Max Stibbe und anderen seither »nicht korrigiert« wor- 502 vgl. Rassismus-Gutachten: Bericht, in: Info3, 3/98 503 Rassismus-Gutachten: Bericht 504 Rassismus-Gutachten: Bericht den seien. Der Bund der niederländischen Waldo",
-          "apa_citation": "Grandt, Guido (1998). Waldorf Connection: Rudolf Steiner und die Anthroposophen [Forschungsbuch-Abschnitt 75/100]. Alibri."
+          "title": "Analytische Religionsphilosophie: Hauptstandpunkte u. Grundprobleme [HTRC-Vollbuch-Abschnitt 10/58]",
+          "author": "Schrödter, Hermann",
+          "publisher": "Nomos / Alber",
+          "date": "1979",
+          "corpus_layer": "hathitrust_ef_fullbook_print",
+          "probability": 88.7,
+          "keywords": [
+            "nan"
+          ],
+          "snippet": "machen Wenden Bild Bild Bild Bild Bild Zuordnung Modell Funktionsbestimmung Weiter Vgl Vgl Elementen Entstehung also also Art stellen Satz Satz Wittgenstein Tatsachen Tatsachen Bildes Bildes Bildes Bildes Bildes Bildes Analyse Mystischen ei",
+          "apa_citation": "Schrödter, Hermann (1979). Analytische Religionsphilosophie: Hauptstandpunkte u. Grundprobleme [HTRC-Vollbuch-Abschnitt 10/58]. Nomos / Alber."
         },
         {
-          "title": "Klerikalismus und Proletariat: zur Religionsfrage und andere frühe Schriften",
-          "author": "Maslowski, Peter",
-          "publisher": "Alibri",
-          "date": "2003",
-          "corpus_layer": "drm_fallback_multi_api_enriched",
-          "probability": 58.8,
-          "keywords": [],
-          "snippet": "Klerikalismus und Proletariat: zur Religionsfrage und andere frühe Schriften. Maslowski, Peter. Alibri. Peter Maslowski (* 25. April 1893 in Berlin; † 24. April 1983 in Sommerhausen) war ein Politiker (KPD), Journalist und Religionskritiker",
-          "apa_citation": "Maslowski, Peter (2003). Klerikalismus und Proletariat: zur Religionsfrage und andere frühe Schriften. Alibri."
+          "title": "Reflexive Letztbegründung: Unters. zur Transzendentalpragmatik [HTRC-Vollbuch-Abschnitt 34/75]",
+          "author": "Kuhlmann, Wolfgang",
+          "publisher": "Nomos / Alber",
+          "date": "1985",
+          "corpus_layer": "hathitrust_ef_fullbook_print",
+          "probability": 87.9,
+          "keywords": [
+            "nan"
+          ],
+          "snippet": "faktisch mißversteht ganz Entsprechend legitim nämlich Moment konform Regel Regel Regel Regel Regel Regel Regel Regel dabei implizit habe Handeln Sinne gewissen Naturgesetz Subjekte zwar vermittelt sagen anders fehlerhaft Komponente Verhält",
+          "apa_citation": "Kuhlmann, Wolfgang (1985). Reflexive Letztbegründung: Unters. zur Transzendentalpragmatik [HTRC-Vollbuch-Abschnitt 34/75]. Nomos / Alber."
         }
       ]
     },
     {
       "topic_id": 4,
       "archetype": {
-        "label": "Critical / Secular-Humanist",
+        "label": "Traditional / Ecclesiastical",
         "confidence": 100.0,
         "scores": {
-          "Traditional / Ecclesiastical": 0.0,
+          "Traditional / Ecclesiastical": 100.0,
           "Neoliberal / Self-Optimization": 0.0,
-          "Critical / Secular-Humanist": 100.0
+          "Critical / Secular-Humanist": 0.0
         }
       },
       "seeded_prior": null,
       "top_terms": [
         {
-          "term": "sozial",
-          "weight": 0.01314
-        },
-        {
-          "term": "gesellschaft",
-          "weight": 0.01055
-        },
-        {
-          "term": "religiös",
-          "weight": 0.00903
-        },
-        {
-          "term": "modern",
-          "weight": 0.00687
-        },
-        {
-          "term": "gesellschaftlich",
-          "weight": 0.00683
+          "term": "gott",
+          "weight": 0.11983
         },
         {
           "term": "mensch",
-          "weight": 0.00621
+          "weight": 0.04445
         },
         {
-          "term": "frage",
-          "weight": 0.00603
+          "term": "glaube",
+          "weight": 0.01929
         },
         {
-          "term": "unterschiedlich",
-          "weight": 0.00552
+          "term": "leben",
+          "weight": 0.01603
         },
         {
-          "term": "politisch",
-          "weight": 0.00531
+          "term": "welt",
+          "weight": 0.015
         },
         {
-          "term": "kultur",
-          "weight": 0.00524
+          "term": "geist",
+          "weight": 0.01261
         },
         {
-          "term": "person",
-          "weight": 0.00516
+          "term": "wort",
+          "weight": 0.01127
         },
         {
-          "term": "entwicklung",
-          "weight": 0.00511
+          "term": "liebe",
+          "weight": 0.0106
         },
         {
-          "term": "gruppe",
-          "weight": 0.00506
+          "term": "göttlich",
+          "weight": 0.01051
         },
         {
-          "term": "bereich",
-          "weight": 0.00497
+          "term": "christlich",
+          "weight": 0.00765
         },
         {
-          "term": "problem",
-          "weight": 0.00473
+          "term": "menschlich",
+          "weight": 0.00742
+        },
+        {
+          "term": "heilig",
+          "weight": 0.00738
+        },
+        {
+          "term": "offenbarung",
+          "weight": 0.00728
+        },
+        {
+          "term": "jesus",
+          "weight": 0.00715
+        },
+        {
+          "term": "christus",
+          "weight": 0.00713
         }
       ],
       "top_publishers": [
         {
-          "publisher": "Klett-Cotta",
-          "share": 10.0
-        },
-        {
-          "publisher": "Rowohlt",
-          "share": 9.2
-        },
-        {
-          "publisher": "Fischer",
+          "publisher": "Gütersloher Verlagshaus (Chr. Kaiser)",
           "share": 7.3
         },
         {
-          "publisher": "Suhrkamp",
-          "share": 7.3
+          "publisher": "Frommann-Holzboog",
+          "share": 5.7
+        },
+        {
+          "publisher": "Schöningh",
+          "share": 5.2
         },
         {
           "publisher": "Vandenhoeck & Ruprecht",
-          "share": 5.8
+          "share": 5.0
         },
         {
-          "publisher": "Gütersloher Verlagshaus (Chr. Kaiser)",
-          "share": 4.5
+          "publisher": "Klett-Cotta",
+          "share": 4.2
+        },
+        {
+          "publisher": "Rowohlt",
+          "share": 3.9
         }
       ],
       "representative_docs": [
         {
-          "title": "Fundamentalismus: radikale Strömungen in den Weltreligionen [Forschungsbuch-Abschnitt 17/90]",
-          "author": "Wippermann, Wolfgang",
+          "title": "Contra Arianos: [lateinisch - deutsch] = Streitschrift gegen die Arianer [HTRC-Vollbuch-Abschnitt 32/36]",
+          "author": "Phoebadius",
           "publisher": "Herder",
-          "date": "2013",
-          "corpus_layer": "green_oa_repository_fulltext",
-          "probability": 87.4,
-          "keywords": [],
-          "snippet": "über Angebot und Nachfrage vermittelten Marktmechanismus (\"geldgesteuerte Märkte\")144. Das besondere Kennzeichen der modernen Gesellschaft liegt nach Giesen dabei in dem Umstand, daß die Institution der Arbeitsteilung und des Geldes systema",
-          "apa_citation": "Wippermann, Wolfgang (2013). Fundamentalismus: radikale Strömungen in den Weltreligionen [Forschungsbuch-Abschnitt 17/90]. Herder."
+          "date": "1999",
+          "corpus_layer": "hathitrust_ef_fullbook_print",
+          "probability": 79.3,
+          "keywords": [
+            "nan"
+          ],
+          "snippet": "etwas warum fähig fähig man Glaubensbekenntnis Substanzen gelehrt unlängst auch auch sehe ganz ersonnen lieber kann menschlichen nicht nicht nicht nicht nicht nämlich Apostel sich sich Voraussetzung häretischer habe Ansicht anstatt übereins",
+          "apa_citation": "Phoebadius (1999). Contra Arianos: [lateinisch - deutsch] = Streitschrift gegen die Arianer [HTRC-Vollbuch-Abschnitt 32/36]. Herder."
         },
         {
-          "title": "Wie hältst du’s mit der Kirche?: Zur Relevanz von Religion und Kirche in der pluralen Gesellschaft. Analysen zur 6. Kirchenmitgliedschaftsuntersuchung [Forschungsbuch-Abschnitt 81/127]",
-          "author": "o. V.",
-          "publisher": "Evangelische Verlagsanstalt",
-          "date": "2024",
-          "corpus_layer": "gbv_direct_fulltext_pdf",
-          "probability": 85.7,
-          "keywords": [],
-          "snippet": "geprüftes Instrument mit vierzehn Items bereitsteht (im Fragebogen die Fragen 42a bis n). Die Münsteraner Lebensführungstypo- 249 Sozialstrukturelle Ungleichheiten und ihre Beziehungen zur Religiosität logie ist die Weiterführung eines früh",
-          "apa_citation": "o. V. (2024). Wie hältst du’s mit der Kirche?: Zur Relevanz von Religion und Kirche in der pluralen Gesellschaft. Analysen zur 6. Kirchenmitgliedschaftsuntersuchung [Forschungsbuch-Abschnitt 81/127]. Evangelische Verlagsanstalt."
-        },
-        {
-          "title": "Biographie, Ritual und Medien [OpenAlex-Vollbuch-Abschnitt 6/12]",
-          "author": "Nadja Miczek",
-          "publisher": "Religion und Medien",
-          "date": "2013",
+          "title": "Reformation und Gegenwart [OpenAlex-Vollbuch-Abschnitt 15/28]",
+          "author": "Munsonius, Hendrik,",
+          "publisher": "Open Access Book (DE)",
+          "date": "2016",
           "corpus_layer": "entire_fulltext_book_cloud",
-          "probability": 84.2,
-          "keywords": [],
-          "snippet": "werden diese Fragen am Beispiel ausgewählter Akteure vertieft. Theoretisch leitend dafür sind Ansätze aus dem sozial- und kulturwissenschaftlichen Bereich. Ihre Übernahme für religionswissenschaftliches Arbeiten in Bezug auf die Erforschung",
-          "apa_citation": "Nadja Miczek (2013). Biographie, Ritual und Medien [OpenAlex-Vollbuch-Abschnitt 6/12]. Religion und Medien."
+          "probability": 78.5,
+          "keywords": [
+            "nan"
+          ],
+          "snippet": "gegen die Vorstellung gewandt, der Glaube sei eine freie Entscheidung des Menschen. Denn dann könnte diese freie Entscheidung als das Werk angesehen werden, das der Mensch vollbringen muss, um gerechtfertigt zu werden. Die Reformatoren habe",
+          "apa_citation": "Munsonius, Hendrik, (2016). Reformation und Gegenwart [OpenAlex-Vollbuch-Abschnitt 15/28]. Open Access Book (DE)."
+        },
+        {
+          "title": "Nachfolge [HTRC-Vollbuch-Abschnitt 49/75]",
+          "author": "Bonhoeffer, Dietrich",
+          "publisher": "Gütersloher Verlagshaus (Chr. Kaiser)",
+          "date": "1989",
+          "corpus_layer": "hathitrust_ef_fullbook_print",
+          "probability": 77.6,
+          "keywords": [
+            "nan"
+          ],
+          "snippet": "Tode Bindung Krankheit Menschheit Menschheit Menschheit Menschheit Menschheit seines trug trug trug trug Menschen Jünger gekommen Fleisch Fleisch Darum Nachfolge verstehen fiel Zwar sterben vergeben Luk zweiter sündiges bedürfte erst Gottes",
+          "apa_citation": "Bonhoeffer, Dietrich (1989). Nachfolge [HTRC-Vollbuch-Abschnitt 49/75]. Gütersloher Verlagshaus (Chr. Kaiser)."
         }
       ]
     },
@@ -571,125 +595,131 @@
       "seeded_prior": null,
       "top_terms": [
         {
-          "term": "theologie",
-          "weight": 0.06883
+          "term": "praktische_theologie",
+          "weight": 0.01119
         },
         {
-          "term": "christlich",
-          "weight": 0.03891
+          "term": "theology",
+          "weight": 0.01058
         },
         {
-          "term": "ethik",
-          "weight": 0.02539
+          "term": "philosophy",
+          "weight": 0.01036
         },
         {
-          "term": "theologisch",
-          "weight": 0.02517
+          "term": "studies",
+          "weight": 0.00977
         },
         {
-          "term": "religiös",
-          "weight": 0.01354
+          "term": "his",
+          "weight": 0.00971
         },
         {
-          "term": "kirche",
-          "weight": 0.01337
+          "term": "zielgruppe_fachpublikum",
+          "weight": 0.00961
         },
         {
-          "term": "glaube",
-          "weight": 0.01117
+          "term": "god",
+          "weight": 0.0096
         },
         {
-          "term": "frage",
-          "weight": 0.011
+          "term": "religionspädagogik",
+          "weight": 0.00825
         },
         {
-          "term": "christentum",
-          "weight": 0.01057
+          "term": "not",
+          "weight": 0.00705
         },
         {
-          "term": "barth",
-          "weight": 0.00927
+          "term": "van",
+          "weight": 0.00657
         },
         {
-          "term": "ethisch",
-          "weight": 0.00817
+          "term": "world",
+          "weight": 0.0063
         },
         {
-          "term": "fakultät",
-          "weight": 0.00754
+          "term": "work",
+          "weight": 0.00628
         },
         {
-          "term": "theologe",
-          "weight": 0.00732
+          "term": "study",
+          "weight": 0.00623
         },
         {
-          "term": "problem",
-          "weight": 0.0069
+          "term": "que",
+          "weight": 0.00586
         },
         {
-          "term": "kritisch",
-          "weight": 0.00626
+          "term": "has",
+          "weight": 0.00544
         }
       ],
       "top_publishers": [
         {
-          "publisher": "Gütersloher Verlagshaus (Chr. Kaiser)",
-          "share": 13.2
-        },
-        {
           "publisher": "Vandenhoeck & Ruprecht",
-          "share": 8.0
+          "share": 6.7
         },
         {
-          "publisher": "Klett-Cotta",
-          "share": 5.8
-        },
-        {
-          "publisher": "Rowohlt",
-          "share": 5.0
-        },
-        {
-          "publisher": "Open Access Book (DE)",
-          "share": 4.7
+          "publisher": "Frommann-Holzboog",
+          "share": 6.6
         },
         {
           "publisher": "Schöningh",
-          "share": 4.2
+          "share": 6.5
+        },
+        {
+          "publisher": "Böhlau",
+          "share": 5.8
+        },
+        {
+          "publisher": "De Gruyter / Transcript",
+          "share": 5.6
+        },
+        {
+          "publisher": "Suhrkamp",
+          "share": 4.8
         }
       ],
       "representative_docs": [
         {
-          "title": "Religionspädagogik: Lehrbuch praktische Theologie, Band 1",
-          "author": "Schweitzer, Friedrich",
-          "publisher": "Gütersloher Verlagshaus",
-          "date": "2006",
-          "corpus_layer": "drm_fallback_multi_api_enriched",
-          "probability": 66.3,
-          "keywords": [],
-          "snippet": "Religionspädagogik: Lehrbuch praktische Theologie, Band 1. Schweitzer, Friedrich. Gütersloher Verlagshaus. Dieses grundlegende Lehrbuch der Religionspädagogik - erschließt die Grundaufgaben der Religionspädagogik, - ermöglicht, auf den vers",
-          "apa_citation": "Schweitzer, Friedrich (2006). Religionspädagogik: Lehrbuch praktische Theologie, Band 1. Gütersloher Verlagshaus."
+          "title": "Echoes of Origen: Augustine's reception of the Commentary on romans",
+          "author": "Kock Møller, Morten",
+          "publisher": "Aschendorff",
+          "date": "2024",
+          "corpus_layer": "dnb_deposit_inhaltstext",
+          "probability": 77.5,
+          "keywords": [
+            "nan"
+          ],
+          "snippet": "It is almost impossible to overstate the historical impact of Augustine of Hippo’s (354–430) interpretation of the Epistle to the Romans in terms of its repercussions in Western theology. Augustine's exegesis of certain key passages in Paul",
+          "apa_citation": "Kock Møller, Morten (2024). Echoes of Origen: Augustine's reception of the Commentary on romans. Aschendorff."
         },
         {
-          "title": "Kein Weltfrieden ohne christlichen Absolutheitsanspruch: eine religionstheologische Auseinandersetzung mit Hans Küngs \"Projekt Weltethos\"",
-          "author": "Neuhaus, Gerd",
-          "publisher": "Herder",
-          "date": "1999",
-          "corpus_layer": "drm_fallback_multi_api_enriched",
-          "probability": 65.8,
-          "keywords": [],
-          "snippet": "Kein Weltfrieden ohne christlichen Absolutheitsanspruch: eine religionstheologische Auseinandersetzung mit Hans Küngs \"Projekt Weltethos\". Neuhaus, Gerd. Herder. Gerd Neuhaus (* 1952 in Essen) ist ein deutscher katholischer Theologe. == Leb",
-          "apa_citation": "Neuhaus, Gerd (1999). Kein Weltfrieden ohne christlichen Absolutheitsanspruch: eine religionstheologische Auseinandersetzung mit Hans Küngs \"Projekt Weltethos\". Herder."
+          "title": "Innovative approaches to religious education",
+          "author": "Schlag, Thomas",
+          "publisher": "Kohlhammer",
+          "date": "2025",
+          "corpus_layer": "dnb_deposit_inhaltstext",
+          "probability": 77.2,
+          "keywords": [
+            "nan"
+          ],
+          "snippet": "Just as members of one religion or worldview will find it difficult, yet instructive and perhaps inspiring, to learn about those involved in other religions or worldviews, so will those from one RE tradition find it difficult, instructive,",
+          "apa_citation": "Schlag, Thomas (2025). Innovative approaches to religious education. Kohlhammer."
         },
         {
-          "title": "Glaubenlernen aus Erfahrung: Grundbegriffe einer Didaktik des Glaubens [Forschungsbuch-Abschnitt 2/2]",
-          "author": "Werbick, Jürgen",
-          "publisher": "Kösel",
-          "date": "1989",
-          "corpus_layer": "drm_fallback_multi_api_enriched",
-          "probability": 64.6,
-          "keywords": [],
-          "snippet": ". . Der »Inhalt« des Zeugnisses . . Symbol-Diskurs . . Die Konkretheit des nächsten Schritts . Die Wahrheit ist konkret - Konsequenzen für den Dialog zwischen Systematischer Theologie und Religionspädagogik Christlicher Glaube als Alternati",
-          "apa_citation": "Werbick, Jürgen (1989). Glaubenlernen aus Erfahrung: Grundbegriffe einer Didaktik des Glaubens [Forschungsbuch-Abschnitt 2/2]. Kösel."
+          "title": "Commentary on the Apocalypse of St. John",
+          "author": "Prigent, Pierre",
+          "publisher": "Mohr Siebeck",
+          "date": "2001",
+          "corpus_layer": "dnb_deposit_inhaltstext",
+          "probability": 76.2,
+          "keywords": [
+            "nan"
+          ],
+          "snippet": "In this work, published 20 years after his first commentary on the Apocalypse, Pierre Prigent deals once again with the Apocalypse, but this time with the numerous exegetical, historical and sociological studies which were published during",
+          "apa_citation": "Prigent, Pierre (2001). Commentary on the Apocalypse of St. John. Mohr Siebeck."
         }
       ]
     },
@@ -697,135 +727,141 @@
       "topic_id": 6,
       "archetype": {
         "label": "Traditional / Ecclesiastical",
-        "confidence": 92.6,
+        "confidence": 93.2,
         "scores": {
-          "Traditional / Ecclesiastical": 92.6,
-          "Neoliberal / Self-Optimization": 7.4,
+          "Traditional / Ecclesiastical": 93.2,
+          "Neoliberal / Self-Optimization": 6.8,
           "Critical / Secular-Humanist": 0.0
         }
       },
       "seeded_prior": null,
       "top_terms": [
         {
-          "term": "gott",
-          "weight": 0.10258
+          "term": "theologie",
+          "weight": 0.08394
         },
         {
-          "term": "mensch",
-          "weight": 0.05899
+          "term": "bisac_subject",
+          "weight": 0.0558
         },
         {
-          "term": "leben",
-          "weight": 0.01873
+          "term": "subject_heading",
+          "weight": 0.03642
         },
         {
-          "term": "welt",
-          "weight": 0.01683
+          "term": "christlich",
+          "weight": 0.03455
         },
         {
-          "term": "geist",
-          "weight": 0.01635
+          "term": "religiös",
+          "weight": 0.0339
+        },
+        {
+          "term": "christentum",
+          "weight": 0.02587
+        },
+        {
+          "term": "vlb",
+          "weight": 0.02161
+        },
+        {
+          "term": "bic_subject",
+          "weight": 0.02099
+        },
+        {
+          "term": "kirche",
+          "weight": 0.0186
+        },
+        {
+          "term": "heading_bisac",
+          "weight": 0.01584
+        },
+        {
+          "term": "subject_category",
+          "weight": 0.01561
+        },
+        {
+          "term": "theologisch",
+          "weight": 0.01553
         },
         {
           "term": "glaube",
-          "weight": 0.01369
+          "weight": 0.0146
         },
         {
-          "term": "menschlich",
-          "weight": 0.01277
+          "term": "heading",
+          "weight": 0.01384
         },
         {
-          "term": "seele",
-          "weight": 0.01043
-        },
-        {
-          "term": "göttlich",
-          "weight": 0.01024
-        },
-        {
-          "term": "sinn",
-          "weight": 0.00935
-        },
-        {
-          "term": "liebe",
-          "weight": 0.00779
-        },
-        {
-          "term": "wort",
-          "weight": 0.00765
-        },
-        {
-          "term": "natur",
-          "weight": 0.00765
-        },
-        {
-          "term": "wesen",
-          "weight": 0.00756
-        },
-        {
-          "term": "ewig",
-          "weight": 0.00751
+          "term": "spiritualität",
+          "weight": 0.01299
         }
       ],
       "top_publishers": [
         {
-          "publisher": "Gütersloher Verlagshaus (Chr. Kaiser)",
-          "share": 9.9
+          "publisher": "De Gruyter / Transcript",
+          "share": 6.1
         },
         {
-          "publisher": "Klett-Cotta",
-          "share": 8.2
+          "publisher": "Mohr Siebeck",
+          "share": 5.5
         },
         {
-          "publisher": "Rowohlt",
-          "share": 7.5
+          "publisher": "Herder",
+          "share": 4.4
+        },
+        {
+          "publisher": "Suhrkamp",
+          "share": 4.1
         },
         {
           "publisher": "Vandenhoeck & Ruprecht",
-          "share": 6.6
+          "share": 4.1
         },
         {
-          "publisher": "Schöningh",
-          "share": 6.6
-        },
-        {
-          "publisher": "Patmos",
-          "share": 4.7
+          "publisher": "Gütersloher Verlagshaus (Chr. Kaiser)",
+          "share": 3.8
         }
       ],
       "representative_docs": [
         {
-          "title": "Der Geist des Lebens: eine ganzheitliche Pneumatologie [HTRC-Vollbuch-Abschnitt 44/75]",
-          "author": "Moltmann, Jürgen",
-          "publisher": "Gütersloher Verlagshaus (Chr. Kaiser)",
-          "date": "1991",
-          "corpus_layer": "hathitrust_ef_fullbook_print",
-          "probability": 78.7,
-          "keywords": [],
-          "snippet": "Subjektes Geist Geist Geist Geist Natur Natur Menschen Menschen uns uns uns uns uns genommen Gnade dessen Werke klar Calvin bezeichnet treiben beginnen Energien machen machen Bild Bild Seele Gottes Gottes Licht Licht Quelle Quelle Quelle Qu",
-          "apa_citation": "Moltmann, Jürgen (1991). Der Geist des Lebens: eine ganzheitliche Pneumatologie [HTRC-Vollbuch-Abschnitt 44/75]. Gütersloher Verlagshaus (Chr. Kaiser)."
+          "title": "Glaubenslehre",
+          "author": "Lange, Dietz",
+          "publisher": "Mohr Siebeck",
+          "date": "2001",
+          "corpus_layer": "dnb_deposit_inhaltstext",
+          "probability": 82.6,
+          "keywords": [
+            "nan"
+          ],
+          "snippet": "(Produktform (spezifisch))Paper over boards, (BISAC Subject Heading)REL000000, (BISAC Subject Heading)REL017000, (BISAC Subject Heading)REL051000, (BISAC Subject Heading)REL067000, (BISAC Subject Heading)REL067110, (BISAC Subject Heading)RE",
+          "apa_citation": "Lange, Dietz (2001). Glaubenslehre. Mohr Siebeck."
         },
         {
-          "title": "Hasst Gott, auch wenn er liebt? : Liebe und Hass in der Religion [OpenAlex-Vollbuch-Abschnitt 7/8]",
-          "author": "Christian Danz",
-          "publisher": "Open Access Book (DE)",
-          "date": "2019",
-          "corpus_layer": "entire_fulltext_book_cloud",
-          "probability": 77.2,
-          "keywords": [],
-          "snippet": "versteht Jüngel formal das ״Ereignis einer inmitten noch so großer und mit Recht Hasst Gott, auch wenn er liebt? Liebe und Hass in der Religion 191 noch so großer Selbstbezogenheit immer noch größeren Selbstlosigkeit“.41 In der liebenden Hi",
-          "apa_citation": "Christian Danz (2019). Hasst Gott, auch wenn er liebt? : Liebe und Hass in der Religion [OpenAlex-Vollbuch-Abschnitt 7/8]. Open Access Book (DE)."
+          "title": "Dogma and method: toward interdisciplinarity in dogmatic theology",
+          "author": "Woźniak, Robert",
+          "publisher": "Mohr Siebeck",
+          "date": "2025",
+          "corpus_layer": "dnb_deposit_inhaltstext",
+          "probability": 75.9,
+          "keywords": [
+            "nan"
+          ],
+          "snippet": "Der Band untersucht die Bedeutung des christlichen Glaubens aus der Perspektive eines wissenschaftlichen Weltbildes und will damit den Dogmatismus in Theologie und Wissenschaft überwinden.",
+          "apa_citation": "Woźniak, Robert (2025). Dogma and method: toward interdisciplinarity in dogmatic theology. Mohr Siebeck."
         },
         {
-          "title": "Das Jenseits und die christliche Hoffnung - eine Kontroverse : Jenseitskontakte und die biblische Sicht auf Leben und Tod [OpenAlex-Vollbuch-Abschnitt 6/11]",
-          "author": "Matthias Zeindler",
-          "publisher": "Open Access Book (DE)",
-          "date": "2017",
-          "corpus_layer": "entire_fulltext_book_cloud",
-          "probability": 75.5,
-          "keywords": [],
-          "snippet": "Gottes kommen\" (1. Tim 2,4). Jeder Mensch wird deshalb einmal mit der schmerzhaften Wahrheit seines Lebens konfrontiert. Es besteht aber die große Hoffnung, dass jenseits dieses Schmerzes und gereinigt durch ihn auch alle in die Gemeinschaf",
-          "apa_citation": "Matthias Zeindler (2017). Das Jenseits und die christliche Hoffnung - eine Kontroverse : Jenseitskontakte und die biblische Sicht auf Leben und Tod [OpenAlex-Vollbuch-Abschnitt 6/11]. Open Access Book (DE)."
+          "title": "Sceptic and Believer in Ancient Mediterranean Religions",
+          "author": "Edelmann-Singer, Babett",
+          "publisher": "Mohr Siebeck",
+          "date": "2020",
+          "corpus_layer": "dnb_deposit_inhaltstext",
+          "probability": 75.0,
+          "keywords": [
+            "nan"
+          ],
+          "snippet": "Was ist die Rolle der Skepsis in der religiösen Umwelt des Mittelmeerraums? Wie wird Zweifel innerhalb einer religiösen Gemeinschaft ausgedrückt? Worin unterscheidet sich der \"Zweifel des Zugehörigen\" von der skeptischen Einstellung des Auß",
+          "apa_citation": "Edelmann-Singer, Babett (2020). Sceptic and Believer in Ancient Mediterranean Religions. Mohr Siebeck."
         }
       ]
     },
@@ -833,407 +869,425 @@
       "topic_id": 7,
       "archetype": {
         "label": "Critical / Secular-Humanist",
-        "confidence": 55.8,
+        "confidence": 100.0,
         "scores": {
           "Traditional / Ecclesiastical": 0.0,
-          "Neoliberal / Self-Optimization": 44.2,
-          "Critical / Secular-Humanist": 55.8
+          "Neoliberal / Self-Optimization": 0.0,
+          "Critical / Secular-Humanist": 100.0
         }
       },
       "seeded_prior": null,
       "top_terms": [
         {
-          "term": "sinn",
-          "weight": 0.01651
-        },
-        {
-          "term": "begriff",
-          "weight": 0.00997
-        },
-        {
           "term": "philosophie",
-          "weight": 0.00907
+          "weight": 0.036
         },
         {
-          "term": "frage",
-          "weight": 0.00743
+          "term": "ethik",
+          "weight": 0.03375
         },
         {
           "term": "kant",
-          "weight": 0.00742
-        },
-        {
-          "term": "form",
-          "weight": 0.00672
-        },
-        {
-          "term": "philosophisch",
-          "weight": 0.00635
-        },
-        {
-          "term": "gegenstand",
-          "weight": 0.00596
-        },
-        {
-          "term": "grund",
-          "weight": 0.00594
-        },
-        {
-          "term": "denken",
-          "weight": 0.00593
-        },
-        {
-          "term": "wissenschaft",
-          "weight": 0.00591
+          "weight": 0.01887
         },
         {
           "term": "vernunft",
-          "weight": 0.00586
+          "weight": 0.01618
         },
         {
-          "term": "bestimmt",
-          "weight": 0.0053
+          "term": "philosophisch",
+          "weight": 0.01612
         },
         {
-          "term": "menschlich",
-          "weight": 0.00498
+          "term": "moralisch",
+          "weight": 0.01262
         },
         {
-          "term": "problem",
-          "weight": 0.0049
+          "term": "absolut",
+          "weight": 0.01246
+        },
+        {
+          "term": "natur",
+          "weight": 0.01219
+        },
+        {
+          "term": "begriff",
+          "weight": 0.012
+        },
+        {
+          "term": "moral",
+          "weight": 0.01115
+        },
+        {
+          "term": "hegel",
+          "weight": 0.00955
+        },
+        {
+          "term": "wissenschaft",
+          "weight": 0.00929
+        },
+        {
+          "term": "praktisch",
+          "weight": 0.00882
+        },
+        {
+          "term": "wesen",
+          "weight": 0.00866
+        },
+        {
+          "term": "wissen",
+          "weight": 0.00857
         }
       ],
       "top_publishers": [
         {
           "publisher": "Klett-Cotta",
-          "share": 16.9
-        },
-        {
-          "publisher": "Vandenhoeck & Ruprecht",
-          "share": 12.8
-        },
-        {
-          "publisher": "Schöningh",
-          "share": 9.2
-        },
-        {
-          "publisher": "Rowohlt",
-          "share": 8.3
-        },
-        {
-          "publisher": "Fischer",
-          "share": 5.9
+          "share": 11.5
         },
         {
           "publisher": "Frommann-Holzboog",
-          "share": 4.3
+          "share": 9.1
+        },
+        {
+          "publisher": "Vandenhoeck & Ruprecht",
+          "share": 8.9
+        },
+        {
+          "publisher": "Meiner",
+          "share": 7.7
+        },
+        {
+          "publisher": "Nomos / Alber",
+          "share": 7.7
+        },
+        {
+          "publisher": "Schöningh",
+          "share": 7.0
         }
       ],
       "representative_docs": [
         {
-          "title": "Fichtes Begriff der intellektuellen Anschauung: die Entwicklung in den Wissenschaftslehren von 1793/94 bis 1801/02 [HTRC-Vollbuch-Abschnitt 50/75]",
-          "author": "Stolzenberg, Jürgen",
+          "title": "Kants Religionsphilosophie [HTRC-Vollbuch-Abschnitt 67/75]",
+          "author": "Picht, Georg",
           "publisher": "Klett-Cotta",
-          "date": "1986",
+          "date": "1985",
           "corpus_layer": "hathitrust_ef_fullbook_print",
-          "probability": 95.0,
-          "keywords": [],
-          "snippet": "Satzteil Satzteil adäquat Terminus Terminus vorzutragen Frage Durchdringens Durchdringens Durchdringens Wissensform umgekehrt Problem genannte Sachverhalt bestimmt Verfassung angesehen einmal Voraussetzung zugesprochene Standpunkt oben eing",
-          "apa_citation": "Stolzenberg, Jürgen (1986). Fichtes Begriff der intellektuellen Anschauung: die Entwicklung in den Wissenschaftslehren von 1793/94 bis 1801/02 [HTRC-Vollbuch-Abschnitt 50/75]. Klett-Cotta."
+          "probability": 86.5,
+          "keywords": [
+            "nan"
+          ],
+          "snippet": "Freiheit Freiheit Freiheit Analyse reinen Erscheinung unerkennbar Überschrift praktischer darum Vernunft Vernunft finden Beispiel trägt transzendentale gelten Antwort aufzuheben weil Wille Wille Kant Idee Idee Wesen Kritik eigentümlich Will",
+          "apa_citation": "Picht, Georg (1985). Kants Religionsphilosophie [HTRC-Vollbuch-Abschnitt 67/75]. Klett-Cotta."
         },
         {
-          "title": "Ontologie und Dialektik bei Aristoteles [HTRC-Vollbuch-Abschnitt 14/73]",
-          "author": "Mesch, Walter",
-          "publisher": "Vandenhoeck & Ruprecht",
-          "date": "1994",
+          "title": "Jenaer kritische Schriften [HTRC-Vollbuch-Abschnitt 20/54]",
+          "author": "Hegel, Georg Wilhelm Friedrich",
+          "publisher": "Meiner",
+          "date": "1979",
           "corpus_layer": "hathitrust_ef_fullbook_print",
-          "probability": 92.6,
-          "keywords": [],
-          "snippet": "Axiome Axiome Axiome Axiome Folgendes Folgendes ihnen anderes Hypothesen gemeinsamen gemeinsamen erwähnten Wissenschaft Wissenschaft Wissenschaft Wissenschaft Wissenschaft Wissenschaft Wissenschaft gegenüber Prinzipien Prinzipien Prinzipien",
-          "apa_citation": "Mesch, Walter (1994). Ontologie und Dialektik bei Aristoteles [HTRC-Vollbuch-Abschnitt 14/73]. Vandenhoeck & Ruprecht."
+          "probability": 78.1,
+          "keywords": [
+            "nan"
+          ],
+          "snippet": "enthält Ichs Kausalitätsverhältnis verschwände Bestimmtes aufweisen Reellen aufgelöst gesetzte werde Entgegensetzen Entgegensetzen Intelligenz Intelligenz Produkt dies gemacht praktische produzieren verwiesen wiederherzustellen Identität Id",
+          "apa_citation": "Hegel, Georg Wilhelm Friedrich (1979). Jenaer kritische Schriften [HTRC-Vollbuch-Abschnitt 20/54]. Meiner."
         },
         {
-          "title": "Bedingungen der Möglichkeit: \"transcendental arguments\" und transzendentales Denken [HTRC-Vollbuch-Abschnitt 64/75]",
-          "author": "Schaper, Eva",
-          "publisher": "Klett-Cotta",
-          "date": "1984",
+          "title": "Philosophie als System bei Fichte, Schelling und Hegel [HTRC-Vollbuch-Abschnitt 19/55]",
+          "author": "Schurr, Adolf",
+          "publisher": "Frommann-Holzboog",
+          "date": "1974",
           "corpus_layer": "hathitrust_ef_fullbook_print",
-          "probability": 92.4,
-          "keywords": [],
-          "snippet": "folgt enthalten vorausgegangen wandelbar beispielsweise weiterhin gefällt muß tatsächlich solche solche Wissens Bestimmung fordert Weise Zustände darstellen anderen anderen daraus Interpretation Existenz Ordnung derselben genauer Kenntnis K",
-          "apa_citation": "Schaper, Eva (1984). Bedingungen der Möglichkeit: \"transcendental arguments\" und transzendentales Denken [HTRC-Vollbuch-Abschnitt 64/75]. Klett-Cotta."
+          "probability": 75.2,
+          "keywords": [
+            "nan"
+          ],
+          "snippet": "kein kein praktische Synthesis Synthesis Identität Identität Identität Identität sey sey sey sey sey Recht vereinigen gesetzt gesetzt solches sehr Fichte keinen keinen Grundlage Grundlage Zuordnung Ausdrucks unterscheidbarer vermag Setzen S",
+          "apa_citation": "Schurr, Adolf (1974). Philosophie als System bei Fichte, Schelling und Hegel [HTRC-Vollbuch-Abschnitt 19/55]. Frommann-Holzboog."
         }
       ]
     },
     {
       "topic_id": 8,
       "archetype": {
-        "label": "Traditional / Ecclesiastical",
+        "label": "Critical / Secular-Humanist",
         "confidence": 100.0,
         "scores": {
-          "Traditional / Ecclesiastical": 100.0,
+          "Traditional / Ecclesiastical": 0.0,
           "Neoliberal / Self-Optimization": 0.0,
-          "Critical / Secular-Humanist": 0.0
+          "Critical / Secular-Humanist": 100.0
         }
       },
       "seeded_prior": null,
       "top_terms": [
         {
-          "term": "luther",
-          "weight": 0.01914
+          "term": "sozial",
+          "weight": 0.01386
         },
         {
-          "term": "christi",
-          "weight": 0.01487
+          "term": "gesellschaft",
+          "weight": 0.01046
         },
         {
-          "term": "christus",
-          "weight": 0.0126
+          "term": "entwicklung",
+          "weight": 0.00965
         },
         {
-          "term": "jesus",
-          "weight": 0.0113
+          "term": "arbeit",
+          "weight": 0.00939
         },
         {
-          "term": "jesu",
-          "weight": 0.01016
+          "term": "frage",
+          "weight": 0.00768
         },
         {
-          "term": "melanchthon",
-          "weight": 0.00961
+          "term": "gesellschaftlich",
+          "weight": 0.00705
         },
         {
-          "term": "schrift",
-          "weight": 0.0094
+          "term": "unterschiedlich",
+          "weight": 0.00607
         },
         {
-          "term": "paulus",
-          "weight": 0.00734
+          "term": "verschieden",
+          "weight": 0.00559
         },
         {
-          "term": "dei",
-          "weight": 0.00695
+          "term": "bereich",
+          "weight": 0.00556
         },
         {
-          "term": "wort",
-          "weight": 0.00672
+          "term": "einzeln",
+          "weight": 0.0053
         },
         {
-          "term": "hoc",
-          "weight": 0.00566
+          "term": "wichtig",
+          "weight": 0.00521
         },
         {
-          "term": "herr",
-          "weight": 0.00563
+          "term": "ergebnis",
+          "weight": 0.00504
         },
         {
-          "term": "joh",
-          "weight": 0.00555
+          "term": "interesse",
+          "weight": 0.00501
         },
         {
-          "term": "evangelium",
-          "weight": 0.00538
+          "term": "praxis",
+          "weight": 0.00483
         },
         {
-          "term": "heilig",
-          "weight": 0.00535
+          "term": "rolle",
+          "weight": 0.00474
         }
       ],
       "top_publishers": [
         {
-          "publisher": "Frommann-Holzboog",
-          "share": 11.1
+          "publisher": "Suhrkamp",
+          "share": 9.1
         },
         {
-          "publisher": "Gütersloher Verlagshaus",
-          "share": 8.4
+          "publisher": "Klett-Cotta",
+          "share": 6.9
         },
         {
-          "publisher": "Gütersloher Verlagshaus (Chr. Kaiser)",
-          "share": 8.0
+          "publisher": "Rowohlt",
+          "share": 5.7
+        },
+        {
+          "publisher": "Schöningh",
+          "share": 5.3
         },
         {
           "publisher": "Vandenhoeck & Ruprecht",
-          "share": 5.5
+          "share": 5.1
         },
         {
-          "publisher": "Herder (Benziger)",
-          "share": 5.4
-        },
-        {
-          "publisher": "Wilhelm Fink",
-          "share": 4.6
+          "publisher": "Fischer",
+          "share": 5.0
         }
       ],
       "representative_docs": [
         {
-          "title": "Der Liber decimationis des Bistums Konstanz: Studien, Edition und Kommentar [HTRC-Vollbuch-Abschnitt 40/71]",
-          "author": "Person-Weber, Gerlinde",
-          "publisher": "Nomos / Alber",
-          "date": "2001",
-          "corpus_layer": "hathitrust_ef_fullbook_print",
-          "probability": 87.9,
-          "keywords": [],
-          "snippet": "dabit taxavit unam unam Fischen aliud cum exempte Lindaugia Solvit Solvit Solvit postea Non domini Magistra Rauenspurch redditibus redditibus hoc hoc tres Item Item Item beneficium beneficia solvit solvit beneficiatus beneficiatus Immenstad",
-          "apa_citation": "Person-Weber, Gerlinde (2001). Der Liber decimationis des Bistums Konstanz: Studien, Edition und Kommentar [HTRC-Vollbuch-Abschnitt 40/71]. Nomos / Alber."
+          "title": "Emotions-Psychologie: theoretische Analysen und empirische Untersuchungen [OpenAlex-Vollbuch-Abschnitt 18/52]",
+          "author": "Ulrich Mees",
+          "publisher": "Carl von Ossiezky University of Oldenburg",
+          "date": "2003",
+          "corpus_layer": "entire_fulltext_book_cloud",
+          "probability": 81.2,
+          "keywords": [
+            "nan"
+          ],
+          "snippet": "ist dagegen nicht signifikant. 1.4.4.4.2 Direkte und indirekte Orientierungen in ihrer Kombination Analog zur Prüfung der Verteilung der Pbn auf die vier möglichen Kombinationen von Annäherungs- und Vermeidungsorientierung (s.o.) wurde auch",
+          "apa_citation": "Ulrich Mees (2003). Emotions-Psychologie: theoretische Analysen und empirische Untersuchungen [OpenAlex-Vollbuch-Abschnitt 18/52]. Carl von Ossiezky University of Oldenburg."
         },
         {
-          "title": "Leben des Jakob Andreae, Doktor der Theologie, von ihm selbst mit großer Treue und Aufrichtigkeit beschrieben, bis auf das Jahr 1562: lateinisch und deutsch [HTRC-Vollbuch-Abschnitt 35/50]",
-          "author": "Andreä, Jacob",
-          "publisher": "Calwer",
-          "date": "1991",
-          "corpus_layer": "hathitrust_ef_fullbook_print",
-          "probability": 81.0,
-          "keywords": [],
-          "snippet": "damit damit ersuchte selbst selbst Vorwand antreten behilflich ungewissen ergriff ihn ihn ihn geliebten einigermaßen Gesandten sondern est est officii unus unus ipse celsitudo egressi parrochiae Domini Hieronymus avertit Hic potuit potuit c",
-          "apa_citation": "Andreä, Jacob (1991). Leben des Jakob Andreae, Doktor der Theologie, von ihm selbst mit großer Treue und Aufrichtigkeit beschrieben, bis auf das Jahr 1562: lateinisch und deutsch [HTRC-Vollbuch-Abschnitt 35/50]. Calwer."
+          "title": "Die Sorge um Andere am Lebensende als Beruf [OpenAlex-Vollbuch-Abschnitt 39/55]",
+          "author": "Karin A. Stadelmann",
+          "publisher": "Springer Nature (Holtzbrinck)",
+          "date": "2024",
+          "corpus_layer": "entire_fulltext_book_cloud",
+          "probability": 80.8,
+          "keywords": [
+            "nan"
+          ],
+          "snippet": "und Koordinationsleistungen unterschieden, welche auch als Kernaufgaben zu lesen sind, und es werden verschiedenen Methoden ausgeführt. Zu den Beratungsleistungen gehören Beratungen bezogen auf • die Krankheit und diesbezüglichen Unterstütz",
+          "apa_citation": "Karin A. Stadelmann (2024). Die Sorge um Andere am Lebensende als Beruf [OpenAlex-Vollbuch-Abschnitt 39/55]. Springer Nature (Holtzbrinck)."
         },
         {
-          "title": "Super Threnos [HTRC-Vollbuch-Abschnitt 25/61]",
-          "author": "Albertus",
-          "publisher": "Aschendorff",
-          "date": "2019",
+          "title": "BA-Studium Soziologie: ein Lehrbuch [HTRC-Vollbuch-Abschnitt 63/70]",
+          "author": "Huinink, Johannes",
+          "publisher": "Rowohlt",
+          "date": "2005",
           "corpus_layer": "hathitrust_ef_fullbook_print",
-          "probability": 80.9,
-          "keywords": [],
-          "snippet": "eorum oportet post loquentes causam dictum compositionem semine loca autem autem autem autem his his opera Inc Inc Inc Inc Inc Inc Inc Inc Inc humorum cornibus sine Habitis facile antehabitis Hss Hss Hss praeinductorum longiora principio de",
-          "apa_citation": "Albertus (2019). Super Threnos [HTRC-Vollbuch-Abschnitt 25/61]. Aschendorff."
+          "probability": 77.8,
+          "keywords": [
+            "nan"
+          ],
+          "snippet": "gestalten verschiedenen Erziehungs zweiten Kollektive kooperieren Abraham entstehen genügen Zweck Repräsentanten deren bzw bzw etwa Oberthemen sozialstrukturellen wissen tun weiterhin hier gestaltet Dennoch größeren Gestaltung Fragestellung",
+          "apa_citation": "Huinink, Johannes (2005). BA-Studium Soziologie: ein Lehrbuch [HTRC-Vollbuch-Abschnitt 63/70]. Rowohlt."
         }
       ]
     },
     {
       "topic_id": 9,
       "archetype": {
-        "label": "Traditional / Ecclesiastical",
+        "label": "Critical / Secular-Humanist",
         "confidence": 100.0,
         "scores": {
-          "Traditional / Ecclesiastical": 100.0,
+          "Traditional / Ecclesiastical": 0.0,
           "Neoliberal / Self-Optimization": 0.0,
-          "Critical / Secular-Humanist": 0.0
+          "Critical / Secular-Humanist": 100.0
         }
       },
       "seeded_prior": null,
       "top_terms": [
         {
-          "term": "kirche",
-          "weight": 0.06286
-        },
-        {
-          "term": "katholisch",
-          "weight": 0.01484
-        },
-        {
-          "term": "kloster",
-          "weight": 0.01185
-        },
-        {
-          "term": "kirchlich",
-          "weight": 0.01159
-        },
-        {
-          "term": "bischof",
-          "weight": 0.00862
-        },
-        {
-          "term": "stadt",
-          "weight": 0.00799
-        },
-        {
-          "term": "gemeinde",
-          "weight": 0.00745
-        },
-        {
-          "term": "evangelisch",
-          "weight": 0.00723
+          "term": "geschichte",
+          "weight": 0.02538
         },
         {
           "term": "jahrhundert",
-          "weight": 0.00619
+          "weight": 0.01761
         },
         {
-          "term": "heilig",
-          "weight": 0.006
+          "term": "deutsch",
+          "weight": 0.01069
         },
         {
-          "term": "pfarrer",
-          "weight": 0.00579
+          "term": "schrift",
+          "weight": 0.0104
         },
         {
-          "term": "papst",
-          "weight": 0.00538
+          "term": "text",
+          "weight": 0.00971
         },
         {
-          "term": "rat",
-          "weight": 0.00519
+          "term": "autor",
+          "weight": 0.00901
         },
         {
-          "term": "reich",
-          "weight": 0.00492
+          "term": "studie",
+          "weight": 0.00823
         },
         {
-          "term": "reformation",
-          "weight": 0.00453
+          "term": "historisch",
+          "weight": 0.00815
+        },
+        {
+          "term": "literatur",
+          "weight": 0.00773
+        },
+        {
+          "term": "brief",
+          "weight": 0.00727
+        },
+        {
+          "term": "mittelalter",
+          "weight": 0.00581
+        },
+        {
+          "term": "kunst",
+          "weight": 0.00544
+        },
+        {
+          "term": "forschung",
+          "weight": 0.00509
+        },
+        {
+          "term": "wissenschaft",
+          "weight": 0.00491
+        },
+        {
+          "term": "martin",
+          "weight": 0.00466
         }
       ],
       "top_publishers": [
         {
-          "publisher": "Nomos / Alber",
-          "share": 8.4
-        },
-        {
-          "publisher": "Calwer",
-          "share": 6.9
-        },
-        {
-          "publisher": "Gütersloher Verlagshaus",
-          "share": 6.7
+          "publisher": "Böhlau",
+          "share": 7.0
         },
         {
           "publisher": "Rowohlt",
-          "share": 5.3
+          "share": 6.5
         },
         {
-          "publisher": "Bonifatius",
-          "share": 5.3
+          "publisher": "Schöningh",
+          "share": 6.1
         },
         {
-          "publisher": "Gütersloher Verlagshaus (Chr. Kaiser)",
-          "share": 5.2
+          "publisher": "Vandenhoeck & Ruprecht",
+          "share": 5.9
+        },
+        {
+          "publisher": "Klett-Cotta",
+          "share": 5.9
+        },
+        {
+          "publisher": "Frommann-Holzboog",
+          "share": 5.6
         }
       ],
       "representative_docs": [
         {
-          "title": "Das Gewissen: vorgegebene Norm verantwortlichen Handelns oder Produkt gesellschaftlicher Zwänge? [Forschungsbuch-Abschnitt 81/89]",
-          "author": "Fuchs, Josef",
-          "publisher": "Patmos",
-          "date": "1979",
-          "corpus_layer": "archive_org_fulltext_book",
-          "probability": 70.5,
-          "keywords": [],
-          "snippet": "jederzeitige Austritt aus der Kirche möglich sein muss. Die Glaubens- und Gewissensfreiheit verbietet es aber den Kantonen nicht, den Austritt von gewissen Erfordernissen abhängig zu machen. So entschied das Bundesgericht in einem die Evang",
-          "apa_citation": "Fuchs, Josef (1979). Das Gewissen: vorgegebene Norm verantwortlichen Handelns oder Produkt gesellschaftlicher Zwänge? [Forschungsbuch-Abschnitt 81/89]. Patmos."
+          "title": "Philosophische Clandestina der deutschen Aufklärung. Texte und Dokumente/Philosophische Clandestina der deutschen Aufklärung. Abteilung I: Texte und Dokumente/Schriften und Dokumente",
+          "author": "Knutzen, Matthias",
+          "publisher": "Frommann-Holzboog",
+          "date": "2010",
+          "corpus_layer": "dnb_deposit_inhaltstext",
+          "probability": 76.7,
+          "keywords": [
+            "nan"
+          ],
+          "snippet": "Matthias Knutzen (1646 - nach 1674) ist der erste namentlich bekannte Atheist der europäischen Philosophiegeschichte. Der vorliegende Band präsentiert eine Neuedition seiner zu Beginn der 1670er Jahre verfassten Schriften (mit zeitgenössisc",
+          "apa_citation": "Knutzen, Matthias (2010). Philosophische Clandestina der deutschen Aufklärung. Texte und Dokumente/Philosophische Clandestina der deutschen Aufklärung. Abteilung I: Texte und Dokumente/Schriften und Dokumente. Frommann-Holzboog."
         },
         {
-          "title": "Von der Reformation bis zur Säkularisation: Geschichte der katholischen Kirche im Raum des späteren Bistums Rottenburg-Stuttgart [HTRC-Vollbuch-Abschnitt 14/60]",
-          "author": "Tüchle, Hermann",
-          "publisher": "Patmos (Schwabenverlag)",
-          "date": "1981",
+          "title": "Max Weber: mit Selbstzeugnissen und Bilddokumenten [HTRC-Vollbuch-Abschnitt 36/36]",
+          "author": "Fügen, Hans Norbert",
+          "publisher": "Rowohlt",
+          "date": "2000",
           "corpus_layer": "hathitrust_ef_fullbook_print",
-          "probability": 67.6,
-          "keywords": [],
-          "snippet": "Religionsfriedens sei geöffnet als beseitigt kaiserlicher Jahre Jahre wurden Vertrag nie paar geflohenen schwache Stadt Schmähungen Der acht Regelung Kommission paritätischen wenn empfahl das das das zogen vertrat Position Minderheit Minder",
-          "apa_citation": "Tüchle, Hermann (1981). Von der Reformation bis zur Säkularisation: Geschichte der katholischen Kirche im Raum des späteren Bistums Rottenburg-Stuttgart [HTRC-Vollbuch-Abschnitt 14/60]. Patmos (Schwabenverlag)."
+          "probability": 74.5,
+          "keywords": [
+            "nan"
+          ],
+          "snippet": "Piscator Biblio Grosz Norbert Fiege Kunst Matthias Michelangelo Catherine Film NUndel Jeder Krahmer Fischer Fischer Fischer Arnold Giedion-Welcker Heinrich Heinrich Heinrich Heinrich Heinrich Max Max Reinken Vinci Reftberger Reinhardt Juerg",
+          "apa_citation": "Fügen, Hans Norbert (2000). Max Weber: mit Selbstzeugnissen und Bilddokumenten [HTRC-Vollbuch-Abschnitt 36/36]. Rowohlt."
         },
         {
-          "title": "Der Gefangene des Vatikans: Strukturen päpstlicher Herrschaft [HTRC-Vollbuch-Abschnitt 70/75]",
-          "author": "Leist, Fritz",
-          "publisher": "Kösel",
-          "date": "1971",
+          "title": "Roman aus Diskursen: Gottfried Keller \"Der grüne Heinrich\" ; (erste Fassung, 1854/55) [HTRC-Vollbuch-Abschnitt 69/75]",
+          "author": "Rohe, Wolfgang",
+          "publisher": "Wilhelm Fink",
+          "date": "1993",
           "corpus_layer": "hathitrust_ef_fullbook_print",
-          "probability": 67.3,
-          "keywords": [],
-          "snippet": "doch alle tun Der Wohle Wohle liegt inne Pontifex Pontifex Pontifex Pontifex begegnet Stellung seinem wenn Haupt Haupt Haupt Haupt Haupt Haupt Haupt ist ist ist ist das das das das das das principatum ihre Amts Testamentes eigene Bischof Bi",
-          "apa_citation": "Leist, Fritz (1971). Der Gefangene des Vatikans: Strukturen päpstlicher Herrschaft [HTRC-Vollbuch-Abschnitt 70/75]. Kösel."
+          "probability": 73.6,
+          "keywords": [
+            "nan"
+          ],
+          "snippet": "Literatur Literatur Jürgen Philosophie Bernd deutsches Mandelkow Mandelkow Mandelkow Mandelkow Muschg Muschg Friedrich Olbrich Olbrich Menninghaus Meister Schiller Umriß Teil Teil Geschichte Subjektivismus Hrsg Hrsg Hrsg Hrsg Einführung The",
+          "apa_citation": "Rohe, Wolfgang (1993). Roman aus Diskursen: Gottfried Keller \"Der grüne Heinrich\" ; (erste Fassung, 1854/55) [HTRC-Vollbuch-Abschnitt 69/75]. Wilhelm Fink."
         }
       ]
     },
@@ -1251,125 +1305,131 @@
       "seeded_prior": null,
       "top_terms": [
         {
+          "term": "leben",
+          "weight": 0.01408
+        },
+        {
+          "term": "tod",
+          "weight": 0.01107
+        },
+        {
+          "term": "mensch",
+          "weight": 0.00911
+        },
+        {
           "term": "alt",
-          "weight": 0.01047
-        },
-        {
-          "term": "bild",
-          "weight": 0.00883
-        },
-        {
-          "term": "kunst",
-          "weight": 0.0072
-        },
-        {
-          "term": "sprache",
-          "weight": 0.00585
+          "weight": 0.0083
         },
         {
           "term": "wort",
-          "weight": 0.00539
-        },
-        {
-          "term": "schön",
-          "weight": 0.00516
-        },
-        {
-          "term": "art",
-          "weight": 0.00495
-        },
-        {
-          "term": "name",
-          "weight": 0.00491
-        },
-        {
-          "term": "auge",
-          "weight": 0.00491
-        },
-        {
-          "term": "letzter",
-          "weight": 0.00447
-        },
-        {
-          "term": "leben",
-          "weight": 0.00422
+          "weight": 0.00823
         },
         {
           "term": "hand",
-          "weight": 0.00415
+          "weight": 0.00814
         },
         {
-          "term": "freund",
-          "weight": 0.004
+          "term": "bild",
+          "weight": 0.00738
         },
         {
-          "term": "rede",
-          "weight": 0.00376
+          "term": "herzog",
+          "weight": 0.00665
         },
         {
-          "term": "stelle",
-          "weight": 0.00366
+          "term": "herr",
+          "weight": 0.00622
+        },
+        {
+          "term": "auge",
+          "weight": 0.00552
+        },
+        {
+          "term": "tier",
+          "weight": 0.00541
+        },
+        {
+          "term": "herz",
+          "weight": 0.00457
+        },
+        {
+          "term": "welt",
+          "weight": 0.00453
+        },
+        {
+          "term": "schön",
+          "weight": 0.00425
+        },
+        {
+          "term": "weg",
+          "weight": 0.00385
         }
       ],
       "top_publishers": [
         {
           "publisher": "Rowohlt",
-          "share": 12.3
-        },
-        {
-          "publisher": "Klett-Cotta",
-          "share": 9.5
+          "share": 8.7
         },
         {
           "publisher": "Fischer",
-          "share": 8.3
+          "share": 6.4
+        },
+        {
+          "publisher": "Klett-Cotta",
+          "share": 6.3
+        },
+        {
+          "publisher": "Suhrkamp",
+          "share": 6.2
+        },
+        {
+          "publisher": "Böhlau",
+          "share": 5.6
         },
         {
           "publisher": "Vandenhoeck & Ruprecht",
-          "share": 7.2
-        },
-        {
-          "publisher": "Schöningh",
-          "share": 5.3
-        },
-        {
-          "publisher": "Frommann-Holzboog",
-          "share": 4.2
+          "share": 5.0
         }
       ],
       "representative_docs": [
         {
-          "title": "Aus der Welt der Azteken: die Chronik des Fray Bernardino de Sahagún [HTRC-Vollbuch-Abschnitt 45/60]",
+          "title": "Aus der Welt der Azteken: die Chronik des Fray Bernardino de Sahagún [HTRC-Vollbuch-Abschnitt 21/60]",
           "author": "Sahagún, Bernardino de",
           "publisher": "Insel",
           "date": "1989",
           "corpus_layer": "hathitrust_ef_fullbook_print",
-          "probability": 76.1,
-          "keywords": [],
-          "snippet": "davon gesagt Blüten wird wird wird wird wird wird Duft Duft wächst Name ihr Der flaumig durcheinander Kolben krank herausgezogen Teonacaztli Teonacaztli Teonacaztli Teonacaztli Teonacaztli füge Kakaokolben fließt wenn wenn wenn ist ist ist",
-          "apa_citation": "Sahagún, Bernardino de (1989). Aus der Welt der Azteken: die Chronik des Fray Bernardino de Sahagún [HTRC-Vollbuch-Abschnitt 45/60]. Insel."
+          "probability": 84.5,
+          "keywords": [
+            "nan"
+          ],
+          "snippet": "Zerstörung sollte sollte sie sie sie sie sie sie sie sie Erklärungen Dinge des Weinenden einen einen und und und bewegen bewegen bewegen Hunger mir mir als als elende Siehe Siehe wird wird wird wird verbergen Wind Stadt Stadt Sorgenvollen w",
+          "apa_citation": "Sahagún, Bernardino de (1989). Aus der Welt der Azteken: die Chronik des Fray Bernardino de Sahagún [HTRC-Vollbuch-Abschnitt 21/60]. Insel."
         },
         {
-          "title": "Zungengewahrsam: kleine Schriften zur Poetik und zur Kunst [HTRC-Vollbuch-Abschnitt 22/27]",
-          "author": "Duden, Anne",
-          "publisher": "Kiepenheuer",
-          "date": "1999",
+          "title": "Also sprach Zarathustra: e. Buch für alle u. keinen [HTRC-Vollbuch-Abschnitt 47/75]",
+          "author": "Nietzsche, Friedrich",
+          "publisher": "Insel",
+          "date": "1976",
           "corpus_layer": "hathitrust_ef_fullbook_print",
-          "probability": 73.2,
-          "keywords": [],
-          "snippet": "eines Ausnahmefall Tatsachen Brasilien gap kurzfristig Sie nun eingeräumten kommen Weiß vielleicht ich ich ich wirklich nur nur Luft pieces pieces mit mit mit mit den einige erscheint fast Slums durchkreuzungen höchstens entstanden entstand",
-          "apa_citation": "Duden, Anne (1999). Zungengewahrsam: kleine Schriften zur Poetik und zur Kunst [HTRC-Vollbuch-Abschnitt 22/27]. Kiepenheuer."
+          "probability": 82.2,
+          "keywords": [
+            "nan"
+          ],
+          "snippet": "Hölle Mitleidigen Liebenden Menschen Menschen LETZTER Zarathustra TEIL geschehen einst dies hörte CEZ sprach Wehe sagen größere jüngst ich Wort Mitleiden Mitleiden Teufel Welt Welt gestorben Also Also Liebe Torheiten ihn tot daher dicker ge",
+          "apa_citation": "Nietzsche, Friedrich (1976). Also sprach Zarathustra: e. Buch für alle u. keinen [HTRC-Vollbuch-Abschnitt 47/75]. Insel."
         },
         {
-          "title": "Fünf Jahre meines Lebens: ein Bericht aus Guantanamo [HTRC-Vollbuch-Abschnitt 43/60]",
-          "author": "Kurnaz, Murat",
-          "publisher": "Rowohlt",
-          "date": "2007",
+          "title": "Die Selbstkonstitution des Menschen [HTRC-Vollbuch-Abschnitt 35/75]",
+          "author": "Nietzsche, Friedrich",
+          "publisher": "Schöningh",
+          "date": "1981",
           "corpus_layer": "hathitrust_ef_fullbook_print",
-          "probability": 70.6,
-          "keywords": [],
-          "snippet": "geschlagen geschlagen Blut gegen sofort warfen Guckklappe brummte immer immer schon vom Füße Block Papiere schwingen durch durch diesen diesen damit wie Handschellen kalt schleppten ausgestattet konnte Luftzufuhr Ich Ich Ich Ich Ich Ich Ich",
-          "apa_citation": "Kurnaz, Murat (2007). Fünf Jahre meines Lebens: ein Bericht aus Guantanamo [HTRC-Vollbuch-Abschnitt 43/60]. Rowohlt."
+          "probability": 79.6,
+          "keywords": [
+            "nan"
+          ],
+          "snippet": "bin bin deinen endlich Trotz Blut Kind reden weißt weißt Bär beginnt stillsten meiner meiner meiner geht Abend holte Scheidenden willst meinem erschrickt Zehen mein mein Flüstern Stunde Stunde Stunde gen geschah geschah geschah seht Würdige",
+          "apa_citation": "Nietzsche, Friedrich (1981). Die Selbstkonstitution des Menschen [HTRC-Vollbuch-Abschnitt 35/75]. Schöningh."
         }
       ]
     },
@@ -1388,472 +1448,484 @@
       "top_terms": [
         {
           "term": "frau",
-          "weight": 0.04674
+          "weight": 0.0334
         },
         {
           "term": "kind",
-          "weight": 0.04564
+          "weight": 0.03281
         },
         {
           "term": "mann",
-          "weight": 0.03044
+          "weight": 0.01888
+        },
+        {
+          "term": "predigt",
+          "weight": 0.01543
         },
         {
           "term": "familie",
-          "weight": 0.0224
-        },
-        {
-          "term": "vater",
-          "weight": 0.01668
-        },
-        {
-          "term": "haus",
-          "weight": 0.01484
-        },
-        {
-          "term": "mutter",
-          "weight": 0.01415
+          "weight": 0.01393
         },
         {
           "term": "jung",
-          "weight": 0.01246
+          "weight": 0.01202
         },
         {
-          "term": "sohn",
-          "weight": 0.01118
+          "term": "haus",
+          "weight": 0.01031
         },
         {
-          "term": "eltern",
-          "weight": 0.00973
+          "term": "fol",
+          "weight": 0.00948
+        },
+        {
+          "term": "vater",
+          "weight": 0.00778
+        },
+        {
+          "term": "mutter",
+          "weight": 0.0076
         },
         {
           "term": "ehe",
-          "weight": 0.00946
+          "weight": 0.00686
         },
         {
-          "term": "liebe",
-          "weight": 0.00906
+          "term": "abt",
+          "weight": 0.0063
         },
         {
           "term": "leben",
-          "weight": 0.00786
+          "weight": 0.00567
         },
         {
-          "term": "freund",
-          "weight": 0.00784
+          "term": "sohn",
+          "weight": 0.00567
         },
         {
-          "term": "alt",
-          "weight": 0.00755
+          "term": "jugendliche",
+          "weight": 0.00563
         }
       ],
       "top_publishers": [
         {
           "publisher": "Rowohlt",
-          "share": 14.9
+          "share": 9.6
         },
         {
           "publisher": "Fischer",
-          "share": 13.3
+          "share": 8.8
         },
         {
-          "publisher": "Kiepenheuer",
-          "share": 7.2
+          "publisher": "Böhlau",
+          "share": 7.8
         },
         {
           "publisher": "Klett-Cotta",
-          "share": 6.2
+          "share": 5.2
         },
         {
-          "publisher": "Gütersloher Verlagshaus (Chr. Kaiser)",
-          "share": 4.4
+          "publisher": "Kiepenheuer",
+          "share": 5.1
         },
         {
-          "publisher": "Campus",
-          "share": 4.4
+          "publisher": "Suhrkamp",
+          "share": 4.6
         }
       ],
       "representative_docs": [
         {
-          "title": "Der kleine Unterschied und seine großen Folgen: Frauen über sich ; Beginn einer Befreiung [HTRC-Vollbuch-Abschnitt 10/75]",
-          "author": "Schwarzer, Alice",
-          "publisher": "Fischer",
-          "date": "2013",
-          "corpus_layer": "hathitrust_ef_fullbook_print",
-          "probability": 70.5,
-          "keywords": [],
-          "snippet": "Ich Ich Ich Ich eisern Schichtarbeit gelernt eins sie sie sie Die Die erste schön Tür des Arzt manches geredet ungewollt ungewollt und und und und und Kinder mir mir mir mir mir Neue Oft Ersten dritten jetziger gesagt wird wird nie Renate R",
-          "apa_citation": "Schwarzer, Alice (2013). Der kleine Unterschied und seine großen Folgen: Frauen über sich ; Beginn einer Befreiung [HTRC-Vollbuch-Abschnitt 10/75]. Fischer."
+          "title": "In Hoffnung widerstehen: Beiträge im Kontext wissenschaftsorientierter Bildungsarbeit unter den Bedinungen der deutschen Teilung ; Erich Lampey zum 90. Geburtstag [OpenAlex-Vollbuch-Abschnitt 34/55]",
+          "author": "Friedrich W. Busch",
+          "publisher": "Carl von Ossiezky University of Oldenburg",
+          "date": "2002",
+          "corpus_layer": "entire_fulltext_book_cloud",
+          "probability": 71.2,
+          "keywords": [
+            "nan"
+          ],
+          "snippet": "Scheidungen auf 10.000 bestehende Ehen von 50,9 auf 95,2 fast verdoppelt. Man kann davon ausgehen, dass mittlerweile mindestens jede dritte Ehe in Westdeutschland geschieden wird. Kaum verändert hat sich dabei der Anteil der Scheidungen, vo",
+          "apa_citation": "Friedrich W. Busch (2002). In Hoffnung widerstehen: Beiträge im Kontext wissenschaftsorientierter Bildungsarbeit unter den Bedinungen der deutschen Teilung ; Erich Lampey zum 90. Geburtstag [OpenAlex-Vollbuch-Abschnitt 34/55]. Carl von Ossiezky University of Oldenburg."
         },
         {
-          "title": "Die verlorenen Söhne: Plädoyer für die Befreiung des türkisch-muslimischen Mannes [HTRC-Vollbuch-Abschnitt 22/55]",
-          "author": "Kelek, Necla",
-          "publisher": "Kiepenheuer",
-          "date": "2006",
+          "title": "Religion als Heimat?: Zur lebensgeschichtlichen Bedeutung katholischer Glaubenstraditionen [HTRC-Vollbuch-Abschnitt 70/75]",
+          "author": "Wiebel-Fanderl, Oliva",
+          "publisher": "Böhlau",
+          "date": "1993",
           "corpus_layer": "hathitrust_ef_fullbook_print",
-          "probability": 70.2,
-          "keywords": [],
-          "snippet": "wegen wegen Vielleicht Staatsanwaltschaft erst wir wir aufgestanden sehr hat Das morgens siebzehn Drogen Mutter noch noch noch noch wäre die die die die aber aber drei drei Geld Geld Geld Leute oder reihte Dann Ibo Ibo Ibo zur auf auf Knast",
-          "apa_citation": "Kelek, Necla (2006). Die verlorenen Söhne: Plädoyer für die Befreiung des türkisch-muslimischen Mannes [HTRC-Vollbuch-Abschnitt 22/55]. Kiepenheuer."
+          "probability": 70.9,
+          "keywords": [
+            "nan"
+          ],
+          "snippet": "sondern Eltern Eltern Eltern Eltern Eltern Chaloupek unehelicher Schweiz Dienst Dienst Schwester zeitweilig Wien Wien erziehungsunwürdig Geburtsort Berkmann Kinder Kinder Hauptschuldirektor Polizeidirektion Fromendorf Direktor Fürsetzing Sc",
+          "apa_citation": "Wiebel-Fanderl, Oliva (1993). Religion als Heimat?: Zur lebensgeschichtlichen Bedeutung katholischer Glaubenstraditionen [HTRC-Vollbuch-Abschnitt 70/75]. Böhlau."
         },
         {
-          "title": "Es ist normal, verschieden zu sein: wir wollen Inklusion [Forschungsbuch-Abschnitt 18/41]",
-          "author": "o. V.",
-          "publisher": "Evangelische Verlagsanstalt",
-          "date": "2019",
-          "corpus_layer": "gbv_direct_fulltext_pdf",
-          "probability": 66.7,
-          "keywords": [],
-          "snippet": "zum Beispiel die Diakonie an. Aber auch die Kirchen sind hier gefragt. So begleiten Kirchengemeinden viele Familien und können in schwierigen Situationen Hilfe anbieten. Zum Beispiel, wenn sich ihr Leben durch einen Unfall plötzlich verände",
-          "apa_citation": "o. V. (2019). Es ist normal, verschieden zu sein: wir wollen Inklusion [Forschungsbuch-Abschnitt 18/41]. Evangelische Verlagsanstalt."
+          "title": "Die  handschriftlichen Kantionale des Franziskus Valentin Ruthen (1674 - 1734): Untersuchungen zu Quellen und Aufbau katholischer Gesangbücher des späten Barock in Pomerellen [HTRC-Vollbuch-Abschnitt 59/74]",
+          "author": "Wöhler, Arnd",
+          "publisher": "Böhlau",
+          "date": "1999",
+          "corpus_layer": "hathitrust_ef_fullbook_print",
+          "probability": 68.7,
+          "keywords": [
+            "nan"
+          ],
+          "snippet": "Brieg wyznac wznawiamy metrisch zmorzony Str Str Str Malina Malina Malina Lied KRKör KRKör KRKör armes Bocksh anderer Inwieweit KüIII leze Begräbnislied Begräbnislied lieg Würmelein Würmelein smierciq uspiony data Artomius Version Specovius",
+          "apa_citation": "Wöhler, Arnd (1999). Die  handschriftlichen Kantionale des Franziskus Valentin Ruthen (1674 - 1734): Untersuchungen zu Quellen und Aufbau katholischer Gesangbücher des späten Barock in Pomerellen [HTRC-Vollbuch-Abschnitt 59/74]. Böhlau."
         }
       ]
     },
     {
       "topic_id": 12,
       "archetype": {
-        "label": "Hybrid / Discursive Mediation",
-        "confidence": 0.0,
+        "label": "Critical / Secular-Humanist",
+        "confidence": 100.0,
         "scores": {
-          "Traditional / Ecclesiastical": 33.3,
-          "Neoliberal / Self-Optimization": 33.3,
-          "Critical / Secular-Humanist": 33.3
+          "Traditional / Ecclesiastical": 0.0,
+          "Neoliberal / Self-Optimization": 0.0,
+          "Critical / Secular-Humanist": 100.0
         }
       },
       "seeded_prior": null,
       "top_terms": [
         {
-          "term": "text",
-          "weight": 0.01806
+          "term": "politisch",
+          "weight": 0.03632
         },
         {
-          "term": "jüdisch",
-          "weight": 0.01692
+          "term": "staat",
+          "weight": 0.02005
         },
         {
-          "term": "jude",
-          "weight": 0.01474
+          "term": "deutschland",
+          "weight": 0.01478
         },
         {
-          "term": "alt",
-          "weight": 0.0117
+          "term": "politik",
+          "weight": 0.01411
         },
         {
-          "term": "israel",
-          "weight": 0.01046
+          "term": "deutsch",
+          "weight": 0.01356
         },
         {
-          "term": "volk",
-          "weight": 0.00934
+          "term": "krieg",
+          "weight": 0.00936
         },
         {
-          "term": "judentum",
-          "weight": 0.00811
+          "term": "gesellschaft",
+          "weight": 0.00826
         },
         {
-          "term": "griechisch",
-          "weight": 0.00747
-        },
-        {
-          "term": "testament",
+          "term": "land",
           "weight": 0.00723
         },
         {
-          "term": "heilig",
-          "weight": 0.00719
+          "term": "volk",
+          "weight": 0.00705
         },
         {
-          "term": "jerusalem",
-          "weight": 0.00658
+          "term": "europa",
+          "weight": 0.00623
         },
         {
-          "term": "könig",
-          "weight": 0.00647
+          "term": "geschichte",
+          "weight": 0.00605
         },
         {
-          "term": "name",
-          "weight": 0.00643
+          "term": "gewalt",
+          "weight": 0.00546
         },
         {
-          "term": "tradition",
-          "weight": 0.00639
+          "term": "polnisch",
+          "weight": 0.00474
         },
         {
-          "term": "prophet",
-          "weight": 0.00597
+          "term": "staatlich",
+          "weight": 0.00455
+        },
+        {
+          "term": "demokratie",
+          "weight": 0.00441
         }
       ],
       "top_publishers": [
         {
-          "publisher": "Gütersloher Verlagshaus (Chr. Kaiser)",
-          "share": 7.9
-        },
-        {
           "publisher": "Rowohlt",
-          "share": 6.4
-        },
-        {
-          "publisher": "Kösel",
-          "share": 6.1
+          "share": 8.6
         },
         {
           "publisher": "Klett-Cotta",
-          "share": 6.1
+          "share": 7.9
         },
         {
           "publisher": "Fischer",
-          "share": 5.5
+          "share": 7.1
         },
         {
-          "publisher": "Gütersloher Verlagshaus",
-          "share": 5.4
+          "publisher": "Suhrkamp",
+          "share": 7.1
+        },
+        {
+          "publisher": "Böhlau",
+          "share": 6.7
+        },
+        {
+          "publisher": "Schöningh",
+          "share": 5.3
         }
       ],
       "representative_docs": [
         {
-          "title": "Die Botschaft des Koran: Übersetzung und Kommentar",
-          "author": "Asad, Muhammad",
-          "publisher": "Patmos",
-          "date": "2009",
-          "corpus_layer": "drm_fallback_multi_api_enriched",
-          "probability": 69.5,
-          "keywords": [],
-          "snippet": "Die Botschaft des Koran: Übersetzung und Kommentar. Asad, Muhammad. Patmos. Inhalt Vorwort Literaturhinweise Sura al-Fatiha (Die Eröffnung) - Verse i viUl al-Baqara (Die Kuh) - Verse i> ÄJI AI 'Imran (Das Haus von ìmran) - Verse o W - -J' a",
-          "apa_citation": "Asad, Muhammad (2009). Die Botschaft des Koran: Übersetzung und Kommentar. Patmos."
+          "title": "Kämpfen für den Frieden: Ost-West. Europäische Perspektiven 1/2024",
+          "author": "Renovabis e.V., Zentralkomitee der deutschen Katholiken",
+          "publisher": "Pustet",
+          "date": "2024",
+          "corpus_layer": "dnb_deposit_inhaltstext",
+          "probability": 75.5,
+          "keywords": [
+            "nan"
+          ],
+          "snippet": "Lange Zeit schien es, als habe die Europäische Union aus einem Kontinent des Krieges einen Kontinent des Friedens gemacht. Dabei waren schon die 1990er-Jahre mit den Balkan-Kriegen von kriegerischen Konflikten bestimmt. Spä-testens seit der",
+          "apa_citation": "Renovabis e.V., Zentralkomitee der deutschen Katholiken (2024). Kämpfen für den Frieden: Ost-West. Europäische Perspektiven 1/2024. Pustet."
         },
         {
-          "title": "Schulbibel: für 10 - 14jährige [Forschungsbuch-Abschnitt 1/2]",
-          "author": "o. V.",
-          "publisher": "Kösel",
-          "date": "1979",
-          "corpus_layer": "drm_fallback_multi_api_enriched",
-          "probability": 68.8,
-          "keywords": [],
-          "snippet": "Schulbibel: für 10 - 14jährige. nan. Kösel. Inhaltsverzeichnis Aus den Schriften des Alten Testaments I. Fünf Bücher der Weisung . Von den Anfängen Gott, Welt und Mensch Mann und Frau Ursünde Kain und Abel Die Bosheit der Menschen BauderArc",
-          "apa_citation": "o. V. (1979). Schulbibel: für 10 - 14jährige [Forschungsbuch-Abschnitt 1/2]. Kösel."
+          "title": "Autoritäre Dynamiken in unsicheren Zeiten [OpenAlex-Vollbuch-Abschnitt 38/54]",
+          "author": "Oliver Decker",
+          "publisher": "Psychosozial-Verlag eBooks",
+          "date": "2022",
+          "corpus_layer": "entire_fulltext_book_cloud",
+          "probability": 71.7,
+          "keywords": [
+            "nan"
+          ],
+          "snippet": "30,0 28,1 31,6 50,6 35,3 42,4 23,7 14,8 13,7 39,7 37,1 29,7 18,5 0 10 20 30 40 50 60 70 80 90 100 Im Konflikt mit Russland kann eine Lösung nur auf diplomatischem Weg gelingen. Die Mitgliedschaft der Ukraine in der EU würde ich begrüßen. Ic",
+          "apa_citation": "Oliver Decker (2022). Autoritäre Dynamiken in unsicheren Zeiten [OpenAlex-Vollbuch-Abschnitt 38/54]. Psychosozial-Verlag eBooks."
         },
         {
-          "title": "Die jahwistische Urgeschichte in exegetischer Sicht [HTRC-Vollbuch-Abschnitt 52/75]",
-          "author": "Drewermann, Eugen",
-          "publisher": "Schöningh",
-          "date": "1995",
+          "title": "Das  Recht, verschieden zu sein: eine sozialethische Studie zu Inklusion und Exklusion im Kontext von Migration [HTRC-Vollbuch-Abschnitt 4/75]",
+          "author": "Dallmann, Hans-Ulrich",
+          "publisher": "Gütersloher Verlagshaus",
+          "date": "2002",
           "corpus_layer": "hathitrust_ef_fullbook_print",
-          "probability": 68.5,
-          "keywords": [],
-          "snippet": "Arche zudem Begebenheit Noah Kulturpflanze Feststellungen Noahs Ikarios-Mythe Genealogie erläutern verlangen betrachten ursprünglich formaler sondern lediglich manches sei Noahsöhne Erzählung Erzählung Widerstand bestimmter Chams Name neben",
-          "apa_citation": "Drewermann, Eugen (1995). Die jahwistische Urgeschichte in exegetischer Sicht [HTRC-Vollbuch-Abschnitt 52/75]. Schöningh."
+          "probability": 68.8,
+          "keywords": [
+            "nan"
+          ],
+          "snippet": "Parteien unterstützen Pariser Zusammenhang Pfarrers vollzieht vollzieht Lausanne Bestrebungen Türkei Umsiedlung Auseinandersetzungen Massakern Anm durften umgesiedelt zahlenmäßig Heimat Mesopotamien heimgeführt gaben minderheitenfeindlichen",
+          "apa_citation": "Dallmann, Hans-Ulrich (2002). Das  Recht, verschieden zu sein: eine sozialethische Studie zu Inklusion und Exklusion im Kontext von Migration [HTRC-Vollbuch-Abschnitt 4/75]. Gütersloher Verlagshaus."
         }
       ]
     }
   ],
   "diachronic_decade_shares": {
     "1970s": {
-      "Topic 1": 10.0,
-      "Topic 2": 5.0,
-      "Topic 3": 5.4,
-      "Topic 4": 10.9,
-      "Topic 5": 3.9,
-      "Topic 6": 11.3,
-      "Topic 7": 26.0,
-      "Topic 8": 3.5,
-      "Topic 9": 5.5,
-      "Topic 10": 10.9,
-      "Topic 11": 2.4,
-      "Topic 12": 5.1
+      "Topic 1": 5.6,
+      "Topic 2": 5.9,
+      "Topic 3": 26.3,
+      "Topic 4": 9.1,
+      "Topic 5": 1.6,
+      "Topic 6": 1.6,
+      "Topic 7": 12.7,
+      "Topic 8": 8.9,
+      "Topic 9": 7.1,
+      "Topic 10": 11.4,
+      "Topic 11": 3.5,
+      "Topic 12": 6.4
     },
     "1980s": {
-      "Topic 1": 11.5,
+      "Topic 1": 5.9,
       "Topic 2": 5.2,
-      "Topic 3": 5.6,
-      "Topic 4": 10.3,
-      "Topic 5": 4.2,
-      "Topic 6": 11.0,
-      "Topic 7": 25.5,
-      "Topic 8": 3.1,
-      "Topic 9": 5.5,
-      "Topic 10": 10.5,
-      "Topic 11": 3.6,
-      "Topic 12": 4.0
+      "Topic 3": 24.0,
+      "Topic 4": 8.8,
+      "Topic 5": 1.8,
+      "Topic 6": 1.7,
+      "Topic 7": 12.2,
+      "Topic 8": 9.2,
+      "Topic 9": 7.6,
+      "Topic 10": 11.3,
+      "Topic 11": 4.8,
+      "Topic 12": 7.6
     },
     "1990s": {
-      "Topic 1": 10.5,
-      "Topic 2": 6.3,
-      "Topic 3": 5.6,
-      "Topic 4": 10.2,
-      "Topic 5": 3.8,
-      "Topic 6": 11.1,
-      "Topic 7": 22.2,
-      "Topic 8": 3.8,
-      "Topic 9": 5.4,
-      "Topic 10": 11.9,
-      "Topic 11": 4.3,
-      "Topic 12": 4.9
+      "Topic 1": 10.0,
+      "Topic 2": 7.1,
+      "Topic 3": 18.4,
+      "Topic 4": 8.2,
+      "Topic 5": 2.0,
+      "Topic 6": 1.7,
+      "Topic 7": 8.3,
+      "Topic 8": 9.2,
+      "Topic 9": 9.3,
+      "Topic 10": 12.1,
+      "Topic 11": 6.3,
+      "Topic 12": 7.4
     },
     "2000s": {
-      "Topic 1": 11.0,
-      "Topic 2": 7.8,
-      "Topic 3": 5.5,
-      "Topic 4": 12.3,
-      "Topic 5": 4.0,
-      "Topic 6": 8.7,
-      "Topic 7": 17.8,
-      "Topic 8": 4.0,
-      "Topic 9": 6.6,
-      "Topic 10": 12.0,
-      "Topic 11": 4.9,
-      "Topic 12": 5.4
+      "Topic 1": 9.7,
+      "Topic 2": 9.6,
+      "Topic 3": 16.2,
+      "Topic 4": 7.6,
+      "Topic 5": 2.2,
+      "Topic 6": 3.0,
+      "Topic 7": 6.6,
+      "Topic 8": 10.4,
+      "Topic 9": 9.9,
+      "Topic 10": 10.9,
+      "Topic 11": 6.3,
+      "Topic 12": 7.6
     },
     "2010s": {
-      "Topic 1": 10.5,
-      "Topic 2": 8.1,
-      "Topic 3": 4.7,
-      "Topic 4": 12.7,
-      "Topic 5": 3.5,
-      "Topic 6": 8.7,
-      "Topic 7": 14.4,
-      "Topic 8": 6.2,
-      "Topic 9": 5.9,
-      "Topic 10": 12.4,
-      "Topic 11": 5.9,
-      "Topic 12": 7.0
+      "Topic 1": 8.7,
+      "Topic 2": 7.5,
+      "Topic 3": 13.9,
+      "Topic 4": 8.6,
+      "Topic 5": 3.2,
+      "Topic 6": 6.7,
+      "Topic 7": 5.4,
+      "Topic 8": 10.7,
+      "Topic 9": 10.6,
+      "Topic 10": 11.4,
+      "Topic 11": 6.8,
+      "Topic 12": 6.5
     },
     "2020s": {
-      "Topic 1": 7.9,
-      "Topic 2": 6.6,
-      "Topic 3": 4.6,
-      "Topic 4": 24.9,
-      "Topic 5": 4.6,
-      "Topic 6": 6.9,
-      "Topic 7": 19.0,
-      "Topic 8": 2.3,
-      "Topic 9": 5.1,
-      "Topic 10": 10.8,
-      "Topic 11": 4.1,
-      "Topic 12": 3.2
+      "Topic 1": 8.2,
+      "Topic 2": 5.3,
+      "Topic 3": 13.4,
+      "Topic 4": 7.1,
+      "Topic 5": 6.3,
+      "Topic 6": 12.4,
+      "Topic 7": 5.7,
+      "Topic 8": 14.3,
+      "Topic 9": 9.8,
+      "Topic 10": 6.8,
+      "Topic 11": 4.7,
+      "Topic 12": 5.9
     }
   },
   "slda_diagnostics": {
-    "regime_cv_accuracy": 72.3,
-    "regime_in_sample_accuracy": 72.3,
-    "regime_macro_f1": 50.5,
-    "publisher_accuracy": 32.8,
-    "r2_explanatory_power": 0.2989,
+    "regime_cv_accuracy": 73.7,
+    "regime_in_sample_accuracy": 73.7,
+    "regime_macro_f1": 51.5,
+    "publisher_accuracy": 31.9,
+    "r2_explanatory_power": 0.3071,
     "regime_class_metrics": {
       "Traditional / Ecclesiastical": {
-        "precision": 80.1,
-        "recall": 78.2,
-        "f1": 79.2,
-        "support": 34280
+        "precision": 81.8,
+        "recall": 80.6,
+        "f1": 81.2,
+        "support": 61420
       },
       "Neoliberal / Self-Optimization": {
-        "precision": 0.0,
-        "recall": 0.0,
-        "f1": 0.0,
-        "support": 6507
+        "precision": 40.8,
+        "recall": 0.6,
+        "f1": 1.2,
+        "support": 10328
       },
       "Critical / Secular-Humanist": {
-        "precision": 64.5,
-        "recall": 82.2,
-        "f1": 72.3,
-        "support": 26536
+        "precision": 64.7,
+        "recall": 81.4,
+        "f1": 72.1,
+        "support": 42876
       }
     },
     "topic_regression_weights": [
       {
         "topic_id": 1,
-        "predicted_regime": "Critical / Secular-Humanist",
-        "w_traditional": -0.638,
-        "w_neoliberal": 0.041,
-        "w_critical": 0.596,
-        "discriminative_power": 0.505
+        "predicted_regime": "Traditional / Ecclesiastical",
+        "w_traditional": 1.15,
+        "w_neoliberal": -0.083,
+        "w_critical": -1.068,
+        "discriminative_power": 0.907
       },
       {
         "topic_id": 2,
-        "predicted_regime": "Critical / Secular-Humanist",
-        "w_traditional": -0.587,
-        "w_neoliberal": -0.066,
-        "w_critical": 0.653,
-        "discriminative_power": 0.508
+        "predicted_regime": "Traditional / Ecclesiastical",
+        "w_traditional": 0.724,
+        "w_neoliberal": -0.07,
+        "w_critical": -0.654,
+        "discriminative_power": 0.564
       },
       {
         "topic_id": 3,
-        "predicted_regime": "Critical / Secular-Humanist",
-        "w_traditional": -0.924,
-        "w_neoliberal": -0.142,
-        "w_critical": 1.066,
-        "discriminative_power": 0.819
+        "predicted_regime": "Neoliberal / Self-Optimization",
+        "w_traditional": -0.349,
+        "w_neoliberal": 0.422,
+        "w_critical": -0.073,
+        "discriminative_power": 0.319
       },
       {
         "topic_id": 4,
-        "predicted_regime": "Critical / Secular-Humanist",
-        "w_traditional": -0.561,
-        "w_neoliberal": 0.173,
-        "w_critical": 0.388,
-        "discriminative_power": 0.406
+        "predicted_regime": "Traditional / Ecclesiastical",
+        "w_traditional": 1.217,
+        "w_neoliberal": -0.195,
+        "w_critical": -1.021,
+        "discriminative_power": 0.924
       },
       {
         "topic_id": 5,
-        "predicted_regime": "Traditional / Ecclesiastical",
-        "w_traditional": 1.316,
-        "w_neoliberal": -0.319,
-        "w_critical": -0.997,
-        "discriminative_power": 0.971
+        "predicted_regime": "Critical / Secular-Humanist",
+        "w_traditional": -0.058,
+        "w_neoliberal": 0.009,
+        "w_critical": 0.049,
+        "discriminative_power": 0.044
       },
       {
         "topic_id": 6,
         "predicted_regime": "Traditional / Ecclesiastical",
-        "w_traditional": 0.711,
-        "w_neoliberal": -0.021,
-        "w_critical": -0.69,
-        "discriminative_power": 0.572
+        "w_traditional": 0.542,
+        "w_neoliberal": 0.002,
+        "w_critical": -0.543,
+        "discriminative_power": 0.443
       },
       {
         "topic_id": 7,
         "predicted_regime": "Critical / Secular-Humanist",
-        "w_traditional": -0.663,
-        "w_neoliberal": 0.249,
-        "w_critical": 0.414,
-        "discriminative_power": 0.473
+        "w_traditional": -0.802,
+        "w_neoliberal": -0.115,
+        "w_critical": 0.916,
+        "discriminative_power": 0.706
       },
       {
         "topic_id": 8,
-        "predicted_regime": "Traditional / Ecclesiastical",
-        "w_traditional": 0.644,
-        "w_neoliberal": -0.114,
-        "w_critical": -0.53,
-        "discriminative_power": 0.486
+        "predicted_regime": "Critical / Secular-Humanist",
+        "w_traditional": -0.391,
+        "w_neoliberal": 0.044,
+        "w_critical": 0.348,
+        "discriminative_power": 0.303
       },
       {
         "topic_id": 9,
-        "predicted_regime": "Traditional / Ecclesiastical",
-        "w_traditional": 1.239,
-        "w_neoliberal": -0.041,
-        "w_critical": -1.198,
-        "discriminative_power": 0.996
+        "predicted_regime": "Critical / Secular-Humanist",
+        "w_traditional": -0.475,
+        "w_neoliberal": -0.085,
+        "w_critical": 0.56,
+        "discriminative_power": 0.427
       },
       {
         "topic_id": 10,
         "predicted_regime": "Critical / Secular-Humanist",
-        "w_traditional": -0.57,
-        "w_neoliberal": 0.118,
-        "w_critical": 0.452,
-        "discriminative_power": 0.425
+        "w_traditional": -0.543,
+        "w_neoliberal": 0.187,
+        "w_critical": 0.356,
+        "discriminative_power": 0.39
       },
       {
         "topic_id": 11,
         "predicted_regime": "Critical / Secular-Humanist",
-        "w_traditional": -0.523,
-        "w_neoliberal": 0.068,
-        "w_critical": 0.455,
-        "discriminative_power": 0.402
+        "w_traditional": -0.393,
+        "w_neoliberal": 0.035,
+        "w_critical": 0.359,
+        "discriminative_power": 0.308
       },
       {
         "topic_id": 12,
-        "predicted_regime": "Traditional / Ecclesiastical",
-        "w_traditional": 0.554,
-        "w_neoliberal": 0.055,
-        "w_critical": -0.609,
-        "discriminative_power": 0.477
+        "predicted_regime": "Critical / Secular-Humanist",
+        "w_traditional": -0.621,
+        "w_neoliberal": -0.15,
+        "w_critical": 0.771,
+        "discriminative_power": 0.578
       }
     ]
   }

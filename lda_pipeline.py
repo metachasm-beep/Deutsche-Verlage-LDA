@@ -60,25 +60,38 @@ GERMAN_CORE_STOPWORDS = {
 FRAKTUR_AND_META_NOISE = {
     "ber", "unb", "bie", "bas", "bes", "bem", "auc", "fein", "feine", "feiner", "feinem", "feinen",
     "unde", "nan", "buch_abschnitt", "forschungsbuch_abschnitt", "abschnitt", "htrc_vollbuch",
-    "gbv_vollbuch", "openalex_vollbuch", "vollbuch", "band", "seite", "kapitel", "auflage",
+    "gbv_vollbuch", "openalex_vollbuch", "dnb_oa", "vollbuch", "band", "seite", "kapitel", "auflage",
     "herder", "suhrkamp", "rowohlt", "fischer", "patmos", "kösel", "alibri", "wagenbach",
     "klett", "gütersloher", "verlagshaus", "verlagsanstalt", "evangelisch_verlagsanstalt",
     "kiepenheuer", "witsch", "kohlhammer", "beck", "springer", "gruyter", "vandenhoeck",
     "benziger", "schwabenverlag", "kaiser", "grünewald", "kreuz", "mohr", "siebeck",
     "schöningh", "aschendorff", "pustet", "echter", "bonifatius", "neukirchener", "calwer",
     "campus", "insel", "meiner", "wallstein", "budrich", "oekom", "nomos", "tvz", "ruprecht",
-    "cotta", "klett", "holzboog", "frommann", "fink", "alber", "schwabe", "böhlau", "süß",
+    "cotta", "holzboog", "frommann", "fink", "alber", "schwabe", "böhlau", "süß", "transcript",
     "münchen", "stuttgart", "leipzig", "freiburg", "frankfurt", "berlin", "wien", "zürich",
     "tübingen", "göttingen", "heidelberg", "köln", "bonn", "münster", "darmstadt", "mainz",
     "wilhelm", "johann", "friedrich", "karl", "heinrich", "hans", "peter", "georg", "august",
     "vnd", "quod", "sed", "est", "non", "cum", "autem", "enim", "etiam", "sunt", "esse",
-    "atque", "neque", "ideo", "tamen", "ergo", "quid", "quae", "quem", "quibus", "cuius",
+    "atque", "neque", "ideo", "tamen", "ergo", "quid", "quae", "quem", "quibus", "cuius", "dei", "fol",
+    "bisac", "subject", "heading", "bisac_subject", "subject_heading", "heading_bisac",
+    "bic", "bic_subject", "vlb", "zielgruppe", "fachpublikum", "zielgruppe_fachpublikum",
+    "produktform", "warengruppe", "hardcover", "softcover", "taschenbuch", "kartoniert",
+    "gebunden", "broschiert", "verlag", "verlage", "gmbh", "isbn", "issn", "doi", "ebook", "ebooks",
     "right", "published", "cambridge", "book", "elector", "council", "gospel", "question",
     "concept", "perspective", "university", "press", "london", "new", "york", "oxford",
     "the", "and", "for", "that", "with", "from", "this", "which", "their", "have", "were",
     "been", "into", "more", "other", "such", "than", "some", "these", "would", "could",
     "should", "about", "between", "through", "during", "before", "after", "under", "above",
     "german", "history", "social", "century", "church", "religion", "religious", "christian",
+    "theology", "philosophy", "studies", "study", "god", "his", "her", "not", "van", "are",
+    "was", "has", "had", "but", "all", "can", "will", "one", "two", "first", "time", "work",
+    "life", "world", "human", "modern", "early", "late", "middle", "ages", "medieval", "ancient",
+    "contemporary", "european", "international", "journal", "volume", "series", "edition",
+    "edited", "introduction", "chapter", "part", "section", "research", "analysis", "theory",
+    "practice", "development", "historical", "theological", "philosophical", "political",
+    "cultural", "ethical", "biblical", "catholic", "protestant", "jewish", "islamic", "faith",
+    "spirit", "nature", "reason", "state", "society", "power", "authority", "tradition",
+    "reform", "reformation", "enlightenment", "secular", "secularization", "approaches", "toward",
     "ders", "bd", "hrsg", "aufl", "kap", "vgl", "ebd", "ff", "bzw", "usw", "etc", "prof", "dr",
     "ekk", "testament_ekk", "kommentar_neu"
 }
@@ -137,7 +150,7 @@ def preprocess_text(text, allowed_postags=config.ALLOWED_POSTAGS):
         return []
     key = _hash_text(text)
     if key in _TOKEN_CACHE:
-        return _TOKEN_CACHE[key]
+        return [t for t in _TOKEN_CACHE[key] if t not in ALL_STOPWORDS]
 
     doc = nlp(text)
     tokens = _extract_tokens_from_doc(doc, allowed_postags=allowed_postags)
@@ -166,7 +179,7 @@ def preprocess_corpus_batch(texts, allowed_postags=config.ALLOWED_POSTAGS):
             continue
         key = _hash_text(text)
         if key in _TOKEN_CACHE:
-            results[idx] = _TOKEN_CACHE[key]
+            results[idx] = [t for t in _TOKEN_CACHE[key] if t not in ALL_STOPWORDS]
         else:
             uncached_indices.append(idx)
 
