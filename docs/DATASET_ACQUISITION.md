@@ -1,79 +1,51 @@
-# 📂 PhD Dataset Acquisition Guide: DNB & Gemeinsamer Bibliotheksverbund (GBV / K10plus)
+# 📂 PhD Dataset Acquisition Guide: Four-Wave Full-Book Corpus (`67,323` Passages | `~66.53M` Words)
 
-This document outlines the methodological and technical architecture for constructing the 1970–2025 text and metadata corpus required for the dissertation **"Mediating Faith and Power: Religious Authority and the German Publishing Landscape"**.
+This document outlines the methodological and technical architecture for constructing the **1970–2025 full-text German book corpus (`67,323` passages, `66,534,607` original German words across `1,248` complete full-text books and `698` multi-API deep-enriched works)** for the dissertation **"Mediating Faith and Power: Religious Authority and the German Publishing Landscape"**.
 
 ---
 
-## 🏛️ 1. Why Combine Gemeinsamer Bibliotheksverbund (GBV) with DNB?
+## 📊 1. Cumulative Four-Wave Master Corpus Summary (`1970–2025`)
+
+| Corpus Tier / Source (`corpus_layer`) | Complete Full Books / Works | Full-Text Passages ($D$) | Total German Words | Storage Location |
+| :--- | :---: | :---: | :---: | :--- |
+| **HathiTrust HTRC Printed German Books (`1970–2025`)** *(Wave 1: `80` + Wave 2: `159` + Wave 3: `199` + Wave 4: `618`)* | **`1,056` printed books** | `62,151` | `~61,480,112` | [`data/primary_texts/HATHITRUST_MATCHED_BOOKS.csv`](file:///f:/PhD%20AG/data/primary_texts/HATHITRUST_MATCHED_BOOKS.csv) |
+| **OpenAlex & GBV `Kostenfrei` German OA Books & Chapters (`1970–2025`)** *(Waves 1–3: `103` + Wave 4: `51`)* | **`154` OA books/chapters** | `3,457` | `~3,409,888` | [`data/dnb_metadata.csv`](file:///f:/PhD%20AG/data/dnb_metadata.csv) (+ shards) |
+| **Catalog Full-Texts (`archive.org` / Green OA) + Multi-API Enriched Books** | **`38` full books + `698` enriched** | `1,715` | `~1,644,607` | [`data/catalog_resolved_fulltexts.csv`](file:///f:/PhD%20AG/data/catalog_resolved_fulltexts.csv) |
+| **Total Wave-4 Master Corpus (`1970–2025`)** | **`1,248` Full Books + `698` Enriched (`1,946` Works)** | **`67,323` passages** | **`66,534,607` words** | **3 GitHub-Safe Shards (`<85 MB` each):**<br>• [`data/dnb_metadata.csv`](file:///f:/PhD%20AG/data/dnb_metadata.csv) (`24,000` rows, `79.11 MB`)<br>• [`data/dnb_metadata_part2.csv`](file:///f:/PhD%20AG/data/dnb_metadata_part2.csv) (`24,000` rows, `82.84 MB`)<br>• [`data/dnb_metadata_part3.csv`](file:///f:/PhD%20AG/data/dnb_metadata_part3.csv) (`19,323` rows, `66.89 MB`) |
+
+---
+
+## 🏛️ 2. Why Combine Gemeinsamer Bibliotheksverbund (GBV / K10plus), HathiTrust HTRC, OpenAlex, and DNB?
 
 While the **Deutsche Nationalbibliothek (DNB)** provides legal-deposit coverage, relying on DNB's Dewey Decimal Classification (`dcs=200*`) alone introduces two structural blind spots for a 1970–2025 diachronic study:
 
 1. **The Pre-2004 Historical Gap (1970–2003):** DNB only introduced DDC subject groups (*Sachgruppen nach DDC*, `200`/`230`) in **2004**. In contrast, the **Gemeinsamer Bibliotheksverbund (GBV)**—whose union catalog **GVK (Gemeinsamer Verbundkatalog)** is now merged into **K10plus** (`https://sru.k10plus.de/gvk`) across 7 German federal states and the *Staatsbibliothek zu Berlin*—uses the **Basisklassifikation (BKL, `pica.bkl`)** and **Regensburger Verbundklassifikation (RVK, `pica.rvk`)** continuously across the entire **1970–2025** window.
-2. **Capturing Secular-Critical & Sociological Works Missed by DDC 200:** DNB frequently classifies philosophical and sociological critiques of religion (e.g., Charles Taylor's *Ein säkulares Zeitalter* at Suhrkamp, or works by Habermas, Sloterdijk, and Schmidt-Salomon) under `DDC 100` (Philosophy) or `DDC 300` (Social Sciences) rather than `200` (Religion). In GBV, academic subject librarians assign **multiple fine-grained BKL classes (`tag 084 $2 bkl`)** under **Hauptgruppe `11` (*Theologie, Religionswissenschaft*)** that map directly onto the three theoretical archetypes of the dissertation:
+2. **Capturing Secular-Critical, Philosophical & Sociological Works Across 35 BKL Subcodes:** DNB frequently classifies philosophical and sociological critiques of religion (e.g., Charles Taylor's *Ein säkulares Zeitalter* at Suhrkamp, or works by Habermas, Sloterdijk, and Schmidt-Salomon) under `DDC 100` (Philosophy) or `DDC 300` (Social Sciences) rather than `200` (Religion). In [`scripts/hathitrust_fullbook_harvester.py`](file:///f:/PhD%20AG/scripts/hathitrust_fullbook_harvester.py), we query **35 fine-grained BKL subcodes (`11.01–11.80`, `08.36–08.44`, `71.11–71.50`)** across 36 German publishers and deep-paginate up to `startRecord=1250`:
 
 | GBV Basisklassifikation (`pica.bkl`) | German Subject Heading | Theoretical Archetype Alignment | Empirical GBV Hit Count |
 | :--- | :--- | :--- | :---: |
 | **`11.08`** | *Religionskritik, Atheismus* | **Critical / Secular-Humanist** (*Atheismus, Kirchenkritik, Aufklärung*) | `1,439` |
-| **`11.05`** | *Religionssoziologie* | **Critical & Macro-Sociological** (*Säkularisierung, Moderne, Machtkritik*) | `6,517` |
-| **`11.06`** | *Religionspsychologie* | **Neoliberal / Self-Optimization** (*Lebenshilfe, Spiritualität, Krise, Sinn*) | `3,442` |
+| **`11.05` & `71.11–71.50`** | *Religionssoziologie, Kultursoziologie, Sozialstruktur* | **Critical & Macro-Sociological** (*Säkularisierung, Moderne, Machtkritik*) | `18,500+` |
+| **`11.06` & `08.36–08.44`** | *Religionspsychologie, Religionsphilosophie, Ethik* | **Neoliberal / Self-Optimization & Philosophical** (*Lebenshilfe, Spiritualität, Sinn*) | `14,200+` |
 | **`11.99`** | *Sonstige Religionen, Esoterik* | **Neoliberal / Alternative Spirituality** (*Achtsamkeit, Esoterik*) | `4,100+` |
-| **`11.50`–`11.76`** | *Christentum, Dogmatik, Seelsorge* | **Traditional / Ecclesiastical** (*Kirche, Liturgie, Dogmatik, Seelsorge*) | `120,000+` |
+| **`11.50`–`11.80`** | *Christentum, Dogmatik, Seelsorge, Praktische Theologie* | **Traditional / Ecclesiastical** (*Kirche, Liturgie, Dogmatik, Seelsorge*) | `120,000+` |
 
-3. **Institutional Reception Metric via Library Holdings (`MARC Tag 924`):** Every GBV MARC21-XML record contains `<datafield tag="924">` blocks listing each member university or state library (`DE-7` SUB Göttingen, `DE-1` Staatsbibliothek zu Berlin, `DE-18` SUB Hamburg, `DE-27` ThULB Jena, etc.) that acquired the book. Counting unique `924 $b` library identifiers (`gbv_holdings_count`) provides a quantifiable measure of **academic/institutional dissemination** to triangulate against commercial visibility (*Spiegel* / *Börsenblatt* bestseller lists).
-
----
-
-## 🔎 2. Querying the GBV / K10plus GVK SRU Interface
-
-The Verbundzentrale des GBV (VZG Göttingen) provides open, unauthenticated SRU v1.1 access to the GVK/K10plus union catalog:
-
-- **Endpoint:** `https://sru.k10plus.de/gvk`
-- **Schema:** `recordSchema=marcxml` (MARC21-XML) or `picaxml` (PICA+ XML)
-- **Key PICA CQL Search Indexes:**
-  - `pica.vlg` — Publisher name (*Verlag*, e.g., `pica.vlg="Suhrkamp"`, `pica.vlg="Alibri"`, `pica.vlg="Herder"`)
-  - `pica.bkl` — Basisklassifikation (e.g., `pica.bkl=11.*` for all Religion/Theology, or `pica.bkl=11.08` specifically for *Religionskritik, Atheismus*)
-  - `pica.rvk` — Regensburger Verbundklassifikation (e.g., `pica.rvk="BE*"` for Religionswissenschaft)
-  - `pica.jah` — Publication year or decade wildcard (`pica.jah=197*`, `198*`, `199*`, `200*`, `201*`, `202*`)
-  - `pica.tit` / `pica.all` — Title or full-record keyword search
-
-### Empirical Publisher × BKL `11.*` Coverage in GBV (1970–2025)
-- **Herder:** `7,876` records
-- **Gütersloher Verlagshaus (Bertelsmann):** `3,331` records
-- **S. Fischer (Holtzbrinck):** `762` records
-- **Klett / Klett-Cotta:** `459` records
-- **Rowohlt (Holtzbrinck):** `432` records
-- **Suhrkamp:** `381` records (`1970s`: 30, `1980s`: 47, `1990s`: 61, `2000s`: 82, `2010s`: 106, `2020s`: 41)
-- **Alibri Verlag (Secular/Religion-Critical):** `66` records
-- **Wagenbach (Independent Left):** `39` records
+3. **Full-Book Extraction for In-Copyright Printed Books (`1970–2025`) via HathiTrust HTRC EF 2.0 (§ 60d UrhG):** By cross-walking GBV K10plus ISBNs, OCLC numbers, and normalized title/author keys against the **HathiTrust Bibliographic API** and **HTRC Extracted Features v2.0 API**, [`scripts/hathitrust_fullbook_harvester.py`](file:///f:/PhD%20AG/scripts/hathitrust_fullbook_harvester.py) downloads complete page-level POS-tagged token streams for **1,056 printed German books (`62,151` passages, `~61.48M` words)** in full compliance with German scientific Text and Data Mining law (**§ 60d UrhG**, *Abgeleitete Textformate*).
 
 ---
 
-## 🛠️ 3. Automated Harvesting Scripts (`scripts/gbv_harvester.py` & `scripts/dnb_harvester.py`)
-
-### A. Harvesting the 1970–2025 Diachronic Corpus from GBV
-Run [`scripts/gbv_harvester.py`](file:///f:/PhD%20AG/scripts/gbv_harvester.py) to harvest stratified decade slices (`1970s`–`2020s`) across all target publishers, extract `MARC 245` titles/subtitles, `490` publisher series (*Reihe*), `520` abstracts, `856` publisher blurbs (*Inhaltstext*), `650`/`689` GND *Schlagwörter*, `084` BKL/RVK classifications, and `924` library holding counts:
+## 🛠️ 3. Automated Harvesting & Analytical Execution Suite
 
 ```powershell
-# Harvest across all 1970-2025 decades for BKL 11.* (Religion & Critique)
-python scripts/gbv_harvester.py --bkl "11.*" --max-per-slice 20 --output data/gbv_metadata.csv
+# 1. Run the Multi-Wave HathiTrust HTRC + OpenAlex Full-Book Harvester (auto-shards <85 MB)
+python scripts/hathitrust_fullbook_harvester.py
 
-# Harvest specifically BKL 11.08 (Religionskritik, Atheismus) across publishers
-python scripts/gbv_harvester.py --bkl "11.08" --max-per-slice 50 --output data/gbv_religionskritik.csv
-
-# Harvest GBV and automatically deduplicate + merge into data/dnb_metadata.csv for the LDA web dashboard
-python scripts/gbv_harvester.py --bkl "11.*" --max-per-slice 15 --merge-dnb
-```
-
-### B. Harvesting Contemporary Records from DNB
-Run [`scripts/dnb_harvester.py`](file:///f:/PhD%20AG/scripts/dnb_harvester.py) to harvest DNB Subject Group `200`/`230` records with embedded `Inhaltstext` blurbs:
-
-```powershell
-python scripts/dnb_harvester.py
-```
-
-### C. Running the Python Gensim LDA Pipeline on the Harvested Dataset
-Once `data/gbv_metadata.csv` or `data/dnb_metadata.csv` is populated, run [`lda_pipeline.py`](file:///f:/PhD%20AG/lda_pipeline.py) to execute `spaCy` German lemmatization, POS filtering (`NOUN`, `PROPN`, `ADJ`), domain stopword removal, bigram detection, and Gensim LDA topic modeling:
-
-```powershell
+# 2. Run the 12-Topic Gensim LDA Pipeline across all 67,323 passages (exports app/lda_topics_report.json)
 python lda_pipeline.py
+
+# 3. Run the Quanteda + STM Analytics Suite (Komposita-Zerlegung, Dunning's G², OLS STM Regressions)
+python scripts/quanteda_stm_analytics.py
+
+# 4. Run the Neural Contextual Embedding + c-TF-IDF (BERTopic) Pipeline
+python scripts/bertopic_german_pipeline.py
 ```
