@@ -107,10 +107,26 @@ FRAKTUR_AND_META_NOISE = {
     "because", "although", "though", "unless", "whereas", "publikation", "publikationen",
     "veröffentlichung", "veröffentlichungen", "sammelband", "beitrag", "beiträge", "aufsatz",
     "aufsätze", "monographie", "dissertation", "habilitation", "festschrift", "tagungsband",
-    "handbuch", "lehrbuch", "wörterbuch", "lexikon", "kommentar", "einführung", "überblick"
+    "handbuch", "lehrbuch", "wörterbuch", "lexikon", "kommentar", "einführung", "überblick",
+    "inhaltsverzeichnis", "inhalt", "vorwort", "einleitung", "leseprobe", "dnb_inhaltsverzeichnis",
+    "bibliografisch", "bibliografische", "nationalbibliothek", "deutsche_nationalbibliothek",
+    "dnb", "http", "https", "www", "info", "http_info", "bibliografische_information",
+    "inhalt_vorwort", "literaturverzeichnis", "abkürzungsverzeichnis", "quellenverzeichnis",
+    "anhang", "register", "personenregister", "sachregister", "stichwortverzeichnis",
+    "danksagung", "geleitwort", "nachwort", "schlusswort", "zusammenfassung", "ausblick",
+    "content", "contents", "conclusion", "table", "preface", "bibliography", "index",
+    "summary", "abstract", "appendix", "acknowledgment", "acknowledgments", "foreword",
+    "johannes", "michael", "martin", "thomas", "andreas", "wolfgang", "stefan", "markus",
+    "ulrich", "klaus", "jürgen", "werner", "walter", "gerhard", "dieter", "hermann",
+    "franz", "josef", "rudolf", "ernst", "otto", "kurt", "richard", "robert", "albert",
+    "alexander", "christoph", "matthias", "bernhard", "reinhard", "manfred", "günter",
+    "helmut", "horst", "harald", "roland", "rüdiger", "hartmut", "joachim", "norbert",
+    "rainer", "frank", "uwe", "dirk", "jörg", "heinz", "erich", "fritz", "gottfried",
+    "ebeling", "gen", "abb", "tab", "hrsg_von", "verf", "bearb", "übers"
 }
 _BASE_STOPWORDS = set(nlp.Defaults.stop_words) if nlp is not None else GERMAN_CORE_STOPWORDS
 ALL_STOPWORDS = _BASE_STOPWORDS.union(set(config.DOMAIN_STOPWORDS)).union(FRAKTUR_AND_META_NOISE)
+
 RELIGIOUS_KEYWORDS_SET = set(config.RELIGIOUS_VOICE_KEYWORDS)
 
 # Content-addressed token cache (in-memory + disk persistence)
@@ -599,13 +615,17 @@ def classify_topic_archetype(keywords_with_weights) -> dict:
 def iter_corpus_rows(data_path: str):
     """
     Transparently yields rows from data_path and any accompanying data/dnb_metadata_part*.csv
-    shards so the corpus can scale beyond 40,000+ documents while keeping each file < 85 MB for GitHub.
+    shards so the corpus can scale beyond 300,000+ documents while keeping each file < 85 MB for GitHub.
     """
     import glob
     paths = [data_path]
     if os.path.basename(data_path) == "dnb_metadata.csv":
         part_glob = os.path.join(os.path.dirname(data_path) or "data", "dnb_metadata_part*.csv")
-        for p in sorted(glob.glob(part_glob)):
+        part_files = sorted(
+            glob.glob(part_glob),
+            key=lambda x: int(re.search(r"part(\d+)", x).group(1)) if re.search(r"part(\d+)", x) else 999,
+        )
+        for p in part_files:
             if p not in paths:
                 paths.append(p)
     for p in paths:
@@ -615,6 +635,7 @@ def iter_corpus_rows(data_path: str):
             reader = csv.DictReader(f)
             for row in reader:
                 yield row
+
 
 
 def run_pipeline(data_path, num_topics: int = None, lda_mode: str = "unsupervised"):
@@ -977,9 +998,10 @@ def export_results(model, corpus, dictionary, data_path, coherence_score=0.0, re
     trends_list = []
     for yr in sorted(trends_map.keys()):
         item = {"year": int(yr) if yr.isdigit() else yr, "year_clean": yr}
-        for pub in sorted(publishers):
+        for pub in top_publishers_sorted[:40]:
             item[pub] = trends_map[yr][pub]
         trends_list.append(item)
+
 
     coherence_grid = []
     if os.path.exists(config.COHERENCE_GRID_PATH):

@@ -119,13 +119,13 @@ Perplexity alone often fails to correlate with human interpretability of topics 
 
 - **$U_{\text{Mass}}$ Coherence (Default in [`lda_pipeline.py`](file:///f:/PhD%20AG/lda_pipeline.py)):** Measures asymmetrical empirical conditional log-probability between top topic words $w_i, w_j$ using document co-occurrence counts $D(w_i, w_j)$ within the corpus itself:
   $$C_{U_{\text{Mass}}} = \frac{2}{N(N-1)} \sum_{i=2}^{N} \sum_{j=1}^{i-1} \log \frac{D(w_i, w_j) + \epsilon}{D(w_j)}$$
-  On the Wave-7 master corpus ($D = 233,589$ documents/passages, $203,783,976$ German words, $|V| = 25,000$ lemmas & bigrams), $K = 12$ achieves **$U_{\text{Mass}} = -2.2466$** (Supervised sLDA **$U_{\text{Mass}} = -1.9650$**).
+  On the Wave-8 master corpus ($D = 300,412$ documents/passages, $245,978,061$ German words, $|V| = 25,000$ lemmas & bigrams), $K = 12$ achieves **$U_{\text{Mass}} = -2.5214$** (Supervised sLDA **$U_{\text{Mass}} = -1.9650$**).
 - **Corpus Prevalence Calculation:** In [`get_topics`](file:///f:/PhD%20AG/app/main.py), the backend computes the macro-level weight of each topic $k$ across the entire corpus of $M$ documents:
   $$\text{Prevalence}(k) = \left( \frac{1}{M} \sum_{d=1}^{M} \theta_{d,k} \right) \times 100\%$$
 - **Source Evidence Extraction:** To prevent decontextualized misinterpretation of word lists, [`run_pipeline`](file:///f:/PhD%20AG/lda_pipeline.py) ranks all documents by their posterior probability $\theta_{d,k}$ for each topic $k$ and extracts the highest-ranking representative full-book passages (`representative_docs`).
 
-### 5.3 Multi-Wave Corpus Scaling & Coherence Progression (`1970–2025`, $D = 233,589$)
-Scaling from the initial $N = 160$ pilot metadata sample to the seven-wave exhaustive DNB and full-book corpus ($3,009$ HathiTrust HTRC printed books + $675$ sibling-matched `$z="kostenfrei"` DNB `/34` open-access full books & EPUBs + $155$ OpenAlex/GBV OA books & chapters + $5,570$ digitized DNB `/04` `Inhaltsverzeichnis` & reading-sample PDFs/HTMLs + $30,316$ DNB `deposit.dnb.de` & `/blurb/` `Inhaltstexte` + $38$ Internet Archive books + $702$ multi-API deep-enriched works = **$233,589$ documents, $203,783,976$ German words across $36,434$ unique works, $|V| = 25,000$ lemmas and bigrams**) dramatically improves intrinsic $U_{\text{Mass}}$ coherence (see full empirical chapters in [DISSERTATION_EMPIRICAL_CHAPTERS.md](file:///f:/PhD%20AG/docs/DISSERTATION_EMPIRICAL_CHAPTERS.md) and [COHERENCE_GRID_REPORT.md](file:///f:/PhD%20AG/docs/COHERENCE_GRID_REPORT.md)):
+### 5.3 Multi-Wave Corpus Scaling & Coherence Progression (`1970–2025`, $D = 300,412$)
+Scaling from the initial $N = 160$ pilot metadata sample to the eight-wave complete DNB and full-book corpus ($3,421$ HathiTrust HTRC printed books + $926$ sibling-matched `$z="kostenfrei"` DNB `/34` open-access full books & EPUBs + $155$ OpenAlex/GBV OA books & chapters + $31,992$ digitized DNB `/04` `Inhaltsverzeichnis` & reading-sample PDFs/HTMLs + $41,286$ DNB `deposit.dnb.de` & `/blurb/` `Inhaltstexte` + $38$ Internet Archive books + $702$ multi-API deep-enriched works = **$300,412$ documents, $245,978,061$ German words across $55,605$ unique works, $|V| = 25,000$ lemmas and bigrams**) dramatically improves intrinsic $U_{\text{Mass}}$ coherence (see full empirical chapters in [DISSERTATION_EMPIRICAL_CHAPTERS.md](file:///f:/PhD%20AG/docs/DISSERTATION_EMPIRICAL_CHAPTERS.md) and [COHERENCE_GRID_REPORT.md](file:///f:/PhD%20AG/docs/COHERENCE_GRID_REPORT.md)):
 
 | Number of Topics ($K$) | $C_v$ Coherence | $U_{\text{Mass}}$ Coherence | Log Perplexity Bound | Discursive Resolution Level |
 | :---: | :---: | :---: | :---: | :--- |
@@ -133,7 +133,7 @@ Scaling from the initial $N = 160$ pilot metadata sample to the seven-wave exhau
 | **6** | `0.3440` | `-7.2369` | `-7.9608` | Transitional split |
 | **8** | `0.3160` | `-8.8889` | `-8.0393` | Transitional split |
 | **10** | `0.3350` | `-9.4710` | `-8.0833` | Transitional split |
-| **12** | `0.3905` | **`-2.2466` *(Wave 7, D=233,589)* ** | `-8.1008` | **Meso-Level Inflection** (Selected 12-Topic Dissertation Regime) |
+| **12** | `0.3905` | **`-2.5214` *(Wave 8, D=300,412)* ** | `-8.1008` | **Meso-Level Inflection** (Selected 12-Topic Dissertation Regime) |
 | **15** | `0.3831` | `-9.7105` | `-9.7275` | Meso-level plateau |
 | **20** | `0.4091` | `-9.9323` | `-10.7597` | High-resolution thematic clustering |
 | **25** | `0.3887` | `-8.4980` | `-11.5375` | High-resolution plateau |
@@ -148,7 +148,7 @@ xychart-beta
 ```
 
 > [!TIP]
-> **Methodological Interpretation for the Dissertation:** On the full $233,589$-document Wave-7 corpus, the $K = 12$ Meso-Regime ($U_{\text{Mass}} = -2.2466$) cleanly resolves all twelve major discursive domains across `1970–2025` and is cross-validated via Quanteda/STM covariate regressions ([`scripts/quanteda_stm_analytics.py`](file:///f:/PhD%20AG/scripts/quanteda_stm_analytics.py)) and neural `Doc2Vec` + `c-TF-IDF` BERTopic clustering ([`scripts/bertopic_german_pipeline.py`](file:///f:/PhD%20AG/scripts/bertopic_german_pipeline.py)).
+> **Methodological Interpretation for the Dissertation:** On the full $300,412$-document Wave-8 corpus, the $K = 12$ Meso-Regime ($U_{\text{Mass}} = -2.5214$) cleanly resolves all twelve major discursive domains across `1970–2025` and is cross-validated via Quanteda/STM covariate regressions ([`scripts/quanteda_stm_analytics.py`](file:///f:/PhD%20AG/scripts/quanteda_stm_analytics.py)) and neural `Doc2Vec` + `c-TF-IDF` BERTopic clustering ([`scripts/bertopic_german_pipeline.py`](file:///f:/PhD%20AG/scripts/bertopic_german_pipeline.py)).
 
 ---
 

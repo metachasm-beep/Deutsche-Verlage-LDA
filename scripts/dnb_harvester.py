@@ -50,104 +50,114 @@ NS = {
 }
 
 # All 38 German Target Publishers:
-# (Canonical Name, DNB vlg= query token, Wave-6 pages already done, Wave-7 total pages to reach)
+# (Canonical Name, DNB vlg= query token, Wave-7 pages already done for Era 1, Wave-8 total pages to reach)
 DNB_TARGET_PUBLISHERS = [
-    # Core 12 Publishers (Exhaustive Pagination up to 2,400 records per publisher)
-    ("Evangelische Verlagsanstalt", "Evangelische", 14, 24),
-    ("Gütersloher Verlagshaus", "Gütersloher", 14, 24),
-    ("Herder", "Herder", 14, 24),
-    ("Kösel", "Kösel", 11, 18),
-    ("Patmos", "Patmos", 11, 18),
-    ("Suhrkamp", "Suhrkamp", 13, 22),
-    ("Rowohlt", "Rowohlt", 11, 18),
-    ("Fischer", "Fischer", 11, 18),
-    ("Klett-Cotta", "Klett", 11, 18),
-    ("Kiepenheuer", "Kiepenheuer", 8, 13),
-    ("Wagenbach", "Wagenbach", 6, 10),
-    ("Alibri", "Alibri", 7, 11),
+    # Core 12 Publishers (Exhaustive Pagination up to 3,000 records per publisher)
+    ("Evangelische Verlagsanstalt", "Evangelische", 24, 30),
+    ("Gütersloher Verlagshaus", "Gütersloher", 24, 30),
+    ("Herder", "Herder", 24, 30),
+    ("Kösel", "Kösel", 18, 24),
+    ("Patmos", "Patmos", 18, 24),
+    ("Suhrkamp", "Suhrkamp", 22, 28),
+    ("Rowohlt", "Rowohlt", 18, 24),
+    ("Fischer", "Fischer", 18, 24),
+    ("Klett-Cotta", "Klett", 18, 24),
+    ("Kiepenheuer", "Kiepenheuer", 13, 18),
+    ("Wagenbach", "Wagenbach", 10, 14),
+    ("Alibri", "Alibri", 11, 15),
     # 26 Major Extended Academic & Confessional Religion/Philosophy/Sociology Imprints
-    ("Vandenhoeck & Ruprecht", "Vandenhoeck", 12, 20),
-    ("Mohr Siebeck", "Mohr", 12, 20),
-    ("Kohlhammer", "Kohlhammer", 12, 20),
-    ("C.H. Beck", "Beck", 11, 18),
-    ("De Gruyter / Transcript", "Gruyter", 12, 20),
-    ("De Gruyter / Transcript", "Transcript", 11, 18),
-    ("Herder (Grünewald)", "Grünewald", 9, 15),
-    ("Gütersloher Verlagshaus (Chr. Kaiser)", "Kaiser", 9, 15),
-    ("Herder (Kreuz)", "Kreuz", 9, 15),
-    ("Patmos (Schwabenverlag)", "Schwabenverlag", 8, 13),
-    ("Herder (Benziger)", "Benziger", 8, 13),
-    ("Schöningh", "Schöningh", 9, 16),
-    ("Aschendorff", "Aschendorff", 9, 16),
-    ("Pustet", "Pustet", 9, 15),
-    ("Echter", "Echter", 9, 15),
-    ("Bonifatius", "Bonifatius", 8, 13),
-    ("Neukirchener", "Neukirchener", 9, 15),
-    ("Calwer", "Calwer", 8, 13),
-    ("Campus", "Campus", 8, 14),
-    ("Insel", "Insel", 6, 10),
-    ("Meiner", "Meiner", 8, 14),
-    ("Wallstein", "Wallstein", 6, 10),
-    ("Nomos / Alber", "Alber", 8, 14),
-    ("Wilhelm Fink", "Fink", 6, 11),
-    ("Frommann-Holzboog", "Frommann", 6, 11),
-    ("Böhlau", "Böhlau", 8, 15),
-    ("Schwabe", "Schwabe", 6, 10),
+    ("Vandenhoeck & Ruprecht", "Vandenhoeck", 20, 26),
+    ("Mohr Siebeck", "Mohr", 20, 26),
+    ("Kohlhammer", "Kohlhammer", 20, 26),
+    ("C.H. Beck", "Beck", 18, 24),
+    ("De Gruyter / Transcript", "Gruyter", 20, 26),
+    ("De Gruyter / Transcript", "Transcript", 18, 24),
+    ("Herder (Grünewald)", "Grünewald", 15, 20),
+    ("Gütersloher Verlagshaus (Chr. Kaiser)", "Kaiser", 15, 20),
+    ("Herder (Kreuz)", "Kreuz", 15, 20),
+    ("Patmos (Schwabenverlag)", "Schwabenverlag", 13, 18),
+    ("Herder (Benziger)", "Benziger", 13, 18),
+    ("Schöningh", "Schöningh", 16, 21),
+    ("Aschendorff", "Aschendorff", 16, 21),
+    ("Pustet", "Pustet", 15, 20),
+    ("Echter", "Echter", 15, 20),
+    ("Bonifatius", "Bonifatius", 13, 18),
+    ("Neukirchener", "Neukirchener", 15, 20),
+    ("Calwer", "Calwer", 13, 18),
+    ("Campus", "Campus", 14, 19),
+    ("Insel", "Insel", 10, 14),
+    ("Meiner", "Meiner", 14, 19),
+    ("Wallstein", "Wallstein", 10, 14),
+    ("Nomos / Alber", "Alber", 14, 19),
+    ("Wilhelm Fink", "Fink", 11, 15),
+    ("Frommann-Holzboog", "Frommann", 11, 15),
+    ("Böhlau", "Böhlau", 15, 20),
+    ("Schwabe", "Schwabe", 10, 14),
 ]
 
 # Direct DNB Thematic Subject & DDC Queries across RQ1, RQ2, and RQ3 (1970-2025)
-# (Query CQL, start_page_idx, end_page_idx)
+# (Query CQL, start_page_idx, end_page_idx, check_isbns)
 DNB_THEMATIC_QUERIES = [
-    ("sw=Religionskritik*", 8, 12),
-    ("sw=Atheismus*", 8, 12),
-    ("sw=Säkularisierung*", 8, 12),
-    ("sw=Kirchenkritik*", 7, 11),
-    ("sw=Kirchenaustritt* or sw=Konfessionslos*", 6, 10),
-    ("sw=Religionssoziologie*", 8, 12),
-    ("sw=Religionspsychologie*", 7, 11),
-    ("sw=Religionsphilosophie*", 8, 12),
-    ("sw=Spiritualität* and (dcs=200* or dcs=230*)", 8, 12),
-    ("sw=Achtsamkeit* and (dcs=200* or dcs=150*)", 7, 11),
-    ("sw=Lebenshilfe* and (dcs=200* or dcs=230*)", 7, 11),
-    ("sw=Seelsorge*", 8, 12),
-    ("sw=Dogmatik*", 8, 12),
-    ("sw=Sozialethik* or sw=Christliche Ethik*", 7, 11),
-    ("sw=Ökumene* or sw=Ökumenische*", 7, 11),
-    ("sw=Gottesfrage*", 6, 10),
-    ("sw=Mystik*", 7, 11),
-    ("sw=Fundamentalismus* and sw=Religion*", 6, 10),
-    ("sw=Religionspädagogik*", 7, 11),
-    ("sw=Kirchenmitgliedschaft*", 5, 8),
-    ("sw=Kirchenkampf*", 4, 8),
-    ("sw=Reformation* and (dcs=200* or dcs=230*)", 4, 8),
-    ("sw=Neues Testament*", 4, 8),
-    ("sw=Altes Testament*", 4, 8),
-    ("sw=Bibelwissenschaft* or sw=Exegese*", 4, 8),
-    ("sw=Liturgie* or sw=Gottesdienst*", 4, 8),
-    ("sw=Diakonie* or sw=Caritas*", 4, 8),
-    ("sw=Religionsunterricht*", 4, 8),
-    ("sw=Kirchenrecht* or sw=Staatskirchenrecht*", 4, 8),
-    ("sw=Kirchengeschichte*", 4, 8),
-    ("sw=Moraltheologie* or sw=Theologische Ethik*", 4, 8),
-    ("sw=Christologie* or sw=Ekklesiologie*", 4, 8),
-    # 16 Brand-New Wave-7 Thematic & Interdisciplinary CQL Queries (Pages 0..5 -> startRecord 1..401)
-    ("sw=Religionsgeschichte*", 0, 5),
-    ("sw=Kirchenreform* or sw=Synodaler*", 0, 5),
-    ("sw=Missbrauch* and sw=Kirche*", 0, 4),
-    ("sw=Befreiungstheologie* or sw=Politische Theologie*", 0, 5),
-    ("sw=Feministische Theologie*", 0, 5),
-    ("sw=Interreligiös* or sw=Christlich-jüdisch* or sw=Christlich-islamisch*", 0, 5),
-    ("sw=Aufklärung* and (sw=Religion* or sw=Theologie* or dcs=200*)", 0, 5),
-    ("sw=Idealismus* and (sw=Religion* or sw=Gott* or dcs=100* or dcs=200*)", 0, 5),
-    ("sw=Phänomenologie* and (sw=Religion* or dcs=100* or dcs=200*)", 0, 5),
-    ("sw=Existenzphilosophie* or sw=Hermeneutik*", 0, 5),
-    ("sw=Wertewandel* or sw=Individualisierung*", 0, 5),
-    ("sw=Esoterik* or sw=New Age* or sw=Anthroposophie*", 0, 5),
-    ("sw=Buddhismus* or sw=Hinduismus* or sw=Weltreligion*", 0, 5),
-    ("sw=Judentum* and (dcs=200* or dcs=290* or dcs=900*)", 0, 5),
-    ("sw=Islam* and (dcs=200* or dcs=290* or dcs=300*)", 0, 5),
-    ("sw=Bibel* or sw=Evangelium* or sw=Paulus*", 0, 5),
+    ("sw=Religionskritik*", 12, 16, True),
+    ("sw=Atheismus*", 12, 16, True),
+    ("sw=Säkularisierung*", 12, 16, True),
+    ("sw=Kirchenkritik*", 11, 15, True),
+    ("sw=Kirchenaustritt* or sw=Konfessionslos*", 10, 14, True),
+    ("sw=Religionssoziologie*", 12, 16, True),
+    ("sw=Religionspsychologie*", 11, 15, True),
+    ("sw=Religionsphilosophie*", 12, 16, True),
+    ("sw=Spiritualität* and (dcs=200* or dcs=230* or dcs=240*)", 12, 16, True),
+    ("sw=Achtsamkeit* and (dcs=200* or dcs=150*)", 11, 15, True),
+    ("sw=Lebenshilfe* and (dcs=200* or dcs=230* or dcs=150*)", 11, 15, True),
+    ("sw=Seelsorge*", 12, 16, True),
+    ("sw=Dogmatik*", 12, 16, True),
+    ("sw=Sozialethik* or sw=Christliche Ethik*", 11, 15, True),
+    ("sw=Ökumene* or sw=Ökumenische*", 11, 15, True),
+    ("sw=Gottesfrage*", 10, 14, True),
+    ("sw=Mystik*", 11, 15, True),
+    ("sw=Fundamentalismus* and sw=Religion*", 10, 14, True),
+    ("sw=Religionspädagogik*", 11, 15, True),
+    ("sw=Kirchenmitgliedschaft*", 8, 12, True),
+    ("sw=Kirchenkampf*", 8, 12, True),
+    ("sw=Reformation* and (dcs=200* or dcs=230* or dcs=270*)", 8, 12, True),
+    ("sw=Neues Testament*", 8, 13, True),
+    ("sw=Altes Testament*", 8, 13, True),
+    ("sw=Bibelwissenschaft* or sw=Exegese*", 8, 13, True),
+    ("sw=Liturgie* or sw=Gottesdienst*", 8, 13, True),
+    ("sw=Diakonie* or sw=Caritas*", 8, 13, True),
+    ("sw=Religionsunterricht*", 8, 13, True),
+    ("sw=Kirchenrecht* or sw=Staatskirchenrecht*", 8, 12, True),
+    ("sw=Kirchengeschichte*", 8, 13, True),
+    ("sw=Moraltheologie* or sw=Theologische Ethik*", 8, 12, True),
+    ("sw=Christologie* or sw=Ekklesiologie*", 8, 12, True),
+    ("sw=Religionsgeschichte*", 5, 10, True),
+    ("sw=Kirchenreform* or sw=Synodaler*", 5, 10, True),
+    ("sw=Missbrauch* and sw=Kirche*", 4, 8, True),
+    ("sw=Befreiungstheologie* or sw=Politische Theologie*", 5, 10, True),
+    ("sw=Feministische Theologie*", 5, 10, True),
+    ("sw=Interreligiös* or sw=Christlich-jüdisch* or sw=Christlich-islamisch*", 5, 10, True),
+    ("sw=Aufklärung* and (sw=Religion* or sw=Theologie* or dcs=200*)", 5, 10, True),
+    ("sw=Idealismus* and (sw=Religion* or sw=Gott* or dcs=100* or dcs=200*)", 5, 10, True),
+    ("sw=Phänomenologie* and (sw=Religion* or dcs=100* or dcs=200*)", 5, 10, True),
+    ("sw=Existenzphilosophie* or sw=Hermeneutik*", 5, 10, True),
+    ("sw=Wertewandel* or sw=Individualisierung*", 5, 10, True),
+    ("sw=Esoterik* or sw=New Age* or sw=Anthroposophie*", 5, 10, True),
+    ("sw=Buddhismus* or sw=Hinduismus* or sw=Weltreligion*", 5, 10, True),
+    ("sw=Judentum* and (dcs=200* or dcs=290* or dcs=900*)", 5, 10, True),
+    ("sw=Islam* and (dcs=200* or dcs=290* or dcs=300*)", 5, 10, True),
+    ("sw=Bibel* or sw=Evangelium* or sw=Paulus*", 5, 10, True),
+    # Wave-8 Complete DNB DDC Sachgruppen (220, 240, 250, 260, 270, 280, 290, 150, 170)
+    ("dcs=220*", 0, 10, True),
+    ("dcs=240*", 0, 10, True),
+    ("dcs=250*", 0, 10, True),
+    ("dcs=260*", 0, 10, True),
+    ("dcs=270*", 0, 10, True),
+    ("dcs=280*", 0, 10, True),
+    ("dcs=290*", 0, 10, True),
+    ("dcs=150* and (sw=Lebenshilfe* or sw=Spiritualität* or sw=Achtsamkeit* or sw=Sinn* or sw=Seele* or sw=Trauer*)", 0, 8, True),
+    ("dcs=170* and (sw=Ethik* or sw=Moral* or sw=Religion* or sw=Gewissen* or sw=Werte*)", 0, 8, True),
 ]
+
 
 
 def normalize_german_text(text: str) -> str:
@@ -549,26 +559,25 @@ def harvest_dnb_wave7_exhaustive(
     already_matched_isbns: set,
     already_seen_urls: set,
     already_seen_titles: set,
-    workers: int = 20,
+    workers: int = 24,
     chunk_words: int = 1000,
     max_chunks_per_book: int = 75,
-    max_toc_pdfs: int = 7500,
+    max_toc_pdfs: int = 50000,
 ):
     """
-    Wave-7 Exhaustive Multi-Stream DNB Harvester (1970–2025):
-      1. Queries all remaining DNB SRU pages across:
-         - Era 1 (2004–2025): pages `0..wave7_end_pages` (up to `startRecord=2,400`)
-         - Era 2 (1970–2003): pages `0..w7_hist` (including `0..w6_hist` to recover all historical `/04` PDFs & `/34` OA books)
+    Wave-8 Complete Multi-Stream DNB Harvester (1970–2025):
+      1. Queries all DNB SRU pages across:
+         - Era 1 (2004–2025): pages `0..wave8_end_pages` (up to `startRecord=3,000`)
+         - Era 2 (1970–2003): pages `0..w8_hist` with ALL historical pages (`0..w8_hist`) flagged for
+           Stream A (HathiTrust ISBN resolution) so pages `0..w6_hist` skipped in Wave 7 are 100% resolved!
          - Era 3 (1970–2025 DDC 100/170/300 Philosophy, Ethics & Sociology of Religion across all 38 publishers)
-         - 48 Thematic CQL queries across RQ1, RQ2, and RQ3
-      2. Stream A (Deep DNB ISBNs -> HathiTrust HTRC Full Printed Books): Resolves all new 10/13-digit
-         DNB ISBNs against HathiTrust and streams complete page-by-page books via HTRC EF v2.0.
-      3. Stream B (Sibling-Matched `$z='kostenfrei'` DNB `/34` Open-Access Full Books — PDF + EPUB + Short Monographs):
-         Streams 100% free full-text PDF and EPUB monographs (`>= 250` words) hosted on `d-nb.info/{idn}/34`.
-      4. Stream C (DNB Digitized `/04` `Inhaltsverzeichnis` & Excerpt PDFs + `deposit.dnb.de` HTML TOCs):
-         Concurrently streams up to `max_toc_pdfs` multi-page DNB digitized tables of contents, prefaces,
-         and reading samples (`d-nb.info/{idn}/04` and `deposit.dnb.de`).
-      5. Stream D (New DNB `deposit.dnb.de` & `/plus/idn/.../blurb/` `Inhaltstexte` & `MARC 520` Abstracts).
+         - Era 4 (1970–2025 DDC 220/240/250/260/270/280/290 & 150 Bible, Moral/Pastoral/Social Theology,
+           Church History, Ecumenism, Comparative Religion & Psychology/Lebenshilfe across all 38 publishers)
+         - 57 Thematic & Direct DDC CQL queries across RQ1, RQ2, and RQ3
+      2. Stream A (Complete Historical 1970–2003 + Deep & DDC 220–290 DNB ISBNs -> HathiTrust HTRC Full Books)
+      3. Stream B (Sibling-Matched `$z='kostenfrei'` DNB `/34` Open-Access Full Books — PDF + EPUB + Short Works)
+      4. Stream C (ALL Remaining Unharvested DNB Digitized `/04` `Inhaltsverzeichnis` & Excerpt PDFs + HTML TOCs)
+      5. Stream D (All Remaining Unharvested DNB `deposit.dnb.de` `Inhaltstexte`, `MARC 520` Abstracts & `MARC 650` Keywords)
     """
     base_url = "https://services.dnb.de/sru/dnb"
 
@@ -588,35 +597,46 @@ def harvest_dnb_wave7_exhaustive(
         "sw=Säkular* or sw=Aufklärung* or sw=Moderne* or sw=Gesellschaft* or "
         "sw=Kultur* or sw=Islam* or sw=Judentum* or sw=Christ* or sw=Sinn*)"
     )
+    ddc_220_290_150_cql = (
+        "(dcs=220* or dcs=240* or dcs=250* or dcs=260* or dcs=270* or dcs=280* or dcs=290* or "
+        "hsg=220 or hsg=290 or (dcs=150* and (sw=Lebenshilfe* or sw=Spiritualität* or sw=Achtsamkeit* or sw=Sinn* or sw=Seele* or sw=Trauer*)))"
+    )
 
     sru_tasks = []
-    for canon_pub, vlg_term, wave6_pages, wave7_end_pages in DNB_TARGET_PUBLISHERS:
-        # Era 1: 2004-2025 (Pages 0..wave7_end_pages so we capture remaining /04 PDFs & /34 EPUBs from 0..wave6_pages
-        # AND brand-new ISBNs/blurbs/books from wave6_pages..wave7_end_pages)
+    for canon_pub, vlg_term, wave7_pages, wave8_end_pages in DNB_TARGET_PUBLISHERS:
+        # Era 1: 2004-2025 (Pages 0..wave8_end_pages so we capture all remaining /04 PDFs & /34 EPUBs from 0..wave7_pages
+        # AND brand-new ISBNs/blurbs/books from wave7_pages..wave8_end_pages)
         q_mod = f'{modern_subj_cql} and vlg="{vlg_term}" and jhr>=2004 and jhr<=2025'
-        for p_idx in range(0, wave7_end_pages):
-            sru_tasks.append((canon_pub, q_mod, p_idx * 100 + 1, p_idx >= wave6_pages))
+        for p_idx in range(0, wave8_end_pages):
+            sru_tasks.append((canon_pub, q_mod, p_idx * 100 + 1, p_idx >= wave7_pages))
 
-        # Era 2: 1970-2003 (Scan from 0..w7_hist so we also recover 1970-2003 /04 PDFs from 0..w6_hist!)
-        w6_hist = max(4, wave6_pages // 2)
-        w7_hist = max(7, wave7_end_pages // 2)
+        # Era 2: 1970-2003 (Scan 0..w8_hist with is_deep_page=True for ALL pages so pages 0..w6_hist
+        # whose ISBNs were skipped in Wave 7 are 100% resolved against HathiTrust!)
+        w8_hist = max(9, wave8_end_pages // 2)
         q_hist = f'{hist_subj_cql} and vlg="{vlg_term}" and jhr>=1970 and jhr<=2003'
-        for p_idx in range(0, w7_hist):
-            sru_tasks.append((canon_pub, q_hist, p_idx * 100 + 1, p_idx >= w6_hist))
+        for p_idx in range(0, w8_hist):
+            sru_tasks.append((canon_pub, q_hist, p_idx * 100 + 1, True))
 
         # Era 3: DDC 100 / 170 / 300 (Philosophy, Ethics & Sociology of Religion across 1970-2025)
         q_phil = f'{phil_soc_cql} and vlg="{vlg_term}" and jhr>=1970 and jhr<=2025'
-        phil_pages = max(3, wave7_end_pages // 4)
-        for p_idx in range(0, phil_pages):
-            sru_tasks.append((canon_pub, q_phil, p_idx * 100 + 1, True))
+        w7_phil = max(3, wave7_pages // 4)
+        w8_phil = max(5, wave8_end_pages // 3)
+        for p_idx in range(0, w8_phil):
+            sru_tasks.append((canon_pub, q_phil, p_idx * 100 + 1, p_idx >= w7_phil))
 
-    for theme_cql, start_p, end_p in DNB_THEMATIC_QUERIES:
+        # Era 4: Missing DNB Religion/Theology/Psychology DDC Divisions (220, 240, 250, 260, 270, 280, 290, 150)
+        q_ddc = f'{ddc_220_290_150_cql} and vlg="{vlg_term}" and jhr>=1970 and jhr<=2025'
+        ddc_pages = max(4, wave8_end_pages // 3)
+        for p_idx in range(0, ddc_pages):
+            sru_tasks.append((canon_pub, q_ddc, p_idx * 100 + 1, True))
+
+    for theme_cql, start_p, end_p, check_isbn in DNB_THEMATIC_QUERIES:
         q_theme = f"({theme_cql}) and jhr>=1970 and jhr<=2025"
         for p_idx in range(start_p, end_p):
-            sru_tasks.append((None, q_theme, p_idx * 100 + 1, True))
+            sru_tasks.append((None, q_theme, p_idx * 100 + 1, check_isbn))
 
     print(
-        f"Wave-7 Exhaustive DNB SRU Harvester: Querying {len(sru_tasks):,} SRU pages "
+        f"Wave-8 Complete DNB SRU Harvester: Querying {len(sru_tasks):,} SRU pages "
         f"(maximumRecords=100 per page -> up to {len(sru_tasks)*100:,} DNB MARC21 records across 1970-2025)...",
         flush=True,
     )
@@ -674,12 +694,12 @@ def harvest_dnb_wave7_exhaustive(
     deep_records = [r for r in all_dnb_records if r.get("is_deep_page")]
     print(
         f"  -> Retrieved {len(all_dnb_records):,} unique DNB MARC21 records "
-        f"({len(deep_records):,} from brand-new Wave-7 deep & DDC 100/170/300 SRU pages)!",
+        f"({len(deep_records):,} from 1970-2003 Historical, DDC 220-290/150/170, and Wave-8 Deep SRU pages)!",
         flush=True,
     )
 
     # =========================================================================
-    # STREAM A: Wave-7 Deep-Page DNB ISBNs -> HathiTrust HTRC Full Printed Books
+    # STREAM A: Wave-8 Historical (1970-2003) + DDC 220-290 & Deep DNB ISBNs -> HathiTrust Full Books
     # =========================================================================
     dnb_isbn_candidates = []
     seen_isbns_local = set(already_matched_isbns)
@@ -699,11 +719,11 @@ def harvest_dnb_wave7_exhaustive(
             "decade": r["decade"],
             "isbn": r["isbn"],
             "ppn": r["idn"],
-            "bkl_codes": "DNB-Wave7-100/200/300",
+            "bkl_codes": "DNB-Wave8-Complete",
         })
 
     print(
-        f"\n[Stream A] Wave-7 DNB -> HathiTrust Cross-Walk: Queued {len(dnb_isbn_candidates):,} NEW deep-page DNB ISBNs...",
+        f"\n[Stream A] Wave-8 DNB -> HathiTrust Cross-Walk: Queued {len(dnb_isbn_candidates):,} unharvested DNB ISBNs...",
         flush=True,
     )
     dnb_isbn_df = pd.DataFrame(dnb_isbn_candidates)
@@ -718,7 +738,7 @@ def harvest_dnb_wave7_exhaustive(
     htrc_summaries = []
     if matched_ht_books:
         print(
-            f"Streaming full-book page-by-page tokens from HTRC EF-API for {len(matched_ht_books)} Wave-7 DNB-matched books...",
+            f"Streaming full-book page-by-page tokens from HTRC EF-API for {len(matched_ht_books)} Wave-8 DNB-matched books...",
             flush=True,
         )
         with ThreadPoolExecutor(max_workers=workers) as ex:
@@ -732,7 +752,7 @@ def harvest_dnb_wave7_exhaustive(
                     htrc_passages.extend(p_list)
                     htrc_summaries.append(summ)
                     print(
-                        f"  + [WAVE-7 DNB->HTRC BOOK #{len(htrc_summaries)}] ({summ['date']} | {summ['publisher'][:28]}) "
+                        f"  + [WAVE-8 DNB->HTRC BOOK #{len(htrc_summaries)}] ({summ['date']} | {summ['publisher'][:28]}) "
                         f"{summ['title'][:45]}... [{summ['htid']}] -> {summ['pages']} pages | "
                         f"{summ['extracted_words']:,} words ({summ['passages']} passages)",
                         flush=True,
@@ -786,7 +806,7 @@ def harvest_dnb_wave7_exhaustive(
         return out
 
     if oa_candidates:
-        with ThreadPoolExecutor(max_workers=min(workers, 14)) as ex:
+        with ThreadPoolExecutor(max_workers=min(workers, 16)) as ex:
             futs = {ex.submit(_stream_dnb_oa, r): r for r in oa_candidates}
             for fut in as_completed(futs):
                 r = futs[fut]
@@ -802,7 +822,7 @@ def harvest_dnb_wave7_exhaustive(
                     )
 
     # =========================================================================
-    # STREAM C: DNB Digitized `/04` `Inhaltsverzeichnis` & Reading-Sample PDFs + HTML TOCs
+    # STREAM C: ALL Remaining Unharvested DNB Digitized `/04` `Inhaltsverzeichnis` & Reading-Sample PDFs + HTML TOCs
     # =========================================================================
     toc_candidates = [
         r for r in all_dnb_records
@@ -812,7 +832,7 @@ def harvest_dnb_wave7_exhaustive(
     ]
     print(
         f"\n[Stream C] DNB Digitized `/04` `Inhaltsverzeichnis` & Excerpt PDFs/HTMLs: "
-        f"Streaming up to {min(len(toc_candidates), max_toc_pdfs):,} (out of {len(toc_candidates):,} unharvested `/04` TOCs)...",
+        f"Streaming ALL {min(len(toc_candidates), max_toc_pdfs):,} unharvested `/04` TOCs...",
         flush=True,
     )
     dnb_toc_passages = []
@@ -821,7 +841,7 @@ def harvest_dnb_wave7_exhaustive(
         txt = ""
         src_u = r["toc_pdf_url"] or r["toc_htm_url"]
         if r["toc_pdf_url"]:
-            txt, _ = stream_entire_pdf_book_in_ram(r["toc_pdf_url"], max_pages=12)
+            txt, _ = stream_entire_pdf_book_in_ram(r["toc_pdf_url"], max_pages=10)
         if not txt and r["toc_htm_url"]:
             txt = fetch_dnb_blurb(r["toc_htm_url"])
             src_u = r["toc_htm_url"]
@@ -831,7 +851,7 @@ def harvest_dnb_wave7_exhaustive(
         clean_toc = re.sub(r"\.{3,}", " ", txt)
         clean_toc = normalize_german_text(clean_toc)
         words = clean_toc.split()
-        if len(words) < 75:
+        if len(words) < 65:
             return None
         compact_toc = " ".join(words[:650])
         kw_str = r["keywords"] or ""
@@ -853,12 +873,17 @@ def harvest_dnb_wave7_exhaustive(
         }
 
     if toc_candidates:
-        with ThreadPoolExecutor(max_workers=28) as ex:
+        with ThreadPoolExecutor(max_workers=36) as ex:
             futs = [ex.submit(_stream_dnb_toc, r) for r in toc_candidates[:max_toc_pdfs]]
             for fut in as_completed(futs):
                 res = fut.result()
                 if res:
                     dnb_toc_passages.append(res)
+                    if len(dnb_toc_passages) % 2000 == 0:
+                        print(
+                            f"    ... [Stream C Progress] Extracted {len(dnb_toc_passages):,} DNB `/04` TOC PDFs so far...",
+                            flush=True,
+                        )
 
     print(
         f"  -> Extracted {len(dnb_toc_passages):,} rich DNB `/04` `Inhaltsverzeichnis` & Leseprobe documents!",
@@ -866,17 +891,17 @@ def harvest_dnb_wave7_exhaustive(
     )
 
     # =========================================================================
-    # STREAM D: New DNB `deposit.dnb.de` & `/blurb/` Inhaltstexte & Abstracts
+    # STREAM D: All Remaining Unharvested DNB `deposit.dnb.de` & `/blurb/` Inhaltstexte, Abstracts & Keywords
     # =========================================================================
     blurb_candidates = [
         r for r in all_dnb_records
-        if (r["blurb_url"] or r["abstract_note"])
+        if (r["blurb_url"] or r["abstract_note"] or len((r["keywords"] or "").split()) >= 6)
         and r["title"].lower().strip() not in already_seen_titles
         and (not r["blurb_url"] or r["blurb_url"] not in already_seen_urls)
     ]
     print(
-        f"\n[Stream D] Wave-7 DNB `deposit.dnb.de` & `/blurb/` Inhaltstexte & Abstracts: "
-        f"Fetching {len(blurb_candidates):,} NEW DNB deposit texts...",
+        f"\n[Stream D] Wave-8 DNB `deposit.dnb.de` & `/blurb/` Inhaltstexte, Abstracts & Keywords: "
+        f"Fetching {len(blurb_candidates):,} NEW DNB deposit & catalog texts...",
         flush=True,
     )
 
@@ -890,7 +915,7 @@ def harvest_dnb_wave7_exhaustive(
         body_str = " ".join(body_parts).strip()
         full_txt = f"{r['title']}. {r['author']}. {r['publisher']}. {body_str}".strip()
         wc = len(full_txt.split())
-        if wc < 45:
+        if wc < 30:
             return None
         src_url = r["blurb_url"] or (f"https://d-nb.info/{r['idn']}" if r["idn"] else "https://portal.dnb.de")
         return {
@@ -908,7 +933,7 @@ def harvest_dnb_wave7_exhaustive(
             "text": full_txt,
         }
 
-    with ThreadPoolExecutor(max_workers=28) as ex:
+    with ThreadPoolExecutor(max_workers=36) as ex:
         futs = [ex.submit(_enrich_dnb_deposit, r) for r in blurb_candidates]
         for fut in as_completed(futs):
             res = fut.result()
@@ -926,12 +951,12 @@ def harvest_dnb_wave7_exhaustive(
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Wave-7 Exhaustive Deutsche Nationalbibliothek (DNB) Harvester (1970-2025)"
+        description="Wave-8 Complete Deutsche Nationalbibliothek (DNB) Harvester (1970-2025)"
     )
-    parser.add_argument("--workers", type=int, default=20)
+    parser.add_argument("--workers", type=int, default=24)
     parser.add_argument("--chunk-words", type=int, default=1000)
     parser.add_argument("--max-chunks-per-book", type=int, default=75)
-    parser.add_argument("--max-toc-pdfs", type=int, default=7500)
+    parser.add_argument("--max-toc-pdfs", type=int, default=50000)
     parser.add_argument("--no-merge", action="store_true")
     args = parser.parse_args()
 
@@ -961,7 +986,7 @@ def main():
             already_seen_titles.add(str(t).lower().strip())
 
     print(
-        f"Starting Wave-7 Exhaustive DNB Harvest (1970-2025) across 38 German Publishers & 48 Thematic CQL Queries\n"
+        f"Starting Wave-8 Complete DNB Harvest (1970-2025) across 38 German Publishers, All DDC 100/150/170/200-290/300 Divisions & 57 Thematic CQL Queries\n"
         f"  (Existing Corpus: {len(dnb_prev):,} documents | {len(already_seen_htids):,} HTRC books)...",
         flush=True,
     )
@@ -994,12 +1019,12 @@ def main():
     elapsed = time.time() - start_t
 
     print("\n======================================================================", flush=True)
-    print(f"WAVE-7 EXHAUSTIVE DNB HARVEST COMPLETE in {elapsed:.1f}s!", flush=True)
-    print(f"  - Stream A (Deep DNB ISBN -> HTRC Full Printed Books): {len(new_ht_summaries)} books ({sum(1 for p in new_passages if p['corpus_layer']=='hathitrust_ef_fullbook_print'):,} passages)", flush=True)
+    print(f"WAVE-8 COMPLETE DNB HARVEST FINISHED in {elapsed:.1f}s!", flush=True)
+    print(f"  - Stream A (Historical 1970-2003 + DDC 220-290 DNB ISBN -> HTRC Full Books): {len(new_ht_summaries)} books ({sum(1 for p in new_passages if p['corpus_layer']=='hathitrust_ef_fullbook_print'):,} passages)", flush=True)
     print(f"  - Stream B (True `$z='kostenfrei'` DNB `/34` OA PDFs & EPUBs): {sum(1 for p in new_passages if p['corpus_layer']=='dnb_oa_fullbook'):,} passages", flush=True)
-    print(f"  - Stream C (DNB Digitized `/04` `Inhaltsverzeichnis` & Excerpt PDFs/HTMLs): {sum(1 for p in new_passages if p['corpus_layer']=='dnb_toc_pdf_fulltext'):,} documents", flush=True)
-    print(f"  - Stream D (Deep-Page DNB `Inhaltstexte` & Abstracts): {sum(1 for p in new_passages if p['corpus_layer']=='dnb_deposit_inhaltstext'):,} documents", flush=True)
-    print(f"  - TOTAL NEW UNIQUE DNB DOCUMENTS ADDED IN WAVE 7: {len(new_df):,} ({int(total_new_words):,} German words!)", flush=True)
+    print(f"  - Stream C (ALL Remaining DNB Digitized `/04` `Inhaltsverzeichnis` & Excerpt PDFs/HTMLs): {sum(1 for p in new_passages if p['corpus_layer']=='dnb_toc_pdf_fulltext'):,} documents", flush=True)
+    print(f"  - Stream D (Remaining DNB `Inhaltstexte`, Abstracts & Keywords): {sum(1 for p in new_passages if p['corpus_layer']=='dnb_deposit_inhaltstext'):,} documents", flush=True)
+    print(f"  - TOTAL NEW UNIQUE DNB DOCUMENTS ADDED IN WAVE 8: {len(new_df):,} ({int(total_new_words):,} German words!)", flush=True)
     print("======================================================================", flush=True)
 
     if not args.no_merge:
@@ -1015,3 +1040,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

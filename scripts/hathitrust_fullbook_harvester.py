@@ -687,13 +687,18 @@ def harvest_openalex_wave4_books_and_chapters(
 
 
 def load_all_dnb_shards(base_path: str = "data/dnb_metadata.csv") -> pd.DataFrame:
-    """Loads data/dnb_metadata.csv plus any data/dnb_metadata_part*.csv shards."""
+    """Loads data/dnb_metadata.csv plus any data/dnb_metadata_part*.csv shards in numerical part order."""
     dfs = []
     if os.path.exists(base_path):
         dfs.append(pd.read_csv(base_path, encoding="utf-8", low_memory=False))
-    for p in sorted(glob.glob("data/dnb_metadata_part*.csv")):
+    part_files = sorted(
+        glob.glob("data/dnb_metadata_part*.csv"),
+        key=lambda x: int(re.search(r"part(\d+)", x).group(1)) if re.search(r"part(\d+)", x) else 999,
+    )
+    for p in part_files:
         dfs.append(pd.read_csv(p, encoding="utf-8", low_memory=False))
     return pd.concat(dfs, ignore_index=True) if dfs else pd.DataFrame()
+
 
 
 def save_sharded_dnb_corpus(merged_df: pd.DataFrame, rows_per_shard: int = 24000):
