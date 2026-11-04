@@ -638,6 +638,85 @@ def iter_corpus_rows(data_path: str):
 
 
 
+# Canonical theological, philosophical, and biblical figures preserved during author/entity filtering
+# (Santana et al., 2025, DHQ 19.2 §56-64; Jiménez-Badillo et al., 2020)
+CANONICAL_THEO_PHIL_WHITELIST = {
+    "jesus", "christus", "paulus", "luther", "kant", "hegel", "habermas", "weber", "nietzsche",
+    "marx", "augustinus", "aquino", "schleiermacher", "barth", "rahner", "bonhoeffer", "bultmann",
+    "moltmann", "pannenberg", "jüngel", "küng", "ratzinger", "kasper", "tillich", "troeltsch",
+    "harnack", "kierkegaard", "heidegger", "husserl", "gadamer", "adorno", "horkheimer", "benjamin",
+    "blumenberg", "sloterdijk", "taylor", "spinoza", "leibniz", "fichte", "schelling", "feuerbach",
+    "foucault", "derrida", "ricoeur", "levinas", "buber", "rosenzweig", "scholem", "eckhart",
+    "origenes", "calvin", "zwingli", "melanchthon", "israel", "jahwe", "moses", "abraham",
+    "david", "jesaja", "hiob", "jeremia", "lukas", "matthäus", "markus", "johannes"
+}
+
+GERMAN_COMPOUND_PREFIXES_LDA = [
+    ("kirchenmitgliedschafts", ["kirche", "mitgliedschaft"]),
+    ("religionswissenschaft", ["religion", "wissenschaft"]),
+    ("säkularisierung", ["säkularisierung"]),
+    ("religions", ["religion"]),
+    ("kirchen", ["kirche"]),
+    ("gottes", ["gott"]),
+    ("glaubens", ["glaube"]),
+    ("christen", ["christ"]),
+    ("menschen", ["mensch"]),
+    ("lebens", ["leben"]),
+    ("geistes", ["geist"]),
+    ("seelen", ["seele"]),
+    ("staats", ["staat"]),
+    ("gesellschafts", ["gesellschaft"]),
+    ("kultur", ["kultur"]),
+    ("moral", ["moral"]),
+    ("bibel", ["bibel"]),
+    ("priester", ["priester"]),
+    ("kloster", ["kloster"]),
+    ("papst", ["papst"]),
+    ("freiheits", ["freiheit"]),
+    ("wahrheits", ["wahrheit"]),
+    ("vernunft", ["vernunft"]),
+    ("wissenschafts", ["wissenschaft"]),
+    ("theologie", ["theologie"]),
+    ("philosophie", ["philosophie"]),
+    ("konfessions", ["konfession"]),
+    ("sozial", ["sozial"]),
+]
+
+
+def split_german_compound_lda(token: str) -> list[str]:
+    """
+    Unified German compound decompounding (Komposita -> Bestimmungswort + Grundwort)
+    shared across Gensim LDA, Quanteda/STM, and BERTopic (Santana et al., 2025, DHQ 19.2 §70-71, §81).
+    """
+    w = token.lower().strip()
+    if len(w) < 9 or "_" in w:
+        return [w]
+    for prefix, mapped_roots in GERMAN_COMPOUND_PREFIXES_LDA:
+        if w.startswith(prefix) and len(w) >= len(prefix) + 4:
+            remainder = w[len(prefix):]
+            if remainder.startswith("s") and len(remainder) >= 6 and remainder[1] not in "aeiouäöüch":
+                remainder = remainder[1:]
+            if len(remainder) >= 4 and remainder not in ALL_STOPWORDS:
+                return [w] + mapped_roots + [remainder]
+    return [w]
+
+
+def extract_row_metadata_tokens(row: dict) -> set[str]:
+    """
+    Extracts non-canonical author/editor name tokens and publisher imprint tokens from a row's
+    metadata so they cannot leak into the topic model from prepended headers or paratexts
+    (Santana et al., 2025, DHQ 19.2 §55-64, Fig. 3 & Fig. 6).
+    """
+    meta_tokens = set()
+    for field in ("author", "publisher", "raw_imprint"):
+        val = row.get(field) or ""
+        for w in _WORD_RE.findall(str(val)):
+            wl = w.lower()
+            if wl not in CANONICAL_THEO_PHIL_WHITELIST and len(wl) > 2:
+                meta_tokens.add(wl)
+    return meta_tokens
+
+
 def run_pipeline(data_path, num_topics: int = None, lda_mode: str = "unsupervised"):
     """
     Executes the end-to-end German LDA pipeline supporting all 4 methodological paradigms:
@@ -660,12 +739,18 @@ def run_pipeline(data_path, num_topics: int = None, lda_mode: str = "unsupervise
 
     processed_docs = preprocess_corpus_batch(texts)
 
-    # Filter out any documents that produced empty token lists and strip any newly added stopwords from cache
+    # Filter out empty token lists, strip row-specific author/publisher metadata leakage (Santana et al. 2025 §55),
+    # and apply unified German compound decompounding (§70-71, §81)
     filtered_docs = []
     filtered_rows = []
     for doc, row in zip(processed_docs, valid_rows):
         base_doc = _unboost_religious_tokens(doc or []) if mode_key == "unseeded" else (doc or [])
-        cleaned_doc = [t for t in base_doc if t not in ALL_STOPWORDS and len(t) > 2]
+        row_meta_noise = extract_row_metadata_tokens(row)
+        cleaned_doc = []
+        for t in base_doc:
+            if t in ALL_STOPWORDS or t in row_meta_noise or len(t) <= 2:
+                continue
+            cleaned_doc.extend(split_german_compound_lda(t))
         if cleaned_doc:
             filtered_docs.append(cleaned_doc)
             filtered_rows.append(row)

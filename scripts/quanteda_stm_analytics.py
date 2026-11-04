@@ -310,7 +310,8 @@ def run_quanteda_stm_suite(data_path: str = "data/dnb_metadata.csv"):
     docvars = []
 
     for doc, row in zip(processed_docs, valid_rows):
-        cleaned = [t for t in (doc or []) if t not in lda_pipeline.ALL_STOPWORDS and len(t) > 2]
+        row_meta_noise = lda_pipeline.extract_row_metadata_tokens(row)
+        cleaned = [t for t in (doc or []) if t not in lda_pipeline.ALL_STOPWORDS and t not in row_meta_noise and len(t) > 2]
         if not cleaned:
             continue
         filtered_rows.append(row)

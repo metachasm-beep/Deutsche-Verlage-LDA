@@ -96,8 +96,9 @@ def run_bertopic_german_pipeline(data_path: str = "data/dnb_metadata.csv", n_clu
     filtered_rows = []
     docs_tokens = []
     for doc, row in zip(processed_docs, valid_rows):
+        row_meta_noise = lda_pipeline.extract_row_metadata_tokens(row)
         base = lda_pipeline._unboost_religious_tokens(doc or [])
-        cleaned = [t for t in base if t not in lda_pipeline.ALL_STOPWORDS and len(t) > 2]
+        cleaned = [t for t in base if t not in lda_pipeline.ALL_STOPWORDS and t not in row_meta_noise and len(t) > 2]
         if not cleaned:
             continue
         expanded = []
