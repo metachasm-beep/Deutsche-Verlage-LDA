@@ -310,8 +310,17 @@ def run_quanteda_stm_suite(data_path: str = "data/dnb_metadata.csv"):
     docvars = []
 
     for doc, row in zip(processed_docs, valid_rows):
+        base_doc = list(doc or [])
+        title_str = str((row or {}).get("title") or "")
+        m_chunk = lda_pipeline._CHUNK_INDEX_RE.search(title_str)
+        if m_chunk and int(m_chunk.group(1)) > 1:
+            base_title = lda_pipeline._ARCHIVAL_BRACKET_RE.sub(" ", title_str)
+            title_word_count = len(lda_pipeline._WORD_RE.findall(base_title))
+            if title_word_count > 0 and len(base_doc) > title_word_count + 5:
+                skip_idx = min(len(base_doc) // 3, title_word_count * 2)
+                base_doc = base_doc[skip_idx:]
         row_meta_noise = lda_pipeline.extract_row_metadata_tokens(row)
-        cleaned = [t for t in (doc or []) if t not in lda_pipeline.ALL_STOPWORDS and t not in row_meta_noise and len(t) > 2]
+        cleaned = [t for t in base_doc if t not in lda_pipeline.ALL_STOPWORDS and t not in row_meta_noise and len(t) > 2]
         if not cleaned:
             continue
         filtered_rows.append(row)

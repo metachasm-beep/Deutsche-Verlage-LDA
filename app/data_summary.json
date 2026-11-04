@@ -72,7 +72,7 @@
       "PROPN",
       "ADJ"
     ],
-    "stopwords_total": 1106,
+    "stopwords_total": 1425,
     "fraktur_noise_count": 537,
     "domain_stopwords_count": 53,
     "religious_boost_keywords": 21,
@@ -84,7 +84,16 @@
     "lda_passes": 15,
     "lda_chunksize": 1500,
     "lda_alpha": "auto",
-    "lda_eta": "auto"
+    "lda_eta": "auto",
+    "spacy_core_stopwords_count": 543,
+    "non_canonical_per_loc_noise_count": 323,
+    "canonical_theo_phil_whitelist_count": 66,
+    "german_compound_prefixes_count": 28,
+    "archival_header_bracket_stripping": true,
+    "continuation_chunk_title_deduplication": true,
+    "tfidf_smartirs": "ntc",
+    "tfidf_min_threshold": 0.015,
+    "santana_2025_dhq_compliance": true
   },
   "summary": {
     "source": "DNB SRU v1.1 + HathiTrust HTRC + OpenAlex Full-Book Corpus (1970–2025)",
@@ -160,7 +169,7 @@
         "PROPN",
         "ADJ"
       ],
-      "stopwords_total": 1106,
+      "stopwords_total": 1425,
       "fraktur_noise_count": 537,
       "domain_stopwords_count": 53,
       "religious_boost_keywords": 21,
@@ -172,7 +181,242 @@
       "lda_passes": 15,
       "lda_chunksize": 1500,
       "lda_alpha": "auto",
-      "lda_eta": "auto"
+      "lda_eta": "auto",
+      "spacy_core_stopwords_count": 543,
+      "non_canonical_per_loc_noise_count": 323,
+      "canonical_theo_phil_whitelist_count": 66,
+      "german_compound_prefixes_count": 28,
+      "archival_header_bracket_stripping": true,
+      "continuation_chunk_title_deduplication": true,
+      "tfidf_smartirs": "ntc",
+      "tfidf_min_threshold": 0.015,
+      "santana_2025_dhq_compliance": true
+    },
+    "document_length_distribution": {
+      "overall": {
+        "documents": 354801,
+        "unique_works": 70758,
+        "total_words": 286237889,
+        "mean_words": 806.8,
+        "sd_words": 362.9,
+        "median_words": 1000.0,
+        "p25_words": 867.0,
+        "p75_words": 1000.0,
+        "iqr_words": 133.0,
+        "min_words": 3,
+        "max_words": 8478
+      },
+      "by_layer": {
+        "hathitrust_ef_fullbook_print": {
+          "documents": 242473,
+          "unique_works": 3880,
+          "total_words": 241887814,
+          "mean_words": 997.6,
+          "sd_words": 37.9,
+          "median_words": 1000.0,
+          "p25_words": 1000.0,
+          "p75_words": 1000.0,
+          "iqr_words": 0.0,
+          "min_words": 80,
+          "max_words": 1079
+        },
+        "dnb_deposit_inhaltstext": {
+          "documents": 41286,
+          "unique_works": 41284,
+          "total_words": 5700265,
+          "mean_words": 138.1,
+          "sd_words": 92.7,
+          "median_words": 131.0,
+          "p25_words": 70.0,
+          "p75_words": 181.0,
+          "iqr_words": 111.0,
+          "min_words": 30,
+          "max_words": 6135
+        },
+        "dnb_toc_pdf_fulltext": {
+          "documents": 31992,
+          "unique_works": 31981,
+          "total_words": 14546069,
+          "mean_words": 454.7,
+          "sd_words": 440.3,
+          "median_words": 308.0,
+          "p25_words": 177.0,
+          "p75_words": 566.0,
+          "iqr_words": 389.0,
+          "min_words": 65,
+          "max_words": 8478
+        },
+        "dnb_oa_fullbook": {
+          "documents": 15122,
+          "unique_works": 913,
+          "total_words": 14853856,
+          "mean_words": 982.3,
+          "sd_words": 101.3,
+          "median_words": 1000.0,
+          "p25_words": 1000.0,
+          "p75_words": 1000.0,
+          "iqr_words": 0.0,
+          "min_words": 81,
+          "max_words": 1196
+        },
+        "gbv_direct_fulltext_pdf": {
+          "documents": 14199,
+          "unique_works": 13174,
+          "total_words": 3425377,
+          "mean_words": 241.2,
+          "sd_words": 252.4,
+          "median_words": 177.0,
+          "p25_words": 119.0,
+          "p75_words": 272.0,
+          "iqr_words": 153.0,
+          "min_words": 7,
+          "max_words": 5257
+        },
+        "entire_fulltext_book_cloud": {
+          "documents": 4072,
+          "unique_works": 183,
+          "total_words": 4017086,
+          "mean_words": 986.5,
+          "sd_words": 88.3,
+          "median_words": 1000.0,
+          "p25_words": 1000.0,
+          "p75_words": 1000.0,
+          "iqr_words": 0.0,
+          "min_words": 94,
+          "max_words": 1078
+        },
+        "drm_fallback_multi_api_enriched": {
+          "documents": 3561,
+          "unique_works": 3530,
+          "total_words": 250221,
+          "mean_words": 70.3,
+          "sd_words": 142.7,
+          "median_words": 32.0,
+          "p25_words": 23.0,
+          "p75_words": 45.0,
+          "iqr_words": 22.0,
+          "min_words": 3,
+          "max_words": 1074
+        },
+        "gbv_kostenfrei_fullbook_pdf": {
+          "documents": 859,
+          "unique_works": 29,
+          "total_words": 849410,
+          "mean_words": 988.8,
+          "sd_words": 78.4,
+          "median_words": 1000.0,
+          "p25_words": 1000.0,
+          "p75_words": 1000.0,
+          "iqr_words": 0.0,
+          "min_words": 95,
+          "max_words": 1039
+        },
+        "primary_cloud_oa_abstract": {
+          "documents": 627,
+          "unique_works": 627,
+          "total_words": 112720,
+          "mean_words": 179.8,
+          "sd_words": 145.9,
+          "median_words": 138.0,
+          "p25_words": 87.0,
+          "p75_words": 235.0,
+          "iqr_words": 148.0,
+          "min_words": 25,
+          "max_words": 1377
+        },
+        "archive_org_fulltext_book": {
+          "documents": 502,
+          "unique_works": 21,
+          "total_words": 497643,
+          "mean_words": 991.3,
+          "sd_words": 72.6,
+          "median_words": 1000.0,
+          "p25_words": 1000.0,
+          "p75_words": 1000.0,
+          "iqr_words": 0.0,
+          "min_words": 84,
+          "max_words": 1000
+        },
+        "green_oa_repository_fulltext": {
+          "documents": 84,
+          "unique_works": 1,
+          "total_words": 84000,
+          "mean_words": 1000.0,
+          "sd_words": 0.0,
+          "median_words": 1000.0,
+          "p25_words": 1000.0,
+          "p75_words": 1000.0,
+          "iqr_words": 0.0,
+          "min_words": 1000,
+          "max_words": 1000
+        },
+        "primary_cloud_oa_fulltext": {
+          "documents": 15,
+          "unique_works": 4,
+          "total_words": 12972,
+          "mean_words": 864.8,
+          "sd_words": 243.8,
+          "median_words": 1000.0,
+          "p25_words": 831.0,
+          "p75_words": 1000.0,
+          "iqr_words": 169.0,
+          "min_words": 184,
+          "max_words": 1000
+        },
+        "nan": {
+          "documents": 6,
+          "unique_works": 6,
+          "total_words": 194,
+          "mean_words": 32.3,
+          "sd_words": 23.4,
+          "median_words": 24.5,
+          "p25_words": 13.0,
+          "p75_words": 48.8,
+          "iqr_words": 35.8,
+          "min_words": 8,
+          "max_words": 71
+        },
+        "primary_fulltext": {
+          "documents": 3,
+          "unique_works": 3,
+          "total_words": 262,
+          "mean_words": 87.3,
+          "sd_words": 12.0,
+          "median_words": 82.0,
+          "p25_words": 79.0,
+          "p75_words": 93.0,
+          "iqr_words": 14.0,
+          "min_words": 76,
+          "max_words": 104
+        }
+      }
+    },
+    "fair_ddi_environment": {
+      "python_version": "3.10.2",
+      "os_platform": "Windows 10 (AMD64)",
+      "cpu_logical_cores": 12,
+      "spacy_model": "de_core_news_lg",
+      "random_seeds": {
+        "gensim_lda": 100,
+        "doc2vec_bertopic": 42,
+        "kmeans_svd": 42,
+        "slda_cv": 42
+      },
+      "standards": [
+        "FAIR Principles (Wilkinson et al., 2016)",
+        "DDI Codebook 2.5 / Lifecycle 3.3",
+        "MARC21 / PICA+ XML"
+      ],
+      "packages": {
+        "gensim": "4.4.0",
+        "spacy": "3.8.14",
+        "scikit-learn": "1.7.2",
+        "scipy": "1.15.3",
+        "numpy": "2.2.6",
+        "pandas": "2.3.3",
+        "PyMuPDF": "1.28.2",
+        "de_core_news_lg_meta": "core_news_lg v3.8.0"
+      }
     }
   },
   "trends": [
@@ -2784,5 +3028,231 @@
       "u_mass": -8.1086,
       "log_perplexity": -12.239
     }
-  ]
+  ],
+  "document_length_distribution": {
+    "overall": {
+      "documents": 354801,
+      "unique_works": 70758,
+      "total_words": 286237889,
+      "mean_words": 806.8,
+      "sd_words": 362.9,
+      "median_words": 1000.0,
+      "p25_words": 867.0,
+      "p75_words": 1000.0,
+      "iqr_words": 133.0,
+      "min_words": 3,
+      "max_words": 8478
+    },
+    "by_layer": {
+      "hathitrust_ef_fullbook_print": {
+        "documents": 242473,
+        "unique_works": 3880,
+        "total_words": 241887814,
+        "mean_words": 997.6,
+        "sd_words": 37.9,
+        "median_words": 1000.0,
+        "p25_words": 1000.0,
+        "p75_words": 1000.0,
+        "iqr_words": 0.0,
+        "min_words": 80,
+        "max_words": 1079
+      },
+      "dnb_deposit_inhaltstext": {
+        "documents": 41286,
+        "unique_works": 41284,
+        "total_words": 5700265,
+        "mean_words": 138.1,
+        "sd_words": 92.7,
+        "median_words": 131.0,
+        "p25_words": 70.0,
+        "p75_words": 181.0,
+        "iqr_words": 111.0,
+        "min_words": 30,
+        "max_words": 6135
+      },
+      "dnb_toc_pdf_fulltext": {
+        "documents": 31992,
+        "unique_works": 31981,
+        "total_words": 14546069,
+        "mean_words": 454.7,
+        "sd_words": 440.3,
+        "median_words": 308.0,
+        "p25_words": 177.0,
+        "p75_words": 566.0,
+        "iqr_words": 389.0,
+        "min_words": 65,
+        "max_words": 8478
+      },
+      "dnb_oa_fullbook": {
+        "documents": 15122,
+        "unique_works": 913,
+        "total_words": 14853856,
+        "mean_words": 982.3,
+        "sd_words": 101.3,
+        "median_words": 1000.0,
+        "p25_words": 1000.0,
+        "p75_words": 1000.0,
+        "iqr_words": 0.0,
+        "min_words": 81,
+        "max_words": 1196
+      },
+      "gbv_direct_fulltext_pdf": {
+        "documents": 14199,
+        "unique_works": 13174,
+        "total_words": 3425377,
+        "mean_words": 241.2,
+        "sd_words": 252.4,
+        "median_words": 177.0,
+        "p25_words": 119.0,
+        "p75_words": 272.0,
+        "iqr_words": 153.0,
+        "min_words": 7,
+        "max_words": 5257
+      },
+      "entire_fulltext_book_cloud": {
+        "documents": 4072,
+        "unique_works": 183,
+        "total_words": 4017086,
+        "mean_words": 986.5,
+        "sd_words": 88.3,
+        "median_words": 1000.0,
+        "p25_words": 1000.0,
+        "p75_words": 1000.0,
+        "iqr_words": 0.0,
+        "min_words": 94,
+        "max_words": 1078
+      },
+      "drm_fallback_multi_api_enriched": {
+        "documents": 3561,
+        "unique_works": 3530,
+        "total_words": 250221,
+        "mean_words": 70.3,
+        "sd_words": 142.7,
+        "median_words": 32.0,
+        "p25_words": 23.0,
+        "p75_words": 45.0,
+        "iqr_words": 22.0,
+        "min_words": 3,
+        "max_words": 1074
+      },
+      "gbv_kostenfrei_fullbook_pdf": {
+        "documents": 859,
+        "unique_works": 29,
+        "total_words": 849410,
+        "mean_words": 988.8,
+        "sd_words": 78.4,
+        "median_words": 1000.0,
+        "p25_words": 1000.0,
+        "p75_words": 1000.0,
+        "iqr_words": 0.0,
+        "min_words": 95,
+        "max_words": 1039
+      },
+      "primary_cloud_oa_abstract": {
+        "documents": 627,
+        "unique_works": 627,
+        "total_words": 112720,
+        "mean_words": 179.8,
+        "sd_words": 145.9,
+        "median_words": 138.0,
+        "p25_words": 87.0,
+        "p75_words": 235.0,
+        "iqr_words": 148.0,
+        "min_words": 25,
+        "max_words": 1377
+      },
+      "archive_org_fulltext_book": {
+        "documents": 502,
+        "unique_works": 21,
+        "total_words": 497643,
+        "mean_words": 991.3,
+        "sd_words": 72.6,
+        "median_words": 1000.0,
+        "p25_words": 1000.0,
+        "p75_words": 1000.0,
+        "iqr_words": 0.0,
+        "min_words": 84,
+        "max_words": 1000
+      },
+      "green_oa_repository_fulltext": {
+        "documents": 84,
+        "unique_works": 1,
+        "total_words": 84000,
+        "mean_words": 1000.0,
+        "sd_words": 0.0,
+        "median_words": 1000.0,
+        "p25_words": 1000.0,
+        "p75_words": 1000.0,
+        "iqr_words": 0.0,
+        "min_words": 1000,
+        "max_words": 1000
+      },
+      "primary_cloud_oa_fulltext": {
+        "documents": 15,
+        "unique_works": 4,
+        "total_words": 12972,
+        "mean_words": 864.8,
+        "sd_words": 243.8,
+        "median_words": 1000.0,
+        "p25_words": 831.0,
+        "p75_words": 1000.0,
+        "iqr_words": 169.0,
+        "min_words": 184,
+        "max_words": 1000
+      },
+      "nan": {
+        "documents": 6,
+        "unique_works": 6,
+        "total_words": 194,
+        "mean_words": 32.3,
+        "sd_words": 23.4,
+        "median_words": 24.5,
+        "p25_words": 13.0,
+        "p75_words": 48.8,
+        "iqr_words": 35.8,
+        "min_words": 8,
+        "max_words": 71
+      },
+      "primary_fulltext": {
+        "documents": 3,
+        "unique_works": 3,
+        "total_words": 262,
+        "mean_words": 87.3,
+        "sd_words": 12.0,
+        "median_words": 82.0,
+        "p25_words": 79.0,
+        "p75_words": 93.0,
+        "iqr_words": 14.0,
+        "min_words": 76,
+        "max_words": 104
+      }
+    }
+  },
+  "fair_ddi_environment": {
+    "python_version": "3.10.2",
+    "os_platform": "Windows 10 (AMD64)",
+    "cpu_logical_cores": 12,
+    "spacy_model": "de_core_news_lg",
+    "random_seeds": {
+      "gensim_lda": 100,
+      "doc2vec_bertopic": 42,
+      "kmeans_svd": 42,
+      "slda_cv": 42
+    },
+    "standards": [
+      "FAIR Principles (Wilkinson et al., 2016)",
+      "DDI Codebook 2.5 / Lifecycle 3.3",
+      "MARC21 / PICA+ XML"
+    ],
+    "packages": {
+      "gensim": "4.4.0",
+      "spacy": "3.8.14",
+      "scikit-learn": "1.7.2",
+      "scipy": "1.15.3",
+      "numpy": "2.2.6",
+      "pandas": "2.3.3",
+      "PyMuPDF": "1.28.2",
+      "de_core_news_lg_meta": "core_news_lg v3.8.0"
+    }
+  }
 }

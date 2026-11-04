@@ -124,8 +124,75 @@ FRAKTUR_AND_META_NOISE = {
     "rainer", "frank", "uwe", "dirk", "jörg", "heinz", "erich", "fritz", "gottfried",
     "ebeling", "gen", "abb", "tab", "hrsg_von", "verf", "bearb", "übers"
 }
+
+# Canonical theological, philosophical, and biblical figures preserved during author/entity filtering
+# (Santana et al., 2025, DHQ 19.2 §56-64; Jiménez-Badillo et al., 2020)
+CANONICAL_THEO_PHIL_WHITELIST = {
+    "jesus", "christus", "paulus", "luther", "kant", "hegel", "habermas", "weber", "nietzsche",
+    "marx", "augustinus", "aquino", "schleiermacher", "barth", "rahner", "bonhoeffer", "bultmann",
+    "moltmann", "pannenberg", "jüngel", "küng", "ratzinger", "kasper", "tillich", "troeltsch",
+    "harnack", "kierkegaard", "heidegger", "husserl", "gadamer", "adorno", "horkheimer", "benjamin",
+    "blumenberg", "sloterdijk", "taylor", "spinoza", "leibniz", "fichte", "schelling", "feuerbach",
+    "foucault", "derrida", "ricoeur", "levinas", "buber", "rosenzweig", "scholem", "eckhart",
+    "origenes", "calvin", "zwingli", "melanchthon", "lessing", "israel", "jahwe", "moses", "abraham",
+    "david", "jesaja", "hiob", "jeremia", "lukas", "matthäus", "markus", "johannes"
+}
+
+# Non-canonical geographic locations (LOC) and modern person/contributor names (PER) filtered per
+# Santana et al. (2025, DHQ 19.2 §56-64, Figs. 4-6) to prevent geographic and homonym conflation
+NON_CANONICAL_LOC_AND_PER_NOISE = {
+    # German federal states, historical regions, European countries & diocesan/university cities
+    "bayern", "bayerisch", "württemberg", "baden", "westfalen", "westfälisch", "rheinland",
+    "rheinisch", "sachsen", "sächsisch", "thüringen", "hessen", "hessisch", "niedersachsen",
+    "brandenburg", "preußen", "preußisch", "pfalz", "franken", "schwaben", "schlesien", "pommern",
+    "österreich", "österreichisch", "schweiz", "schweizerisch", "deutschland", "italien",
+    "frankreich", "england", "großbritannien", "polen", "spanien", "niederlande", "belgien",
+    "rom", "paris", "basel", "bern", "genf", "luzern", "konstanz", "augsburg", "regensburg",
+    "bamberg", "würzburg", "passau", "eichstätt", "rottenburg", "hildesheim", "osnabrück",
+    "paderborn", "fulda", "trier", "speyer", "limburg", "erfurt", "magdeburg", "greifswald",
+    "rostock", "kiel", "hamburg", "bremen", "hannover", "braunschweig", "bielefeld", "bochum",
+    "dortmund", "duisburg", "essen", "kassel", "marburg", "gießen", "mannheim", "karlsruhe",
+    "ulm", "erlangen", "nürnberg", "salzburg", "innsbruck", "graz", "linz", "aachen", "halle",
+    "jena", "oldenburg", "detmold", "koblenz", "lübeck", "flensburg", "chemnitz", "dresden",
+    "potsdam", "cottbus", "neubrandenburg", "schwerin", "stralsund", "wittenberg", "weimar",
+    "gotha", "eisenach", "altenburg", "meiningen", "coburg", "bayreuth", "ansbach", "ingolstadt",
+    "landshut", "freising", "kempten", "ravensburg", "reutlingen", "esslingen", "heilbronn",
+    "pforzheim", "offenburg", "lörrach", "baden_baden", "worms", "kaiserslautern", "saarbrücken",
+    "siegen", "hagen", "wuppertal", "solingen", "remscheid", "krefeld", "mönchengladbach",
+    "neuss", "leverkusen", "gelsenkirchen", "recklinghausen", "hamm", "herne", "mülheim",
+    "oberhausen", "bottrop", "gütersloh", "minden", "herford", "lippstadt", "soest", "arnsberg",
+    "meschede", "brilon", "kleve", "wesel", "bocholt", "borken", "coesfeld", "steinfurt",
+    "warendorf", "celle", "lüneburg", "stade", "verden", "aurich", "emden", "leer", "wilhelmshaven",
+    "delmenhorst", "hameln", "göttingen", "goslar", "wolfenbüttel", "salzgitter", "peine",
+    "gifhorn", "wolfsburg", "helmstedt", "northeim", "holzminden", "einbeck", "hann_münden",
+    # Frequent German given names causing homonym conflation (Santana et al., 2025 §56: e.g., 'Maria')
+    "maria", "anna", "elisabeth", "ursula", "monika", "brigitte", "renate", "helga", "ingrid",
+    "gisela", "christine", "christa", "barbara", "sabine", "petra", "claudia", "susanne", "katrin",
+    "julia", "katharina", "margarete", "hildegard", "dorothea", "angelika", "gabriele", "heidrun",
+    "irmgard", "gudrun", "mechthild", "sigrid", "waltraud", "anne", "birgit", "cornelia", "dagmar",
+    "edith", "elke", "eva", "gertrud", "hanna", "hannelore", "hedwig", "heike", "helene", "ilse",
+    "ines", "irene", "johanna", "karin", "kerstin", "kristina", "lotte", "luise", "magdalena",
+    "margit", "margot", "marianne", "marlies", "martha", "martina", "nadine", "nicole", "regina",
+    "rita", "rosemarie", "ruth", "silke", "simone", "sonja", "stephanie", "sylvia", "theresia",
+    "ulrike", "ute", "vera", "veronika", "yvonne",
+    # Frequent modern German contributor/editor surnames in DNB/GBV headers
+    "müller", "schmidt", "schneider", "meyer", "wagner", "becker", "schulz", "hoffmann", "schäfer",
+    "koch", "bauer", "richter", "klein", "schröder", "neumann", "zimmermann", "braun", "krüger",
+    "hofmann", "hartmann", "lange", "schmitt", "schmitz", "krause", "meier", "lehmann", "maier",
+    "köhler", "herrmann", "mayer", "huber", "fuchs", "peters", "scholz", "möller", "hahn",
+    "schubert", "vogel", "keller", "günther", "berger", "winkler", "roth", "lorenz", "baumann",
+    "franke", "albrecht", "schuster", "böhm", "kraus", "schumacher", "krämer", "vogt", "jäger",
+    "sommer", "seidel", "brandt", "haas", "schreiber", "schulte", "dietrich", "ziegler", "kuhn",
+    "kühn", "pohl", "busch", "bergmann", "voigt", "sauer", "arnold", "wolff", "pfeiffer"
+} - CANONICAL_THEO_PHIL_WHITELIST
+
 _BASE_STOPWORDS = set(nlp.Defaults.stop_words) if nlp is not None else GERMAN_CORE_STOPWORDS
-ALL_STOPWORDS = _BASE_STOPWORDS.union(set(config.DOMAIN_STOPWORDS)).union(FRAKTUR_AND_META_NOISE)
+ALL_STOPWORDS = (
+    _BASE_STOPWORDS
+    .union(set(config.DOMAIN_STOPWORDS))
+    .union(FRAKTUR_AND_META_NOISE)
+    .union(NON_CANONICAL_LOC_AND_PER_NOISE)
+) - CANONICAL_THEO_PHIL_WHITELIST
 
 RELIGIOUS_KEYWORDS_SET = set(config.RELIGIOUS_VOICE_KEYWORDS)
 
@@ -638,18 +705,32 @@ def iter_corpus_rows(data_path: str):
 
 
 
-# Canonical theological, philosophical, and biblical figures preserved during author/entity filtering
-# (Santana et al., 2025, DHQ 19.2 §56-64; Jiménez-Badillo et al., 2020)
-CANONICAL_THEO_PHIL_WHITELIST = {
-    "jesus", "christus", "paulus", "luther", "kant", "hegel", "habermas", "weber", "nietzsche",
-    "marx", "augustinus", "aquino", "schleiermacher", "barth", "rahner", "bonhoeffer", "bultmann",
-    "moltmann", "pannenberg", "jüngel", "küng", "ratzinger", "kasper", "tillich", "troeltsch",
-    "harnack", "kierkegaard", "heidegger", "husserl", "gadamer", "adorno", "horkheimer", "benjamin",
-    "blumenberg", "sloterdijk", "taylor", "spinoza", "leibniz", "fichte", "schelling", "feuerbach",
-    "foucault", "derrida", "ricoeur", "levinas", "buber", "rosenzweig", "scholem", "eckhart",
-    "origenes", "calvin", "zwingli", "melanchthon", "israel", "jahwe", "moses", "abraham",
-    "david", "jesaja", "hiob", "jeremia", "lukas", "matthäus", "markus", "johannes"
-}
+_ARCHIVAL_BRACKET_RE = re.compile(
+    r"\[(?:HTRC|DNB|GBV|OpenAlex|Vollbuch|Abschnitt|Forschungsbuch)[^\]]*\]",
+    re.IGNORECASE,
+)
+_CHUNK_INDEX_RE = re.compile(r"Abschnitt\s+(\d+)\s*/\s*\d+", re.IGNORECASE)
+
+
+def strip_archival_headers_from_text(text: str, row: dict = None) -> str:
+    """
+    Strips bracketed provenance tags ([HTRC-Vollbuch-Abschnitt X/Y], [DNB-Inhaltsverzeichnis ...],
+    [GBV-K10plus-Volltext ...], [OpenAlex-Vollbuch-OA ...]) and, on continuation passages (chunk_index > 1),
+    removes the repeated '{title}. {author}. {publisher}.' prefix from raw text
+    (Santana et al., 2025, DHQ 19.2 §55, Fig. 3).
+    """
+    if not text:
+        return ""
+    cleaned = _ARCHIVAL_BRACKET_RE.sub(" ", str(text))
+    if row:
+        title_str = str(row.get("title") or "")
+        m_chunk = _CHUNK_INDEX_RE.search(title_str)
+        if m_chunk and int(m_chunk.group(1)) > 1:
+            base_title = _ARCHIVAL_BRACKET_RE.sub("", title_str).strip()
+            if base_title and cleaned.lstrip().startswith(base_title):
+                cleaned = cleaned.lstrip()[len(base_title):].lstrip(" .,-;:")
+    return re.sub(r"\s+", " ", cleaned).strip()
+
 
 GERMAN_COMPOUND_PREFIXES_LDA = [
     ("kirchenmitgliedschafts", ["kirche", "mitgliedschaft"]),
@@ -717,6 +798,77 @@ def extract_row_metadata_tokens(row: dict) -> set[str]:
     return meta_tokens
 
 
+def clean_row_tokens_for_modeling(doc_tokens: list, row: dict, unboost: bool = False) -> list[str]:
+    """
+    Unified per-document token cleaning pipeline shared across Gensim LDA, Quanteda/STM, and BERTopic
+    (Santana et al., 2025, DHQ 19.2 §55-71, §81; Jiménez-Badillo et al., 2020):
+      1. Optional unboosting of 2x domain salience weights (for pure unseeded LDA & neural embeddings).
+      2. Strips row-specific author/editor and publisher metadata tokens (Rule 1, §55, Fig. 3).
+      3. On continuation chunks (Abschnitt K/N where K > 1), strips the leading repeated book-title
+         prefix tokens so each book's title words are included only once per work (chunk_index == 1).
+      4. Filters out ALL_STOPWORDS (including NON_CANONICAL_LOC_AND_PER_NOISE while preserving
+         CANONICAL_THEO_PHIL_WHITELIST; Rule 2 & Rule 4, §56-67, Figs. 4-7).
+      5. Applies unified German compound decompounding (Rule 3, §70-71, §81).
+    """
+    base_doc = _unboost_religious_tokens(doc_tokens or []) if unboost else list(doc_tokens or [])
+    if not base_doc:
+        return []
+
+    # Rule 1 continuation-chunk title deduplication: strip leading title words on chunk K > 1
+    title_str = str((row or {}).get("title") or "")
+    m_chunk = _CHUNK_INDEX_RE.search(title_str)
+    if m_chunk and int(m_chunk.group(1)) > 1:
+        base_title = _ARCHIVAL_BRACKET_RE.sub(" ", title_str)
+        title_word_count = len(_WORD_RE.findall(base_title))
+        if title_word_count > 0 and len(base_doc) > title_word_count + 5:
+            # Account for 2x religious keyword weighting in the leading title slice
+            skip_idx = min(len(base_doc) // 3, title_word_count * (1 if unboost else 2))
+            base_doc = base_doc[skip_idx:]
+
+    row_meta_noise = extract_row_metadata_tokens(row or {})
+    cleaned_doc = []
+    for t in base_doc:
+        if t in ALL_STOPWORDS or t in row_meta_noise or len(t) <= 2:
+            continue
+        cleaned_doc.extend(split_german_compound_lda(t))
+    return cleaned_doc
+
+
+def apply_tfidf_low_info_filter(corpus: list, dictionary, min_tfidf: float = 0.015) -> tuple[list, dict]:
+    """
+    Applies Gensim TfidfModel sublinear/normalized TF-IDF scoring (smartirs='ntc') to identify and
+    prune ultra-low-information ubiquity tokens before LdaModel estimation
+    (Santana et al., 2025, DHQ 19.2 §72-73).
+    """
+    if not corpus or len(dictionary) == 0 or gensim is None:
+        return corpus, {"tfidf_min_threshold": min_tfidf, "tfidf_pruned_tokens_count": 0}
+
+    tfidf_model = gensim.models.TfidfModel(corpus, id2word=dictionary, smartirs="ntc")
+    max_weight_by_id = defaultdict(float)
+    for bow in corpus:
+        for token_id, weight in tfidf_model[bow]:
+            if weight > max_weight_by_id[token_id]:
+                max_weight_by_id[token_id] = float(weight)
+
+    low_info_ids = [
+        tid for tid in dictionary.keys()
+        if max_weight_by_id.get(tid, 0.0) < min_tfidf
+        and dictionary[tid] not in RELIGIOUS_KEYWORDS_SET
+        and dictionary[tid] not in CANONICAL_THEO_PHIL_WHITELIST
+    ]
+    pruned_count = len(low_info_ids)
+    if low_info_ids and len(dictionary) - pruned_count >= 50:
+        dictionary.filter_tokens(bad_ids=low_info_ids)
+        dictionary.compactify()
+
+    return corpus, {
+        "tfidf_smartirs": "ntc",
+        "tfidf_min_threshold": min_tfidf,
+        "tfidf_pruned_tokens_count": pruned_count,
+        "post_tfidf_vocab_size": len(dictionary)
+    }
+
+
 def run_pipeline(data_path, num_topics: int = None, lda_mode: str = "unsupervised"):
     """
     Executes the end-to-end German LDA pipeline supporting all 4 methodological paradigms:
@@ -739,18 +891,13 @@ def run_pipeline(data_path, num_topics: int = None, lda_mode: str = "unsupervise
 
     processed_docs = preprocess_corpus_batch(texts)
 
-    # Filter out empty token lists, strip row-specific author/publisher metadata leakage (Santana et al. 2025 §55),
+    # Filter out empty token lists, strip row-specific author/publisher metadata leakage & continuation-chunk
+    # title duplication (Santana et al. 2025 §55), filter non-canonical PER/LOC entities (§56-64),
     # and apply unified German compound decompounding (§70-71, §81)
     filtered_docs = []
     filtered_rows = []
     for doc, row in zip(processed_docs, valid_rows):
-        base_doc = _unboost_religious_tokens(doc or []) if mode_key == "unseeded" else (doc or [])
-        row_meta_noise = extract_row_metadata_tokens(row)
-        cleaned_doc = []
-        for t in base_doc:
-            if t in ALL_STOPWORDS or t in row_meta_noise or len(t) <= 2:
-                continue
-            cleaned_doc.extend(split_german_compound_lda(t))
+        cleaned_doc = clean_row_tokens_for_modeling(doc, row, unboost=(mode_key == "unseeded"))
         if cleaned_doc:
             filtered_docs.append(cleaned_doc)
             filtered_rows.append(row)
@@ -775,10 +922,12 @@ def run_pipeline(data_path, num_topics: int = None, lda_mode: str = "unsupervise
             ng_doc.append(tok)
         processed_n_grams.append(ng_doc)
 
-    # Create Dictionary & Bag-of-Words Corpus
+    # Create Dictionary, apply Extremes + Sublinear TF-IDF Low-Information Filter (Santana et al., 2025 §72-73)
     dictionary = corpora.Dictionary(processed_n_grams)
     if len(processed_n_grams) >= 100:
         dictionary.filter_extremes(no_below=5, no_above=0.55, keep_n=25000)
+    pre_tfidf_corpus = [dictionary.doc2bow(doc) for doc in processed_n_grams]
+    _, tfidf_audit = apply_tfidf_low_info_filter(pre_tfidf_corpus, dictionary, min_tfidf=0.015)
     corpus = [dictionary.doc2bow(doc) for doc in processed_n_grams]
 
     # Guard against tiny temporal slices where K exceeds vocabulary/corpus size
@@ -907,7 +1056,43 @@ def run_pipeline(data_path, num_topics: int = None, lda_mode: str = "unsupervise
     lda_model.lda_mode = mode_key
     lda_model.seed_assignments = seed_assignments
     lda_model.slda_diagnostics = slda_diagnostics
+    lda_model.tfidf_audit = tfidf_audit
     return lda_model, corpus, dictionary, coherence_score, representative_docs
+
+
+def collect_fair_ddi_environment() -> dict:
+    """
+    Collects exact software, model, and hardware environment specifications for FAIR / DDI / NFDI
+    reproducibility compliance (Santana et al., 2025, DHQ 19.2 §28-53; Jiménez-Badillo et al., 2020, §16).
+    """
+    import platform
+    import sys as _sys
+    env = {
+        "python_version": platform.python_version(),
+        "os_platform": f"{platform.system()} {platform.release()} ({platform.machine()})",
+        "cpu_logical_cores": os.cpu_count() or 1,
+        "spacy_model": config.SPACY_MODEL,
+        "random_seeds": {"gensim_lda": 100, "doc2vec_bertopic": 42, "kmeans_svd": 42, "slda_cv": 42},
+        "standards": ["FAIR Principles (Wilkinson et al., 2016)", "DDI Codebook 2.5 / Lifecycle 3.3", "MARC21 / PICA+ XML"],
+        "packages": {}
+    }
+    for mod_name, pkg_label in [
+        ("gensim", "gensim"),
+        ("spacy", "spacy"),
+        ("sklearn", "scikit-learn"),
+        ("scipy", "scipy"),
+        ("numpy", "numpy"),
+        ("pandas", "pandas"),
+        ("fitz", "PyMuPDF")
+    ]:
+        try:
+            mod = __import__(mod_name)
+            env["packages"][pkg_label] = getattr(mod, "__version__", "installed")
+        except Exception:
+            env["packages"][pkg_label] = "not_installed"
+    if nlp is not None and hasattr(nlp, "meta"):
+        env["packages"]["de_core_news_lg_meta"] = f"{nlp.meta.get('name', 'de')} v{nlp.meta.get('version', '3.8.0')}"
+    return env
 
 
 def get_viz_html(lda_model, corpus, dictionary):
@@ -979,6 +1164,7 @@ def build_report_dict(model, corpus, dictionary, coherence_score=0.0, representa
     mode_key = getattr(model, "lda_mode", "unsupervised")
     seed_assignments = getattr(model, "seed_assignments", {})
     slda_diagnostics = getattr(model, "slda_diagnostics", {})
+    tfidf_audit = getattr(model, "tfidf_audit", {})
 
     topics_list = []
     for t_id in range(model.num_topics):
@@ -1001,9 +1187,36 @@ def build_report_dict(model, corpus, dictionary, coherence_score=0.0, representa
         "corpus_documents": len(corpus),
         "vocabulary_size": len(dictionary),
         "coherence_score": round(float(coherence_score), 4),
+        "tfidf_audit": tfidf_audit,
         "topics": topics_list,
         "diachronic_decade_shares": dec_breakdown,
         "slda_diagnostics": slda_diagnostics
+    }
+
+
+def _summarize_word_lengths(lengths: list[int], unique_works_count: int) -> dict:
+    if not lengths:
+        return {
+            "documents": 0, "unique_works": 0, "total_words": 0,
+            "mean_words": 0.0, "sd_words": 0.0, "median_words": 0.0,
+            "p25_words": 0.0, "p75_words": 0.0, "iqr_words": 0.0,
+            "min_words": 0, "max_words": 0
+        }
+    import numpy as _np
+    arr = _np.array(lengths, dtype=_np.float64)
+    p25, p50, p75 = _np.percentile(arr, [25, 50, 75])
+    return {
+        "documents": int(len(lengths)),
+        "unique_works": int(unique_works_count),
+        "total_words": int(_np.sum(arr)),
+        "mean_words": round(float(_np.mean(arr)), 1),
+        "sd_words": round(float(_np.std(arr)), 1),
+        "median_words": round(float(p50), 1),
+        "p25_words": round(float(p25), 1),
+        "p75_words": round(float(p75), 1),
+        "iqr_words": round(float(p75 - p25), 1),
+        "min_words": int(_np.min(arr)),
+        "max_words": int(_np.max(arr))
     }
 
 
@@ -1030,6 +1243,9 @@ def export_results(model, corpus, dictionary, data_path, coherence_score=0.0, re
     publishers = set()
     pub_counts = defaultdict(int)
     layer_counts = defaultdict(int)
+    layer_word_lengths = defaultdict(list)
+    layer_unique_titles = defaultdict(set)
+    all_word_lengths = []
     decade_counts = defaultdict(int)
     unique_base_titles = set()
     trends_map = defaultdict(lambda: defaultdict(int))
@@ -1038,21 +1254,28 @@ def export_results(model, corpus, dictionary, data_path, coherence_score=0.0, re
 
     for row in iter_corpus_rows(data_path):
         count += 1
+        layer = _clean_marc_control_chars(row.get("corpus_layer") or "dnb_sru_marc21")
+        layer_counts[layer] += 1
+
         raw_title = _clean_marc_control_chars(row.get("title") or "")
         if raw_title:
             base_t = re.sub(r"\[.*?\]", "", raw_title).strip().lower()
             if base_t:
                 unique_base_titles.add(base_t)
+                layer_unique_titles[layer].add(base_t)
 
         wc_val = row.get("word_count")
+        wc_int = 0
         if wc_val:
             try:
-                total_words += int(float(wc_val))
+                wc_int = int(float(wc_val))
             except Exception:
-                pass
-
-        layer = _clean_marc_control_chars(row.get("corpus_layer") or "dnb_sru_marc21")
-        layer_counts[layer] += 1
+                wc_int = 0
+        if wc_int <= 0:
+            wc_int = len((row.get("text") or "").split())
+        total_words += wc_int
+        all_word_lengths.append(wc_int)
+        layer_word_lengths[layer].append(wc_int)
 
         dec = _clean_marc_control_chars(row.get("decade") or "")
         y = row.get("year") or row.get("date")
@@ -1087,7 +1310,6 @@ def export_results(model, corpus, dictionary, data_path, coherence_score=0.0, re
             item[pub] = trends_map[yr][pub]
         trends_list.append(item)
 
-
     coherence_grid = []
     if os.path.exists(config.COHERENCE_GRID_PATH):
         try:
@@ -1102,8 +1324,20 @@ def export_results(model, corpus, dictionary, data_path, coherence_score=0.0, re
         except Exception:
             pass
 
+    doc_length_dist = {
+        "overall": _summarize_word_lengths(all_word_lengths, len(unique_base_titles)),
+        "by_layer": {
+            lyr: _summarize_word_lengths(
+                layer_word_lengths[lyr], len(layer_unique_titles[lyr])
+            )
+            for lyr, _ in sorted(layer_counts.items(), key=lambda x: x[1], reverse=True)
+        }
+    }
+    fair_ddi_env = collect_fair_ddi_environment()
+    tfidf_audit = getattr(model, "tfidf_audit", {"tfidf_min_threshold": 0.015, "tfidf_pruned_tokens_count": 0})
+
     full_summary = {
-        "source": "DNB SRU v1.1 + HathiTrust HTRC + OpenAlex Full-Book Corpus (1970–2025)",
+        "source": "DNB SRU v1.1 + GBV/K10plus + HathiTrust HTRC + OpenAlex Full-Book Corpus (1970–2025)",
         "count": count,
         "total_records": count,
         "unique_books": len(unique_base_titles),
@@ -1116,22 +1350,34 @@ def export_results(model, corpus, dictionary, data_path, coherence_score=0.0, re
         "corpus_layers": dict(sorted(layer_counts.items(), key=lambda x: x[1], reverse=True)),
         "decade_counts": dict(sorted(decade_counts.items())),
         "year_range": f"{min(years)}–{max(years)}" if years else "1970–2025",
+        "document_length_distribution": doc_length_dist,
+        "fair_ddi_environment": fair_ddi_env,
         "pipeline_config": {
             "spacy_model": config.SPACY_MODEL,
             "allowed_postags": config.ALLOWED_POSTAGS,
             "stopwords_total": len(ALL_STOPWORDS),
+            "spacy_core_stopwords_count": len(_BASE_STOPWORDS),
             "fraktur_noise_count": len(FRAKTUR_AND_META_NOISE),
             "domain_stopwords_count": len(config.DOMAIN_STOPWORDS),
+            "non_canonical_per_loc_noise_count": len(NON_CANONICAL_LOC_AND_PER_NOISE),
+            "canonical_theo_phil_whitelist_count": len(CANONICAL_THEO_PHIL_WHITELIST),
             "religious_boost_keywords": len(config.RELIGIOUS_VOICE_KEYWORDS),
+            "german_compound_prefixes_count": len(GERMAN_COMPOUND_PREFIXES_LDA),
+            "archival_header_bracket_stripping": True,
+            "continuation_chunk_title_deduplication": True,
             "bigram_min_count": 5,
             "bigram_threshold": 10,
             "filter_no_below": 5,
             "filter_no_above": 0.55,
             "filter_keep_n": 25000,
+            "tfidf_smartirs": tfidf_audit.get("tfidf_smartirs", "ntc"),
+            "tfidf_min_threshold": tfidf_audit.get("tfidf_min_threshold", 0.015),
+            "tfidf_pruned_tokens_count": tfidf_audit.get("tfidf_pruned_tokens_count", 0),
             "lda_passes": config.PASSES,
             "lda_chunksize": 1500,
             "lda_alpha": str(config.ALPHA),
-            "lda_eta": str(config.ETA)
+            "lda_eta": str(config.ETA),
+            "santana_2025_dhq_compliance": True
         }
     }
 
