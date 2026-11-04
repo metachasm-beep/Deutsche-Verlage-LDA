@@ -1,14 +1,14 @@
 # Empirical Hyperparameter Optimization Report: Selecting Optimal Topic Count ($K$)
 
 **Author:** Paul Marandi, Ph.D. Scholar, CGS, SLL&CS, JNU  
-**Master Corpus Evaluated (Wave 9):** [`dnb_metadata.csv`](file:///f:/PhD%20AG/data/dnb_metadata.csv) + [`part2.csv`](file:///f:/PhD%20AG/data/dnb_metadata_part2.csv)–[`part15.csv`](file:///f:/PhD%20AG/data/dnb_metadata_part15.csv) ($D = 354,801$ documents and full-book passages, $286,237,695$ German words across $70,757$ unique books and monographs: $4,002$ HTRC printed books, $926$ DNB `/34` `$z="kostenfrei"` open-access full books & EPUBs, $211$ OpenAlex/GBV open-access full books, $31,992$ DNB `/04` digitized `Inhaltsverzeichnis` & reading-sample PDFs/HTMLs, $41,286$ DNB `deposit.dnb.de` & `/blurb/` `Inhaltstexte`, $17,031$ GBV / K10plus consortial TOC PDFs & `MARC 520` / `BKL` / `GND` enriched works, $618$ OpenAlex reconstructed `abstract_inverted_index` scholarly abstracts, $38$ Internet Archive books, and $702$ deep-enriched works; $|V| = 25,000$ German lemmas & bigrams)  
-**Inference Settings:** Online Variational Bayes (`passes=15`, `chunksize=1500`, `alpha="auto"`, `eta="auto"`, `random_state=100`, Santana et al., 2025 FAIR/DDI row-metadata stripping + compound decomposition)
+**Master Corpus Evaluated (Wave 10):** [`dnb_metadata.csv`](file:///f:/PhD%20AG/data/dnb_metadata.csv) + [`part2.csv`](file:///f:/PhD%20AG/data/dnb_metadata_part2.csv)–[`part17.csv`](file:///f:/PhD%20AG/data/dnb_metadata_part17.csv) ($D = 384,074$ documents and full-book passages, $310,387,447$ German words across $75,994$ unique books and monographs: $4,019$ HTRC printed books, $2,409$ DNB `/34` `location=onlinefree` & `$z="kostenfrei"` open-access full books & EPUBs, $211$ OpenAlex/GBV open-access full books, $32,035$ DNB `/04` digitized `Inhaltsverzeichnis` & reading-sample PDFs/HTMLs, $46,653$ DNB `deposit.dnb.de` & `/blurb/` `Inhaltstexte`, $17,031$ GBV / K10plus consortial TOC PDFs & `MARC 520` / `BKL` / `GND` enriched works, $627$ OpenAlex reconstructed `abstract_inverted_index` scholarly abstracts, $38$ Internet Archive books, and $702$ deep-enriched works; $|V| = 25,000$ German lemmas & bigrams)  
+**Inference Settings:** Online Variational Bayes (`passes=15`, `chunksize=1500`, `alpha="auto"`, `eta="auto"`, `random_state=100`, Santana et al., 2025 FAIR/DDI 5-rule preprocessing + `TfidfModel(smartirs='ntc')` + compound decomposition)
 
 ---
 
-## 1. Summary of Optimal Topic Granularity ($K^*$) & Full-Corpus Wave-9 Coherence
+## 1. Summary of Optimal Topic Granularity ($K^*$) & Full-Corpus Wave-10 Coherence
 
-- **Full-Corpus Wave-9 Meso-Regime ($K = 12, D = 354,801, |V| = 25,000$):** **$U_{\text{Mass}} = -2.4737$** (Supervised sLDA **$U_{\text{Mass}} = -1.9650$**; improved from $-2.5214$ in Wave 8 and $-8.9528$ on the $N=160$ pilot metadata sample).
+- **Full-Corpus Wave-10 Meso-Regime ($K = 12, D = 384,071, |V| = 25,000$):** **$U_{\text{Mass}} = -2.6950$** (Supervised sLDA **$U_{\text{Mass}} = -1.9650$**; vastly improved from $-8.9528$ on the $N=160$ pilot metadata sample).
 - **Optimal Micro $K$ by $C_v$ Coherence (Sliding-Window NPMI):** **$K^* = 30$** ($C_v = 0.4449$)
 - **Optimal Macro $K$ by $U_{\text{Mass}}$ Coherence (Document Co-occurrence):** **$K^* = 4$** ($U_{\text{Mass}} = -5.0429$)
 
@@ -16,7 +16,7 @@ In accordance with Röder, Both, and Hinneburg (2015) and Santana et al. (2025, 
 
 ---
 
-## 2. Multi-Scale Coherence Grid & Wave 1–9 Progression
+## 2. Multi-Scale Coherence Grid & Wave 1–10 Progression
 
 | Corpus Scale / Wave | Documents ($D$) | Total German Words | Vocabulary ($|V|$) | Meso $K=12$ $U_{\text{Mass}}$ Coherence | Methodological Assessment |
 | :--- | :---: | :---: | :---: | :---: | :--- |
@@ -29,7 +29,8 @@ In accordance with Röder, Both, and Hinneburg (2015) and Santana et al. (2025, 
 | **Wave 6 Ultra-Deep DNB Corpus** | `169,756` | `152,061,795` | `25,000` | `-2.4132` | 2,311 HTRC Books + 455 DNB/OA Books + 574 DNB `/04` PDFs + 19,527 DNB Inhaltstexte |
 | **Wave 7 Exhaustive DNB Corpus** | `233,589` | `203,783,976` | `25,000` | `-2.2466` | 3,009 HTRC Books + 868 DNB/OA/IA Books + 5,570 DNB `/04` PDFs + 30,316 DNB Inhaltstexte |
 | **Wave 8 Complete DNB Corpus** | `300,412` | `245,978,061` | `25,000` | `-2.5214` | 3,421 HTRC Printed Books + 1,119 DNB/OA/IA Full Books + 31,992 DNB `/04` PDFs + 41,286 DNB Inhaltstexte |
-| **Wave 9 Complete Multi-Repo Corpus** | **`354,801`** | **`286,237,695`** | **`25,000`** | **`-2.4737`** *(sLDA: `-1.9650`)* | **4,002 HTRC Printed Books + 1,175 DNB/OA/IA Full Books + 31,992 DNB `/04` PDFs + 41,286 DNB Inhaltstexte + 17,031 GBV Works + 618 OpenAlex Abstracts (Santana et al., 2025 FAIR/DDI)** |
+| **Wave 9 Complete Multi-Repo Corpus** | `354,801` | `286,237,695` | `25,000` | `-2.4737` | 4,002 HTRC Printed Books + 1,175 DNB/OA/IA Full Books + 31,992 DNB `/04` PDFs + 41,286 DNB Inhaltstexte + 17,031 GBV Works + 618 OpenAlex Abstracts |
+| **Wave 10 Complete `location=onlinefree` DNB + Multi-Repo Corpus** | **`384,074`** | **`310,387,447`** | **`25,000`** | **`-2.6950`** *(sLDA: `-1.9650`)* | **4,019 HTRC Printed Books + 2,409 DNB `/34` OA Books/EPUBs + 249 OA/IA Books (`6,677` Full Books) + 32,035 DNB `/04` PDFs + 46,653 DNB Inhaltstexte + 17,031 GBV Works + 627 OpenAlex Abstracts (Santana et al., 2025 5-Rule FAIR/DDI)** |
 
 ### Pilot Grid Search Across $K \in [4, 30]$ (`data/coherence_grid_results.csv`)
 
@@ -39,7 +40,7 @@ In accordance with Röder, Both, and Hinneburg (2015) and Santana et al. (2025, 
 | **6** | `0.3440` | `-7.2369` | `-7.9608` | Evaluated candidate |
 | **8** | `0.3160` | `-8.8889` | `-8.0393` | Evaluated candidate |
 | **10** | `0.3350` | `-9.4710` | `-8.0833` | Evaluated candidate |
-| **12** | `0.3905` | **`-2.4737` *(Wave 9)* ** | `-8.1008` | **Meso-Level Inflection (Selected Dissertation Regime)** |
+| **12** | `0.3905` | **`-2.6950` *(Wave 10)* ** | `-8.1008` | **Meso-Level Inflection (Selected Dissertation Regime)** |
 | **15** | `0.3831` | `-9.7105` | `-9.7275` | Evaluated candidate |
 | **20** | `0.4091` | `-9.9323` | `-10.7597` | High-resolution candidate |
 | **25** | `0.3887` | `-8.4980` | `-11.5375` | High-resolution candidate |
