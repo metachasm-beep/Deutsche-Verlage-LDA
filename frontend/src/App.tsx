@@ -32,6 +32,7 @@ import {
   ChevronUp,
   Cpu,
   GitCompare,
+  FileCode2,
 } from 'lucide-react';
 import { useLDA, type LDAMode } from './hooks/useLDA';
 import { TrendsGraph } from './components/TrendsGraph';
@@ -39,6 +40,7 @@ import { TopicModelViz, getArchetypeTheme, type Topic, type RepresentativeDoc, t
 import { PipelineExplainer } from './components/PipelineExplainer';
 import { ConceptualDriftExplorer } from './components/ConceptualDriftExplorer';
 import { InterTopicDistanceMap } from './components/InterTopicDistanceMap';
+import { HypothesisAndExportWorkbench } from './components/HypothesisAndExportWorkbench';
 import clsx from 'clsx';
 
 function App() {
@@ -71,6 +73,8 @@ function App() {
     fetchCoherenceGrid,
     fetchConceptualDrift,
     runLDA,
+    updateCustomSeeds,
+    resetCustomSeeds,
     uploadDataset,
   } = useLDA();
 
@@ -85,7 +89,7 @@ function App() {
 
   // 3-Pane Split-View IDE State
   const [workspaceMode, setWorkspaceMode] = useState<
-    'bento' | 'distance' | 'drift' | 'pipeline' | 'topics' | 'matrix'
+    'bento' | 'distance' | 'drift' | 'workbench' | 'pipeline' | 'topics' | 'matrix'
   >('bento');
   const [leftSidebarOpen, setLeftSidebarOpen] = useState<boolean>(true);
   const [rightInspectorOpen, setRightInspectorOpen] = useState<boolean>(true);
@@ -373,6 +377,18 @@ function App() {
           >
             <GitCompare className="w-3.5 h-3.5" />
             <span>Word-Shift & Drift</span>
+          </button>
+          <button
+            onClick={() => setWorkspaceMode('workbench')}
+            className={clsx(
+              'flex items-center gap-1.5 px-2.5 py-1 rounded-md font-mono text-[11px] transition-all cursor-pointer',
+              workspaceMode === 'workbench'
+                ? 'bg-traditional text-obsidian-950 font-bold shadow-glow-gold'
+                : 'text-parchment-200 hover:text-parchment-50 hover:bg-white/[0.04]'
+            )}
+          >
+            <FileCode2 className="w-3.5 h-3.5" />
+            <span>Seeds, Breakpoints & LaTeX</span>
           </button>
           <button
             onClick={() => setWorkspaceMode('pipeline')}
@@ -1364,6 +1380,23 @@ function App() {
                 onPublisherClick={(pub) => handleTogglePublisher(pub, true)}
               />
 
+              {/* Modules 3, 5, 6: Statistical Breakpoint Tests, Custom Seed Workbench & LaTeX/BibTeX Exporter */}
+              <HypothesisAndExportWorkbench
+                topics={typedTopics}
+                numTopics={numTopics}
+                ldaMode={ldaMode}
+                coherenceScore={coherenceScore}
+                cvCoherence={cvCoherence}
+                modesComparison={modesComparison}
+                sldaDiagnostics={sldaDiagnostics}
+                publisherArchetypes={publisherArchetypes}
+                seedLexicons={seedLexicons}
+                isTraining={isTraining}
+                onUpdateCustomSeeds={updateCustomSeeds}
+                onResetCustomSeeds={resetCustomSeeds}
+                onYearClick={handleYearClick}
+              />
+
               {/* Full End-to-End Pipeline & Methodology Explainer Section */}
               <PipelineExplainer
                 summary={summary}
@@ -1407,6 +1440,27 @@ function App() {
               driftData={conceptualDrift}
               onDecadeClick={handleDecadeClick}
               onPublisherClick={(pub) => handleTogglePublisher(pub, true)}
+            />
+          )}
+
+          {/* =================================================================
+              WORKSPACE MODE 1W: HYPOTHESIS TESTS, CUSTOM SEEDS & LaTeX EXPORTER
+             ================================================================= */}
+          {workspaceMode === 'workbench' && (
+            <HypothesisAndExportWorkbench
+              topics={typedTopics}
+              numTopics={numTopics}
+              ldaMode={ldaMode}
+              coherenceScore={coherenceScore}
+              cvCoherence={cvCoherence}
+              modesComparison={modesComparison}
+              sldaDiagnostics={sldaDiagnostics}
+              publisherArchetypes={publisherArchetypes}
+              seedLexicons={seedLexicons}
+              isTraining={isTraining}
+              onUpdateCustomSeeds={updateCustomSeeds}
+              onResetCustomSeeds={resetCustomSeeds}
+              onYearClick={handleYearClick}
             />
           )}
 

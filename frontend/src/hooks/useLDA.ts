@@ -231,6 +231,47 @@ export const useLDA = () => {
     }
   };
 
+  const updateCustomSeeds = async (
+    newSeeds: Record<string, string[]>,
+    seedBoost: number = 15.0,
+    baseEta: number = 0.05,
+    triggerRun: boolean = true
+  ) => {
+    setSeedLexicons(newSeeds);
+    try {
+      await fetch(`${API_BASE}/api/update-seeds`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          seed_lexicons: newSeeds,
+          seed_boost: seedBoost,
+          base_eta: baseEta,
+        }),
+      });
+      if (triggerRun) {
+        await runLDA(
+          activeFilters.year,
+          activeFilters.decade,
+          numTopics,
+          'seeded',
+          activeFilters.publishers
+        );
+      }
+    } catch (e) {
+      console.error('Failed to update custom seeds', e);
+    }
+  };
+
+  const resetCustomSeeds = async () => {
+    try {
+      const res = await fetch(`${API_BASE}/api/reset-seeds`, { method: 'POST' });
+      const data = await res.json();
+      if (data.seed_lexicons) setSeedLexicons(data.seed_lexicons);
+    } catch (e) {
+      console.error('Failed to reset custom seeds', e);
+    }
+  };
+
   return {
     isTraining,
     isUploading,
@@ -254,6 +295,7 @@ export const useLDA = () => {
     decadeBreakdown,
     representativeDocs,
     seedLexicons,
+    setSeedLexicons,
     religiousBoostWords,
     conceptualDrift,
     activeFilters,
@@ -263,6 +305,8 @@ export const useLDA = () => {
     fetchCoherenceGrid,
     fetchConceptualDrift,
     runLDA,
+    updateCustomSeeds,
+    resetCustomSeeds,
     uploadDataset,
     resetToMock
   };
