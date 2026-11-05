@@ -316,21 +316,26 @@ def harvest_gbv_wave9_and_multi_isbns(
     seen_titles = set(existing_titles)
 
     all_tasks = []
+    # Comprehensive German-language (pica.spr=ger) queries across all 38 target publishers (unrestricted by BKL subject)
     for canonical_pub, gbv_term, bkl_list in CORE_12_PUBLISHERS:
+        for start_rec in range(1, 1501, 100):
+            all_tasks.append((canonical_pub, f'pica.ver="{gbv_term}" and pica.spr=ger', "all", start_rec))
         for bkl in bkl_list:
             s_start = 1
             s_end = 1500 if bkl == "11.*" else 700
             for start_rec in range(s_start, s_end + 1, 100):
-                all_tasks.append((canonical_pub, f'pica.bkl={bkl} and pica.ver="{gbv_term}"', bkl, start_rec))
+                all_tasks.append((canonical_pub, f'pica.bkl={bkl} and pica.ver="{gbv_term}" and pica.spr=ger', bkl, start_rec))
 
     for canonical_pub, gbv_term, bkl_list, s_start, s_end in EXTENDED_GERMAN_RELIGION_PUBLISHERS:
+        for start_rec in range(1, min(1000, s_end) + 1, 100):
+            all_tasks.append((canonical_pub, f'pica.ver="{gbv_term}" and pica.spr=ger', "all", start_rec))
         for bkl in bkl_list:
             for start_rec in range(s_start, s_end + 1, 100):
-                all_tasks.append((canonical_pub, f'pica.bkl={bkl} and pica.ver="{gbv_term}"', bkl, start_rec))
+                all_tasks.append((canonical_pub, f'pica.bkl={bkl} and pica.ver="{gbv_term}" and pica.spr=ger', bkl, start_rec))
 
     for bkl_code, s_start, s_end in WAVE9_BKL_SUBCODES:
         for start_rec in range(s_start, s_end + 1, 100):
-            all_tasks.append((None, f'pica.bkl={bkl_code}', bkl_code, start_rec))
+            all_tasks.append((None, f'pica.bkl={bkl_code} and pica.spr=ger', bkl_code, start_rec))
 
     print(
         f"Wave-9 GBV K10plus Complete Harvester: Querying {len(all_tasks)} SRU pages (maximumRecords=100) "

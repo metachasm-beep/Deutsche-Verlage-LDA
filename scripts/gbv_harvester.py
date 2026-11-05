@@ -320,13 +320,14 @@ def parse_gbv_marc_record(
 def harvest_gbv(
     publisher_names=None,
     decades=None,
-    bkl_filter: str = "11.*",
+    bkl_filter: str = "*",
     max_records_per_slice: int = 20,
     fetch_blurbs: bool = True
 ) -> pd.DataFrame:
     """
     Harvests diachronic bibliographic, paratextual, and library-holdings data from the
-    Gemeinsamer Bibliotheksverbund (GBV / K10plus GVK) SRU API v1.1 across 1970–2025.
+    Gemeinsamer Bibliotheksverbund (GBV / K10plus GVK) SRU API v1.1 across 1970–2025
+    in German language (`pica.spr=ger`), unrestricted by subject by default.
     """
     base_url = "https://sru.k10plus.de/gvk"
     records = []
@@ -352,7 +353,7 @@ def harvest_gbv(
         decades = ["197*", "198*", "199*", "200*", "201*", "202*"]
 
     print(
-        f"Harvesting Gemeinsamer Bibliotheksverbund (GBV/GVK) SRU records "
+        f"Harvesting Gemeinsamer Bibliotheksverbund (GBV/GVK) SRU German-language (pica.spr=ger) records "
         f"for BKL={bkl_filter} across {len(publisher_names)} publishers and {len(decades)} decades..."
     )
 
@@ -362,7 +363,10 @@ def harvest_gbv(
 
         for dec in decades:
             decade_label = f"{dec[:3]}0s"
-            cql_query = f'pica.vlg="{pub}" and pica.bkl={bkl_filter} and pica.jah={dec}'
+            if bkl_filter and bkl_filter not in ("*", "all", "ALL"):
+                cql_query = f'pica.vlg="{pub}" and pica.spr=ger and pica.bkl={bkl_filter} and pica.jah={dec}'
+            else:
+                cql_query = f'pica.vlg="{pub}" and pica.spr=ger and pica.jah={dec}'
             params = {
                 'operation': 'searchRetrieve',
                 'version': '1.1',
@@ -435,9 +439,9 @@ def merge_gbv_with_dnb(gbv_df: pd.DataFrame, dnb_csv_path: str = "data/dnb_metad
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
-        description="Harvest 1970-2025 German Religion & Critique Corpus from Gemeinsamer Bibliotheksverbund (GBV/GVK)"
+        description="Harvest 1970-2025 Comprehensive German-Language Corpus from Gemeinsamer Bibliotheksverbund (GBV/GVK)"
     )
-    parser.add_argument("--bkl", default="11.*", help="GBV Basisklassifikation filter (e.g., 11.*, 11.08, 11.05)")
+    parser.add_argument("--bkl", default="*", help="GBV Basisklassifikation filter ('*' for all subjects in German language, or e.g. 11.*, 08.*, 71.*)")
     parser.add_argument("--max-per-slice", type=int, default=15, help="Max records per publisher-decade slice")
     parser.add_argument("--no-blurbs", action="store_true", help="Skip fetching external Inhaltstext HTML blurbs")
     parser.add_argument("--output", default="data/gbv_metadata.csv", help="Output CSV path")

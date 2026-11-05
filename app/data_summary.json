@@ -1,9 +1,9 @@
 {
-  "source": "DNB SRU v1.1 + GBV/K10plus + HathiTrust HTRC + OpenAlex Full-Book Corpus (1970–2025)",
-  "count": 461785,
-  "total_records": 461785,
-  "unique_books": 80103,
-  "total_words": 385115918,
+  "source": "DNB SRU v1.1 + GBV/K10plus + HathiTrust HTRC + OpenAlex Comprehensive German-Language Corpus (spr=ger, All Subjects 000–900, 1970–2025)",
+  "count": 462036,
+  "total_records": 462036,
+  "unique_books": 80362,
+  "total_words": 385171913,
   "vocabulary_size": 25000,
   "coherence_score": -2.476,
   "publishers": [
@@ -24,27 +24,27 @@
   ],
   "all_publishers_count": 4235,
   "publisher_counts": {
-    "De Gruyter / Transcript": 33751,
-    "Vandenhoeck & Ruprecht": 23947,
+    "De Gruyter / Transcript": 33759,
+    "Vandenhoeck & Ruprecht": 23948,
     "Schöningh": 22289,
     "Böhlau": 22036,
-    "Mohr Siebeck": 15237,
-    "Kohlhammer": 15041,
+    "Mohr Siebeck": 15238,
+    "Kohlhammer": 15044,
     "Aschendorff": 12905,
-    "Suhrkamp": 12730,
+    "Suhrkamp": 12734,
     "Campus": 12589,
     "Frommann-Holzboog": 12502,
     "Wilhelm Fink": 11495,
     "Neukirchener": 11238,
-    "Klett-Cotta": 11200,
-    "Gütersloher Verlagshaus": 10819,
-    "Fischer": 10632
+    "Klett-Cotta": 11237,
+    "Gütersloher Verlagshaus": 10823,
+    "Fischer": 10652
   },
   "corpus_layers": {
     "hathitrust_ef_fullbook_print": 243751,
-    "dnb_oa_fullbook": 115002,
-    "dnb_deposit_inhaltstext": 47083,
-    "dnb_toc_pdf_fulltext": 32021,
+    "dnb_oa_fullbook": 115019,
+    "dnb_deposit_inhaltstext": 47269,
+    "dnb_toc_pdf_fulltext": 32069,
     "gbv_direct_fulltext_pdf": 14199,
     "entire_fulltext_book_cloud": 4072,
     "drm_fallback_multi_api_enriched": 3561,
@@ -57,19 +57,19 @@
     "primary_fulltext": 3
   },
   "decade_counts": {
-    "1970s": 41368,
+    "1970s": 41369,
     "1980s": 66524,
-    "1990s": 82367,
-    "2000s": 104639,
-    "2010s": 67562,
-    "2020s": 99325
+    "1990s": 82377,
+    "2000s": 104647,
+    "2010s": 67589,
+    "2020s": 99530
   },
   "year_range": "1970–2027",
   "document_length_distribution": {
     "overall": {
-      "documents": 461785,
-      "unique_works": 80103,
-      "total_words": 385115918,
+      "documents": 462036,
+      "unique_works": 80362,
+      "total_words": 385171913,
       "mean_words": 834.0,
       "sd_words": 341.1,
       "median_words": 1000.0,
@@ -3256,5 +3256,18 @@
       "u_mass": -8.1086,
       "log_perplexity": -12.239
     }
-  ]
+  ],
+  "dnb_catalog_coverage": {
+    "timeframe": "1970-2025",
+    "language_scope": "spr=ger (German language, all DDC Hauptsachgruppen 000-900, unrestricted by subject)",
+    "dnb_entire_catalog_all_languages_1970_2025": 35064043,
+    "dnb_entire_catalog_german_spr_ger_1970_2025": 11602989,
+    "dnb_38_target_publishers_all_languages_1970_2025": 544425,
+    "dnb_38_target_publishers_german_spr_ger_all_subjects_1970_2025": 461491,
+    "dnb_38_target_publishers_german_spr_ger_onlinefree_oa_1970_2025": 12251,
+    "incorporated_total_corpus_documents": 462036,
+    "incorporated_unique_books": 80362,
+    "incorporated_direct_dnb_sru_documents": 194357,
+    "incorporated_unique_dnb_oa_books": 8486
+  }
 }

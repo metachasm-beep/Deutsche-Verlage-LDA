@@ -47,10 +47,10 @@ def build_master_dataset(
     frames = []
 
     print("\n======================================================================")
-    print("STAGE 1/7: Harvesting GBV / K10plus (1970-2025 Diachronic BKL 11.*)")
+    print("STAGE 1/7: Harvesting GBV / K10plus (1970-2025 Comprehensive German-Language Corpus)")
     print("======================================================================")
     df_gbv_main = harvest_gbv(
-        bkl_filter="11.*",
+        bkl_filter="*",
         max_records_per_slice=gbv_per_slice,
         fetch_blurbs=fetch_blurbs
     )
@@ -58,7 +58,7 @@ def build_master_dataset(
         frames.append(df_gbv_main)
 
     print("\n======================================================================")
-    print("STAGE 2/7: Harvesting GBV Targeted Sub-Corpus (BKL 11.08 Religionskritik)")
+    print("STAGE 2/7: Harvesting GBV Targeted Sub-Corpus (BKL 11.* / 11.08)")
     print("======================================================================")
     df_gbv_crit = harvest_gbv(
         bkl_filter="11.08",
@@ -69,10 +69,10 @@ def build_master_dataset(
         frames.append(df_gbv_crit)
 
     print("\n======================================================================")
-    print("STAGE 3/7: Harvesting DNB SRU (DDC 200/230 Religion & Inhaltstexte)")
+    print("STAGE 3/7: Harvesting DNB SRU (1970-2025 Comprehensive German-Language spr=ger)")
     print("======================================================================")
     df_dnb = harvest_dnb(
-        start_year=2004,
+        start_year=1970,
         max_records_per_publisher=dnb_per_pub,
         fetch_blurbs=fetch_blurbs
     )

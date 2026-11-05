@@ -660,7 +660,7 @@ def parse_marc_record(
 
 
 def harvest_dnb(
-    query: str = "dcs=200* and jhr>=1970 and jhr<=2025",
+    query: str = "spr=ger and jhr>=1970 and jhr<=2025",
     max_records: int = 150,
     output_file: str = "data/dnb_live_harvest.csv",
     fetch_blurbs: bool = True,
@@ -749,51 +749,51 @@ def harvest_dnb_wave7_exhaustive(
 
     base_url = "https://services.dnb.de/sru/dnb"
 
-    pub_oa_domain_cql = (
-        "(hsg=200 or hsg=220 or hsg=230 or hsg=290 or hsg=100 or hsg=150 or hsg=300 or "
-        "sw=Religion* or sw=Theologie* or sw=Kirche* or sw=Glaube* or sw=Gott* or sw=Christ* or "
-        "sw=Bibel* or sw=Ethik* or sw=Moral* or sw=Säkular* or sw=Atheismus* or sw=Spiritualität* or "
-        "sw=Achtsamkeit* or sw=Lebenshilfe* or sw=Seelsorge* or sw=Islam* or sw=Judentum* or "
-        "sw=Philosophie* or sw=Gesellschaft* or sw=Kultur* or sw=Sinn*)"
-    )
-
     # Phase 1: Seed Queries (startRecord=1) with uncapped SRU pagination limit (max_cap=10000)
+    # Comprehensive German-language (`spr=ger`, 1970-2025) scope across all DDC Hauptsachgruppen (000-900)
+    # and all 38 target German publishing houses (unrestricted by religious subject pre-filters).
     # Tuple: (canon_pub, cql_query, start_rec, is_deep_page, force_onlinefree, max_rec_cap)
     phase1_queries = []
 
-    # Group 1: All 38 Target Publishers with location=onlinefree (1970-2025), uncapped (10,000)
+    # Group 1: All 38 Target Publishers with location=onlinefree and spr=ger (1970-2025), unrestricted by subject
     for canon_pub, vlg_term, _, _ in DNB_TARGET_PUBLISHERS:
-        q_pub_oa = f'vlg="{vlg_term}" and location=onlinefree and spr=ger and {pub_oa_domain_cql} and jhr>=1970 and jhr<=2025'
+        q_pub_oa = f'vlg="{vlg_term}" and location=onlinefree and spr=ger and jhr>=1970 and jhr<=2025'
         phase1_queries.append((canon_pub, q_pub_oa, 1, True, True, 10000))
 
-    # Group 2A: Year-by-Year (1970-2025) across hsg=200, 220, 230, 290, 100, 150, 300, 000/800/900 with location=onlinefree (uncapped 10,000)
+    # Group 2A: Year-by-Year (1970-2025) across ALL DDC Hauptsachgruppen (000-900) with location=onlinefree and spr=ger
     hsg_oa_templates = [
-        ("hsg=230", 10000),
+        ("hsg=000", 10000),
+        ("hsg=100", 10000),
+        ("hsg=150", 10000),
         ("hsg=200", 10000),
-        ("hsg=290", 10000),
         ("hsg=220", 10000),
-        ("hsg=100 and (sw=Religion* or sw=Gott* or sw=Ethik* or sw=Moral* or sw=Aufklärung* or sw=Sinn* or sw=Philosophie*)", 10000),
-        ("hsg=300 and (sw=Religion* or sw=Kirche* or sw=Säkular* or sw=Islam* or sw=Judentum* or sw=Wertewandel*)", 10000),
-        ("hsg=150 and (sw=Spiritualität* or sw=Achtsamkeit* or sw=Lebenshilfe* or sw=Seele* or sw=Trauer* or sw=Religion*)", 10000),
-        ("(hsg=000 or hsg=800 or hsg=900) and (sw=Religion* or sw=Theologie* or sw=Kirche* or sw=Bibel* or sw=Säkular* or sw=Atheismus*)", 10000),
+        ("hsg=230", 10000),
+        ("hsg=290", 10000),
+        ("hsg=300", 10000),
+        ("hsg=400", 10000),
+        ("hsg=500", 10000),
+        ("hsg=600", 10000),
+        ("hsg=700", 10000),
+        ("hsg=800", 10000),
+        ("hsg=900", 10000),
     ]
     for yr in range(2025, 1969, -1):
         for hsg_expr, cap in hsg_oa_templates:
             q_yr = f"({hsg_expr}) and location=onlinefree and spr=ger and jhr={yr}"
             phase1_queries.append((None, q_yr, 1, True, True, cap))
 
-    # Group 2B: All 57 DNB_THEMATIC_QUERIES (sw= & dcs=220*..290*) with location=onlinefree (1970-2025), uncapped (10,000)
+    # Group 2B: All DNB_THEMATIC_QUERIES with location=onlinefree and spr=ger (1970-2025), uncapped (10,000)
     for cql_theme, _, _, _ in DNB_THEMATIC_QUERIES:
         q_theme_oa = f"({cql_theme}) and location=onlinefree and spr=ger and jhr>=1970 and jhr<=2025"
         phase1_queries.append((None, q_theme_oa, 1, True, True, 10000))
 
-    # Group 3: hsg=200/220/230/290 across All 38 Target Publishers (print + online for multi-ISBN $z & /04 PDFs)
+    # Group 3: Comprehensive German-language (spr=ger) catalog across All 38 Target Publishers (all subjects, print + online)
     for canon_pub, vlg_term, _, wave8_end_pages in DNB_TARGET_PUBLISHERS:
-        q_hsg_pub = f'(hsg=200 or hsg=220 or hsg=230 or hsg=290) and vlg="{vlg_term}" and jhr>=1970 and jhr<=2025'
-        phase1_queries.append((canon_pub, q_hsg_pub, 1, True, False, min(1500, wave8_end_pages * 60)))
+        q_all_pub = f'vlg="{vlg_term}" and spr=ger and jhr>=1970 and jhr<=2025'
+        phase1_queries.append((canon_pub, q_all_pub, 1, True, False, min(3000, wave8_end_pages * 100)))
 
     print(
-        f"Wave-11 Uncapped Exhaustive DNB `location=onlinefree` + `MARC 856` Harvester: Probing {len(phase1_queries):,} "
+        f"Comprehensive German-Language (`spr=ger`, All Subjects 000-900) DNB Harvester: Probing {len(phase1_queries):,} "
         f"year-by-year, thematic & publisher SRU queries (1970-2025)...",
         flush=True,
     )
