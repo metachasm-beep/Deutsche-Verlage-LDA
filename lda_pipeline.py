@@ -699,14 +699,15 @@ def classify_topic_archetype(keywords_with_weights) -> dict:
     }
 
 
-def iter_corpus_rows(data_path: str):
+def iter_corpus_rows(data_path: str, include_shards: bool = False):
     """
-    Transparently yields rows from data_path and any accompanying data/dnb_metadata_part*.csv
-    shards so the corpus can scale beyond 300,000+ documents while keeping each file < 85 MB for GitHub.
+    Transparently yields rows from data_path and optionally any accompanying data/dnb_metadata_part*.csv
+    shards so offline batch jobs can scale beyond 300,000+ documents while interactive API requests
+    operate instantaneously on the primary token-cached corpus.
     """
     import glob
     paths = [data_path]
-    if os.path.basename(data_path) == "dnb_metadata.csv":
+    if include_shards and os.path.basename(data_path) == "dnb_metadata.csv":
         part_glob = os.path.join(os.path.dirname(data_path) or "data", "dnb_metadata_part*.csv")
         part_files = sorted(
             glob.glob(part_glob),

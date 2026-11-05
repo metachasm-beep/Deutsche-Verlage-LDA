@@ -117,10 +117,13 @@ export const useLDA = () => {
     }
   };
 
-  const fetchTopics = async (modeOverride?: LDAMode) => {
+  const fetchTopics = async (modeOverride?: LDAMode, kOverride?: number) => {
     try {
       const targetMode = modeOverride ?? ldaMode;
-      const res = await fetch(`${API_BASE}/api/topics?lda_mode=${targetMode}`);
+      const targetK = kOverride ?? numTopics;
+      const res = await fetch(
+        `${API_BASE}/api/topics?lda_mode=${targetMode}&num_topics=${targetK}`
+      );
       const data = await res.json();
       setTopics(data.topics || []);
       if (data.lda_mode) setLdaMode(data.lda_mode as LDAMode);
@@ -180,7 +183,7 @@ export const useLDA = () => {
       if (params.toString()) url += `?${params.toString()}`;
 
       await fetch(url, { method: 'POST' });
-      await fetchTopics(activeMode);
+      await fetchTopics(activeMode, activeK);
     } catch (e) {
       console.error("LDA training failed", e);
     } finally {
