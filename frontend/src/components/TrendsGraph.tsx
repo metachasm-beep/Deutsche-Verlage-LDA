@@ -29,13 +29,25 @@ interface TrendsGraphProps {
 
 const PUBLISHER_COLORS: Record<string, string> = {
   'Verlag Herder': '#EAB308',
+  'Herder': '#EAB308',
   'St. Benno Verlag': '#F59E0B',
+  'St. Benno': '#F59E0B',
   'SCM R. Brockhaus': '#FDE047',
+  'Patmos': '#FBBF24',
+  'Bonifatius': '#D97706',
+  'Kreuz': '#CA8A04',
   'Kösel-Verlag': '#38BDF8',
+  'Kösel': '#38BDF8',
   'Gräfe und Unzer (GU)': '#06B6D4',
+  'GU': '#06B6D4',
   'J. Kamphausen': '#2DD4BF',
   'Suhrkamp / Insel': '#FB7185',
+  'Suhrkamp': '#FB7185',
   'C.H. Beck': '#A78BFA',
+  'Rowohlt': '#F43F5E',
+  'Fischer': '#EC4899',
+  'Kohlhammer': '#818CF8',
+  'Vandenhoeck & Ruprecht': '#34D399',
 };
 
 const FALLBACK_COLORS = [

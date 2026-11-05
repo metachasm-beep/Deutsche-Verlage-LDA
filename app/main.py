@@ -1,3 +1,4 @@
+from typing import Optional
 from fastapi import FastAPI, HTTPException, Query, UploadFile, File, Body
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse
@@ -709,13 +710,13 @@ def _project_topics_to_k(
 
 @app.post("/api/run-lda")
 async def run_lda(
-    year: int = Query(None),
-    decade: int = Query(None),
-    publishers: str = Query(None),
-    num_topics: int = Query(None),
-    lda_mode: str = Query("unsupervised"),
-    seed_boost: float = Query(None),
-    base_eta: float = Query(None),
+    year: Optional[int] = None,
+    decade: Optional[int] = None,
+    publishers: Optional[str] = None,
+    num_topics: Optional[int] = None,
+    lda_mode: str = "unsupervised",
+    seed_boost: Optional[float] = None,
+    base_eta: Optional[float] = None,
 ):
     global current_model, current_corpus, current_dictionary, current_viz_html, current_coherence, current_top_docs, current_num_topics, current_lda_mode, current_year_filter, current_decade_filter, current_publishers_filter, current_seed_boost, current_base_eta
 
@@ -924,13 +925,13 @@ async def get_viz():
 
 @app.get("/api/topics")
 async def get_topics(
-    lda_mode: str = Query(None),
-    num_topics: int = Query(None),
-    year: int = Query(None),
-    decade: int = Query(None),
-    publishers: str = Query(None),
-    seed_boost: float = Query(None),
-    base_eta: float = Query(None),
+    lda_mode: Optional[str] = None,
+    num_topics: Optional[int] = None,
+    year: Optional[int] = None,
+    decade: Optional[int] = None,
+    publishers: Optional[str] = None,
+    seed_boost: Optional[float] = None,
+    base_eta: Optional[float] = None,
 ):
     global current_model, current_corpus, current_dictionary, current_coherence, current_top_docs, current_num_topics, current_lda_mode, current_year_filter, current_decade_filter, current_publishers_filter, current_seed_boost, current_base_eta
 
@@ -1309,7 +1310,7 @@ async def data_summary():
 
 
 @app.get("/api/conceptual-drift")
-async def get_conceptual_drift(lemma: str = Query(None)):
+async def get_conceptual_drift(lemma: Optional[str] = None):
     """
     Returns the Diachronic Word-Shift & Conceptual Drift telemetry (1970s–2020s)
     including 20 tracked German signifiers (Pr(RQ_m | w, Decade), relative frequency,

@@ -84,7 +84,9 @@ export const useLDA = () => {
     year: number | null;
     decade: number | null;
     publishers: string[];
-  }>({ year: null, decade: null, publishers: [] });
+    seed_boost?: number;
+    base_eta?: number;
+  }>({ year: null, decade: null, publishers: [], seed_boost: 15.0, base_eta: 0.05 });
 
   const fetchConceptualDrift = async () => {
     try {
@@ -122,7 +124,9 @@ export const useLDA = () => {
     kOverride?: number,
     yearOverride?: number | null,
     decadeOverride?: number | null,
-    pubsOverride?: string[]
+    pubsOverride?: string[],
+    seedBoostOverride?: number,
+    baseEtaOverride?: number
   ) => {
     try {
       const targetMode = modeOverride ?? ldaMode;
@@ -130,6 +134,8 @@ export const useLDA = () => {
       const targetYear = yearOverride !== undefined ? yearOverride : activeFilters.year;
       const targetDecade = decadeOverride !== undefined ? decadeOverride : activeFilters.decade;
       const targetPubs = pubsOverride !== undefined ? pubsOverride : activeFilters.publishers;
+      const targetSeedBoost = seedBoostOverride ?? activeFilters.seed_boost ?? 15.0;
+      const targetBaseEta = baseEtaOverride ?? activeFilters.base_eta ?? 0.05;
 
       const params = new URLSearchParams();
       params.append('lda_mode', targetMode);
@@ -145,6 +151,8 @@ export const useLDA = () => {
         params.append('decade', '0');
       }
       params.append('publishers', (targetPubs || []).join(','));
+      params.append('seed_boost', targetSeedBoost.toString());
+      params.append('base_eta', targetBaseEta.toString());
 
       const res = await fetch(`${API_BASE}/api/topics?${params.toString()}`);
       const data = await res.json();
@@ -184,13 +192,17 @@ export const useLDA = () => {
     decade?: number | null,
     kOverride?: number,
     modeOverride?: LDAMode,
-    publishersOverride?: string[]
+    publishersOverride?: string[],
+    seedBoostOverride?: number,
+    baseEtaOverride?: number
   ) => {
     setIsTraining(true);
     try {
       const activeK = kOverride ?? numTopics;
       const activeMode = modeOverride ?? ldaMode;
       const activePubs = publishersOverride ?? activeFilters.publishers;
+      const activeSeedBoost = seedBoostOverride ?? activeFilters.seed_boost ?? 15.0;
+      const activeBaseEta = baseEtaOverride ?? activeFilters.base_eta ?? 0.05;
       if (kOverride) setNumTopics(kOverride);
       if (modeOverride) setLdaMode(modeOverride);
 
@@ -203,10 +215,20 @@ export const useLDA = () => {
       if (activePubs && activePubs.length > 0) {
         params.append('publishers', activePubs.join(','));
       }
+      params.append('seed_boost', activeSeedBoost.toString());
+      params.append('base_eta', activeBaseEta.toString());
       if (params.toString()) url += `?${params.toString()}`;
 
       await fetch(url, { method: 'POST' });
-      await fetchTopics(activeMode, activeK, year ?? null, decade ?? null, activePubs);
+      await fetchTopics(
+        activeMode,
+        activeK,
+        year ?? null,
+        decade ?? null,
+        activePubs,
+        activeSeedBoost,
+        activeBaseEta
+      );
     } catch (e) {
       console.error("LDA training failed", e);
     } finally {
@@ -280,7 +302,9 @@ export const useLDA = () => {
           activeFilters.decade,
           numTopics,
           'seeded',
-          activeFilters.publishers
+          activeFilters.publishers,
+          seedBoost,
+          baseEta
         );
       }
     } catch (e) {
@@ -293,6 +317,15 @@ export const useLDA = () => {
       const res = await fetch(`${API_BASE}/api/reset-seeds`, { method: 'POST' });
       const data = await res.json();
       if (data.seed_lexicons) setSeedLexicons(data.seed_lexicons);
+      await runLDA(
+        activeFilters.year,
+        activeFilters.decade,
+        numTopics,
+        ldaMode,
+        activeFilters.publishers,
+        15.0,
+        0.05
+      );
     } catch (e) {
       console.error('Failed to reset custom seeds', e);
     }

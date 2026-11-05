@@ -203,7 +203,7 @@ export const TopicModelViz: React.FC<TopicModelVizProps> = ({
         <p className="font-mono text-[11px] text-parchment-300 mt-1.5">
           {selectedYear
             ? `Temporal Slice: Year ${selectedYear} · Lemmatizing via spaCy de_core_news_lg`
-            : 'Full DNB Corpus (2005–2026) · Computing Röder et al. (2015) Cv Coherence'}
+            : 'Full DNB Corpus (1970–2025) · Computing Röder et al. (2015) Cv Coherence'}
         </p>
       </div>
     );

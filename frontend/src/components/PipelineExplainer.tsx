@@ -37,19 +37,19 @@ interface PipelineExplainerProps {
 }
 
 const DEFAULT_SEED_LEXICONS: Record<string, string[]> = {
-  'Traditional / Theological': [
+  'Traditional / Ecclesiastical': [
     'gott', 'kirche', 'glaube', 'jesus', 'christus', 'bibel', 'theologie', 'gebet',
     'liturgie', 'sakrament', 'gnade', 'schöpfung', 'evangelium', 'seelsorge', 'pfarrer',
-    'gemeinde', 'katholisch', 'evangelisch', 'ökumene', 'bischof', 'papst', 'predigt',
+    'gemeinde', 'katholisch', 'evangelisch', 'ökumene', 'bischof', 'predigt',
     'frömmigkeit', 'heilig', 'auferstehung', 'erlösung',
   ],
-  'Neoliberal / Self-Help': [
+  'Neoliberal / Self-Optimization': [
     'selbsthilfe', 'achtsamkeit', 'erfolg', 'glück', 'heilung', 'energie', 'bewusstsein',
     'meditation', 'wohlbefinden', 'potenzial', 'selbstliebe', 'coaching', 'resilienz',
     'motivation', 'lebenshilfe', 'gelassenheit', 'balance', 'stress', 'erfüllung',
     'innerer', 'harmonie', 'positiv', 'kraft', 'loslassen',
   ],
-  'Critical / Secular': [
+  'Critical / Secular-Humanist': [
     'kritik', 'wissenschaft', 'gesellschaft', 'politik', 'macht', 'ideologie', 'moderne',
     'säkularisierung', 'demokratie', 'ethik', 'philosophie', 'soziologie', 'kapitalismus',
     'aufklärung', 'diskurs', 'menschenrechte', 'vernunft', 'autonomie', 'pluralismus',
@@ -127,8 +127,8 @@ const PIPELINE_STAGES = [
     summary:
       'Detects statistically significant multi-word theological and sociological collocations and prunes extreme low-frequency typos and high-frequency background terms.',
     details: [
-      'Gensim Phraser (min_count=3, threshold=8) binds recurring multi-word concepts into single compound tokens (e.g., rudolf_steiner, hans_küng, mensch_behinderung, kind_jugendliche).',
-      'Re-applies ALL_STOPWORDS post-bigramming to ensure no stopword-joined collocations enter the dictionary.',
+      'Gensim Phraser (min_count=3, threshold=8) binds recurring multi-word concepts into single compound tokens while stripping all personal (PER) and geographic (LOC) proper-noun entities (e.g., retaining religionspädagogik, säkularisierung, kirchenmitgliedschaft, selbstoptimierung).',
+      'Re-applies ALL_STOPWORDS and NON_CANONICAL_LOC_AND_PER_NOISE post-bigramming to ensure zero author/biographical name leakage across all 4 LDA paradigms.',
       'Prunes tokens appearing in fewer than 5 documents (no_below=5) or more than 55% of the corpus (no_above=0.55, keep_n=25,000), yielding a high-signal vocabulary of |V| = 10,279 lemmas/bigrams.',
     ],
   },
