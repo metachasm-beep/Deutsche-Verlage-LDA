@@ -77,6 +77,13 @@ export const useLDA = () => {
   const [publisherArchetypes, setPublisherArchetypes] = useState<PublisherArchetypeRow[]>([]);
   const [decadeBreakdown, setDecadeBreakdown] = useState<Record<string, Record<string, number>>>({});
   const [representativeDocs, setRepresentativeDocs] = useState<Record<number, any[]>>({});
+  const [seedLexicons, setSeedLexicons] = useState<Record<string, string[]>>({});
+  const [religiousBoostWords, setReligiousBoostWords] = useState<string[]>([]);
+  const [activeFilters, setActiveFilters] = useState<{
+    year: number | null;
+    decade: number | null;
+    publishers: string[];
+  }>({ year: null, decade: null, publishers: [] });
 
   const fetchTrends = async () => {
     try {
@@ -117,6 +124,9 @@ export const useLDA = () => {
       setPublisherArchetypes(data.publisher_archetypes || []);
       setDecadeBreakdown(data.decade_breakdown || {});
       setRepresentativeDocs(data.representative_docs || {});
+      if (data.seed_lexicons) setSeedLexicons(data.seed_lexicons);
+      if (data.religious_boost_words) setReligiousBoostWords(data.religious_boost_words);
+      if (data.active_filters) setActiveFilters(data.active_filters);
     } catch (e) {
       console.error("Failed to fetch topics", e);
     }
@@ -136,12 +146,14 @@ export const useLDA = () => {
     year?: number | null,
     decade?: number | null,
     kOverride?: number,
-    modeOverride?: LDAMode
+    modeOverride?: LDAMode,
+    publishersOverride?: string[]
   ) => {
     setIsTraining(true);
     try {
       const activeK = kOverride ?? numTopics;
       const activeMode = modeOverride ?? ldaMode;
+      const activePubs = publishersOverride ?? activeFilters.publishers;
       if (kOverride) setNumTopics(kOverride);
       if (modeOverride) setLdaMode(modeOverride);
 
@@ -151,6 +163,9 @@ export const useLDA = () => {
       if (decade) params.append('decade', decade.toString());
       if (activeK) params.append('num_topics', activeK.toString());
       if (activeMode) params.append('lda_mode', activeMode);
+      if (activePubs && activePubs.length > 0) {
+        params.append('publishers', activePubs.join(','));
+      }
       if (params.toString()) url += `?${params.toString()}`;
 
       await fetch(url, { method: 'POST' });
@@ -227,6 +242,9 @@ export const useLDA = () => {
     publisherArchetypes,
     decadeBreakdown,
     representativeDocs,
+    seedLexicons,
+    religiousBoostWords,
+    activeFilters,
     fetchTrends,
     fetchSummary,
     fetchTopics,

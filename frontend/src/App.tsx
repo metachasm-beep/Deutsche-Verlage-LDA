@@ -59,6 +59,8 @@ function App() {
     publisherArchetypes,
     decadeBreakdown,
     representativeDocs,
+    seedLexicons,
+    religiousBoostWords,
     fetchTrends,
     fetchSummary,
     fetchTopics,
@@ -84,6 +86,7 @@ function App() {
   // Synchronized Selection & Filter State across Panes 1, 2, and 3
   const [selectedYear, setSelectedYear] = useState<number | null>(null);
   const [selectedDecade, setSelectedDecade] = useState<number | null>(null);
+  const [selectedPublishers, setSelectedPublishers] = useState<string[]>([]);
   const [selectedTopicIndex, setSelectedTopicIndex] = useState<number>(0);
   const [ideologicalFilter, setIdeologicalFilter] = useState<string | null>(null);
   const [inspectorSearch, setInspectorSearch] = useState<string>('');
@@ -113,41 +116,91 @@ function App() {
     'J. Kamphausen',
   ];
 
+  // Full list of major imprints in the 1,863-passage corpus for single/multi-publisher slicing
+  const sliceablePublishers: string[] = Array.from(
+    new Set([
+      ...publishersList,
+      ...publisherArchetypes.map((p) => p.publisher),
+      'Herder',
+      'Suhrkamp',
+      'C.H. Beck',
+      'Kösel',
+      'GU',
+      'Rowohlt',
+      'Fischer',
+      'Patmos',
+      'Kohlhammer',
+      'Vandenhoeck & Ruprecht',
+      'Mohr Siebeck',
+      'Kreuz',
+      'Gütersloher Verlagshaus',
+    ])
+  ).slice(0, 14);
+
   const handleSliderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNumTopics(parseInt(e.target.value, 10));
   };
 
   const handleRecalculate = () => {
-    runLDA(selectedYear, selectedDecade, numTopics, ldaMode);
+    runLDA(selectedYear, selectedDecade, numTopics, ldaMode, selectedPublishers);
   };
 
   const handleModeSelect = (nextMode: LDAMode) => {
-    runLDA(selectedYear, selectedDecade, numTopics, nextMode);
+    runLDA(selectedYear, selectedDecade, numTopics, nextMode, selectedPublishers);
   };
 
   const handleRegimeSelect = (kVal: number) => {
     setNumTopics(kVal);
-    runLDA(selectedYear, selectedDecade, kVal, ldaMode);
+    runLDA(selectedYear, selectedDecade, kVal, ldaMode, selectedPublishers);
   };
 
   const handleYearClick = (year: number) => {
     const nextYear = selectedYear === year ? null : year;
     setSelectedYear(nextYear);
     setSelectedDecade(null);
-    runLDA(nextYear, null, numTopics, ldaMode);
+    runLDA(nextYear, null, numTopics, ldaMode, selectedPublishers);
+  };
+
+  const handleYearSelectDropdown = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const val = e.target.value;
+    if (!val) {
+      setSelectedYear(null);
+      runLDA(null, selectedDecade, numTopics, ldaMode, selectedPublishers);
+    } else {
+      const y = parseInt(val, 10);
+      setSelectedYear(y);
+      setSelectedDecade(null);
+      runLDA(y, null, numTopics, ldaMode, selectedPublishers);
+    }
   };
 
   const handleDecadeClick = (decade: number) => {
     const nextDecade = selectedDecade === decade ? null : decade;
     setSelectedDecade(nextDecade);
     setSelectedYear(null);
-    runLDA(null, nextDecade, numTopics, ldaMode);
+    runLDA(null, nextDecade, numTopics, ldaMode, selectedPublishers);
+  };
+
+  const handleTogglePublisher = (pubName: string, autoRun = true) => {
+    const nextPubs = selectedPublishers.includes(pubName)
+      ? selectedPublishers.filter((p) => p !== pubName)
+      : [...selectedPublishers, pubName];
+    setSelectedPublishers(nextPubs);
+    if (autoRun) {
+      runLDA(selectedYear, selectedDecade, numTopics, ldaMode, nextPubs);
+    }
+  };
+
+  const handleClearPublishers = () => {
+    setSelectedPublishers([]);
+    runLDA(selectedYear, selectedDecade, numTopics, ldaMode, []);
   };
 
   const handleResetTemporal = () => {
     setSelectedYear(null);
     setSelectedDecade(null);
-    runLDA(null, null, numTopics, ldaMode);
+    setSelectedPublishers([]);
+    runLDA(null, null, numTopics, ldaMode, []);
   };
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -329,13 +382,22 @@ function App() {
 
         {/* Right: Active Filter Pill, Upload, APA Modal, Scholar Badge & Right Inspector Toggle */}
         <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
-          {(selectedYear || selectedDecade) && (
+          {(selectedYear || selectedDecade || selectedPublishers.length > 0) && (
             <button
               onClick={handleResetTemporal}
-              title="Clear Temporal Filter"
+              title="Reset Sub-Corpus Filters (Timeframe & Publishers)"
               className="inline-flex items-center gap-1 px-2 py-1 rounded-md bg-neoliberal/15 border border-neoliberal/40 font-mono text-[10px] text-neoliberal hover:bg-neoliberal/25 transition-colors cursor-pointer"
             >
-              <span>{selectedYear ? `Year: ${selectedYear}` : `Decade: ${selectedDecade}s`}</span>
+              <span>
+                {[
+                  selectedYear ? `Year: ${selectedYear}` : selectedDecade ? `${selectedDecade}s` : null,
+                  selectedPublishers.length > 0
+                    ? `${selectedPublishers.length} Pub${selectedPublishers.length > 1 ? 's' : ''}`
+                    : null,
+                ]
+                  .filter(Boolean)
+                  .join(' · ')}
+              </span>
               <RotateCcw className="w-3 h-3" />
             </button>
           )}
@@ -684,6 +746,123 @@ function App() {
                   </button>
                 </div>
 
+                {/* 2B. Sub-Corpus Slicer: Timeframe (Decade / Year) & Single/Multi-Publisher Selector */}
+                <div className="bg-obsidian-950/80 border border-white/[0.07] rounded-xl p-3 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="font-mono text-[10px] uppercase tracking-widest text-neoliberal flex items-center gap-1.5 font-bold">
+                      <Building2 className="w-3 h-3 text-neoliberal" />
+                      Sub-Corpus Slicer (Time & Imprints)
+                    </span>
+                    {(selectedYear || selectedDecade || selectedPublishers.length > 0) && (
+                      <button
+                        onClick={handleResetTemporal}
+                        className="font-mono text-[9px] text-neoliberal hover:underline cursor-pointer"
+                      >
+                        Reset All
+                      </button>
+                    )}
+                  </div>
+
+                  {/* A. Decade Cohort Pills (1970s-2020s) + Specific Year Dropdown (1970-2025) */}
+                  <div>
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="font-mono text-[9px] text-parchment-300 uppercase">
+                        1. Select Decade or Exact Year
+                      </span>
+                      {selectedYear && (
+                        <span className="font-mono text-[9px] text-neoliberal font-bold">
+                          Year: {selectedYear}
+                        </span>
+                      )}
+                    </div>
+                    <div className="grid grid-cols-4 gap-1 mb-1.5">
+                      <button
+                        onClick={() => {
+                          setSelectedDecade(null);
+                          setSelectedYear(null);
+                          runLDA(null, null, numTopics, ldaMode, selectedPublishers);
+                        }}
+                        className={clsx(
+                          'py-1 px-1.5 rounded border font-mono text-[9px] transition-all cursor-pointer',
+                          !selectedDecade && !selectedYear
+                            ? 'bg-traditional/20 border-traditional text-parchment-50 font-bold'
+                            : 'bg-obsidian-900 border-white/[0.06] text-parchment-300 hover:border-white/20'
+                        )}
+                      >
+                        All Yrs
+                      </button>
+                      {[1970, 1980, 1990, 2000, 2010, 2020].map((dec) => {
+                        const isDecActive = selectedDecade === dec;
+                        return (
+                          <button
+                            key={dec}
+                            onClick={() => handleDecadeClick(dec)}
+                            className={clsx(
+                              'py-1 px-1.5 rounded border font-mono text-[9px] transition-all cursor-pointer',
+                              isDecActive
+                                ? 'bg-neoliberal/20 border-neoliberal text-neoliberal font-bold'
+                                : 'bg-obsidian-900 border-white/[0.06] text-parchment-300 hover:border-white/20'
+                            )}
+                          >
+                            {dec}s
+                          </button>
+                        );
+                      })}
+                    </div>
+
+                    {/* Exact Year Selector Dropdown (1970-2025) */}
+                    <select
+                      value={selectedYear ?? ''}
+                      onChange={handleYearSelectDropdown}
+                      aria-label="Select specific publication year (1970-2025)"
+                      className="w-full bg-obsidian-900 border border-white/10 rounded-lg px-2 py-1 text-[10px] font-mono text-parchment-100 focus:outline-none focus:border-neoliberal cursor-pointer"
+                    >
+                      <option value="">— Or Isolate Single Year (1970–2025) —</option>
+                      {Array.from({ length: 56 }, (_, i) => 1970 + i).map((yr) => (
+                        <option key={yr} value={yr}>
+                          Year {yr} ({Math.floor(yr / 10) * 10}s Cohort)
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {/* B. Single or Multi-Publisher Selector Chips */}
+                  <div className="pt-2 border-t border-white/[0.06]">
+                    <div className="flex items-center justify-between mb-1.5">
+                      <span className="font-mono text-[9px] text-parchment-300 uppercase">
+                        2. Isolate 1 or Multiple Publishers
+                      </span>
+                      {selectedPublishers.length > 0 && (
+                        <button
+                          onClick={handleClearPublishers}
+                          className="font-mono text-[9px] text-traditional hover:underline cursor-pointer"
+                        >
+                          All Imprints ({selectedPublishers.length} active)
+                        </button>
+                      )}
+                    </div>
+                    <div className="flex flex-wrap gap-1 max-h-[135px] overflow-y-auto pr-1 custom-scrollbar">
+                      {sliceablePublishers.map((pub) => {
+                        const isPubSelected = selectedPublishers.includes(pub);
+                        return (
+                          <button
+                            key={pub}
+                            onClick={() => handleTogglePublisher(pub, true)}
+                            className={clsx(
+                              'px-2 py-0.5 rounded border font-mono text-[9px] transition-all cursor-pointer truncate max-w-full',
+                              isPubSelected
+                                ? 'bg-traditional/20 border-traditional text-traditional font-bold shadow-glow-gold'
+                                : 'bg-obsidian-900/80 border-white/[0.06] text-parchment-300 hover:border-white/20 hover:text-parchment-100'
+                            )}
+                          >
+                            {isPubSelected ? `✓ ${pub}` : pub}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
+
                 {/* 3. Latent Topic Source List (Master-Detail Directory) */}
                 <div className="bg-obsidian-950/80 border border-white/[0.07] rounded-xl p-3 flex flex-col">
                   <div className="flex items-center justify-between mb-2">
@@ -1012,15 +1191,24 @@ function App() {
                           ? 'bg-neoliberal/15 text-neoliberal border-neoliberal/30'
                           : 'bg-critical/15 text-critical border-critical/30';
 
+                        const isPubActive = selectedPublishers.includes(item.publisher);
+
                         return (
                           <div
                             key={item.publisher}
-                            className="p-2.5 rounded-lg bg-obsidian-950/80 border border-white/[0.06] hover:border-white/15 transition-all"
+                            onClick={() => handleTogglePublisher(item.publisher, true)}
+                            title="Click to isolate/toggle this publisher in the active LDA sub-corpus"
+                            className={clsx(
+                              'p-2.5 rounded-lg border transition-all cursor-pointer',
+                              isPubActive
+                                ? 'bg-traditional/10 border-traditional shadow-glow-gold'
+                                : 'bg-obsidian-950/80 border-white/[0.06] hover:border-white/20'
+                            )}
                           >
                             <div className="flex items-center justify-between gap-2 mb-1.5">
                               <div className="flex items-center gap-2 min-w-0">
                                 <span className="font-serif font-bold text-sm text-parchment-50 truncate">
-                                  {item.publisher}
+                                  {isPubActive ? `✓ ${item.publisher}` : item.publisher}
                                 </span>
                                 <span
                                   className={clsx(
@@ -1135,11 +1323,15 @@ function App() {
                 coherenceScore={coherenceScore}
                 cvCoherence={cvCoherence}
                 isTraining={isTraining}
-                onRunFullPipeline={() => runLDA(selectedYear, selectedDecade, numTopics, ldaMode)}
+                onRunFullPipeline={() =>
+                  runLDA(selectedYear, selectedDecade, numTopics, ldaMode, selectedPublishers)
+                }
                 ldaMode={ldaMode}
                 onSelectLdaMode={handleModeSelect}
                 modesComparison={modesComparison}
                 sldaDiagnostics={sldaDiagnostics}
+                seedLexicons={seedLexicons}
+                religiousBoostWords={religiousBoostWords}
               />
             </>
           )}
@@ -1155,11 +1347,15 @@ function App() {
               coherenceScore={coherenceScore}
               cvCoherence={cvCoherence}
               isTraining={isTraining}
-              onRunFullPipeline={() => runLDA(selectedYear, selectedDecade, numTopics, ldaMode)}
+              onRunFullPipeline={() =>
+                runLDA(selectedYear, selectedDecade, numTopics, ldaMode, selectedPublishers)
+              }
               ldaMode={ldaMode}
               onSelectLdaMode={handleModeSelect}
               modesComparison={modesComparison}
               sldaDiagnostics={sldaDiagnostics}
+              seedLexicons={seedLexicons}
+              religiousBoostWords={religiousBoostWords}
             />
           )}
 

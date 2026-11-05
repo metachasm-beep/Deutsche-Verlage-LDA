@@ -32,7 +32,36 @@ interface PipelineExplainerProps {
   onSelectLdaMode?: (mode: LDAMode) => void;
   modesComparison?: ModeComparisonRow[];
   sldaDiagnostics?: SLDADiagnostics | null;
+  seedLexicons?: Record<string, string[]>;
+  religiousBoostWords?: string[];
 }
+
+const DEFAULT_SEED_LEXICONS: Record<string, string[]> = {
+  'Traditional / Theological': [
+    'gott', 'kirche', 'glaube', 'jesus', 'christus', 'bibel', 'theologie', 'gebet',
+    'liturgie', 'sakrament', 'gnade', 'schöpfung', 'evangelium', 'seelsorge', 'pfarrer',
+    'gemeinde', 'katholisch', 'evangelisch', 'ökumene', 'bischof', 'papst', 'predigt',
+    'frömmigkeit', 'heilig', 'auferstehung', 'erlösung',
+  ],
+  'Neoliberal / Self-Help': [
+    'selbsthilfe', 'achtsamkeit', 'erfolg', 'glück', 'heilung', 'energie', 'bewusstsein',
+    'meditation', 'wohlbefinden', 'potenzial', 'selbstliebe', 'coaching', 'resilienz',
+    'motivation', 'lebenshilfe', 'gelassenheit', 'balance', 'stress', 'erfüllung',
+    'innerer', 'harmonie', 'positiv', 'kraft', 'loslassen',
+  ],
+  'Critical / Secular': [
+    'kritik', 'wissenschaft', 'gesellschaft', 'politik', 'macht', 'ideologie', 'moderne',
+    'säkularisierung', 'demokratie', 'ethik', 'philosophie', 'soziologie', 'kapitalismus',
+    'aufklärung', 'diskurs', 'menschenrechte', 'vernunft', 'autonomie', 'pluralismus',
+    'gerechtigkeit', 'staat', 'institution',
+  ],
+};
+
+const DEFAULT_RELIGIOUS_BOOST_WORDS: string[] = [
+  'glaube', 'gott', 'spiritualität', 'kirche', 'seele', 'religion', 'seelsorge', 'gebet',
+  'heilig', 'theologie', 'christlich', 'christus', 'bibel', 'frömmigkeit', 'liturgie',
+  'erlösung', 'auferstehung', 'gnade', 'säkularität', 'selbsthilfe', 'religionskritik',
+];
 
 const PIPELINE_STAGES = [
   {
@@ -194,8 +223,16 @@ export const PipelineExplainer: React.FC<PipelineExplainerProps> = ({
   onSelectLdaMode,
   modesComparison = [],
   sldaDiagnostics,
+  seedLexicons,
+  religiousBoostWords,
 }) => {
   const [activeStage, setActiveStage] = useState<number>(6);
+  const resolvedSeeds =
+    seedLexicons && Object.keys(seedLexicons).length > 0 ? seedLexicons : DEFAULT_SEED_LEXICONS;
+  const resolvedBoostWords =
+    religiousBoostWords && religiousBoostWords.length > 0
+      ? religiousBoostWords
+      : DEFAULT_RELIGIOUS_BOOST_WORDS;
 
   // Animate through stages 1..6 when isTraining is active
   useEffect(() => {
@@ -579,6 +616,265 @@ export const PipelineExplainer: React.FC<PipelineExplainerProps> = ({
                       </td>
                     </tr>
                   ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        {/* ===================================================================
+            HOW SEEDED LDA WORKS (ASYMMETRIC η-MATRIX) & 4-PARADIGM DIFFERENCE MATRIX
+           =================================================================== */}
+        <div className="mt-4 pt-4 border-t border-white/[0.08] space-y-4">
+          <div className="grid grid-cols-1 2xl:grid-cols-12 gap-4 items-stretch">
+            {/* Left 5 Cols: Mathematical & Algorithmic Explanation of How We Seed LDA */}
+            <div className="2xl:col-span-5 bg-obsidian-950/90 border border-neoliberal/30 rounded-xl p-4 flex flex-col justify-between">
+              <div>
+                <div className="flex items-center justify-between gap-2 mb-2">
+                  <span className="px-2 py-0.5 rounded bg-neoliberal/15 border border-neoliberal/40 font-mono text-[9px] uppercase tracking-widest text-neoliberal font-bold">
+                    How Seeded LDA Works · build_seeded_eta_matrix()
+                  </span>
+                  <span className="font-mono text-[10px] text-parchment-300">
+                    Jagarlamudi et al. (2012)
+                  </span>
+                </div>
+                <h4 className="font-serif text-base sm:text-lg font-bold text-parchment-50 mb-2">
+                  3-Tier Conjugate Dirichlet Prior Matrix (η ∈ ℝ<sup>K×|V|</sup>)
+                </h4>
+                <p className="text-xs text-parchment-200 leading-relaxed mb-3">
+                  Unlike post-hoc keyword labeling, our <strong>Seeded LDA</strong> modifies the generative{' '}
+                  <strong>topic-word Dirichlet prior η</strong> before Variational Bayes inference begins. Topic slots{' '}
+                  <code className="text-traditional">k ∈ [0, K-1]</code> are cyclically partitioned via{' '}
+                  <code className="text-traditional">k mod 3</code> across <strong>RQ₁</strong>, <strong>RQ₂</strong>, and{' '}
+                  <strong>RQ₃</strong>, and every token <code className="text-neoliberal">w ∈ V</code> (including compound bigrams split on{' '}
+                  <code>_</code>) is assigned one of three conjugate prior densities:
+                </p>
+
+                <div className="space-y-2 font-mono text-[11px] mb-3">
+                  <div className="p-2.5 rounded-lg bg-obsidian-900 border-l-2 border-emerald-400 flex items-center justify-between gap-2">
+                    <div>
+                      <div className="text-emerald-300 font-bold">
+                        Tier 1 · Target Regime Seed Lemma (w ∈ S_RQm)
+                      </div>
+                      <div className="text-[10px] text-parchment-300">
+                        300× prior density boost anchors topic slot k to its assigned ideological pole
+                      </div>
+                    </div>
+                    <span className="px-2 py-1 rounded bg-emerald-500/15 text-emerald-300 font-bold shrink-0">
+                      η = 15.00
+                    </span>
+                  </div>
+
+                  <div className="p-2.5 rounded-lg bg-obsidian-900 border-l-2 border-traditional flex items-center justify-between gap-2">
+                    <div>
+                      <div className="text-traditional font-bold">
+                        Tier 2 · Neutral Corpus Vocabulary (w ∉ S_all)
+                      </div>
+                      <div className="text-[10px] text-parchment-300">
+                        Unseeded German lemmas co-cluster freely around seed anchors via document co-occurrence
+                      </div>
+                    </div>
+                    <span className="px-2 py-1 rounded bg-traditional/15 text-traditional font-bold shrink-0">
+                      η = 0.05
+                    </span>
+                  </div>
+
+                  <div className="p-2.5 rounded-lg bg-obsidian-900 border-l-2 border-critical flex items-center justify-between gap-2">
+                    <div>
+                      <div className="text-critical font-bold">
+                        Tier 3 · Competing Regime Seed Lemma (w ∈ S_RQ≠m)
+                      </div>
+                      <div className="text-[10px] text-parchment-300">
+                        5× cross-regime suppression prevents ideological bleeding across RQ₁, RQ₂ & RQ₃
+                      </div>
+                    </div>
+                    <span className="px-2 py-1 rounded bg-critical/15 text-critical font-bold shrink-0">
+                      η = 0.01
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="p-2.5 rounded-lg bg-obsidian-900/80 border border-white/[0.06] font-mono text-[10px] text-parchment-200">
+                <span className="text-neoliberal font-bold">Posterior Update Rule:</span>{' '}
+                <code>P(w | z_k) ∝ n_(k,w) + η_(k,w)</code> — Even when a seed word has moderate count{' '}
+                <code>n_(k,w)</code> in a small temporal slice, <code>η_(k,w) = 15.0</code> preserves regime alignment while allowing organic vocabulary discovery.
+              </div>
+            </div>
+
+            {/* Right 7 Cols: Interactive 72-Lemma Seed Lexicons (RQ1, RQ2, RQ3) + 21 Boost Words */}
+            <div className="2xl:col-span-7 bg-obsidian-950/90 border border-white/[0.08] rounded-xl p-4 flex flex-col justify-between">
+              <div>
+                <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
+                  <div>
+                    <span className="font-mono text-[10px] uppercase tracking-widest text-traditional font-bold">
+                      Curated German Seed Lexicons (config.ARCHETYPE_LEXICONS)
+                    </span>
+                    <h4 className="font-serif text-base sm:text-lg font-bold text-parchment-50">
+                      72 Seed Lemmas Anchoring RQ₁–RQ₃ + 21 Domain Salience Boost Signifiers
+                    </h4>
+                  </div>
+                  <span className="px-2 py-0.5 rounded bg-white/[0.05] border border-white/10 font-mono text-[10px] text-parchment-200">
+                    26 Trad · 24 Neo · 22 Crit
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-3">
+                  {/* RQ1 Seeds */}
+                  <div className="p-3 rounded-lg bg-obsidian-900/90 border border-traditional/30">
+                    <div className="flex items-center justify-between mb-1.5">
+                      <span className="font-mono text-[10px] font-bold text-traditional uppercase">
+                        RQ₁ · Traditional / Ecclesiastical
+                      </span>
+                      <span className="font-mono text-[9px] text-parchment-300">
+                        {(resolvedSeeds['Traditional / Theological'] || []).length} seeds
+                      </span>
+                    </div>
+                    <div className="flex flex-wrap gap-1 max-h-[145px] overflow-y-auto pr-1 custom-scrollbar">
+                      {(resolvedSeeds['Traditional / Theological'] || []).map((w) => (
+                        <span
+                          key={w}
+                          className="px-1.5 py-0.5 rounded bg-traditional/15 border border-traditional/30 font-mono text-[10px] text-traditional"
+                        >
+                          {w}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* RQ2 Seeds */}
+                  <div className="p-3 rounded-lg bg-obsidian-900/90 border border-neoliberal/30">
+                    <div className="flex items-center justify-between mb-1.5">
+                      <span className="font-mono text-[10px] font-bold text-neoliberal uppercase">
+                        RQ₂ · Neoliberal / Self-Help
+                      </span>
+                      <span className="font-mono text-[9px] text-parchment-300">
+                        {(resolvedSeeds['Neoliberal / Self-Help'] || []).length} seeds
+                      </span>
+                    </div>
+                    <div className="flex flex-wrap gap-1 max-h-[145px] overflow-y-auto pr-1 custom-scrollbar">
+                      {(resolvedSeeds['Neoliberal / Self-Help'] || []).map((w) => (
+                        <span
+                          key={w}
+                          className="px-1.5 py-0.5 rounded bg-neoliberal/15 border border-neoliberal/30 font-mono text-[10px] text-neoliberal"
+                        >
+                          {w}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* RQ3 Seeds */}
+                  <div className="p-3 rounded-lg bg-obsidian-900/90 border border-critical/30">
+                    <div className="flex items-center justify-between mb-1.5">
+                      <span className="font-mono text-[10px] font-bold text-critical uppercase">
+                        RQ₃ · Critical / Secular
+                      </span>
+                      <span className="font-mono text-[9px] text-parchment-300">
+                        {(resolvedSeeds['Critical / Secular'] || []).length} seeds
+                      </span>
+                    </div>
+                    <div className="flex flex-wrap gap-1 max-h-[145px] overflow-y-auto pr-1 custom-scrollbar">
+                      {(resolvedSeeds['Critical / Secular'] || []).map((w) => (
+                        <span
+                          key={w}
+                          className="px-1.5 py-0.5 rounded bg-critical/15 border border-critical/30 font-mono text-[10px] text-critical"
+                        >
+                          {w}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* 21 Religious Voice Boost Words Strip */}
+              <div className="p-2.5 rounded-lg bg-obsidian-900/80 border border-white/[0.06]">
+                <div className="flex items-center justify-between mb-1.5">
+                  <span className="font-mono text-[10px] text-emerald-300 font-bold">
+                    2× Domain Salience Boost Signifiers (RELIGIOUS_VOICE_KEYWORDS — Active in Unsupervised, Seeded & sLDA; Disabled in Unseeded):
+                  </span>
+                  <span className="font-mono text-[9px] text-parchment-300">
+                    {resolvedBoostWords.length} lemmas
+                  </span>
+                </div>
+                <div className="flex flex-wrap gap-1">
+                  {resolvedBoostWords.map((bw) => (
+                    <span
+                      key={bw}
+                      className="px-1.5 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/30 font-mono text-[9px] text-emerald-300"
+                    >
+                      {bw} (2×)
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* 6-Dimension Methodological Difference Table: Unseeded vs Unsupervised vs Seeded vs Supervised */}
+          <div className="bg-obsidian-950/90 border border-white/[0.08] rounded-xl p-4">
+            <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
+              <div>
+                <span className="font-mono text-[10px] uppercase tracking-widest text-emerald-400 font-bold">
+                  Methodological Reference Matrix for Doctoral Defense & Peer Review
+                </span>
+                <h4 className="font-serif text-base sm:text-lg font-bold text-parchment-50">
+                  Architectural Differences: Unseeded vs. Unsupervised vs. Seeded (η-Matrix) vs. Supervised (sLDA)
+                </h4>
+              </div>
+              <span className="font-mono text-[10px] text-parchment-300">
+                All 4 paradigms executable live on any Year, Decade, or Publisher sub-corpus
+              </span>
+            </div>
+
+            <div className="overflow-x-auto">
+              <table className="w-full text-left border-collapse text-[11px]">
+                <thead>
+                  <tr className="border-b border-white/15 font-mono text-[10px] uppercase text-parchment-200 bg-obsidian-900/80">
+                    <th className="py-2 px-3">Dimension</th>
+                    <th className="py-2 px-3 text-parchment-100">1. Unseeded LDA</th>
+                    <th className="py-2 px-3 text-traditional">2. Unsupervised LDA</th>
+                    <th className="py-2 px-3 text-neoliberal">3. Seeded (Guided) LDA</th>
+                    <th className="py-2 px-3 text-emerald-300">4. Supervised LDA (sLDA)</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-white/[0.06] text-parchment-200">
+                  <tr>
+                    <td className="py-2 px-3 font-mono font-bold text-parchment-100">Canonical Citation</td>
+                    <td className="py-2 px-3 font-mono">Blei, Ng, & Jordan (2003)</td>
+                    <td className="py-2 px-3 font-mono">Blei et al. (2003) + Domain TF Weighting</td>
+                    <td className="py-2 px-3 font-mono">Jagarlamudi, Daumé III, & Udupa (2012)</td>
+                    <td className="py-2 px-3 font-mono">Blei & McAuliffe (2007)</td>
+                  </tr>
+                  <tr>
+                    <td className="py-2 px-3 font-mono font-bold text-parchment-100">Token Salience Weighting</td>
+                    <td className="py-2 px-3">Pure 1× natural document frequency (no keyword boost)</td>
+                    <td className="py-2 px-3">2× token boost on 21 core religious/critical signifiers</td>
+                    <td className="py-2 px-3">2× token boost + 72 archetype seed anchors</td>
+                    <td className="py-2 px-3">2× token boost + empirical class-conditional smoothing</td>
+                  </tr>
+                  <tr>
+                    <td className="py-2 px-3 font-mono font-bold text-parchment-100">Dirichlet Prior (η)</td>
+                    <td className="py-2 px-3 font-mono">Symmetric / learned vector η = "auto"</td>
+                    <td className="py-2 px-3 font-mono">Learned vector η = "auto" (unconstrained slots)</td>
+                    <td className="py-2 px-3 font-mono">Asymmetric K×|V| matrix (15.0 / 0.05 / 0.01)</td>
+                    <td className="py-2 px-3 font-mono">Empirical label-informed K×|V| prior (η = 18.0 + 6.0·P(w|y))</td>
+                  </tr>
+                  <tr>
+                    <td className="py-2 px-3 font-mono font-bold text-parchment-100">Supervision Target (y_d)</td>
+                    <td className="py-2 px-3">None (100% blind to publisher, decade & regime labels)</td>
+                    <td className="py-2 px-3">None (topics self-organize; labels assigned post-hoc)</td>
+                    <td className="py-2 px-3">Weak lexical supervision via 3 theoretical seed lists</td>
+                    <td className="py-2 px-3">Full document-level supervision on Regime (RQ₁–₃) & Publisher via 5-fold CV Ridge head</td>
+                  </tr>
+                  <tr>
+                    <td className="py-2 px-3 font-mono font-bold text-parchment-100">Dissertation Role</td>
+                    <td className="py-2 px-3">Skeptical baseline proving RQ₁–RQ₃ are not artifacts of seeding</td>
+                    <td className="py-2 px-3">Primary exploratory discovery of sub-genres across 1970–2025</td>
+                    <td className="py-2 px-3">Confirmatory hypothesis testing when slicing small decades/publishers</td>
+                    <td className="py-2 px-3">Predictive validation quantifying how strongly θ_d predicts Publisher & Regime (75.1% CV)</td>
+                  </tr>
                 </tbody>
               </table>
             </div>

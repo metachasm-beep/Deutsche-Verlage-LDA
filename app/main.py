@@ -29,6 +29,9 @@ current_coherence = 0.0
 current_top_docs = {}
 current_num_topics = config.NUM_TOPICS
 current_lda_mode = "unsupervised"
+current_year_filter = None
+current_decade_filter = None
+current_publishers_filter = []
 current_viz_html = ""
 
 # In-memory memoization cache for instant switching across (dataset, K, year, decade)
@@ -149,7 +152,7 @@ async def reset_to_mock():
     """
     Resets the model state and reloads the default DNB Harvest / Demo Corpus.
     """
-    global current_model, current_corpus, current_dictionary, current_viz_html, current_coherence, current_top_docs, current_lda_mode
+    global current_model, current_corpus, current_dictionary, current_viz_html, current_coherence, current_top_docs, current_lda_mode, current_year_filter, current_decade_filter, current_publishers_filter
 
     try:
         current_model = None
@@ -158,6 +161,9 @@ async def reset_to_mock():
         current_coherence = 0.0
         current_top_docs = {}
         current_lda_mode = "unsupervised"
+        current_year_filter = None
+        current_decade_filter = None
+        current_publishers_filter = []
         current_viz_html = ""
         _MODEL_RUN_CACHE.clear()
         return {"status": "success", "message": "Reverted to Default Research Corpus."}
@@ -177,25 +183,42 @@ def _load_modes_report_cache() -> dict:
     return {}
 
 
+def _publisher_matches_filter(pub_name: str, selected_pubs: list) -> bool:
+    if not selected_pubs:
+        return True
+    p_low = (pub_name or "").lower().strip()
+    for target in selected_pubs:
+        t_low = target.lower().strip()
+        if t_low and (t_low in p_low or p_low in t_low):
+            return True
+    return False
+
+
 @app.post("/api/run-lda")
 async def run_lda(
     year: int = Query(None),
     decade: int = Query(None),
+    publishers: str = Query(None),
     num_topics: int = Query(None),
     lda_mode: str = Query("unsupervised")
 ):
-    global current_model, current_corpus, current_dictionary, current_viz_html, current_coherence, current_top_docs, current_num_topics, current_lda_mode
+    global current_model, current_corpus, current_dictionary, current_viz_html, current_coherence, current_top_docs, current_num_topics, current_lda_mode, current_year_filter, current_decade_filter, current_publishers_filter
 
     mode_key = lda_mode if lda_mode in lda_pipeline.LDA_MODES_META else "unsupervised"
     current_lda_mode = mode_key
+    current_year_filter = year
+    current_decade_filter = decade
+    parsed_pubs = [p.strip() for p in (publishers or "").split(",") if p.strip()]
+    current_publishers_filter = parsed_pubs
+
     data_path = _get_active_data_path()
     k_target = int(num_topics) if num_topics else config.NUM_TOPICS
     current_num_topics = k_target
 
-    # Fast-path if full-corpus K=12 mode is precomputed in app/lda_modes_report.json or running on Vercel serverless without gensim
+    # Fast-path if full-corpus K=12 mode is precomputed in app/lda_modes_report.json (no filters) or running on Vercel serverless without gensim
     modes_cache = _load_modes_report_cache()
     if (
-        (not year and not decade and k_target == config.NUM_TOPICS and mode_key in modes_cache.get("modes", {}))
+        (not year and not decade and not parsed_pubs and k_target == config.NUM_TOPICS and mode_key in modes_cache.get("modes", {}))
         or lda_pipeline.gensim is None
         or data_path == config.MOCK_DATA_PATH
         or not os.path.exists(data_path)
@@ -206,35 +229,53 @@ async def run_lda(
             "status": "success",
             "year_filtered": year,
             "decade_filtered": decade,
+            "publishers_filtered": parsed_pubs,
             "num_topics": k_target,
             "lda_mode": mode_key,
             "cached": True
         }
 
     try:
-        if year or decade:
+        if year or decade or parsed_pubs:
             rows = []
             headers = None
             for row in lda_pipeline.iter_corpus_rows(data_path):
                 if headers is None:
                     headers = list(row.keys())
-                date_val = str(row.get("date", "") or row.get("year", ""))
-                match = re.search(r"(\d{4})", date_val)
-                if not match:
-                    continue
-                r_year = int(match.group(1))
 
-                if year and r_year == year:
-                    rows.append(row)
-                elif decade and (decade <= r_year < decade + 10):
-                    rows.append(row)
+                if parsed_pubs:
+                    row_pub = lda_pipeline._clean_marc_control_chars(row.get("publisher") or "")
+                    if not _publisher_matches_filter(row_pub, parsed_pubs):
+                        continue
+
+                if year or decade:
+                    date_val = str(row.get("date", "") or row.get("year", ""))
+                    match = re.search(r"(\d{4})", date_val)
+                    if not match:
+                        continue
+                    r_year = int(match.group(1))
+
+                    if year and r_year != year:
+                        continue
+                    if decade and not (decade <= r_year < decade + 10):
+                        continue
+
+                rows.append(row)
 
             if not rows:
-                target = f"year {year}" if year else f"decade {decade}s"
-                raise HTTPException(status_code=404, detail=f"No records found for {target}")
+                target_parts = []
+                if year:
+                    target_parts.append(f"year {year}")
+                if decade:
+                    target_parts.append(f"decade {decade}s")
+                if parsed_pubs:
+                    target_parts.append(f"publishers [{', '.join(parsed_pubs)}]")
+                raise HTTPException(status_code=404, detail=f"No records found for {' & '.join(target_parts)}")
 
-            suffix = year if year else f"decade_{decade}"
-            filtered_path = os.path.join(DATA_STORAGE_DIR, f"filtered_{suffix}.csv")
+            import hashlib
+            filter_sig = f"y{year}_d{decade}_p{'_'.join(sorted(parsed_pubs))}"
+            sig_hash = hashlib.md5(filter_sig.encode("utf-8")).hexdigest()[:10]
+            filtered_path = os.path.join(DATA_STORAGE_DIR, f"filtered_{sig_hash}.csv")
             with open(filtered_path, mode="w", encoding="utf-8", newline="") as f:
                 writer = csv.DictWriter(f, fieldnames=headers)
                 writer.writeheader()
@@ -242,7 +283,7 @@ async def run_lda(
             data_path = filtered_path
 
         mtime = os.path.getmtime(data_path) if os.path.exists(data_path) else 0
-        cache_key = (data_path, mtime, year, decade, k_target, mode_key)
+        cache_key = (data_path, mtime, year, decade, tuple(sorted(parsed_pubs)), k_target, mode_key)
 
         if cache_key in _MODEL_RUN_CACHE:
             current_model, current_corpus, current_dictionary, current_coherence, current_top_docs = _MODEL_RUN_CACHE[cache_key]
@@ -266,6 +307,7 @@ async def run_lda(
             "status": "success",
             "year_filtered": year,
             "decade_filtered": decade,
+            "publishers_filtered": parsed_pubs,
             "num_topics": current_num_topics,
             "lda_mode": mode_key,
             "cached": cache_key in _MODEL_RUN_CACHE
@@ -343,7 +385,7 @@ async def get_viz():
 
 @app.get("/api/topics")
 async def get_topics(lda_mode: str = Query(None)):
-    global current_model, current_corpus, current_dictionary, current_coherence, current_top_docs, current_lda_mode
+    global current_model, current_corpus, current_dictionary, current_coherence, current_top_docs, current_lda_mode, current_year_filter, current_decade_filter, current_publishers_filter
 
     if lda_mode and lda_mode in lda_pipeline.LDA_MODES_META:
         current_lda_mode = lda_mode
@@ -352,8 +394,15 @@ async def get_topics(lda_mode: str = Query(None)):
     modes_cache = _load_modes_report_cache()
     modes_comparison = modes_cache.get("comparison", [])
     available_modes = list(lda_pipeline.LDA_MODES_META.values())
+    seed_lexicons_payload = {k: sorted(list(v)) for k, v in config.ARCHETYPE_LEXICONS.items()}
+    boost_words_payload = sorted(list(config.RELIGIOUS_VOICE_KEYWORDS))
+    active_filters_payload = {
+        "year": current_year_filter,
+        "decade": current_decade_filter,
+        "publishers": current_publishers_filter
+    }
 
-    # Fast-path if current_model is None (cold start or precomputed full-corpus K=12 mode switch)
+    # Fast-path if current_model is None (cold start, Vercel serverless, or precomputed full-corpus K=12 mode switch)
     report_path = os.path.join(config.BASE_DIR, "app", "lda_topics_report.json")
     if not current_model or not current_corpus:
         rep = None
@@ -374,22 +423,50 @@ async def get_topics(lda_mode: str = Query(None)):
 
             for idx, t in enumerate(rep.get("topics", [])):
                 t_id = int(t.get("topic_id", idx + 1)) - 1
-                t_pubs = t.get("top_publishers", [])
+                raw_t_pubs = t.get("top_publishers", [])
+                if current_publishers_filter:
+                    t_pubs = [
+                        p for p in raw_t_pubs
+                        if _publisher_matches_filter(p.get("publisher", ""), current_publishers_filter)
+                    ] or raw_t_pubs
+                else:
+                    t_pubs = raw_t_pubs
+
                 top_pubs_dict = {p["publisher"]: p["share"] for p in t_pubs}
                 arch_info = t.get("archetype", {})
                 arch_label = arch_info.get("label", "Hybrid / Discursive Mediation")
-                prev = round(100.0 / max(1, len(rep.get("topics", []))), 2)
+
+                # Weight prevalence by selected publisher share or decade share if filtered on serverless
+                base_prev = round(100.0 / max(1, len(rep.get("topics", []))), 2)
+                if current_publishers_filter:
+                    matched_share = sum(
+                        p["share"] for p in raw_t_pubs
+                        if _publisher_matches_filter(p.get("publisher", ""), current_publishers_filter)
+                    )
+                    prev = round(max(1.5, matched_share), 2)
+                elif current_decade_filter:
+                    dec_key = f"{current_decade_filter}s"
+                    dec_map = rep.get("diachronic_decade_shares", {}).get(dec_key, {})
+                    prev = round(float(dec_map.get(f"Topic {t_id + 1}", base_prev)), 2)
+                else:
+                    prev = base_prev
 
                 for p_item in t_pubs:
                     pub_arch_accum[p_item["publisher"]][arch_label] += (p_item["share"] * prev) / 100.0
 
                 raw_docs = t.get("representative_docs", [])
+                filtered_raw_docs = [
+                    d for d in raw_docs
+                    if _publisher_matches_filter(d.get("publisher", ""), current_publishers_filter)
+                ] if current_publishers_filter else raw_docs
+                active_raw_docs = filtered_raw_docs if filtered_raw_docs else raw_docs
+
                 formatted_docs = [
                     {
                         **d,
                         "year": d.get("date") or d.get("year") or "o. J."
                     }
-                    for d in raw_docs
+                    for d in active_raw_docs
                 ]
                 rep_docs_map[t_id] = formatted_docs
 
@@ -409,6 +486,8 @@ async def get_topics(lda_mode: str = Query(None)):
 
             publisher_archetypes = []
             for pub, arch_map in sorted(pub_arch_accum.items()):
+                if current_publishers_filter and not _publisher_matches_filter(pub, current_publishers_filter):
+                    continue
                 total_w = sum(arch_map.values()) or 1.0
                 trad = round((arch_map.get("Traditional / Ecclesiastical", 0.0) / total_w) * 100, 1)
                 neolib = round((arch_map.get("Neoliberal / Self-Optimization", 0.0) / total_w) * 100, 1)
@@ -430,6 +509,9 @@ async def get_topics(lda_mode: str = Query(None)):
                 "available_modes": available_modes,
                 "modes_comparison": modes_comparison,
                 "slda_diagnostics": rep.get("slda_diagnostics", {}),
+                "seed_lexicons": seed_lexicons_payload,
+                "religious_boost_words": boost_words_payload,
+                "active_filters": active_filters_payload,
                 "topics": rep_topics,
                 "num_topics": k_val,
                 "corpus_documents": rep.get("corpus_documents", 1863),
@@ -529,6 +611,9 @@ async def get_topics(lda_mode: str = Query(None)):
         "available_modes": available_modes,
         "modes_comparison": modes_comparison,
         "slda_diagnostics": slda_diagnostics,
+        "seed_lexicons": seed_lexicons_payload,
+        "religious_boost_words": boost_words_payload,
+        "active_filters": active_filters_payload,
         "topics": topics,
         "num_topics": current_model.num_topics,
         "corpus_documents": doc_count,
