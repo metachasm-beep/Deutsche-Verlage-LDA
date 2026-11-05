@@ -161,20 +161,28 @@ def stream_green_oa_for_target_book(title: str, author: str, min_words: int = 15
 
 def is_clean_modern_german(text: str) -> bool:
     """
-    Verifies that an OCR stream is genuine modern high German (not Spanish/French/Latin/English
+    Verifies that an OCR/PDF stream is genuine modern High German (not purely foreign
     and not a corrupted 19th-century Fraktur scan with 'ift', 'baß', 'ober', 'unb').
+    Tolerates standard English abstracts or Latin theological citations in German dissertations.
     """
-    sample_words = [w.lower() for w in re.findall(r"\b[a-zA-ZäöüÄÖÜß]+\b", text[:25000])]
-    if len(sample_words) < 200:
+    sample_words = [w.lower() for w in re.findall(r"\b[a-zA-ZäöüÄÖÜß]+\b", text[:60000])]
+    if len(sample_words) < 100:
         return False
     total = len(sample_words)
-    de_core = sum(1 for w in sample_words if w in {"der", "die", "das", "und", "in", "von", "mit", "nicht", "ist", "auf", "für"})
-    fraktur_or_foreign = sum(
+    de_core = sum(
         1 for w in sample_words
-        if w in {"ift", "baß", "ober", "unb", "ber", "bie", "bas", "würbe", "que", "del", "por", "para", "les", "des", "quod", "cum", "domini", "the", "and"}
+        if w in {
+            "der", "die", "das", "des", "dem", "den", "und", "in", "von", "mit",
+            "nicht", "ist", "auf", "für", "eine", "einer", "einem", "sich", "auch", "als", "werden"
+        }
     )
-    # Require >= 6% modern German function words and < 1% Fraktur/foreign noise
-    return (de_core / total) >= 0.06 and (fraktur_or_foreign / total) < 0.01
+    fraktur_corrupt = sum(
+        1 for w in sample_words
+        if w in {"ift", "baß", "ober", "unb", "ber", "bie", "bas", "würbe"}
+    )
+    # Require >= 4.5% modern German function words and < 1.5% Fraktur OCR corruption
+    return (de_core / total) >= 0.045 and (fraktur_corrupt / total) < 0.015
+
 
 
 def stream_archive_org_for_target_book(

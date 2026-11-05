@@ -105,20 +105,20 @@ In [`_extract_tokens_from_doc`](file:///f:/PhD%20AG/lda_pipeline.py#L213-L238), 
 ### 4.6 Collocation (`Gensim Phrases`) & Sublinear `TF-IDF` Low-Information Ubiquity Filtering (Santana et al., 2025, §71–73)
 In [`run_pipeline`](file:///f:/PhD%20AG/lda_pipeline.py#L859-L895), `gensim.models.Phrases` (`min_count=5, threshold=10`) binds statistically significant bigrams while unpacking artificial self-bigrams (`w_w -> w`). Following `dictionary.filter_extremes(no_below=5, no_above=0.55, keep_n=25000)`, [`apply_tfidf_low_info_filter`](file:///f:/PhD%20AG/lda_pipeline.py#L822-L854) applies `gensim.models.TfidfModel(corpus, smartirs='ntc')` (sublinear term frequency with inverse document frequency and cosine normalization per Santana et al., 2025, §72–73) to prune ultra-low-information ubiquity tokens (`min_tfidf = 0.015`) while protecting `CANONICAL_THEO_PHIL_WHITELIST` and `RELIGIOUS_VOICE_KEYWORDS`.
 
-### 4.7 Rule 5A — Empirical Document-Length Distribution Audit Across the Wave-10 Corpus ($D = 384,074$, Santana et al., 2025, §74–80, Fig. 8)
-As Santana et al. (2025, §74–80, Fig. 8) emphasize, topic modelers must explicitly audit and report the word-length distribution of their corpus across heterogeneous document strata, calibrating long monographs via passage segmentation while cross-validating shorter paratexts/abstracts via contextual embeddings (`BERTopic`). The table below reports the exact empirical word-length distribution exported to [`app/data_summary.json`](file:///f:/PhD%20AG/app/data_summary.json) (`document_length_distribution`):
+### 4.7 Rule 5A — Empirical Document-Length Distribution Audit Across the Wave-11 Corpus ($D = 461,785$, Santana et al., 2025, §74–80, Fig. 8)
+As Santana et al. (2025, §74–80, Fig. 8) emphasize, topic modelers must explicitly audit and report the word-length distribution of their corpus across heterogeneous document strata, calibrating long monographs via passage segmentation while cross-validating shorter paratexts/abstracts via contextual embeddings (`BERTopic`). The table below reports the exact empirical word-length distribution exported to [`app/data_summary.json`](file:///f:/PhD%20AG/app/data_summary.json) (`document_length_distribution`) and cataloged in [`data/primary_texts/DNB_FULLTEXT_MASTER_MANIFEST.csv`](file:///f:/PhD%20AG/data/primary_texts/DNB_FULLTEXT_MASTER_MANIFEST.csv) (`82,283` unique works) and [`data/primary_texts/DNB_OPEN_ACCESS_FULLBOOKS_INVENTORY.csv`](file:///f:/PhD%20AG/data/primary_texts/DNB_OPEN_ACCESS_FULLBOOKS_INVENTORY.csv) (`12,739` complete full-text books):
 
 | Corpus Stratum (`corpus_layer`) | Documents ($D$) | Unique Works | Mean Words ($\mu$) | SD ($\sigma$) | Median ($P_{50}$) | IQR ($P_{25}\text{–}P_{75}$) | Min–Max Words | Total German Words |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| **`hathitrust_ef_fullbook_print`** *(HTRC EF 2.0 Printed Books)* | $243,198$ | $4,019$ books | **`997.6`** | `37.8` | `1,000.0` | `0.0` (`1,000–1,000`) | `80–1,079` | $242,612,814$ |
-| **`dnb_deposit_inhaltstext`** *(DNB `deposit.dnb.de` & `/blurb/` Abstracts)* | $46,422$ | $46,410$ works | **`133.8`** | `91.7` | `127.0` | `115.0` (`62–177`) | `30–6,135` | $6,212,525$ |
-| **`dnb_oa_fullbook`** *(DNB `/34` `location=onlinefree` & `$z="kostenfrei"` OA Books/EPUBs)* | $38,505$ | $2,409$ books | **`980.5`** | `105.4` | `1,000.0` | `0.0` (`1,000–1,000`) | `81–1,196` | $37,755,730$ |
+| **`hathitrust_ef_fullbook_print`** *(HTRC EF 2.0 Printed Books)* | $243,751$ | $4,031$ books | **`997.6`** | `37.8` | `1,000.0` | `0.0` (`1,000–1,000`) | `80–1,079` | $243,164,001$ |
+| **`dnb_oa_fullbook`** *(DNB `/34` & `MARC 856` `location=onlinefree` & `$z="kostenfrei"` OA Books/EPUBs)* | $115,002$ | $8,553$ books | **`972.9`** | `125.4` | `1,000.0` | `0.0` (`1,000–1,000`) | `81–1,196` | $111,879,881$ |
+| **`dnb_deposit_inhaltstext`** *(DNB `deposit.dnb.de` & `/blurb/` Abstracts)* | $47,083$ | $47,065$ works | **`133.1`** | `91.7` | `127.0` | `117.0` (`60–177`) | `30–6,135` | $6,265,658$ |
 | **`dnb_toc_pdf_fulltext`** *(DNB `/04` Digitized TOC & Sample PDFs)* | $32,021$ | $32,010$ works | **`454.6`** | `440.2` | `308.0` | `389.0` (`177–566`) | `65–8,478` | $14,556,493$ |
 | **`gbv_direct_fulltext_pdf`** *(GBV / K10plus Consortial TOC PDFs & Blurbs)* | $14,199$ | $13,174$ works | **`241.2`** | `252.4` | `177.0` | `153.0` (`119–272`) | `7–5,257` | $3,425,377$ |
-| **`entire_fulltext_book_cloud` + `gbv_kostenfrei_*` + `archive_org_*`** *(OA Full Books)* | $5,532$ | $249$ books | **`987.0`** | `85.4` | `1,000.0` | `0.0` (`1,000–1,000`) | `84–1,078` | $5,461,111$ |
+| **`entire_fulltext_book_cloud` + `gbv_kostenfrei_*` + `archive_org_*`** *(OA Full Books)* | $5,532$ | $236$ books | **`987.0`** | `85.4` | `1,000.0` | `0.0` (`1,000–1,000`) | `84–1,078` | $5,461,111$ |
 | **`drm_fallback_multi_api_enriched`** *(GBV `MARC 520`/`BKL`/`GND` & Multi-API)* | $3,561$ | $3,530$ works | **`70.3`** | `142.7` | `32.0` | `22.0` (`23–45`) | `3–1,074` | $250,221$ |
 | **`primary_cloud_oa_abstract`** *(OpenAlex `abstract_inverted_index` Abstracts)* | $627$ | $626$ works | **`179.8`** | `145.9` | `138.0` | `148.0` (`87–235`) | `25–1,377` | $112,720$ |
-| **Total Wave-10 Master Corpus (`1970–2025`)** | **$384,074$** | **$75,994$ unique works** | **`808.1`** | **`362.0`** | **`1,000.0`** | **`38.0` (`962–1,000`)** | **`3–8,478`** | **$310,387,447$** |
+| **Total Wave-11 Master Corpus (`1970–2025`)** | **$461,785$** | **$82,283$ unique works** | **`834.0`** | **`341.1`** | **`1,000.0`** | **`0.0` (`1,000–1,000`)** | **`3–8,478`** | **$385,115,918$** |
 
 ### 4.8 Rule 5B — FAIR / DDI & Software-Hardware Environment Specification Table (Santana et al., 2025, §28–53; Jiménez-Badillo et al., 2020, §16)
 To guarantee strict computational reproducibility under the **FAIR Principles** (Wilkinson et al., 2016) and **DDI (Data Documentation Initiative)** standards advocated by Santana et al. (2025, §34–53), [`collect_fair_ddi_environment`](file:///f:/PhD%20AG/lda_pipeline.py#L1063-L1095) records and exports the exact runtime environment into [`app/data_summary.json`](file:///f:/PhD%20AG/app/data_summary.json) (`fair_ddi_environment`):
@@ -131,7 +131,7 @@ To guarantee strict computational reproducibility under the **FAIR Principles** 
 | **Bayesian Topic Modeling & `TF-IDF`** | `gensim 4.4.0` (`LdaModel`, `Phrases`, `TfidfModel`, `Doc2Vec`) | Online Variational Bayes LDA (`passes=15, chunksize=1500, random_state=100`), `Phrases(min_count=5, threshold=10)`, `TfidfModel(smartirs='ntc')`. |
 | **Statistical & Manifold Learning** | `scikit-learn 1.7.2`, `scipy 1.15.3`, `numpy 2.2.6`, `pandas 2.3.3` | 5-fold CV `sLDA` Ridge/Softmax head (`seed=42`), `TruncatedSVD` + Spherical `KMeans` (`seed=42`), Dunning's $G^2$ & OLS STM regressions. |
 | **PDF / Archival Full-Text Extraction** | `PyMuPDF 1.28.2` | Native stream extraction for DNB `/34` OA monographs, DNB `/04` TOC PDFs, and GBV/OpenAlex PDFs. |
-| **Metadata & Legal TDM Compliance** | `MARC21-xml`, `PICA+`, `HTRC EF 2.0`, `DDI 2.5/3.3`, `§ 60d UrhG` | Non-consumptive Derived Text Formats (*Abgeleitete Textformate*, Schöch et al., 2020) across 17 GitHub-safe CSV shards (`<86 MB` each). |
+| **Metadata & Legal TDM Compliance** | `MARC21-xml`, `PICA+`, `HTRC EF 2.0`, `DDI 2.5/3.3`, `§ 60d UrhG` | Non-consumptive Derived Text Formats (*Abgeleitete Textformate*, Schöch et al., 2020) across 20 GitHub-safe CSV shards (`<88 MB` each). |
 
 ---
 
@@ -144,8 +144,8 @@ The hyperparameter settings in [config.py](file:///f:/PhD%20AG/config.py#L12-L16
 
 | Parameter | Current Setting | Methodological Role & Tuning Guidance |
 | :--- | :--- | :--- |
-| [`NUM_TOPICS`](file:///f:/PhD%20AG/config.py#L17) ($K$) | `12` | Defines the number of latent clusters (Meso-Level $C_v$ Inflection across the $384,074$-document Wave-10 corpus). |
-| [`PASSES`](file:///f:/PhD%20AG/config.py#L18) | `15` | Number of full training sweeps through the $384,071$-document corpus (`chunksize=1500`). |
+| [`NUM_TOPICS`](file:///f:/PhD%20AG/config.py#L17) ($K$) | `12` | Defines the number of latent clusters (Meso-Level $C_v$ Inflection across the $461,785$-document Wave-11 corpus). |
+| [`PASSES`](file:///f:/PhD%20AG/config.py#L18) | `15` | Number of full training sweeps through the $461,782$-document corpus (`chunksize=1500`). |
 | [`ALPHA`](file:///f:/PhD%20AG/config.py#L19) ($\alpha$) | `"auto"` | Learns an asymmetric document-topic prior from the data. High $\alpha$ implies documents contain many topics; low $\alpha$ forces documents to belong to a single dominant voice. |
 | `random_state` | `100` | Fixed random seed in [`LdaModel`](file:///f:/PhD%20AG/lda_pipeline.py) ensuring 100% deterministic reproducibility for doctoral thesis verification. |
 
@@ -154,13 +154,13 @@ Perplexity alone often fails to correlate with human interpretability of topics 
 
 - **$U_{\text{Mass}}$ Coherence (Default in [`lda_pipeline.py`](file:///f:/PhD%20AG/lda_pipeline.py)):** Measures asymmetrical empirical conditional log-probability between top topic words $w_i, w_j$ using document co-occurrence counts $D(w_i, w_j)$ within the corpus itself:
   $$C_{U_{\text{Mass}}} = \frac{2}{N(N-1)} \sum_{i=2}^{N} \sum_{j=1}^{i-1} \log \frac{D(w_i, w_j) + \epsilon}{D(w_j)}$$
-  On the Wave-10 master corpus ($D = 384,074$ documents/passages, $310,387,447$ German words across $75,994$ unique works, $|V| = 25,000$ lemmas & bigrams), $K = 12$ achieves **$U_{\text{Mass}} = -2.6950$** (Supervised sLDA **$U_{\text{Mass}} = -1.9650$**).
+  On the Wave-11 master corpus ($D = 461,785$ records / $461,782$ modeled documents, $385,115,918$ German words across $82,283$ unique works and $12,739$ complete full-text books, $|V| = 25,000$ lemmas & bigrams), $K = 12$ achieves **$U_{\text{Mass}} = -2.4760$** (Supervised sLDA **$U_{\text{Mass}} = -1.9650$**).
 - **Corpus Prevalence Calculation:** In [`get_topics`](file:///f:/PhD%20AG/app/main.py), the backend computes the macro-level weight of each topic $k$ across the entire corpus of $M$ documents:
   $$\text{Prevalence}(k) = \left( \frac{1}{M} \sum_{d=1}^{M} \theta_{d,k} \right) \times 100\%$$
 - **Source Evidence Extraction:** To prevent decontextualized misinterpretation of word lists, [`run_pipeline`](file:///f:/PhD%20AG/lda_pipeline.py) ranks all documents by their posterior probability $\theta_{d,k}$ for each topic $k$ and extracts the highest-ranking representative full-book passages (`representative_docs`).
 
-### 5.3 Multi-Wave Corpus Scaling & Coherence Progression (`1970–2025`, $D = 384,074$)
-Scaling from the initial $N = 160$ pilot metadata sample to the ten-wave complete multi-repository corpus ($4,019$ HathiTrust HTRC printed books + $2,409$ `location=onlinefree` & sibling-matched `$z="kostenfrei"` DNB `/34` open-access full books & EPUBs + $211$ OpenAlex/GBV OA books & chapters + $32,035$ digitized DNB `/04` `Inhaltsverzeichnis` & reading-sample PDFs/HTMLs + $46,653$ DNB `deposit.dnb.de` & `/blurb/` `Inhaltstexte` + $17,031$ GBV / K10plus consortial TOC PDFs & `MARC 520` / `BKL` / `GND` enriched works + $627$ OpenAlex reconstructed `abstract_inverted_index` scholarly abstracts + $38$ Internet Archive books + $702$ multi-API deep-enriched works = **$384,074$ documents, $310,387,447$ German words across $75,994$ unique works, $|V| = 25,000$ lemmas and bigrams**) dramatically improves intrinsic $U_{\text{Mass}}$ coherence (see full empirical chapters in [DISSERTATION_EMPIRICAL_CHAPTERS.md](file:///f:/PhD%20AG/docs/DISSERTATION_EMPIRICAL_CHAPTERS.md) and [COHERENCE_GRID_REPORT.md](file:///f:/PhD%20AG/docs/COHERENCE_GRID_REPORT.md)):
+### 5.3 Multi-Wave Corpus Scaling & Coherence Progression (`1970–2025`, $D = 461,785$)
+Scaling from the initial $N = 160$ pilot metadata sample to the eleven-wave complete multi-repository corpus ($4,031$ HathiTrust HTRC printed books + $8,553$ `location=onlinefree` & sibling-matched `$z="kostenfrei"` DNB `/34` & `MARC 856` open-access full books & EPUBs + $236$ OpenAlex/GBV/Archive.org OA books + $32,021$ digitized DNB `/04` `Inhaltsverzeichnis` & reading-sample PDFs/HTMLs + $47,083$ DNB `deposit.dnb.de` & `/blurb/` `Inhaltstexte` + $17,760$ GBV / K10plus consortial TOC PDFs & `MARC 520` / `BKL` / `GND` enriched works + $627$ OpenAlex reconstructed `abstract_inverted_index` scholarly abstracts = **$461,785$ documents, $385,115,918$ German words across $82,283$ unique works and $12,739$ complete full-text books, $|V| = 25,000$ lemmas and bigrams**) dramatically improves intrinsic $U_{\text{Mass}}$ coherence (see full empirical chapters in [DISSERTATION_EMPIRICAL_CHAPTERS.md](file:///f:/PhD%20AG/docs/DISSERTATION_EMPIRICAL_CHAPTERS.md) and [COHERENCE_GRID_REPORT.md](file:///f:/PhD%20AG/docs/COHERENCE_GRID_REPORT.md)):
 
 | Number of Topics ($K$) | $C_v$ Coherence | $U_{\text{Mass}}$ Coherence | Log Perplexity Bound | Discursive Resolution Level |
 | :---: | :---: | :---: | :---: | :--- |
@@ -168,7 +168,7 @@ Scaling from the initial $N = 160$ pilot metadata sample to the ten-wave complet
 | **6** | `0.3440` | `-7.2369` | `-7.9608` | Transitional split |
 | **8** | `0.3160` | `-8.8889` | `-8.0393` | Transitional split |
 | **10** | `0.3350` | `-9.4710` | `-8.0833` | Transitional split |
-| **12** | `0.3905` | **`-2.6950` *(Wave 10, D=384,074)* ** | `-8.1008` | **Meso-Level Inflection** (Selected 12-Topic Dissertation Regime) |
+| **12** | `0.3905` | **`-2.4760` *(Wave 11, D=461,785)* ** | `-8.1008` | **Meso-Level Inflection** (Selected 12-Topic Dissertation Regime) |
 | **15** | `0.3831` | `-9.7105` | `-9.7275` | Meso-level plateau |
 | **20** | `0.4091` | `-9.9323` | `-10.7597` | High-resolution thematic clustering |
 | **25** | `0.3887` | `-8.4980` | `-11.5375` | High-resolution plateau |
@@ -183,7 +183,7 @@ xychart-beta
 ```
 
 > [!TIP]
-> **Methodological Interpretation for the Dissertation:** On the full $384,074$-document Wave-10 corpus, the $K = 12$ Meso-Regime ($U_{\text{Mass}} = -2.6950$) cleanly resolves all twelve major discursive domains across `1970–2025` and is cross-validated via Quanteda/STM covariate regressions ([`scripts/quanteda_stm_analytics.py`](file:///f:/PhD%20AG/scripts/quanteda_stm_analytics.py)) and neural `Doc2Vec` + `c-TF-IDF` BERTopic clustering ([`scripts/bertopic_german_pipeline.py`](file:///f:/PhD%20AG/scripts/bertopic_german_pipeline.py)).
+> **Methodological Interpretation for the Dissertation:** On the full $461,785$-document Wave-11 corpus, the $K = 12$ Meso-Regime ($U_{\text{Mass}} = -2.4760$) cleanly resolves all twelve major discursive domains across `1970–2025` and is cross-validated via Quanteda/STM covariate regressions ([`scripts/quanteda_stm_analytics.py`](file:///f:/PhD%20AG/scripts/quanteda_stm_analytics.py)) and neural `Doc2Vec` + `c-TF-IDF` BERTopic clustering ([`scripts/bertopic_german_pipeline.py`](file:///f:/PhD%20AG/scripts/bertopic_german_pipeline.py)).
 
 ---
 

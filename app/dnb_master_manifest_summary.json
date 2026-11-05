@@ -1,0 +1,40 @@
+{
+  "total_unique_works_1970_2025": 82283,
+  "total_complete_fulltext_books": 12739,
+  "total_dnb_oa_fulltext_books": 8553,
+  "total_hathitrust_fulltext_books": 3950,
+  "total_passages_in_corpus": 461785,
+  "total_words_in_corpus": 385117224,
+  "works_by_highest_tier": {
+    "Tier 2: DNB Digitized /04 Inhaltsverzeichnis & Reading-Sample PDF": 30258,
+    "Tier 3: DNB Deposit.dnb.de Inhaltstext, MARC 520 Abstract & Indexing": 23370,
+    "Tier 2: DNB/GBV Digitized /04 Inhaltsverzeichnis & Reading-Sample PDF": 12488,
+    "Tier 1A: DNB Open-Access Full-Text Monograph/Dissertation (/34 & MARC 856)": 8553,
+    "Tier 1B: DNB/GBV Multi-ISBN Matched HathiTrust Full-Book Stream": 3950,
+    "Tier 3B: Extended Paratext & Abstract (drm_fallback_multi_api_enriched)": 2861,
+    "Tier 3B: Extended Paratext & Abstract (primary_cloud_oa_abstract)": 567,
+    "Tier 1C: Direct Publisher / Repository Open-Access Full-Text Monograph": 236
+  },
+  "works_by_primary_layer": {
+    "dnb_toc_pdf_fulltext": 30258,
+    "dnb_deposit_inhaltstext": 23370,
+    "gbv_direct_fulltext_pdf": 12488,
+    "dnb_oa_fullbook": 8553,
+    "hathitrust_ef_fullbook_print": 3950,
+    "drm_fallback_multi_api_enriched": 2861,
+    "primary_cloud_oa_abstract": 567,
+    "entire_fulltext_book_cloud": 181,
+    "gbv_kostenfrei_fullbook_pdf": 28,
+    "archive_org_fulltext_book": 20,
+    "primary_cloud_oa_fulltext": 4,
+    "primary_fulltext": 3
+  },
+  "fulltext_books_by_decade": {
+    "1970s": 740,
+    "1980s": 1278,
+    "1990s": 1703,
+    "2000s": 3707,
+    "2010s": 2118,
+    "2020s": 3193
+  }
+}

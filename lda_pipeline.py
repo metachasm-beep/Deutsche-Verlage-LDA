@@ -122,7 +122,14 @@ FRAKTUR_AND_META_NOISE = {
     "alexander", "christoph", "matthias", "bernhard", "reinhard", "manfred", "günter",
     "helmut", "horst", "harald", "roland", "rüdiger", "hartmut", "joachim", "norbert",
     "rainer", "frank", "uwe", "dirk", "jörg", "heinz", "erich", "fritz", "gottfried",
-    "ebeling", "gen", "abb", "tab", "hrsg_von", "verf", "bearb", "übers"
+    "ebeling", "gen", "abb", "tab", "hrsg_von", "verf", "bearb", "übers",
+    "open", "access", "open_access", "creative", "commons", "creative_commons", "creativecommons",
+    "creativecommon", "creativecommons_org", "creativecommon_org", "org_licenses", "license",
+    "licenses", "lizenz", "org", "com", "net", "edu", "gov", "de", "html", "htm", "pdf", "epub",
+    "xml", "url", "urn", "nbn", "hdl", "handle", "orcid", "ror", "heft", "akte", "akten",
+    "handschrift", "handschriften", "jahrgang", "signatur", "bestand", "wiesbaden", "main",
+    "frankfurt_main", "ten", "isch", "ische", "ischen", "ischer", "isches", "ung", "ungen",
+    "keit", "keiten", "heit", "heiten", "lich", "liche", "lichen", "licher", "liches", "ver", "ent", "zer"
 }
 
 # Canonical theological, philosophical, and biblical figures preserved during author/entity filtering
@@ -448,7 +455,13 @@ def _infer_doc_ground_truth_regime(row: dict, doc_tokens: list) -> str:
     return max(scores, key=scores.get)
 
 
-def build_seeded_eta_matrix(dictionary, num_topics: int, seed_boost: float = 15.0, base_eta: float = 0.05):
+def build_seeded_eta_matrix(
+    dictionary,
+    num_topics: int,
+    seed_boost: float = 15.0,
+    base_eta: float = 0.05,
+    custom_seed_lexicons: dict = None,
+):
     """
     Constructs an asymmetric K x |V| Dirichlet prior matrix (eta) anchored to
     RQ1 (Traditional), RQ2 (Neoliberal), and RQ3 (Critical) seed lexicons.
@@ -461,14 +474,21 @@ def build_seeded_eta_matrix(dictionary, num_topics: int, seed_boost: float = 15.
         "Neoliberal / Self-Optimization",
         "Critical / Secular-Humanist",
     ]
+    active_lexicons = {}
+    for arch in archetype_names:
+        if custom_seed_lexicons and arch in custom_seed_lexicons and custom_seed_lexicons[arch]:
+            active_lexicons[arch] = {str(w).strip().lower() for w in custom_seed_lexicons[arch] if str(w).strip()}
+        else:
+            active_lexicons[arch] = set(config.ARCHETYPE_LEXICONS[arch])
+
     seed_assignments = {}
 
     for t_id in range(num_topics):
         target_arch = archetype_names[t_id % 3]
         seed_assignments[t_id] = target_arch
-        lex_set = config.ARCHETYPE_LEXICONS[target_arch]
+        lex_set = active_lexicons[target_arch]
         other_lex = set().union(*[
-            s for a, s in config.ARCHETYPE_LEXICONS.items() if a != target_arch
+            s for a, s in active_lexicons.items() if a != target_arch
         ])
 
         for token_id, word in dictionary.items():
@@ -869,7 +889,14 @@ def apply_tfidf_low_info_filter(corpus: list, dictionary, min_tfidf: float = 0.0
     }
 
 
-def run_pipeline(data_path, num_topics: int = None, lda_mode: str = "unsupervised"):
+def run_pipeline(
+    data_path,
+    num_topics: int = None,
+    lda_mode: str = "unsupervised",
+    seed_boost: float = 15.0,
+    base_eta: float = 0.05,
+    custom_seed_lexicons: dict = None,
+):
     """
     Executes the end-to-end German LDA pipeline supporting all 4 methodological paradigms:
       - 'unseeded': Pure Unsupervised & Unseeded (1x natural token frequencies, eta='auto')
@@ -936,7 +963,13 @@ def run_pipeline(data_path, num_topics: int = None, lda_mode: str = "unsupervise
     # Configure Dirichlet word prior (eta) according to lda_mode
     seed_assignments = {}
     if mode_key == "seeded":
-        eta_param, seed_assignments = build_seeded_eta_matrix(dictionary, effective_k)
+        eta_param, seed_assignments = build_seeded_eta_matrix(
+            dictionary,
+            effective_k,
+            seed_boost=seed_boost,
+            base_eta=base_eta,
+            custom_seed_lexicons=custom_seed_lexicons,
+        )
     elif mode_key == "supervised":
         eta_param, seed_assignments = build_supervised_eta_matrix(
             dictionary, processed_n_grams, filtered_rows, effective_k

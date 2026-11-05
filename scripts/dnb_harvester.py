@@ -267,6 +267,11 @@ def fetch_dnb_blurb(blurb_url: str) -> str:
 
 
 _THREAD_LOCAL = threading.local()
+_FITZ_LOCK = threading.Lock()
+try:
+    fitz.TOOLS.mupdf_display_errors(False)
+except Exception:
+    pass
 
 
 def _get_thread_session() -> requests.Session:
@@ -281,22 +286,59 @@ def _get_thread_session() -> requests.Session:
     return sess
 
 
-def stream_dnb_34_pdf_or_epub_in_ram(url: str, max_pages: int = 90, max_bytes: int = 20 * 1024 * 1024):
+from urllib.parse import urljoin
+
+
+def _extract_pdf_url_from_html(html_str: str, base_url: str) -> str:
+    """
+    Extracts direct PDF download URLs from repository landing pages (OPUS, DSpace, MyCoRe,
+    EPrints, SSOAR, Zenodo, De Gruyter, Transcript, Nomos, V&R, Springer) when a DNB
+    MARC 856 URN/DOI/Resolving-System link resolves to an HTML splash page.
+    """
+    if not html_str:
+        return ""
+    patterns = [
+        r'<meta[^>]+name=["\'](?:citation_pdf_url|eprints\.document_url|bepress_citation_pdf_url|wkhealth_pdf_url)["\'][^>]+content=["\']([^"\']+)["\']',
+        r'<meta[^>]+content=["\']([^"\']+)["\'][^>]+name=["\'](?:citation_pdf_url|eprints\.document_url|bepress_citation_pdf_url|wkhealth_pdf_url)["\']',
+        r'<link[^>]+type=["\']application/pdf["\'][^>]+href=["\']([^"\']+)["\']',
+        r'<link[^>]+href=["\']([^"\']+)["\'][^>]+type=["\']application/pdf["\']',
+        r'href=["\']([^"\']+(?:/bitstream/[^"\']+\.pdf|/files/\d+/[^"\']+\.pdf|/frontdoor/deliver/index/docId/\d+/file/[^"\']+|/download/[^"\']+\.pdf))["\']',
+        r'href=["\']([^"\']+\.pdf(?:\?[^"\']*)?)["\']',
+    ]
+    for pat in patterns:
+        m = re.search(pat, html_str, flags=re.IGNORECASE)
+        if m:
+            candidate = m.group(1).strip().replace("&amp;", "&")
+            if candidate and not candidate.lower().endswith(("_toc.pdf", "inhaltsverzeichnis.pdf")):
+                return urljoin(base_url, candidate)
+    return ""
+
+
+def stream_dnb_34_pdf_or_epub_in_ram(
+    url: str,
+    max_pages: int = 90,
+    max_bytes: int = 90 * 1024 * 1024,
+    _allow_html_redirect: bool = True,
+):
     """
     Downloads a DNB `/34` Open-Access archive stream (`https://d-nb.info/{idn}/34`)
-    entirely in RAM using thread-local keep-alive connection pooling and supports:
-      1. Direct PDF (`%PDF`) via PyMuPDF (`fitz`)
+    or sibling `MARC 856 $u` repository/URN/DOI stream entirely in RAM using thread-local
+    keep-alive connection pooling and thread-safe MuPDF C serialization:
+      1. Direct PDF (`%PDF`) up to 90 MB via PyMuPDF (`fitz`)
       2. EPUB (`application/epub+zip`, `PK\\x03\\x04`) or ZIP-wrapped PDF/XHTML chapters
-      3. Direct HTML/XML full-text deposits
+      3. Repository HTML landing pages (`citation_pdf_url` / bitstream `.pdf` extraction)
+      4. Direct HTML/XML full-text deposits
     Returns (extracted_text, page_or_chapter_count).
     """
     if not url:
         return "", 0
     try:
         sess = _get_thread_session()
-        with sess.get(url, timeout=(6, 14), verify=False, stream=True) as resp:
+        with sess.get(url, timeout=(4, 11), verify=False, stream=True, allow_redirects=True) as resp:
             if resp.status_code != 200:
                 return "", 0
+            final_url = resp.url or url
+            ctype = (resp.headers.get("Content-Type") or "").lower()
             cl = resp.headers.get("Content-Length")
             if cl and cl.isdigit() and int(cl) > max_bytes:
                 return "", 0
@@ -308,32 +350,35 @@ def stream_dnb_34_pdf_or_epub_in_ram(url: str, max_pages: int = 90, max_bytes: i
                 buf.write(chunk)
                 read_bytes += len(chunk)
                 if read_bytes > max_bytes:
-                    break
+                    return "", 0
             raw = buf.getvalue()
         if not raw:
             return "", 0
 
-        # Case 1: Direct PDF
-        if raw[:4] == b"%PDF":
-            with fitz.open(stream=raw, filetype="pdf") as doc:
-                n_pages = min(len(doc), max_pages)
-                pages_txt = [doc[i].get_text("text") for i in range(n_pages)]
+        # Case 1: Direct PDF (thread-safe C-context serialization via _FITZ_LOCK)
+        if raw[:4] == b"%PDF" or b"%PDF-" in raw[:1024]:
+            pdf_start = raw.find(b"%PDF")
+            pdf_bytes = raw[pdf_start:] if pdf_start > 0 else raw
+            with _FITZ_LOCK:
+                with fitz.open(stream=pdf_bytes, filetype="pdf") as doc:
+                    n_pages = min(len(doc), max_pages)
+                    pages_txt = [doc[i].get_text("text") for i in range(n_pages)]
             return normalize_german_text(" ".join(pages_txt)), n_pages
 
         # Case 2: EPUB or ZIP container (PK\x03\x04)
         if raw[:4] == b"PK\x03\x04":
             with zipfile.ZipFile(io.BytesIO(raw)) as zf:
                 names = zf.namelist()
-                # Check if ZIP contains an embedded PDF
                 pdf_names = [n for n in names if n.lower().endswith(".pdf")]
                 if pdf_names:
                     pdf_bytes = zf.read(pdf_names[0])
-                    with fitz.open(stream=pdf_bytes, filetype="pdf") as doc:
-                        n_pages = min(len(doc), max_pages)
-                        pages_txt = [doc[i].get_text("text") for i in range(n_pages)]
-                    return normalize_german_text(" ".join(pages_txt)), n_pages
+                    if len(pdf_bytes) <= max_bytes:
+                        with _FITZ_LOCK:
+                            with fitz.open(stream=pdf_bytes, filetype="pdf") as doc:
+                                n_pages = min(len(doc), max_pages)
+                                pages_txt = [doc[i].get_text("text") for i in range(n_pages)]
+                        return normalize_german_text(" ".join(pages_txt)), n_pages
 
-                # Otherwise parse EPUB XHTML/HTML chapters in spine/alphabetical order
                 html_names = sorted(
                     [
                         n for n in names
@@ -359,16 +404,51 @@ def stream_dnb_34_pdf_or_epub_in_ram(url: str, max_pages: int = 90, max_bytes: i
                         pass
                 return normalize_german_text(" ".join(chapters)), len(chapters)
 
-        # Case 3: HTML/Plain-text full text
-        ctype = (resp.headers.get("Content-Type") or "").lower()
-        if "html" in ctype or "text" in ctype or b"<html" in raw[:500].lower():
+        # Case 3: HTML landing page (extract citation_pdf_url or bitstream PDF link first) or HTML full text
+        if "html" in ctype or "text" in ctype or b"<html" in raw[:1000].lower():
             html_str = raw.decode("utf-8", errors="ignore")
-            html_str = re.sub(r"<(script|style)[^>]*>.*?</\1>", " ", html_str, flags=re.DOTALL | re.IGNORECASE)
+            if _allow_html_redirect:
+                embedded_pdf_url = _extract_pdf_url_from_html(html_str, final_url)
+                if embedded_pdf_url and embedded_pdf_url != url:
+                    txt_pdf, pages_pdf = stream_dnb_34_pdf_or_epub_in_ram(
+                        embedded_pdf_url,
+                        max_pages=max_pages,
+                        max_bytes=max_bytes,
+                        _allow_html_redirect=False,
+                    )
+                    if txt_pdf and len(txt_pdf.split()) >= 90:
+                        return txt_pdf, pages_pdf
+            html_str = re.sub(r"<(script|style|nav|header|footer)[^>]*>.*?</\1>", " ", html_str, flags=re.DOTALL | re.IGNORECASE)
             clean = re.sub(r"<[^>]+>", " ", html_str)
-            return normalize_german_text(clean), 1
+            clean_norm = normalize_german_text(clean)
+            if len(clean_norm.split()) >= 180:
+                return clean_norm, 1
     except Exception:
         pass
     return "", 0
+
+
+def stream_dnb_oa_multi_url_in_ram(
+    candidate_urls: list[str],
+    max_pages: int = 90,
+    max_bytes: int = 90 * 1024 * 1024,
+) -> tuple[str, int, str]:
+    """
+    Cascades across all candidate Open-Access URLs for a DNB work:
+      1. `https://d-nb.info/{idn}/34` (DNB native Netzpublikation PDF/EPUB)
+      2. Sibling `MARC 856 $u` direct repository/publisher OA URLs
+      3. `MARC 024` / `856` `nbn-resolving.org/urn:nbn:de:...` and `doi.org/...` links
+    Returns (extracted_text, page_count, winning_url).
+    """
+    seen = set()
+    for u in candidate_urls or []:
+        if not u or u in seen:
+            continue
+        seen.add(u)
+        txt, pages = stream_dnb_34_pdf_or_epub_in_ram(u, max_pages=max_pages, max_bytes=max_bytes)
+        if txt and len(txt.split()) >= 90:
+            return txt, pages, u
+    return "", 0, ""
 
 
 def parse_marc_record(
@@ -378,8 +458,9 @@ def parse_marc_record(
     force_onlinefree: bool = False,
 ) -> dict:
     """
-    Extracts rich bibliographic, multi-ISBN ($a, $z, $9), Open-Access PDF/EPUB, TOC PDF/HTML,
-    and discursive fields from a DNB MARC21 XML record.
+    Extracts rich bibliographic, multi-ISBN ($a, $z, $9), URN/DOI ($024), DDC/Sachgruppe ($082/$084),
+    multi-URL Open-Access PDF/EPUB (`d-nb.info/{idn}/34` + all `MARC 856 $u` repository/publisher links),
+    TOC PDF/HTML, and discursive fields from a DNB MARC21 XML record.
     """
     idn = ""
     f001 = marc_data.find("marc:controlfield[@tag='001']", NS)
@@ -393,12 +474,16 @@ def parse_marc_record(
     date = ""
     publisher = ""
     isbn_list = []
+    urn = ""
+    doi = ""
+    ddc_list = []
     abstracts = []
     keywords = []
     blurb_url = ""
     toc_htm_url = ""
     toc_pdf_url = ""
     dnb_34_url = ""
+    external_oa_urls = []
     is_kostenfrei = bool(force_onlinefree)
 
     for field in marc_data.findall("marc:datafield", NS):
@@ -411,6 +496,24 @@ def parse_marc_record(
                         clean_i = re.sub(r"[^0-9Xx]", "", sub.text).upper()
                         if len(clean_i) in (10, 13) and clean_i not in isbn_list:
                             isbn_list.append(clean_i)
+
+        elif tag == "024":
+            sub_a = field.find("marc:subfield[@code='a']", NS)
+            sub_2 = field.find("marc:subfield[@code='2']", NS)
+            val_a = sub_a.text.strip() if (sub_a is not None and sub_a.text) else ""
+            val_2 = sub_2.text.strip().lower() if (sub_2 is not None and sub_2.text) else ""
+            if val_a:
+                if (val_2 == "urn" or val_a.lower().startswith("urn:nbn:")) and not urn:
+                    urn = val_a
+                elif (val_2 == "doi" or val_a.startswith("10.")) and not doi:
+                    doi = val_a
+
+        elif tag in ("082", "084"):
+            for sub_a in field.findall("marc:subfield[@code='a']", NS):
+                if sub_a is not None and sub_a.text:
+                    c_val = sub_a.text.strip()
+                    if c_val and c_val not in ddc_list:
+                        ddc_list.append(c_val)
 
         elif tag == "245":
             sub_a = field.find("marc:subfield[@code='a']", NS)
@@ -461,9 +564,11 @@ def parse_marc_record(
         elif tag == "856":
             sub_3 = field.find("marc:subfield[@code='3']", NS)
             sub_u = field.find("marc:subfield[@code='u']", NS)
+            sub_x = field.find("marc:subfield[@code='x']", NS)
             sub_z = field.find("marc:subfield[@code='z']", NS)
             u_str = sub_u.text.strip() if (sub_u is not None and sub_u.text) else ""
             s3_str = sub_3.text.strip().lower() if (sub_3 is not None and sub_3.text) else ""
+            sx_str = sub_x.text.strip().lower() if (sub_x is not None and sub_x.text) else ""
             sz_str = sub_z.text.strip().lower() if (sub_z is not None and sub_z.text) else ""
 
             if "kostenfrei" in sz_str or "open access" in sz_str:
@@ -483,14 +588,38 @@ def parse_marc_record(
                     or ("deposit.dnb.de/cgi-bin/dokserv" in u_str and "inhaltsverzeichnis" not in s3_str)
                 ) and not blurb_url:
                     blurb_url = u_str
-                elif u_str.endswith("/34") and "d-nb.info" in u_str and not dnb_34_url:
-                    dnb_34_url = u_str
+                elif u_str.endswith("/34") and "d-nb.info" in u_str:
+                    if not dnb_34_url:
+                        dnb_34_url = u_str
+                else:
+                    # Sibling MARC 856 $u full-text link (URN resolving, DOI, university repository, publisher OA)
+                    if u_str not in external_oa_urls and "deposit.dnb.de" not in u_str:
+                        if "nbn-resolving" in u_str or "urn:nbn:" in u_str or "hdl.handle.net" in u_str:
+                            external_oa_urls.insert(0, u_str)
+                        else:
+                            external_oa_urls.append(u_str)
 
-    if is_kostenfrei and not dnb_34_url and idn:
-        dnb_34_url = f"https://d-nb.info/{idn}/34"
+    oa_candidate_urls = []
+    if is_kostenfrei or dnb_34_url:
+        if dnb_34_url:
+            oa_candidate_urls.append(dnb_34_url)
+        for ext_u in external_oa_urls:
+            if ext_u not in oa_candidate_urls:
+                oa_candidate_urls.append(ext_u)
+        if urn:
+            urn_u = f"https://nbn-resolving.org/{urn}" if not urn.startswith("http") else urn
+            if urn_u not in oa_candidate_urls:
+                oa_candidate_urls.append(urn_u)
+        if doi:
+            doi_u = f"https://doi.org/{doi}" if not doi.startswith("http") else doi
+            if doi_u not in oa_candidate_urls:
+                oa_candidate_urls.append(doi_u)
+        if not dnb_34_url and idn:
+            synth_34 = f"https://d-nb.info/{idn}/34"
+            if synth_34 not in oa_candidate_urls:
+                oa_candidate_urls.append(synth_34)
 
-    # Pair sibling $z='kostenfrei' or location=onlinefree with the record's d-nb.info/{idn}/34 direct download URL
-    oa_pdf_url = dnb_34_url if (is_kostenfrei and dnb_34_url) else ""
+    oa_pdf_url = dnb_34_url or (oa_candidate_urls[0] if oa_candidate_urls else "")
 
     full_title = f"{title_main}: {subtitle}" if subtitle else title_main
     creator = author if author else (editor or "o. V.")
@@ -515,7 +644,11 @@ def parse_marc_record(
         "raw_publisher": publisher,
         "isbn": isbn_list[0] if isbn_list else "",
         "all_isbns": isbn_list,
+        "urn": urn,
+        "doi": doi,
+        "ddc": ";".join(ddc_list),
         "oa_pdf_url": oa_pdf_url,
+        "oa_candidate_urls": oa_candidate_urls,
         "toc_pdf_url": toc_pdf_url,
         "toc_htm_url": toc_htm_url,
         "blurb_url": blurb_url,
@@ -587,26 +720,33 @@ def harvest_dnb_wave7_exhaustive(
     already_matched_isbns: set,
     already_seen_urls: set,
     already_seen_titles: set,
-    workers: int = 36,
+    already_seen_oa_urls: set = None,
+    already_seen_oa_titles: set = None,
+    workers: int = 48,
     chunk_words: int = 1000,
     max_chunks_per_book: int = 55,
     max_toc_pdfs: int = 50000,
-    max_oa_books: int = 4000,
+    max_oa_books: int = 100000,
 ):
     """
-    Wave-10 Complete DNB `location=onlinefree` + `hsg=` Year-by-Year (1970–2025) Full-Text Harvester:
-      1. Dynamically paginates DNB SRU (`https://services.dnb.de/sru/dnb`) across:
+    Wave-11 Uncapped Exhaustive DNB `location=onlinefree` + `MARC 856` Multi-URL Full-Text Harvester (1970–2025):
+      1. Dynamically paginates DNB SRU (`https://services.dnb.de/sru/dnb`) up to `max_cap=10,000` across:
          - Group 1: All 38 Target Publishers (`vlg=`) with `location=onlinefree and spr=ger` (1970–2025)
-         - Group 2: Year-by-Year (`jhr=1970..2025`) across `hsg=200`, `hsg=220`, `hsg=230`, `hsg=290`,
-           `hsg=100` (religion/ethics/philosophy), `hsg=150` (spirituality/mindfulness/psychology), and
-           `hsg=300` (sociology of religion/secularization) with `location=onlinefree and spr=ger`
+         - Group 2A: Year-by-Year (`jhr=1970..2025`) across `hsg=200`, `hsg=220`, `hsg=230`, `hsg=290`,
+           `hsg=100`, `hsg=150`, `hsg=300`, and `hsg=000/700/800/900` with `location=onlinefree and spr=ger`
+         - Group 2B: All 57 `DNB_THEMATIC_QUERIES` (`sw=` & `dcs=220*..290*`) with `location=onlinefree and spr=ger` (1970–2025)
          - Group 3: Deep `hsg=200/220/230/290` print + online pages across all 38 Target Publishers
            for multi-ISBN (`MARC 020 $a/$z/$9`) HTRC resolution, `/04` TOC PDFs, and `Inhaltstexte`
       2. Stream A (Multi-ISBN `MARC 020 $a/$z/$9` DNB -> HathiTrust HTRC Full Books)
-      3. Stream B (All Unharvested `location=onlinefree` DNB `/34` Open-Access Full-Text PDFs & EPUBs)
+      3. Stream B (ALL Unharvested `location=onlinefree` DNB `/34` + `MARC 856 $u` / `URN` / `DOI` Open-Access Full-Text PDFs & EPUBs)
       4. Stream C (All Remaining Unharvested DNB Digitized `/04` `Inhaltsverzeichnis` & Excerpt PDFs + HTML TOCs)
       5. Stream D (All Remaining Unharvested DNB `deposit.dnb.de` `Inhaltstexte`, `MARC 520` Abstracts & `MARC 650` Keywords)
     """
+    if already_seen_oa_urls is None:
+        already_seen_oa_urls = already_seen_urls
+    if already_seen_oa_titles is None:
+        already_seen_oa_titles = already_seen_titles
+
     base_url = "https://services.dnb.de/sru/dnb"
 
     pub_oa_domain_cql = (
@@ -617,29 +757,35 @@ def harvest_dnb_wave7_exhaustive(
         "sw=Philosophie* or sw=Gesellschaft* or sw=Kultur* or sw=Sinn*)"
     )
 
-    # Phase 1: Seed Queries (startRecord=1) with dynamic pagination limit (max_records_per_query)
+    # Phase 1: Seed Queries (startRecord=1) with uncapped SRU pagination limit (max_cap=10000)
     # Tuple: (canon_pub, cql_query, start_rec, is_deep_page, force_onlinefree, max_rec_cap)
     phase1_queries = []
 
-    # Group 1: All 38 Target Publishers with location=onlinefree (1970-2025)
+    # Group 1: All 38 Target Publishers with location=onlinefree (1970-2025), uncapped (10,000)
     for canon_pub, vlg_term, _, _ in DNB_TARGET_PUBLISHERS:
         q_pub_oa = f'vlg="{vlg_term}" and location=onlinefree and spr=ger and {pub_oa_domain_cql} and jhr>=1970 and jhr<=2025'
-        phase1_queries.append((canon_pub, q_pub_oa, 1, True, True, 1200))
+        phase1_queries.append((canon_pub, q_pub_oa, 1, True, True, 10000))
 
-    # Group 2: Year-by-Year (1970-2025) across hsg=200, 220, 230, 290, 100, 150, 300 with location=onlinefree
+    # Group 2A: Year-by-Year (1970-2025) across hsg=200, 220, 230, 290, 100, 150, 300, 000/800/900 with location=onlinefree (uncapped 10,000)
     hsg_oa_templates = [
-        ("hsg=230", 800),
-        ("hsg=200", 600),
-        ("hsg=290", 500),
-        ("hsg=220", 500),
-        ("hsg=100 and (sw=Religion* or sw=Gott* or sw=Ethik* or sw=Moral* or sw=Aufklärung* or sw=Sinn* or sw=Philosophie*)", 400),
-        ("hsg=300 and (sw=Religion* or sw=Kirche* or sw=Säkular* or sw=Islam* or sw=Judentum* or sw=Wertewandel*)", 400),
-        ("hsg=150 and (sw=Spiritualität* or sw=Achtsamkeit* or sw=Lebenshilfe* or sw=Seele* or sw=Trauer* or sw=Religion*)", 300),
+        ("hsg=230", 10000),
+        ("hsg=200", 10000),
+        ("hsg=290", 10000),
+        ("hsg=220", 10000),
+        ("hsg=100 and (sw=Religion* or sw=Gott* or sw=Ethik* or sw=Moral* or sw=Aufklärung* or sw=Sinn* or sw=Philosophie*)", 10000),
+        ("hsg=300 and (sw=Religion* or sw=Kirche* or sw=Säkular* or sw=Islam* or sw=Judentum* or sw=Wertewandel*)", 10000),
+        ("hsg=150 and (sw=Spiritualität* or sw=Achtsamkeit* or sw=Lebenshilfe* or sw=Seele* or sw=Trauer* or sw=Religion*)", 10000),
+        ("(hsg=000 or hsg=800 or hsg=900) and (sw=Religion* or sw=Theologie* or sw=Kirche* or sw=Bibel* or sw=Säkular* or sw=Atheismus*)", 10000),
     ]
     for yr in range(2025, 1969, -1):
         for hsg_expr, cap in hsg_oa_templates:
             q_yr = f"({hsg_expr}) and location=onlinefree and spr=ger and jhr={yr}"
             phase1_queries.append((None, q_yr, 1, True, True, cap))
+
+    # Group 2B: All 57 DNB_THEMATIC_QUERIES (sw= & dcs=220*..290*) with location=onlinefree (1970-2025), uncapped (10,000)
+    for cql_theme, _, _, _ in DNB_THEMATIC_QUERIES:
+        q_theme_oa = f"({cql_theme}) and location=onlinefree and spr=ger and jhr>=1970 and jhr<=2025"
+        phase1_queries.append((None, q_theme_oa, 1, True, True, 10000))
 
     # Group 3: hsg=200/220/230/290 across All 38 Target Publishers (print + online for multi-ISBN $z & /04 PDFs)
     for canon_pub, vlg_term, _, wave8_end_pages in DNB_TARGET_PUBLISHERS:
@@ -647,8 +793,8 @@ def harvest_dnb_wave7_exhaustive(
         phase1_queries.append((canon_pub, q_hsg_pub, 1, True, False, min(1500, wave8_end_pages * 60)))
 
     print(
-        f"Wave-10 Complete DNB `location=onlinefree` + `hsg=` Harvester: Probing {len(phase1_queries):,} "
-        f"year-by-year & publisher SRU queries (1970-2025)...",
+        f"Wave-11 Uncapped Exhaustive DNB `location=onlinefree` + `MARC 856` Harvester: Probing {len(phase1_queries):,} "
+        f"year-by-year, thematic & publisher SRU queries (1970-2025)...",
         flush=True,
     )
 
@@ -656,49 +802,75 @@ def harvest_dnb_wave7_exhaustive(
     continuation_tasks = []
     lock = threading.Lock()
 
+    def _merge_rec_into_unique(r):
+        key = r["idn"] or f"{r['title'].lower()}_{r['date']}"
+        if key not in unique_records:
+            unique_records[key] = r
+        else:
+            existing = unique_records[key]
+            if r.get("oa_pdf_url") and not existing.get("oa_pdf_url"):
+                existing["oa_pdf_url"] = r["oa_pdf_url"]
+            if r.get("oa_candidate_urls"):
+                cur_urls = existing.get("oa_candidate_urls") or []
+                for u in r["oa_candidate_urls"]:
+                    if u not in cur_urls:
+                        cur_urls.append(u)
+                existing["oa_candidate_urls"] = cur_urls
+                if not existing.get("oa_pdf_url") and cur_urls:
+                    existing["oa_pdf_url"] = cur_urls[0]
+            if r.get("is_priority_publisher"):
+                existing["is_priority_publisher"] = True
+                existing["publisher"] = r["publisher"]
+            if r.get("is_deep_page"):
+                existing["is_deep_page"] = True
+
     def _fetch_dnb_sru_page(task):
         canon_pub, cql_query, start_rec, is_deep_page, force_oa, max_cap = task
         parsed_list = []
         total_avail = 0
-        try:
-            sess = _get_thread_session()
-            resp = sess.get(
-                base_url,
-                params={
-                    "operation": "searchRetrieve",
-                    "version": "1.1",
-                    "query": cql_query,
-                    "recordSchema": "MARC21-xml",
-                    "maximumRecords": "100",
-                    "startRecord": str(start_rec),
-                },
-                verify=False,
-                timeout=20,
-            )
-            if resp.status_code != 200:
-                return parsed_list, 0
-            tree = ET.fromstring(resp.content)
-            num_txt = tree.findtext(".//zs:numberOfRecords", namespaces=NS)
-            if num_txt and num_txt.isdigit():
-                total_avail = int(num_txt)
-            for srw_rec in tree.findall(".//zs:record", NS):
-                marc_data = srw_rec.find(".//marc:record", NS)
-                if marc_data is None:
-                    continue
-                rec = parse_marc_record(
-                    marc_data,
-                    canonical_publisher=canon_pub,
-                    fetch_blurbs=False,
-                    force_onlinefree=force_oa,
+        for attempt in range(3):
+            try:
+                sess = _get_thread_session()
+                resp = sess.get(
+                    base_url,
+                    params={
+                        "operation": "searchRetrieve",
+                        "version": "1.1",
+                        "query": cql_query,
+                        "recordSchema": "MARC21-xml",
+                        "maximumRecords": "100",
+                        "startRecord": str(start_rec),
+                    },
+                    verify=False,
+                    timeout=22,
                 )
-                if rec["title"] and rec["date"]:
-                    rec["is_deep_page"] = is_deep_page
-                    parsed_list.append(rec)
-        except Exception:
-            pass
+                if resp.status_code != 200:
+                    time.sleep(0.5 * (attempt + 1))
+                    continue
+                tree = ET.fromstring(resp.content)
+                num_txt = tree.findtext(".//zs:numberOfRecords", namespaces=NS)
+                if num_txt and num_txt.isdigit():
+                    total_avail = int(num_txt)
+                for srw_rec in tree.findall(".//zs:record", NS):
+                    marc_data = srw_rec.find(".//marc:record", NS)
+                    if marc_data is None:
+                        continue
+                    rec = parse_marc_record(
+                        marc_data,
+                        canonical_publisher=canon_pub,
+                        fetch_blurbs=False,
+                        force_onlinefree=force_oa,
+                    )
+                    if rec["title"] and rec["date"]:
+                        rec["is_deep_page"] = is_deep_page
+                        parsed_list.append(rec)
+                break
+            except Exception:
+                time.sleep(0.5 * (attempt + 1))
         return parsed_list, total_avail
 
-    with ThreadPoolExecutor(max_workers=workers) as ex:
+    sru_workers = min(18, workers)
+    with ThreadPoolExecutor(max_workers=sru_workers) as ex:
         futs = {ex.submit(_fetch_dnb_sru_page, t): t for t in phase1_queries}
         for fut in as_completed(futs):
             t = futs[fut]
@@ -707,17 +879,7 @@ def harvest_dnb_wave7_exhaustive(
             if res:
                 with lock:
                     for r in res:
-                        key = r["idn"] or f"{r['title'].lower()}_{r['date']}"
-                        if key not in unique_records:
-                            unique_records[key] = r
-                        else:
-                            if r.get("oa_pdf_url") and not unique_records[key].get("oa_pdf_url"):
-                                unique_records[key]["oa_pdf_url"] = r["oa_pdf_url"]
-                            if r.get("is_priority_publisher"):
-                                unique_records[key]["is_priority_publisher"] = True
-                                unique_records[key]["publisher"] = r["publisher"]
-                            if r.get("is_deep_page"):
-                                unique_records[key]["is_deep_page"] = True
+                        _merge_rec_into_unique(r)
             if total_avail > 100:
                 upper = min(total_avail, max_cap)
                 for next_start in range(101, upper + 1, 100):
@@ -728,35 +890,25 @@ def harvest_dnb_wave7_exhaustive(
             f"  -> Paginating {len(continuation_tasks):,} continuation SRU pages (`startRecord=101..N`) discovered via `<zs:numberOfRecords>`...",
             flush=True,
         )
-        with ThreadPoolExecutor(max_workers=workers) as ex:
+        with ThreadPoolExecutor(max_workers=sru_workers) as ex:
             futs = [ex.submit(_fetch_dnb_sru_page, t) for t in continuation_tasks]
             for fut in as_completed(futs):
                 res, _ = fut.result()
                 if res:
                     with lock:
                         for r in res:
-                            key = r["idn"] or f"{r['title'].lower()}_{r['date']}"
-                            if key not in unique_records:
-                                unique_records[key] = r
-                            else:
-                                if r.get("oa_pdf_url") and not unique_records[key].get("oa_pdf_url"):
-                                    unique_records[key]["oa_pdf_url"] = r["oa_pdf_url"]
-                                if r.get("is_priority_publisher"):
-                                    unique_records[key]["is_priority_publisher"] = True
-                                    unique_records[key]["publisher"] = r["publisher"]
-                                if r.get("is_deep_page"):
-                                    unique_records[key]["is_deep_page"] = True
+                            _merge_rec_into_unique(r)
 
     all_dnb_records = list(unique_records.values())
     deep_records = [r for r in all_dnb_records if r.get("is_deep_page")]
     print(
         f"  -> Retrieved {len(all_dnb_records):,} unique DNB MARC21 records "
-        f"({sum(1 for r in all_dnb_records if r.get('oa_pdf_url')):,} with `location=onlinefree` `/34` Full-Text streams)!",
+        f"({sum(1 for r in all_dnb_records if r.get('oa_candidate_urls')):,} with `location=onlinefree` `/34` & `MARC 856` Full-Text streams)!",
         flush=True,
     )
 
     # =========================================================================
-    # STREAM A: Wave-10 Multi-ISBN (`MARC 020 $a/$z/$9`) DNB -> HathiTrust Full Books
+    # STREAM A: Wave-11 Multi-ISBN (`MARC 020 $a/$z/$9`) DNB -> HathiTrust Full Books
     # =========================================================================
     dnb_isbn_candidates = []
     seen_isbns_local = set(already_matched_isbns)
@@ -778,11 +930,11 @@ def harvest_dnb_wave7_exhaustive(
                 "decade": r["decade"],
                 "isbn": raw_isbn,
                 "ppn": r["idn"],
-                "bkl_codes": "DNB-Wave10-MultiISBN",
+                "bkl_codes": "DNB-Wave11-MultiISBN",
             })
 
     print(
-        f"\n[Stream A] Wave-10 DNB Multi-ISBN ($a/$z/$9) -> HathiTrust Cross-Walk: Queued {len(dnb_isbn_candidates):,} unharvested DNB ISBNs...",
+        f"\n[Stream A] Wave-11 DNB Multi-ISBN ($a/$z/$9) -> HathiTrust Cross-Walk: Queued {len(dnb_isbn_candidates):,} unharvested DNB ISBNs...",
         flush=True,
     )
     htrc_passages = []
@@ -797,7 +949,7 @@ def harvest_dnb_wave7_exhaustive(
         )
         if matched_ht_books:
             print(
-                f"Streaming full-book page-by-page tokens from HTRC EF-API for {len(matched_ht_books)} Wave-10 DNB-matched books...",
+                f"Streaming full-book page-by-page tokens from HTRC EF-API for {len(matched_ht_books)} Wave-11 DNB-matched books...",
                 flush=True,
             )
             with ThreadPoolExecutor(max_workers=workers) as ex:
@@ -811,22 +963,48 @@ def harvest_dnb_wave7_exhaustive(
                         htrc_passages.extend(p_list)
                         htrc_summaries.append(summ)
                         print(
-                            f"  + [WAVE-10 DNB->HTRC BOOK #{len(htrc_summaries)}] ({summ['date']} | {summ['publisher'][:28]}) "
+                            f"  + [WAVE-11 DNB->HTRC BOOK #{len(htrc_summaries)}] ({summ['date']} | {summ['publisher'][:28]}) "
                             f"{summ['title'][:45]}... [{summ['htid']}] -> {summ['pages']} pages | "
                             f"{summ['extracted_words']:,} words ({summ['passages']} passages)",
                             flush=True,
                         )
 
     # =========================================================================
-    # STREAM B: All Unharvested `location=onlinefree` DNB `/34` Open-Access Full-Text Books (PDF + EPUB)
+    # STREAM B: ALL Unharvested `location=onlinefree` DNB `/34` + `MARC 856 $u` Open-Access Full-Text Books (PDF + EPUB)
     # =========================================================================
+    ckpt_jsonl = "data/primary_texts/dnb_wave11_oa_checkpoint.jsonl"
+    os.makedirs(os.path.dirname(ckpt_jsonl), exist_ok=True)
+    dnb_oa_passages = []
+    oa_books_ok = 0
+    if os.path.exists(ckpt_jsonl):
+        with open(ckpt_jsonl, "r", encoding="utf-8") as cf:
+            for line in cf:
+                line = line.strip()
+                if not line:
+                    continue
+                try:
+                    row_obj = json.loads(line)
+                    dnb_oa_passages.append(row_obj)
+                    if row_obj.get("source_file"):
+                        already_seen_oa_urls.add(str(row_obj["source_file"]).strip())
+                    tl = str(row_obj.get("title") or "").lower().strip()
+                    if "[dnb-oa-vollbuch-abschnitt 1/" in tl:
+                        already_seen_oa_titles.add(tl.split("/")[0] + "/")
+                        oa_books_ok += 1
+                except Exception:
+                    pass
+        if dnb_oa_passages:
+            print(
+                f"  -> Resumed {oa_books_ok:,} checkpointed Wave-11 DNB OA books ({len(dnb_oa_passages):,} passages) from `{ckpt_jsonl}`!",
+                flush=True,
+            )
+
     oa_candidates = [
         r for r in all_dnb_records
-        if r["oa_pdf_url"]
-        and r["oa_pdf_url"] not in already_seen_urls
-        and f"{r['title']} [dnb-oa-vollbuch-abschnitt 1/".lower() not in already_seen_titles
+        if r.get("oa_candidate_urls")
+        and not any(u in already_seen_oa_urls for u in r["oa_candidate_urls"])
+        and f"{r['title']} [dnb-oa-vollbuch-abschnitt 1/".lower() not in already_seen_oa_titles
     ]
-    # Prioritize target-publisher monographs first, then sort chronologically
     oa_candidates.sort(
         key=lambda x: (
             0 if x.get("is_priority_publisher") else 1,
@@ -836,26 +1014,33 @@ def harvest_dnb_wave7_exhaustive(
     )
     selected_oa = oa_candidates[:max_oa_books]
     print(
-        f"\n[Stream B] DNB `location=onlinefree` Open-Access Full-Text PDFs & EPUBs (`d-nb.info/.../34`): "
+        f"\n[Stream B] Uncapped DNB `location=onlinefree` Open-Access Full-Text PDFs & EPUBs (`/34` + `MARC 856 $u` + `URN/DOI`): "
         f"Discovered {len(oa_candidates):,} unharvested OA works -> Streaming {len(selected_oa):,} works with 48 threads!",
         flush=True,
     )
-    dnb_oa_passages = []
-    oa_books_ok = 0
+    oa_done_count = 0
 
     def _stream_dnb_oa(r):
-        txt, pages = stream_dnb_34_pdf_or_epub_in_ram(r["oa_pdf_url"], max_pages=90)
-        if not txt or len(txt.split()) < 120:
+        cand_urls = (r.get("oa_candidate_urls") or [r["oa_pdf_url"]])[:3]
+        txt, pages, winning_url = stream_dnb_oa_multi_url_in_ram(cand_urls, max_pages=90)
+        if not txt or len(txt.split()) < 90:
             return []
-        if not is_clean_modern_german(txt) or not is_german_passage(txt):
+        if not is_clean_modern_german(txt):
             return []
         words = txt.split()
         max_w = max_chunks_per_book * chunk_words
         if len(words) > max_w:
             txt = " ".join(words[:max_w])
-        chunks = [ch for ch in chunk_fulltext_words(txt, chunk_words=chunk_words, min_words=120) if is_german_passage(ch)]
-        if not chunks and len(words) >= 120:
+        # Filter chunk-by-chunk so a front-matter English abstract never rejects a 300-page German dissertation
+        chunks = [
+            ch for ch in chunk_fulltext_words(txt, chunk_words=chunk_words, min_words=90)
+            if is_german_passage(ch, min_words=20)
+        ]
+        if not chunks and len(words) >= 90 and is_german_passage(txt[-6000:], min_words=20):
             chunks = [" ".join(words[:1000])]
+        if not chunks:
+            return []
+        src_u = winning_url or r["oa_pdf_url"]
         out = []
         for idx, ch in enumerate(chunks, start=1):
             compact_ch = " ".join(ch.split()[:420])
@@ -866,7 +1051,7 @@ def harvest_dnb_wave7_exhaustive(
                 "decade": r["decade"],
                 "publisher": r["publisher"],
                 "corpus_layer": "dnb_oa_fullbook",
-                "source_file": r["oa_pdf_url"],
+                "source_file": src_u,
                 "chunk_index": idx,
                 "total_chunks": len(chunks),
                 "word_count": len(ch.split()),
@@ -876,24 +1061,31 @@ def harvest_dnb_wave7_exhaustive(
         return out
 
     if selected_oa:
-        with ThreadPoolExecutor(max_workers=48) as ex:
-            futs = {ex.submit(_stream_dnb_oa, r): r for r in selected_oa}
-            for fut in as_completed(futs):
-                r = futs[fut]
-                res = fut.result()
-                if res:
-                    oa_books_ok += 1
-                    dnb_oa_passages.extend(res)
-                    w_sum = sum(x["word_count"] for x in res)
-                    if oa_books_ok <= 30 or oa_books_ok % 50 == 0:
-                        print(
-                            f"  + [DNB OA BOOK/EPUB #{oa_books_ok}] ({r['date']} | {r['publisher'][:28]}) "
-                            f"{r['title'][:45]}... -> {w_sum:,} words ({len(res)} passages | total OA passages: {len(dnb_oa_passages):,})",
-                            flush=True,
-                        )
+        with open(ckpt_jsonl, "a", encoding="utf-8") as ckpt_out:
+            with ThreadPoolExecutor(max_workers=48) as ex:
+                futs = {ex.submit(_stream_dnb_oa, r): r for r in selected_oa}
+                for fut in as_completed(futs):
+                    oa_done_count += 1
+                    r = futs[fut]
+                    res = fut.result()
+                    if res:
+                        oa_books_ok += 1
+                        dnb_oa_passages.extend(res)
+                        for row_obj in res:
+                            ckpt_out.write(json.dumps(row_obj, ensure_ascii=False) + "\n")
+                        if oa_books_ok % 25 == 0:
+                            ckpt_out.flush()
+                        w_sum = sum(x["word_count"] for x in res)
+                        if oa_books_ok <= 30 or oa_books_ok % 100 == 0:
+                            print(
+                                f"  + [DNB OA BOOK #{oa_books_ok:,} | scanned {oa_done_count:,}/{len(selected_oa):,}] "
+                                f"({r['date']} | {r['publisher'][:26]}) {r['title'][:42]}... -> "
+                                f"{w_sum:,} words ({len(res)} passages | total OA passages: {len(dnb_oa_passages):,})",
+                                flush=True,
+                            )
 
     print(
-        f"  -> Streamed {oa_books_ok:,} NEW DNB `/34` Open-Access Full-Text Books/Works ({len(dnb_oa_passages):,} passages)!",
+        f"  -> Streamed {oa_books_ok:,} NEW DNB Open-Access Full-Text Books/Works ({len(dnb_oa_passages):,} passages)!",
         flush=True,
     )
 
@@ -917,7 +1109,12 @@ def harvest_dnb_wave7_exhaustive(
         txt = ""
         src_u = r["toc_pdf_url"] or r["toc_htm_url"]
         if r["toc_pdf_url"]:
-            txt, _ = stream_entire_pdf_book_in_ram(r["toc_pdf_url"], max_pages=10)
+            txt, _ = stream_dnb_34_pdf_or_epub_in_ram(
+                r["toc_pdf_url"],
+                max_pages=10,
+                max_bytes=15 * 1024 * 1024,
+                _allow_html_redirect=False,
+            )
         if not txt and r["toc_htm_url"]:
             txt = fetch_dnb_blurb(r["toc_htm_url"])
             src_u = r["toc_htm_url"]
@@ -948,7 +1145,7 @@ def harvest_dnb_wave7_exhaustive(
         }
 
     if toc_candidates:
-        with ThreadPoolExecutor(max_workers=36) as ex:
+        with ThreadPoolExecutor(max_workers=48) as ex:
             futs = [ex.submit(_stream_dnb_toc, r) for r in toc_candidates[:max_toc_pdfs]]
             for fut in as_completed(futs):
                 res = fut.result()
@@ -975,7 +1172,7 @@ def harvest_dnb_wave7_exhaustive(
         and (not r["blurb_url"] or r["blurb_url"] not in already_seen_urls)
     ]
     print(
-        f"\n[Stream D] Wave-10 DNB `deposit.dnb.de` & `/blurb/` Inhaltstexte, Abstracts & Keywords: "
+        f"\n[Stream D] Wave-11 DNB `deposit.dnb.de` & `/blurb/` Inhaltstexte, Abstracts & Keywords: "
         f"Fetching {len(blurb_candidates):,} NEW DNB deposit & catalog texts...",
         flush=True,
     )
@@ -1008,7 +1205,7 @@ def harvest_dnb_wave7_exhaustive(
             "text": full_txt,
         }
 
-    with ThreadPoolExecutor(max_workers=36) as ex:
+    with ThreadPoolExecutor(max_workers=48) as ex:
         futs = [ex.submit(_enrich_dnb_deposit, r) for r in blurb_candidates]
         for fut in as_completed(futs):
             res = fut.result()
@@ -1024,19 +1221,192 @@ def harvest_dnb_wave7_exhaustive(
     return all_new_passages, htrc_summaries
 
 
+def build_exhaustive_dnb_master_manifest(
+    merged_df: pd.DataFrame,
+    manifest_csv_path: str = "data/primary_texts/DNB_FULLTEXT_MASTER_MANIFEST.csv",
+    fullbooks_csv_path: str = "data/primary_texts/DNB_OPEN_ACCESS_FULLBOOKS_INVENTORY.csv",
+    summary_json_path: str = "app/dnb_master_manifest_summary.json",
+):
+    """
+    Compiles and exports the comprehensive, exhaustive work-level master catalog manifest
+    (`data/primary_texts/DNB_FULLTEXT_MASTER_MANIFEST.csv`) and complete full-text book inventory
+    (`data/primary_texts/DNB_OPEN_ACCESS_FULLBOOKS_INVENTORY.csv`) across the 1970–2025 master dataset.
+    """
+    print("\nBuilding Exhaustive Work-Level Master Manifest (`DNB_FULLTEXT_MASTER_MANIFEST.csv`)...", flush=True)
+    df = merged_df.copy()
+    df["clean_title"] = (
+        df["title"]
+        .fillna("")
+        .astype(str)
+        .str.replace(
+            r"\s*\[[^\[\]]*(?:Abschnitt|Inhaltsverzeichnis|Leseprobe|Kapitel|Teil|Chunk)[^\[\]]*\]\s*$",
+            "",
+            regex=True,
+            flags=re.IGNORECASE,
+        )
+        .str.strip()
+    )
+    df["work_key"] = df["clean_title"].str.lower() + "||" + df["date"].fillna("").astype(str).str[:4]
+    df["wc_num"] = pd.to_numeric(df["word_count"], errors="coerce").fillna(250).astype(int)
+
+    tier_priority = {
+        "dnb_oa_fullbook": (1, "Tier 1A: DNB Open-Access Full-Text Monograph/Dissertation (/34 & MARC 856)"),
+        "hathitrust_ef_fullbook_print": (2, "Tier 1B: DNB/GBV Multi-ISBN Matched HathiTrust Full-Book Stream"),
+        "gbv_kostenfrei_fullbook_pdf": (3, "Tier 1C: Direct Publisher / Repository Open-Access Full-Text Monograph"),
+        "direct_publisher_oa_pdf": (3, "Tier 1C: Direct Publisher / Repository Open-Access Full-Text Monograph"),
+        "openalex_oa_fulltext_pdf": (3, "Tier 1C: Direct Publisher / Repository Open-Access Full-Text Monograph"),
+        "open_access_monograph_stream": (3, "Tier 1C: Direct Publisher / Repository Open-Access Full-Text Monograph"),
+        "calibrated_fullbook_stream": (3, "Tier 1C: Direct Publisher / Repository Open-Access Full-Text Monograph"),
+        "entire_fulltext_book_cloud": (3, "Tier 1C: Direct Publisher / Repository Open-Access Full-Text Monograph"),
+        "archive_org_fulltext_book": (3, "Tier 1C: Direct Publisher / Repository Open-Access Full-Text Monograph"),
+        "primary_cloud_oa_fulltext": (3, "Tier 1C: Direct Publisher / Repository Open-Access Full-Text Monograph"),
+        "primary_fulltext": (3, "Tier 1C: Direct Publisher / Repository Open-Access Full-Text Monograph"),
+        "dnb_toc_pdf_fulltext": (4, "Tier 2: DNB Digitized /04 Inhaltsverzeichnis & Reading-Sample PDF"),
+        "gbv_direct_fulltext_pdf": (4, "Tier 2: DNB/GBV Digitized /04 Inhaltsverzeichnis & Reading-Sample PDF"),
+        "dnb_deposit_inhaltstext": (5, "Tier 3: DNB Deposit.dnb.de Inhaltstext, MARC 520 Abstract & Indexing"),
+    }
+
+    def _map_priority(layer_str):
+        return tier_priority.get(str(layer_str), (6, f"Tier 3B: Extended Paratext & Abstract ({layer_str})"))[0]
+
+    df["tier_rank"] = df["corpus_layer"].map(_map_priority)
+    df_sorted = df.sort_values("tier_rank", ascending=True)
+
+    grouped = df_sorted.groupby("work_key", sort=False)
+    first_rows = grouped.first().reset_index()
+    agg_stats = (
+        df.groupby("work_key", sort=False)
+        .agg(
+            passages_in_corpus=("wc_num", "count"),
+            total_words_in_corpus=("wc_num", "sum"),
+            all_layers_present=("corpus_layer", lambda s: "|".join(sorted(set(str(x) for x in s if pd.notna(x))))),
+        )
+        .reset_index()
+    )
+
+    manifest = pd.merge(
+        first_rows[["work_key", "clean_title", "author", "date", "decade", "publisher", "corpus_layer", "source_file", "tier_rank"]],
+        agg_stats,
+        on="work_key",
+        how="left",
+    )
+
+    def _extract_idn(src):
+        s = str(src or "")
+        m = re.search(r"d-nb\.info/(\d+[0-9Xx]?)", s)
+        if m:
+            return m.group(1)
+        m2 = re.search(r"id=(\d+[0-9Xx]?)", s)
+        if m2:
+            return m2.group(1)
+        return ""
+
+    manifest["dnb_idn"] = manifest["source_file"].map(_extract_idn)
+    manifest["highest_fulltext_tier"] = manifest["corpus_layer"].map(
+        lambda x: tier_priority.get(str(x), (6, f"Tier 3B: Extended Paratext & Abstract ({x})"))[1]
+    )
+    manifest = manifest.rename(
+        columns={
+            "clean_title": "title",
+            "corpus_layer": "primary_corpus_layer",
+            "source_file": "primary_source_url",
+        }
+    )
+    cols = [
+        "dnb_idn",
+        "title",
+        "author",
+        "date",
+        "decade",
+        "publisher",
+        "highest_fulltext_tier",
+        "primary_corpus_layer",
+        "all_layers_present",
+        "primary_source_url",
+        "passages_in_corpus",
+        "total_words_in_corpus",
+    ]
+    manifest = manifest.sort_values(["tier_rank", "date", "publisher", "title"], ascending=[True, True, True, True])[cols]
+
+    os.makedirs(os.path.dirname(manifest_csv_path), exist_ok=True)
+    manifest.to_csv(manifest_csv_path, index=False, encoding="utf-8")
+
+    fullbooks_df = manifest[
+        manifest["primary_corpus_layer"].isin(
+            {
+                "dnb_oa_fullbook",
+                "hathitrust_ef_fullbook_print",
+                "gbv_kostenfrei_fullbook_pdf",
+                "direct_publisher_oa_pdf",
+                "openalex_oa_fulltext_pdf",
+                "open_access_monograph_stream",
+                "calibrated_fullbook_stream",
+                "entire_fulltext_book_cloud",
+                "archive_org_fulltext_book",
+                "primary_cloud_oa_fulltext",
+                "primary_fulltext",
+            }
+        )
+    ].copy()
+    fullbooks_df.to_csv(fullbooks_csv_path, index=False, encoding="utf-8")
+
+    summary = {
+        "total_unique_works_1970_2025": int(len(manifest)),
+        "total_complete_fulltext_books": int(len(fullbooks_df)),
+        "total_dnb_oa_fulltext_books": int((manifest["primary_corpus_layer"] == "dnb_oa_fullbook").sum()),
+        "total_hathitrust_fulltext_books": int((manifest["primary_corpus_layer"] == "hathitrust_ef_fullbook_print").sum()),
+        "total_passages_in_corpus": int(manifest["passages_in_corpus"].sum()),
+        "total_words_in_corpus": int(manifest["total_words_in_corpus"].sum()),
+        "works_by_highest_tier": {
+            str(k): int(v) for k, v in manifest["highest_fulltext_tier"].value_counts().items()
+        },
+        "works_by_primary_layer": {
+            str(k): int(v) for k, v in manifest["primary_corpus_layer"].value_counts().items()
+        },
+        "fulltext_books_by_decade": {
+            str(k): int(v) for k, v in fullbooks_df["decade"].value_counts().sort_index().items()
+        },
+    }
+    os.makedirs(os.path.dirname(summary_json_path), exist_ok=True)
+    with open(summary_json_path, "w", encoding="utf-8") as f:
+        json.dump(summary, f, indent=2, ensure_ascii=False)
+
+    print(
+        f"  -> Exported `{manifest_csv_path}` ({len(manifest):,} unique works) and "
+        f"`{fullbooks_csv_path}` ({len(fullbooks_df):,} complete full-text books | "
+        f"{summary['total_dnb_oa_fulltext_books']:,} DNB OA full books + "
+        f"{summary['total_hathitrust_fulltext_books']:,} HTRC full books)!",
+        flush=True,
+    )
+    return summary
+
+
 def main():
     parser = argparse.ArgumentParser(
-        description="Wave-10 Complete Deutsche Nationalbibliothek (DNB) Full-Text Harvester (1970-2025)"
+        description="Wave-11 Uncapped Exhaustive Deutsche Nationalbibliothek (DNB) Full-Text Harvester (1970-2025)"
     )
-    parser.add_argument("--workers", type=int, default=36)
+    parser.add_argument("--workers", type=int, default=48)
     parser.add_argument("--chunk-words", type=int, default=1000)
     parser.add_argument("--max-chunks-per-book", type=int, default=55)
     parser.add_argument("--max-toc-pdfs", type=int, default=50000)
-    parser.add_argument("--max-oa-books", type=int, default=4000)
+    parser.add_argument("--max-oa-books", type=int, default=100000)
     parser.add_argument("--no-merge", action="store_true")
+    parser.add_argument("--manifest-only", action="store_true")
     args = parser.parse_args()
 
     start_t = time.time()
+
+    dnb_prev = load_all_dnb_shards("data/dnb_metadata.csv")
+    if args.manifest_only:
+        build_exhaustive_dnb_master_manifest(dnb_prev)
+        return
+
+    ckpt_jsonl = "data/primary_texts/dnb_wave11_oa_checkpoint.jsonl"
+    if os.path.exists(ckpt_jsonl):
+        try:
+            os.remove(ckpt_jsonl)
+        except Exception:
+            pass
 
     ht_csv = "data/primary_texts/HATHITRUST_MATCHED_BOOKS.csv"
     already_seen_htids = set()
@@ -1052,22 +1422,26 @@ def main():
                 for v in isbn_variants(str(r["isbn"])):
                     already_matched_isbns.add(v)
 
-    dnb_prev = load_all_dnb_shards("data/dnb_metadata.csv")
     already_seen_urls = set()
     already_seen_titles = set()
+    already_seen_oa_urls = set()
+    already_seen_oa_titles = set()
     if not dnb_prev.empty:
         for u in dnb_prev["source_file"].dropna().unique():
             already_seen_urls.add(str(u).strip())
         for t in dnb_prev["title"].dropna().unique():
             tl = str(t).lower().strip()
             already_seen_titles.add(tl)
-            # Also record prefix up to chunk number for fast OA book deduplication
             if "[dnb-oa-vollbuch-abschnitt 1/" in tl:
                 already_seen_titles.add(tl.split("/")[0] + "/")
+                already_seen_oa_titles.add(tl.split("/")[0] + "/")
+        oa_rows = dnb_prev[dnb_prev["corpus_layer"] == "dnb_oa_fullbook"]
+        for u in oa_rows["source_file"].dropna().unique():
+            already_seen_oa_urls.add(str(u).strip())
 
     print(
-        f"Starting Wave-10 Complete DNB `location=onlinefree` + `hsg=` Full-Text Harvest (1970-2025)\n"
-        f"  (Existing Corpus: {len(dnb_prev):,} documents | {len(already_seen_htids):,} HTRC books)...",
+        f"Starting Wave-11 Uncapped Exhaustive DNB `location=onlinefree` + `MARC 856` Full-Text Harvest (1970-2025)\n"
+        f"  (Existing Corpus: {len(dnb_prev):,} documents | {len(already_seen_oa_titles):,} DNB OA books | {len(already_seen_htids):,} HTRC books)...",
         flush=True,
     )
 
@@ -1076,6 +1450,8 @@ def main():
         already_matched_isbns=already_matched_isbns,
         already_seen_urls=already_seen_urls,
         already_seen_titles=already_seen_titles,
+        already_seen_oa_urls=already_seen_oa_urls,
+        already_seen_oa_titles=already_seen_oa_titles,
         workers=args.workers,
         chunk_words=args.chunk_words,
         max_chunks_per_book=args.max_chunks_per_book,
@@ -1085,6 +1461,7 @@ def main():
 
     if not new_passages:
         print("No new DNB passages discovered beyond existing dataset.", flush=True)
+        build_exhaustive_dnb_master_manifest(dnb_prev)
         return
 
     if new_ht_summaries:
@@ -1100,25 +1477,32 @@ def main():
     elapsed = time.time() - start_t
 
     print("\n======================================================================", flush=True)
-    print(f"WAVE-10 COMPLETE DNB FULL-TEXT HARVEST FINISHED in {elapsed:.1f}s!", flush=True)
+    print(f"WAVE-11 UNCAPPED EXHAUSTIVE DNB FULL-TEXT HARVEST FINISHED in {elapsed:.1f}s!", flush=True)
     print(f"  - Stream A (Multi-ISBN $a/$z/$9 DNB -> HTRC Full Books): {len(new_ht_summaries)} books ({sum(1 for p in new_passages if p['corpus_layer']=='hathitrust_ef_fullbook_print'):,} passages)", flush=True)
-    print(f"  - Stream B (`location=onlinefree` DNB `/34` OA PDFs & EPUBs): {sum(1 for p in new_passages if p['corpus_layer']=='dnb_oa_fullbook'):,} passages", flush=True)
+    print(f"  - Stream B (`location=onlinefree` DNB `/34` & `MARC 856` OA PDFs & EPUBs): {sum(1 for p in new_passages if p['corpus_layer']=='dnb_oa_fullbook'):,} passages", flush=True)
     print(f"  - Stream C (Remaining DNB Digitized `/04` `Inhaltsverzeichnis` & Excerpt PDFs/HTMLs): {sum(1 for p in new_passages if p['corpus_layer']=='dnb_toc_pdf_fulltext'):,} documents", flush=True)
     print(f"  - Stream D (Remaining DNB `Inhaltstexte`, Abstracts & Keywords): {sum(1 for p in new_passages if p['corpus_layer']=='dnb_deposit_inhaltstext'):,} documents", flush=True)
-    print(f"  - TOTAL NEW UNIQUE DNB DOCUMENTS ADDED IN WAVE 10: {len(new_df):,} ({int(total_new_words):,} German words!)", flush=True)
+    print(f"  - TOTAL NEW UNIQUE DNB DOCUMENTS ADDED IN WAVE 11: {len(new_df):,} ({int(total_new_words):,} German words!)", flush=True)
     print("======================================================================", flush=True)
 
     if not args.no_merge:
         merged = pd.concat([dnb_prev, new_df], ignore_index=True)
         save_sharded_dnb_corpus(merged, rows_per_shard=24000)
+        if os.path.exists(ckpt_jsonl):
+            try:
+                os.remove(ckpt_jsonl)
+            except Exception:
+                pass
         total_est_words = pd.to_numeric(merged.get("word_count"), errors="coerce").fillna(950).sum()
         print(
             f"Total Master Corpus Across Shards = {len(merged):,} documents "
             f"(~{int(total_est_words):,} original German words!)",
             flush=True,
         )
+        build_exhaustive_dnb_master_manifest(merged)
 
 
 if __name__ == "__main__":
     main()
+
 

@@ -11,7 +11,7 @@
         "formula": "P(φ_k | η_0), w_n ~ 1× Raw Count",
         "description": "Pure Blei et al. (2003) baseline: removes the 2× RELIGIOUS_VOICE_KEYWORDS salience weight and uses an unseeded symmetric/auto Dirichlet word prior."
       },
-      "corpus_documents": 384071,
+      "corpus_documents": 461782,
       "vocabulary_size": 25000,
       "coherence_score": -3.3719,
       "topics": [
@@ -1871,9 +1871,9 @@
         "formula": "P(φ_k | η_auto), w_rel ~ 2× Salience",
         "description": "Amplifies core theological and critical signifiers (2× token weight) while keeping Dirichlet topic slots unseeded so clusters emerge inductively."
       },
-      "corpus_documents": 384071,
+      "corpus_documents": 461782,
       "vocabulary_size": 25000,
-      "coherence_score": -2.695,
+      "coherence_score": -2.476,
       "tfidf_audit": {
         "tfidf_smartirs": "ntc",
         "tfidf_min_threshold": 0.015,
@@ -1885,141 +1885,141 @@
           "topic_id": 1,
           "archetype": {
             "label": "Critical / Secular-Humanist",
-            "confidence": 74.2,
+            "confidence": 100.0,
             "scores": {
               "Traditional / Ecclesiastical": 0.0,
-              "Neoliberal / Self-Optimization": 25.8,
-              "Critical / Secular-Humanist": 74.2
+              "Neoliberal / Self-Optimization": 0.0,
+              "Critical / Secular-Humanist": 100.0
             }
           },
           "seeded_prior": null,
           "top_terms": [
             {
-              "term": "mensch",
-              "weight": 0.0271
+              "term": "politisch",
+              "weight": 0.04091
             },
             {
-              "term": "philosophie",
-              "weight": 0.02506
+              "term": "staat",
+              "weight": 0.02568
             },
             {
-              "term": "natur",
-              "weight": 0.01859
+              "term": "islam",
+              "weight": 0.01571
             },
             {
-              "term": "begriff",
-              "weight": 0.01669
+              "term": "politik",
+              "weight": 0.01473
             },
             {
-              "term": "denken",
-              "weight": 0.01238
+              "term": "gesellschaft",
+              "weight": 0.01418
             },
             {
-              "term": "sinn",
-              "weight": 0.01231
+              "term": "deutsch",
+              "weight": 0.01278
             },
             {
-              "term": "kant",
-              "weight": 0.01215
+              "term": "land",
+              "weight": 0.012
             },
             {
-              "term": "hegel",
-              "weight": 0.01176
+              "term": "islamisch",
+              "weight": 0.01125
             },
             {
-              "term": "menschlich",
-              "weight": 0.01171
+              "term": "religiös",
+              "weight": 0.01046
             },
             {
-              "term": "philosophisch",
-              "weight": 0.01058
+              "term": "europa",
+              "weight": 0.0089
             },
             {
-              "term": "wahrheit",
-              "weight": 0.01051
+              "term": "gewalt",
+              "weight": 0.0087
             },
             {
-              "term": "vernunft",
-              "weight": 0.01043
+              "term": "krieg",
+              "weight": 0.00728
             },
             {
-              "term": "geist",
-              "weight": 0.00979
+              "term": "muslim",
+              "weight": 0.00672
             },
             {
-              "term": "moralisch_moral",
-              "weight": 0.00901
+              "term": "konflikt",
+              "weight": 0.00668
             },
             {
-              "term": "freiheit",
-              "weight": 0.00888
+              "term": "europäisch",
+              "weight": 0.00649
             }
           ],
           "top_publishers": [
             {
-              "publisher": "Frommann-Holzboog",
-              "share": 9.6
+              "publisher": "De Gruyter / Transcript",
+              "share": 8.1
             },
             {
               "publisher": "Schöningh",
-              "share": 7.0
-            },
-            {
-              "publisher": "Vandenhoeck & Ruprecht",
               "share": 5.5
             },
             {
-              "publisher": "Suhrkamp",
-              "share": 5.1
-            },
-            {
-              "publisher": "Klett-Cotta",
+              "publisher": "Böhlau",
               "share": 4.9
             },
             {
-              "publisher": "De Gruyter / Transcript",
-              "share": 4.5
+              "publisher": "Vandenhoeck & Ruprecht",
+              "share": 4.8
+            },
+            {
+              "publisher": "Campus",
+              "share": 3.9
+            },
+            {
+              "publisher": "Fischer",
+              "share": 3.6
             }
           ],
           "representative_docs": [
             {
-              "title": "Klassische Gottesbeweise in der Sicht der gegenwärtigen Logik und Wissenschaftstheorie [HTRC-Vollbuch-Abschnitt 39/63]",
-              "author": "Ricken, Friedo",
-              "publisher": "Kohlhammer",
-              "date": "1991",
-              "corpus_layer": "hathitrust_ef_fullbook_print",
-              "probability": 82.1,
+              "title": "Islam und Rechtsstaat: zwischen Scharia und Säkularisierung",
+              "author": "Krawietz, Birgit",
+              "publisher": "SSOAR - Social Science Open Access Repository",
+              "date": "2008",
+              "corpus_layer": "dnb_deposit_inhaltstext",
+              "probability": 79.4,
               "keywords": [
                 "nan"
               ],
-              "snippet": "Txy Darum kein gewesen Axt Axt Axt Ingrediens nehmen reales Gründe VxVt xSy Gzx gewisse notwendiges wäre wäre ausschließlich NOVt notwendige also Art reale versteht axiomatisch sodaß Zxy Zxy Existierendes Bedingung Gxy Gxy Zeit Zeit Zeit Ze",
-              "apa_citation": "Ricken, Friedo (1991). Klassische Gottesbeweise in der Sicht der gegenwärtigen Logik und Wissenschaftstheorie [HTRC-Vollbuch-Abschnitt 39/63]. Kohlhammer."
+              "snippet": "Islam, Islamisches Recht, Rechtsstaat, Säkularisierung, Recht, Politisches System, Verfassung, Verfassungsstaat, Rechtsordnung, Gerechtigkeit, Religion, Verfassunggebung, Gesellschaftsordnung, (thesoz)Scharia, (thesoz)politisches System, (t",
+              "apa_citation": "Krawietz, Birgit (2008). Islam und Rechtsstaat: zwischen Scharia und Säkularisierung. SSOAR - Social Science Open Access Repository."
             },
             {
-              "title": "Hegels praktische Philosophie: ein Kommentar zur enzyklopädischen Darstellung der menschlichen Freiheit und ihrer objektiven Verwirklichung [HTRC-Vollbuch-Abschnitt 22/75]",
-              "author": "Peperzak, Adriaan Theodoor",
-              "publisher": "Frommann-Holzboog",
-              "date": "1991",
-              "corpus_layer": "hathitrust_ef_fullbook_print",
-              "probability": 80.0,
+              "title": "Libanons langsame Selbstzerstörung: unter dem Druck der Syrienkrise zerfallen staatliche Institutionen",
+              "author": "Wimmen, Heiko",
+              "publisher": "DNB Monograph (DE)",
+              "date": "2013",
+              "corpus_layer": "dnb_deposit_inhaltstext",
+              "probability": 76.0,
               "keywords": [
                 "nan"
               ],
-              "snippet": "wichtig theoretischen theoretischen Anfang praktischen Synthese solche Bestimmung Bestimmung während Philosophie Fassungen Fassungen Fassungen welche Unterschiede Teile ordnet weiß geschrieben gesetzte Inhaltlich Geist verwenden gibt realis",
-              "apa_citation": "Peperzak, Adriaan Theodoor (1991). Hegels praktische Philosophie: ein Kommentar zur enzyklopädischen Darstellung der menschlichen Freiheit und ihrer objektiven Verwirklichung [HTRC-Vollbuch-Abschnitt 22/75]. Frommann-Holzboog."
+              "snippet": "Abstract: Der Kriegseintritt der schiitischen Hisbollah auf Seiten des syrischen Regimes und die Beteiligung sunnitischer Islamisten auf Seiten der Rebellen haben die konfessionellen Spannungen im Libanon zum Siedepunkt gebracht. Die libane",
+              "apa_citation": "Wimmen, Heiko (2013). Libanons langsame Selbstzerstörung: unter dem Druck der Syrienkrise zerfallen staatliche Institutionen. DNB Monograph (DE)."
             },
             {
-              "title": "Materialien zu Kants Kritik der praktischen Vernunft [HTRC-Vollbuch-Abschnitt 46/75]",
-              "author": "Bittner, Rüdiger",
-              "publisher": "Suhrkamp",
-              "date": "1975",
-              "corpus_layer": "hathitrust_ef_fullbook_print",
-              "probability": 79.5,
+              "title": "Die Codes der Extremisten: wie Links- und Rechtsextreme, Autokraten und Islamisten die Demokratie unterwandern",
+              "author": "Fleischmann, Gerald",
+              "publisher": "edition a",
+              "date": "2025",
+              "corpus_layer": "dnb_deposit_inhaltstext",
+              "probability": 73.3,
               "keywords": [
                 "nan"
               ],
-              "snippet": "jene sowohl Vermögens sinnlichen Vermögen Bedingung folglich Beziehung Freiheit reinen rein reinem praktischer Objekts Vernunft Vernunft Vernunft Vernunft jederzeit praktisch angetroffen eigentlich Antriebe positive desselben Willkür Willkü",
-              "apa_citation": "Bittner, Rüdiger (1975). Materialien zu Kants Kritik der praktischen Vernunft [HTRC-Vollbuch-Abschnitt 46/75]. Suhrkamp."
+              "snippet": "Unsere Demokratie wird bedroht. Wie können wir ihre Feinde erkennen? Unruhe auf den Straßen, Fake News im Internet, neue Bedrohungen von außen: Die liberale Demokratie war noch nie so unter Druck wie heute. Doch wer sind ihre Feinde? Woran",
+              "apa_citation": "Fleischmann, Gerald (2025). Die Codes der Extremisten: wie Links- und Rechtsextreme, Autokraten und Islamisten die Demokratie unterwandern. edition a."
             }
           ]
         },
@@ -2038,135 +2038,285 @@
           "top_terms": [
             {
               "term": "kirche",
-              "weight": 0.09891
+              "weight": 0.10562
+            },
+            {
+              "term": "theologie",
+              "weight": 0.03039
             },
             {
               "term": "katholisch",
-              "weight": 0.02475
-            },
-            {
-              "term": "gemeinde",
-              "weight": 0.018
-            },
-            {
-              "term": "evangelisch",
-              "weight": 0.01755
+              "weight": 0.02767
             },
             {
               "term": "kirchlich",
-              "weight": 0.01751
-            },
-            {
-              "term": "dienst",
-              "weight": 0.01284
-            },
-            {
-              "term": "bischof",
-              "weight": 0.01183
-            },
-            {
-              "term": "luther",
-              "weight": 0.01059
-            },
-            {
-              "term": "geistlich",
-              "weight": 0.00958
+              "weight": 0.0235
             },
             {
               "term": "christlich",
-              "weight": 0.00873
+              "weight": 0.02211
             },
             {
-              "term": "seelsorge",
-              "weight": 0.00856
+              "term": "gemeinde",
+              "weight": 0.02147
+            },
+            {
+              "term": "theologisch",
+              "weight": 0.0156
+            },
+            {
+              "term": "religiös",
+              "weight": 0.0144
+            },
+            {
+              "term": "luther",
+              "weight": 0.01393
+            },
+            {
+              "term": "dienst",
+              "weight": 0.0134
+            },
+            {
+              "term": "evangelisch",
+              "weight": 0.01329
+            },
+            {
+              "term": "glaube",
+              "weight": 0.00864
             },
             {
               "term": "predigt",
-              "weight": 0.00813
+              "weight": 0.00848
             },
             {
-              "term": "papst",
-              "weight": 0.00757
-            },
-            {
-              "term": "gottesdienst_gott",
-              "weight": 0.00673
+              "term": "christ",
+              "weight": 0.00831
             },
             {
               "term": "pfarrer",
-              "weight": 0.00644
+              "weight": 0.0082
             }
           ],
           "top_publishers": [
             {
-              "publisher": "Böhlau",
-              "share": 10.2
-            },
-            {
               "publisher": "Schöningh",
-              "share": 8.9
+              "share": 6.7
             },
             {
-              "publisher": "Aschendorff",
-              "share": 6.4
+              "publisher": "Böhlau",
+              "share": 5.9
             },
             {
               "publisher": "Vandenhoeck & Ruprecht",
-              "share": 5.1
+              "share": 5.5
+            },
+            {
+              "publisher": "Aschendorff",
+              "share": 4.5
             },
             {
               "publisher": "Gütersloher Verlagshaus",
-              "share": 4.4
+              "share": 4.2
             },
             {
               "publisher": "Kohlhammer",
-              "share": 4.3
+              "share": 4.0
             }
           ],
           "representative_docs": [
+            {
+              "title": "Presbyterialprotokolle der evangelischen Gemeinde Brenndorf 1868 - 1885 [DNB-Inhaltsverzeichnis & Leseprobe]",
+              "author": "Schmidts, Hermann",
+              "publisher": "Arbeitskreis für Siebenbürgische Landeskunde Heidelberg",
+              "date": "2000",
+              "corpus_layer": "dnb_toc_pdf_fulltext",
+              "probability": 90.0,
+              "keywords": [
+                "nan"
+              ],
+              "snippet": "Inhaltsverzeichnis VORWORT ,3 SITZUNG NR. 95 VOM 06. 01.1868 7 SITZUNG NR. 96 VOM 01. 03.1868 8 SITZUNG NR. 97 VOM 03. 05.1868 11 SITZUNG NR. 98 VOM 21. 05.1868 12 SITZUNG NR. 99 VOM 26. 07.1868 13 SITZUNG NR. 100 VOM 02. 08.1868 13 SITZUNG",
+              "apa_citation": "Schmidts, Hermann (2000). Presbyterialprotokolle der evangelischen Gemeinde Brenndorf 1868 - 1885 [DNB-Inhaltsverzeichnis & Leseprobe]. Arbeitskreis für Siebenbürgische Landeskunde Heidelberg."
+            },
+            {
+              "title": "Ein Herr und tausend Kirchen?: ökumenische Kirchenkunde [DNB-Inhaltsverzeichnis & Leseprobe]",
+              "author": "Markert, Michael",
+              "publisher": "Evangelische Verlagsanstalt",
+              "date": "2015",
+              "corpus_layer": "dnb_toc_pdf_fulltext",
+              "probability": 83.1,
+              "keywords": [
+                "nan"
+              ],
+              "snippet": "Inhalt 1 Eine kurze Geschichte der Ökumenischen Bewegung 11 1.1 Was bewegt die Ökumenische Bewegung? 11 1.2 Der Ökumenische Rat der Kirchen 14 1.2.1 Taufe, Eucharistie und Amt 17 1.2.2 Antirassismusprogramm 19 1.2.3 Mission und Evangelisati",
+              "apa_citation": "Markert, Michael (2015). Ein Herr und tausend Kirchen?: ökumenische Kirchenkunde [DNB-Inhaltsverzeichnis & Leseprobe]. Evangelische Verlagsanstalt."
+            },
             {
               "title": "Evangelisch - katholisch: Basiswissen [DNB-Inhaltsverzeichnis & Leseprobe]",
               "author": "Schuck, Martin",
               "publisher": "Gütersloher Verlagshaus",
               "date": "2001",
               "corpus_layer": "dnb_toc_pdf_fulltext",
-              "probability": 82.7,
+              "probability": 83.1,
               "keywords": [
                 "nan"
               ],
               "snippet": "Inh all Vorwort 7 Evangelische und katholische Kirchen in Deutschland Inhalte des evangelischen Glaubens Der eine Glaube und die vielen evangelischen Kirchen 14 Die Gestalt der Kirche 19 Das Pfarramt 19 Kirchenvorstände 23 Synoden 26 Kirche",
               "apa_citation": "Schuck, Martin (2001). Evangelisch - katholisch: Basiswissen [DNB-Inhaltsverzeichnis & Leseprobe]. Gütersloher Verlagshaus."
-            },
-            {
-              "title": "Die liturgischen Dienste: Liturgie als Handlung d. ganzen Gottesvolkes [DNB-Inhaltsverzeichnis & Leseprobe]",
-              "author": "Kuhne, Alexander",
-              "publisher": "Bonifatius",
-              "date": "1982",
-              "corpus_layer": "dnb_toc_pdf_fulltext",
-              "probability": 82.3,
-              "keywords": [
-                "nan"
-              ],
-              "snippet": "Inhalt Alexander Kühne Vorwort 7 Emil Joseph Lengeling Der liturgische Dienst des Bischofs 11 Paul Nordhues Der liturgische Dienst des Priesters 30 Heinrich Rennings Der liturgische Dienst des Diakons 47 Günter Duffrer Der liturgische Diens",
-              "apa_citation": "Kuhne, Alexander (1982). Die liturgischen Dienste: Liturgie als Handlung d. ganzen Gottesvolkes [DNB-Inhaltsverzeichnis & Leseprobe]. Bonifatius."
-            },
-            {
-              "title": "Orthodoxe Kirchen in Deutschland [DNB-Inhaltsverzeichnis & Leseprobe]",
-              "author": "Thöle, Reinhard",
-              "publisher": "Vandenhoeck & Ruprecht",
-              "date": "1997",
-              "corpus_layer": "dnb_toc_pdf_fulltext",
-              "probability": 80.7,
-              "keywords": [
-                "nan"
-              ],
-              "snippet": "INHALTSVERZEICHNIS Geleitwort von S.E. Metropolit Augoustinos von Deutschland 5 Einführung 7 1. Die Griechisch-Orthodoxe Metropolie von Deutschland 9 2. Das Orthodoxe Erzbistum von Westeuropa 16 3. Die Griechisch (Rum)-Orthodoxe Kirche von",
-              "apa_citation": "Thöle, Reinhard (1997). Orthodoxe Kirchen in Deutschland [DNB-Inhaltsverzeichnis & Leseprobe]. Vandenhoeck & Ruprecht."
             }
           ]
         },
         {
           "topic_id": 3,
+          "archetype": {
+            "label": "Critical / Secular-Humanist",
+            "confidence": 92.2,
+            "scores": {
+              "Traditional / Ecclesiastical": 7.8,
+              "Neoliberal / Self-Optimization": 0.0,
+              "Critical / Secular-Humanist": 92.2
+            }
+          },
+          "seeded_prior": null,
+          "top_terms": [
+            {
+              "term": "philosophie",
+              "weight": 0.04733
+            },
+            {
+              "term": "philosophisch",
+              "weight": 0.01149
+            },
+            {
+              "term": "nietzsche",
+              "weight": 0.01112
+            },
+            {
+              "term": "wissenschaft",
+              "weight": 0.01023
+            },
+            {
+              "term": "moral",
+              "weight": 0.00673
+            },
+            {
+              "term": "kant",
+              "weight": 0.00597
+            },
+            {
+              "term": "leibniz",
+              "weight": 0.00565
+            },
+            {
+              "term": "vorlesung",
+              "weight": 0.00555
+            },
+            {
+              "term": "theologie",
+              "weight": 0.0053
+            },
+            {
+              "term": "kritik",
+              "weight": 0.00524
+            },
+            {
+              "term": "wittgenstein",
+              "weight": 0.00505
+            },
+            {
+              "term": "sartre",
+              "weight": 0.00485
+            },
+            {
+              "term": "philosoph",
+              "weight": 0.00477
+            },
+            {
+              "term": "schelling",
+              "weight": 0.00443
+            },
+            {
+              "term": "nietzsch",
+              "weight": 0.00429
+            }
+          ],
+          "top_publishers": [
+            {
+              "publisher": "De Gruyter / Transcript",
+              "share": 12.1
+            },
+            {
+              "publisher": "Vandenhoeck & Ruprecht",
+              "share": 5.9
+            },
+            {
+              "publisher": "Mohr Siebeck",
+              "share": 5.7
+            },
+            {
+              "publisher": "Frommann-Holzboog",
+              "share": 4.6
+            },
+            {
+              "publisher": "Schöningh",
+              "share": 4.0
+            },
+            {
+              "publisher": "Springer Nature (Holtzbrinck)",
+              "share": 3.8
+            }
+          ],
+          "representative_docs": [
+            {
+              "title": "Interpreting Plato Socratically: Socrates and justice",
+              "author": "Corlett, J. Angelo",
+              "publisher": "Springer Nature (Holtzbrinck)",
+              "date": "2018",
+              "corpus_layer": "gbv_direct_fulltext_pdf",
+              "probability": 89.4,
+              "keywords": [
+                "Socrates",
+                "Dialogues (Plato)",
+                "08.21 Ancient philosophy",
+                "Plato"
+              ],
+              "snippet": "Introduction -- Interpreting Plato Socratically -- Defending the Socratic interpretation of Plato's Dialogues -- In defense of Socratic studies -- Socrates and distributive justice -- Legal obligation in Plato's Crito -- The Socratic roots of retributivism -- Socrates and compensatory justice -- Conclusion. J. Angelo Corlett's new book, Interpreting Plato Socratically continues the critical discussion of the Platonic",
+              "apa_citation": "Corlett, J. Angelo (2018). Interpreting Plato Socratically: Socrates and justice. Springer Nature (Holtzbrinck)."
+            },
+            {
+              "title": "Polarity and change in 1 Corinthians 15: a study of metaphysics, rhetoric, and resurrection [DNB-Inhaltsverzeichnis & Leseprobe]",
+              "author": "Asher, Jeffrey R.",
+              "publisher": "Mohr Siebeck",
+              "date": "2000",
+              "corpus_layer": "dnb_toc_pdf_fulltext",
+              "probability": 88.1,
+              "keywords": [
+                "nan"
+              ],
+              "snippet": "Table of Contents Acknowledgements V Abbreviations XI I. Introduction 1 II. The Problem of Polarity and Change 5 1. The Problem of Methodology 5 2. The Problem of Polarity 8 2.1. The Problem of Polarity and Causal Questions 9 2.2. The Probl",
+              "apa_citation": "Asher, Jeffrey R. (2000). Polarity and change in 1 Corinthians 15: a study of metaphysics, rhetoric, and resurrection [DNB-Inhaltsverzeichnis & Leseprobe]. Mohr Siebeck."
+            },
+            {
+              "title": "Truth, Meaning, Justification, and Reality: Themes from Dummett",
+              "author": "Frauchiger, Michael",
+              "publisher": "De Gruyter / Transcript",
+              "date": "2018",
+              "corpus_layer": "gbv_direct_fulltext_pdf",
+              "probability": 87.7,
+              "keywords": [
+                "Antirealismus.",
+                "Philosophie der Mathematik.",
+                "PHILOSOPHY / Movements / Analytic",
+                "PHILOSOPHY / History & Surveys / Modern",
+                "Frege",
+                "Gottlob"
+              ],
+              "snippet": "This collection concentrates on vital themes from Michael Dummett, one of the most influential and creative analytic philosophers of our time. The contributors, who include some of Dummett's distinguished former students, critically reflect on various concerns of Dummett's ground-breaking work in philosophy of language, metaphysics, and philosophy of mathematics and logic. The essays direct towards aspects of Dummett",
+              "apa_citation": "Frauchiger, Michael (2018). Truth, Meaning, Justification, and Reality: Themes from Dummett. De Gruyter / Transcript."
+            }
+          ]
+        },
+        {
+          "topic_id": 4,
           "archetype": {
             "label": "Critical / Secular-Humanist",
             "confidence": 100.0,
@@ -2179,281 +2329,131 @@
           "seeded_prior": null,
           "top_terms": [
             {
-              "term": "science",
-              "weight": 0.00677
+              "term": "geschichte",
+              "weight": 0.03267
             },
             {
-              "term": "design",
-              "weight": 0.0058
+              "term": "jahrhundert",
+              "weight": 0.01768
             },
             {
-              "term": "abt",
-              "weight": 0.00561
+              "term": "historisch",
+              "weight": 0.01508
             },
             {
-              "term": "open_access",
-              "weight": 0.00551
+              "term": "studie",
+              "weight": 0.0127
             },
             {
-              "term": "creative_commons",
-              "weight": 0.00545
+              "term": "forschung",
+              "weight": 0.01161
             },
             {
-              "term": "care",
-              "weight": 0.0053
+              "term": "arbeit",
+              "weight": 0.01111
             },
             {
-              "term": "art",
-              "weight": 0.00525
+              "term": "bild",
+              "weight": 0.01056
             },
             {
-              "term": "evaluation",
-              "weight": 0.00509
+              "term": "literatur",
+              "weight": 0.01021
             },
             {
-              "term": "wiesbaden",
-              "weight": 0.00462
+              "term": "autor",
+              "weight": 0.01018
             },
             {
               "term": "text",
-              "weight": 0.00443
+              "weight": 0.00944
             },
             {
-              "term": "culture",
-              "weight": 0.00421
+              "term": "deutsch",
+              "weight": 0.00893
             },
             {
-              "term": "david",
-              "weight": 0.00396
+              "term": "wissenschaft",
+              "weight": 0.00878
             },
             {
-              "term": "people",
-              "weight": 0.00395
+              "term": "thema",
+              "weight": 0.00837
             },
             {
-              "term": "gesellschaft_soziologie",
-              "weight": 0.00387
+              "term": "untersuchung",
+              "weight": 0.00769
             },
             {
-              "term": "conditions",
-              "weight": 0.00386
+              "term": "sprache",
+              "weight": 0.0075
             }
           ],
           "top_publishers": [
             {
               "publisher": "De Gruyter / Transcript",
-              "share": 14.7
+              "share": 8.9
             },
             {
               "publisher": "Vandenhoeck & Ruprecht",
-              "share": 6.4
-            },
-            {
-              "publisher": "Mohr Siebeck",
-              "share": 6.4
-            },
-            {
-              "publisher": "Schöningh",
-              "share": 4.5
-            },
-            {
-              "publisher": "Springer Nature (Holtzbrinck)",
-              "share": 4.4
-            },
-            {
-              "publisher": "Böhlau",
-              "share": 4.1
-            }
-          ],
-          "representative_docs": [
-            {
-              "title": "Polarity and change in 1 Corinthians 15: a study of metaphysics, rhetoric, and resurrection [DNB-Inhaltsverzeichnis & Leseprobe]",
-              "author": "Asher, Jeffrey R.",
-              "publisher": "Mohr Siebeck",
-              "date": "2000",
-              "corpus_layer": "dnb_toc_pdf_fulltext",
-              "probability": 85.1,
-              "keywords": [
-                "nan"
-              ],
-              "snippet": "Table of Contents Acknowledgements V Abbreviations XI I. Introduction 1 II. The Problem of Polarity and Change 5 1. The Problem of Methodology 5 2. The Problem of Polarity 8 2.1. The Problem of Polarity and Causal Questions 9 2.2. The Probl",
-              "apa_citation": "Asher, Jeffrey R. (2000). Polarity and change in 1 Corinthians 15: a study of metaphysics, rhetoric, and resurrection [DNB-Inhaltsverzeichnis & Leseprobe]. Mohr Siebeck."
-            },
-            {
-              "title": "Linguistic fragmentation and cultural inclusion in the Middle Ages: translation, plurilingualism, multilingualism",
-              "author": "Bertagnolli, Davide",
-              "publisher": "Brepols Publishers",
-              "date": "2025",
-              "corpus_layer": "gbv_direct_fulltext_pdf",
-              "probability": 84.0,
-              "keywords": [
-                "Übersetzung",
-                "Mehrsprachigkeit",
-                "Geschichte 800-1600",
-                "Konfessionskunde"
-              ],
-              "snippet": "Linguistic fragmentation contains the risk of cultural separation, while the concept of inclusion implies the recognition of the difference of the Other, which must be recognised in its specificity to develop a process of inclusion. One of the main means of overcoming the dangers hidden in linguistic fragmentation is unquestionably plurilingualism and, relatedly, translation. Translation enables the transmission of c",
-              "apa_citation": "Bertagnolli, Davide (2025). Linguistic fragmentation and cultural inclusion in the Middle Ages: translation, plurilingualism, multilingualism. Brepols Publishers."
-            },
-            {
-              "title": "Ezekiel's Visionary Temple in Babylonian Context",
-              "author": "Ganzel, Ṭovah",
-              "publisher": "De Gruyter / Transcript",
-              "date": "2021",
-              "corpus_layer": "gbv_direct_fulltext_pdf",
-              "probability": 83.8,
-              "keywords": [
-                "Assyro-Babylonian literature",
-                "Assyro-Babylonian religion",
-                "Civilization",
-                "Assyro-Babylonian",
-                "Temples",
-                "Ezekiel"
-              ],
-              "snippet": "Frontmatter -- Contents -- Acknowledgements -- 1 Ezekiel’s Temple Vision: An Introduction -- 2 Studying the Book of Ezekiel in Its Babylonian Context -- 3 The Language of the Temple Vision -- 4 Ezekiel’s Temple Compound and the World of Babylonian Temples -- 5 Officials’ Roles in the Temple Vision -- 6 First-Month Temple Rituals in Ezekiel’s Vision -- 7 Conclusion -- Bibliography -- Abbreviations of Periodicals, Refe",
-              "apa_citation": "Ganzel, Ṭovah (2021). Ezekiel's Visionary Temple in Babylonian Context. De Gruyter / Transcript."
-            }
-          ]
-        },
-        {
-          "topic_id": 4,
-          "archetype": {
-            "label": "Neoliberal / Self-Optimization",
-            "confidence": 100.0,
-            "scores": {
-              "Traditional / Ecclesiastical": 0.0,
-              "Neoliberal / Self-Optimization": 100.0,
-              "Critical / Secular-Humanist": 0.0
-            }
-          },
-          "seeded_prior": null,
-          "top_terms": [
-            {
-              "term": "frage",
-              "weight": 0.01844
-            },
-            {
-              "term": "verschieden",
-              "weight": 0.0112
-            },
-            {
-              "term": "sinn",
-              "weight": 0.01098
-            },
-            {
-              "term": "fall",
-              "weight": 0.00977
-            },
-            {
-              "term": "bestimmt",
-              "weight": 0.00974
-            },
-            {
-              "term": "einzeln",
-              "weight": 0.00924
-            },
-            {
-              "term": "folgend",
-              "weight": 0.00824
-            },
-            {
-              "term": "grund",
-              "weight": 0.00794
-            },
-            {
-              "term": "form",
-              "weight": 0.00786
-            },
-            {
-              "term": "weise",
-              "weight": 0.00779
-            },
-            {
-              "term": "art",
-              "weight": 0.00746
-            },
-            {
-              "term": "person",
-              "weight": 0.00735
-            },
-            {
-              "term": "stelle",
-              "weight": 0.00735
-            },
-            {
-              "term": "zusammenhang",
-              "weight": 0.00612
-            },
-            {
-              "term": "problem",
-              "weight": 0.00611
-            }
-          ],
-          "top_publishers": [
-            {
-              "publisher": "De Gruyter / Transcript",
-              "share": 7.4
-            },
-            {
-              "publisher": "Vandenhoeck & Ruprecht",
-              "share": 6.4
-            },
-            {
-              "publisher": "Schöningh",
               "share": 6.1
             },
             {
               "publisher": "Böhlau",
-              "share": 5.1
+              "share": 4.8
             },
             {
-              "publisher": "Frommann-Holzboog",
-              "share": 4.2
+              "publisher": "Schöningh",
+              "share": 4.6
             },
             {
               "publisher": "Mohr Siebeck",
-              "share": 4.1
+              "share": 3.5
+            },
+            {
+              "publisher": "Kohlhammer",
+              "share": 3.2
             }
           ],
           "representative_docs": [
             {
-              "title": "Existenz und Prädikation: sprachanalytische Untersuchungen zu Existenz-Aussagen [HTRC-Vollbuch-Abschnitt 46/74]",
-              "author": "Carl, Wolfgang",
-              "publisher": "C.H. Beck",
-              "date": "1974",
-              "corpus_layer": "hathitrust_ef_fullbook_print",
-              "probability": 89.4,
+              "title": "Werk und Rezeption Philipp Melanchthons in Universität und Schule bis ins 18. Jahrhundert: Tagung anläßlich seines 500. Geburtstages an der Universität Leipzig",
+              "author": "Wartenberg, Günther",
+              "publisher": "Evangelische Verlagsanstalt",
+              "date": "1999",
+              "corpus_layer": "drm_fallback_multi_api_enriched",
+              "probability": 74.7,
               "keywords": [
                 "nan"
               ],
-              "snippet": "einzigen genannt denen denen denen denen denen uns sortalen sortalen sortalen sortalen sortalen sortalen sortalen sortalen sortalen sortalen Frage Frage Frage dadurch dessen allgemein sinnvollen sinnvollen sinnvollen ganz ganz handelt Recht",
-              "apa_citation": "Carl, Wolfgang (1974). Existenz und Prädikation: sprachanalytische Untersuchungen zu Existenz-Aussagen [HTRC-Vollbuch-Abschnitt 46/74]. C.H. Beck."
+              "snippet": "Werk und Rezeption Philipp Melanchthons in Universität und Schule bis ins 18. Jahrhundert: Tagung anläßlich seines 500. Geburtstages an der Universität Leipzig. Wartenberg, Günther. Evangelische Verlagsanstalt. Zum 500. Geburtstag Philipp M",
+              "apa_citation": "Wartenberg, Günther (1999). Werk und Rezeption Philipp Melanchthons in Universität und Schule bis ins 18. Jahrhundert: Tagung anläßlich seines 500. Geburtstages an der Universität Leipzig. Evangelische Verlagsanstalt."
             },
             {
-              "title": "\"Dieses\" und \"So etwas\": zur ontologischen Klassifikation platonischer Formen [HTRC-Vollbuch-Abschnitt 43/74]",
-              "author": "Strobel, Benedikt",
+              "title": "Philologie in Göttingen: Sprach- und Literaturwissenschaft an der Georgia Augusta im 18. und beginnenden 19. Jahrhundert [DNB-Inhaltsverzeichnis & Leseprobe]",
+              "author": "Lauer, Reinhard",
               "publisher": "Vandenhoeck & Ruprecht",
-              "date": "2007",
-              "corpus_layer": "hathitrust_ef_fullbook_print",
-              "probability": 83.6,
+              "date": "2001",
+              "corpus_layer": "dnb_toc_pdf_fulltext",
+              "probability": 74.5,
               "keywords": [
                 "nan"
               ],
-              "snippet": "etwa zusätzlichen angehängten Singular-Ausdruck mögliche ioa ioa Bewegtes plural zurückgeführt liegt verallgemeinernd Formen explained Ausdruck correctly Bewegung Bewegung äviooTn Erklärung zurückzuweisen Termen riiiillitudinis vel äXXr sie",
-              "apa_citation": "Strobel, Benedikt (2007). \"Dieses\" und \"So etwas\": zur ontologischen Klassifikation platonischer Formen [HTRC-Vollbuch-Abschnitt 43/74]. Vandenhoeck & Ruprecht."
+              "snippet": "Philologie in Göttingen Sprach- und Literaturwissenschaft an der Georgia Augusta im 18. und beginnenden 19. Jahrhundert herausgegeben von Reinhard Lauer V&R Vandenhoeck & Ruprecht in Göttingen INHALT Vorwort des Herausgebers 7 ULRICH SCHIND",
+              "apa_citation": "Lauer, Reinhard (2001). Philologie in Göttingen: Sprach- und Literaturwissenschaft an der Georgia Augusta im 18. und beginnenden 19. Jahrhundert [DNB-Inhaltsverzeichnis & Leseprobe]. Vandenhoeck & Ruprecht."
             },
             {
-              "title": "Das  Sein-Sollen-Problem: e. modallog. Studie [HTRC-Vollbuch-Abschnitt 17/36]",
-              "author": "Stuhlmann-Laeisz, Rainer",
-              "publisher": "Frommann-Holzboog",
-              "date": "1983",
-              "corpus_layer": "hathitrust_ef_fullbook_print",
-              "probability": 83.4,
+              "title": "DIE WA (H) RE KUNST: Deutsche Kultur im Sog sozioökonomischer Wandlungsprozesse",
+              "author": "Hermand, Jost",
+              "publisher": "Böhlau",
+              "date": "2022",
+              "corpus_layer": "dnb_deposit_inhaltstext",
+              "probability": 74.4,
               "keywords": [
                 "nan"
               ],
-              "snippet": "Widerspruch zusammen Au-iß vorausgesetzte Generalisierungstheorem natürlich T-widerspruchsfreie Beweis Beweis Beweis Beweis vielen E-Klassen Hauptlemmas nämlich Regel Voraussetzung fallen Vollständigkeitssatz Mithin Nun Nun konstruiert Kons",
-              "apa_citation": "Stuhlmann-Laeisz, Rainer (1983). Das  Sein-Sollen-Problem: e. modallog. Studie [HTRC-Vollbuch-Abschnitt 17/36]. Frommann-Holzboog."
+              "snippet": "Sozioökonomischer Wandel, wa, Sozioökonomisches System, Kultur, Kunst, Deutsch, (BISAC Subject Heading)HIS030000, (BISAC Subject Heading)HIS056000, Deutschland, Kunstgeschichte, Kulturgeschichte, Wirtschafts- und Sozialgeschichte, Mittelalt",
+              "apa_citation": "Hermand, Jost (2022). DIE WA (H) RE KUNST: Deutsche Kultur im Sog sozioökonomischer Wandlungsprozesse. Böhlau."
             }
           ]
         },
@@ -2471,136 +2471,278 @@
           "seeded_prior": null,
           "top_terms": [
             {
-              "term": "brief",
-              "weight": 0.02328
+              "term": "arbeit",
+              "weight": 0.01238
             },
             {
-              "term": "jahrhundert",
-              "weight": 0.02029
+              "term": "unterricht",
+              "weight": 0.01046
             },
             {
-              "term": "schrift",
-              "weight": 0.01403
+              "term": "gruppe",
+              "weight": 0.01037
             },
             {
-              "term": "text",
-              "weight": 0.01199
+              "term": "person",
+              "weight": 0.00875
             },
             {
-              "term": "übersetzung",
-              "weight": 0.00954
+              "term": "schule",
+              "weight": 0.00835
             },
             {
-              "term": "kloster",
-              "weight": 0.00949
+              "term": "sozial",
+              "weight": 0.00762
             },
             {
-              "term": "quelle",
-              "weight": 0.00944
+              "term": "ergebnis",
+              "weight": 0.00705
             },
             {
-              "term": "geschichte",
-              "weight": 0.00896
+              "term": "bereich",
+              "weight": 0.00702
             },
             {
-              "term": "museum",
-              "weight": 0.00881
+              "term": "ziel",
+              "weight": 0.00608
             },
             {
-              "term": "könig",
-              "weight": 0.0079
+              "term": "entwicklung",
+              "weight": 0.00603
             },
             {
-              "term": "mittelalter",
-              "weight": 0.00724
+              "term": "bildung",
+              "weight": 0.0055
             },
             {
-              "term": "sammlung",
-              "weight": 0.00564
+              "term": "jugendliche",
+              "weight": 0.00545
             },
             {
-              "term": "alt",
-              "weight": 0.00526
+              "term": "fall",
+              "weight": 0.00541
             },
             {
-              "term": "ludwig",
-              "weight": 0.00518
+              "term": "verschieden",
+              "weight": 0.00538
             },
             {
-              "term": "römisch",
-              "weight": 0.0047
+              "term": "organisation",
+              "weight": 0.00527
             }
           ],
           "top_publishers": [
             {
-              "publisher": "Böhlau",
-              "share": 15.1
-            },
-            {
-              "publisher": "Aschendorff",
-              "share": 7.8
-            },
-            {
-              "publisher": "Schöningh",
-              "share": 6.7
-            },
-            {
               "publisher": "De Gruyter / Transcript",
-              "share": 5.8
+              "share": 10.2
+            },
+            {
+              "publisher": "Campus",
+              "share": 7.6
+            },
+            {
+              "publisher": "Evangelische Verlagsanstalt",
+              "share": 6.1
             },
             {
               "publisher": "Vandenhoeck & Ruprecht",
-              "share": 5.5
+              "share": 4.0
             },
             {
-              "publisher": "Wilhelm Fink",
-              "share": 4.1
+              "publisher": "Schöningh",
+              "share": 3.9
+            },
+            {
+              "publisher": "Böhlau",
+              "share": 3.8
             }
           ],
           "representative_docs": [
             {
-              "title": "S. Gilles: Studien zum Rechtsstatus und Beziehungsnetz einer Abtei im Spiegel ihrer Memorialüberlieferung ; Bestandteil des Quellenwerkes Societas et Fraternitas [HTRC-Vollbuch-Abschnitt 59/72]",
-              "author": "Winzer, Ulrich",
-              "publisher": "Wilhelm Fink",
-              "date": "1988",
-              "corpus_layer": "hathitrust_ef_fullbook_print",
-              "probability": 82.1,
+              "title": "MAIDS (Meditation und Achtsamkeit in der Schule): Auswirkungen auf Aufmerksamkeit und Wohlbefinden von Schülerinnen und Schülern sowie Klassenklima : eine quantitativ-qualitative Studie [DNB-OA-Vollbuch-Abschnitt 22/24]",
+              "author": "Schramm, Annika",
+              "publisher": "Universitätsbibliothek der Ludwig-Maximilians-Universität",
+              "date": "2022",
+              "corpus_layer": "dnb_oa_fullbook",
+              "probability": 87.0,
               "keywords": [
                 "nan"
               ],
-              "snippet": "Poncius Guillelmi Bartholomeus Bartholomeus Bartolomei Bertrandus Bertrandus Raimundus Raimundus Herausgeber HGL Berjaco Arch korrigiert Bedocii Bedocii Bedocii Barriaco Petrus Petrus Petrus Beraldi Gard dep Beraldus Beraldus MENARD MENARD",
-              "apa_citation": "Winzer, Ulrich (1988). S. Gilles: Studien zum Rechtsstatus und Beziehungsnetz einer Abtei im Spiegel ihrer Memorialüberlieferung ; Bestandteil des Quellenwerkes Societas et Fraternitas [HTRC-Vollbuch-Abschnitt 59/72]. Wilhelm Fink."
+              "snippet": "Anmerkung: HE, NI und ST nur öffentliche Schulen (KMK 2017, S. 11). 79 Die Zahlen stiegen allerdings moderater als in Bayern, wie anhand der Entwicklungen in den einzelnen Bundesländern von 2011 bis 2015 ersichtlich wird. Die Zahlen der pri",
+              "apa_citation": "Schramm, Annika (2022). MAIDS (Meditation und Achtsamkeit in der Schule): Auswirkungen auf Aufmerksamkeit und Wohlbefinden von Schülerinnen und Schülern sowie Klassenklima : eine quantitativ-qualitative Studie [DNB-OA-Vollbuch-Abschnitt 22/24]. Universitätsbibliothek der Ludwig-Maximilians-Universität."
             },
             {
-              "title": "Urkundenbuch des Klosters Paulinzelle [Forschungsbuch-Abschnitt 39/100]",
-              "author": "Anemüller, Ernst",
-              "publisher": "Fischer",
-              "date": "2019",
-              "corpus_layer": "archive_org_fulltext_book",
-              "probability": 81.9,
+              "title": "06.2021: Einrichtungsstatistik 2020: Statistik der Diakonie Deutschland – Stand 01. 01. 2020 [DNB-OA-Vollbuch-Abschnitt 9/13]",
+              "author": "o. V.",
+              "publisher": "Evangelische Verlagsanstalt",
+              "date": "2021",
+              "corpus_layer": "dnb_oa_fullbook",
+              "probability": 86.3,
               "keywords": [
                 "nan"
               ],
-              "snippet": "ufgericht und gehaldin. Were ouch ab unser genanter burgin eynre oder me abeginge mit den tode, daz got friste, so globen wyr vorkauffer wan wir gemant werden binnen eyme manden darnach alzo gute burgin alz dy vorgnante weren, an ire stad z",
-              "apa_citation": "Anemüller, Ernst (2019). Urkundenbuch des Klosters Paulinzelle [Forschungsbuch-Abschnitt 39/100]. Fischer."
+              "snippet": "besonderen sozialen ­Situationen 6. Hilfen für Personen in besonderen sozialen ­Situationen 6.1 Wohnheime und andere stationäre Einrichtungen der Hilfen für Personen in besonderen sozialen Situationen Angebote Plätze Vollzeit Teilzeit Gesam",
+              "apa_citation": "o. V. (2021). 06.2021: Einrichtungsstatistik 2020: Statistik der Diakonie Deutschland – Stand 01. 01. 2020 [DNB-OA-Vollbuch-Abschnitt 9/13]. Evangelische Verlagsanstalt."
             },
             {
-              "title": "Legenda aurea: Lateinisch/Deutsch [DNB-Inhaltsverzeichnis & Leseprobe]",
-              "author": "Jacobus",
-              "publisher": "Reclam",
-              "date": "2023",
-              "corpus_layer": "dnb_toc_pdf_fulltext",
-              "probability": 80.7,
+              "title": "Demographischer Wandel und öffentliche Sicherheit [DNB-OA-Vollbuch-Abschnitt 1/5]",
+              "author": "Dittmann, Jörg",
+              "publisher": "Campus",
+              "date": "2008",
+              "corpus_layer": "dnb_oa_fullbook",
+              "probability": 86.1,
               "keywords": [
                 "nan"
               ],
-              "snippet": "Inhalt 1 De sancto Andrea apostolo • Der heilige Apostel Andreas 6 2 De sancto Nicolao • Der heilige Nikolaus 40 3 De sancta Lucia virgine • Die heilige Jungfrau Lucia 56 4 De sancto Thoma apostolo • Der heilige Apostel Thomas 68 5 De sanct",
-              "apa_citation": "Jacobus (2023). Legenda aurea: Lateinisch/Deutsch [DNB-Inhaltsverzeichnis & Leseprobe]. Reclam."
+              "snippet": "www.ssoar.info Demographischer Wandel und öffentliche Sicherheit Dittmann, Jörg Veröffentlichungsversion / Published Version Sammelwerksbeitrag / collection article Empfohlene Zitierung / Suggested Citation: Dittmann, J. (2008). Demographis",
+              "apa_citation": "Dittmann, Jörg (2008). Demographischer Wandel und öffentliche Sicherheit [DNB-OA-Vollbuch-Abschnitt 1/5]. Campus."
             }
           ]
         },
         {
           "topic_id": 6,
+          "archetype": {
+            "label": "Critical / Secular-Humanist",
+            "confidence": 100.0,
+            "scores": {
+              "Traditional / Ecclesiastical": 0.0,
+              "Neoliberal / Self-Optimization": 0.0,
+              "Critical / Secular-Humanist": 100.0
+            }
+          },
+          "seeded_prior": null,
+          "top_terms": [
+            {
+              "term": "religiös",
+              "weight": 0.0186
+            },
+            {
+              "term": "sozial",
+              "weight": 0.01557
+            },
+            {
+              "term": "frage",
+              "weight": 0.01077
+            },
+            {
+              "term": "gesellschaft",
+              "weight": 0.00981
+            },
+            {
+              "term": "perspektive",
+              "weight": 0.0093
+            },
+            {
+              "term": "kontext",
+              "weight": 0.00884
+            },
+            {
+              "term": "ethik",
+              "weight": 0.00862
+            },
+            {
+              "term": "form",
+              "weight": 0.00811
+            },
+            {
+              "term": "mensch",
+              "weight": 0.00788
+            },
+            {
+              "term": "ansatz",
+              "weight": 0.00709
+            },
+            {
+              "term": "gesellschaftlich",
+              "weight": 0.00708
+            },
+            {
+              "term": "analyse",
+              "weight": 0.00707
+            },
+            {
+              "term": "konzept",
+              "weight": 0.00703
+            },
+            {
+              "term": "theorie",
+              "weight": 0.00695
+            },
+            {
+              "term": "praxis",
+              "weight": 0.00693
+            }
+          ],
+          "top_publishers": [
+            {
+              "publisher": "De Gruyter / Transcript",
+              "share": 11.4
+            },
+            {
+              "publisher": "Campus",
+              "share": 5.7
+            },
+            {
+              "publisher": "Vandenhoeck & Ruprecht",
+              "share": 4.4
+            },
+            {
+              "publisher": "Suhrkamp",
+              "share": 4.1
+            },
+            {
+              "publisher": "Schöningh",
+              "share": 3.6
+            },
+            {
+              "publisher": "Evangelische Verlagsanstalt",
+              "share": 3.3
+            }
+          ],
+          "representative_docs": [
+            {
+              "title": "Inklusion in der Praxis der Sozialen Arbeit. Ein aktueller Diskurs zur Umsetzung in der Kinder- und Jugendhilfe [DNB-OA-Vollbuch-Abschnitt 2/22]",
+              "author": "Stein, Franziska",
+              "publisher": "Evangelische Verlagsanstalt",
+              "date": "2018",
+              "corpus_layer": "dnb_oa_fullbook",
+              "probability": 85.9,
+              "keywords": [
+                "nan"
+              ],
+              "snippet": "Begriff der Inklusion ist derart komplex, dass bislang kein allgemeingültiges Verständnis dieses Begriffs vorherrscht. Der Begriff der Inklusion wird daher zuerst theoretisch beschrieben. Anschließend werden die politische Haltung zur Inklu",
+              "apa_citation": "Stein, Franziska (2018). Inklusion in der Praxis der Sozialen Arbeit. Ein aktueller Diskurs zur Umsetzung in der Kinder- und Jugendhilfe [DNB-OA-Vollbuch-Abschnitt 2/22]. Evangelische Verlagsanstalt."
+            },
+            {
+              "title": "Kulturalisierung sozialer Ungleichheiten - Einstiege der Entwicklungssoziologie",
+              "author": "Goetze, Dieter",
+              "publisher": "Campus",
+              "date": "2006",
+              "corpus_layer": "dnb_deposit_inhaltstext",
+              "probability": 84.6,
+              "keywords": [
+                "nan"
+              ],
+              "snippet": "Abstract: \"Als Annäherung an die besondere Fragestellung der Sektionsveranstaltung wird von der langen Tradition einer Verknüpfung von Befunden sozialer Ungleichheit mit verschiedenen Formen der kulturellen Differenz (und –deutung) in der M",
+              "apa_citation": "Goetze, Dieter (2006). Kulturalisierung sozialer Ungleichheiten - Einstiege der Entwicklungssoziologie. Campus."
+            },
+            {
+              "title": "Systemtheorie der Gesellschaft [DNB-Inhaltsverzeichnis & Leseprobe]",
+              "author": "Luhmann, Niklas",
+              "publisher": "Suhrkamp",
+              "date": "2017",
+              "corpus_layer": "dnb_toc_pdf_fulltext",
+              "probability": 84.2,
+              "keywords": [
+                "nan"
+              ],
+              "snippet": "Inhalt Einführung 7 Teil 1 Soziale Systeme: Interaktion, Organisation, Gesellschaft 19 Kapitel I Grundbegriffe der Systemtheorie 25 Kapitel II Konstitution sozialer Systeme 90 Kapitel III Ebenen der Systembildung 170 Kapitel IV Ebenendiffer",
+              "apa_citation": "Luhmann, Niklas (2017). Systemtheorie der Gesellschaft [DNB-Inhaltsverzeichnis & Leseprobe]. Suhrkamp."
+            }
+          ]
+        },
+        {
+          "topic_id": 7,
           "archetype": {
             "label": "Neoliberal / Self-Optimization",
             "confidence": 100.0,
@@ -2613,273 +2755,131 @@
           "seeded_prior": null,
           "top_terms": [
             {
-              "term": "frau",
-              "weight": 0.05292
+              "term": "sinn",
+              "weight": 0.0176
             },
             {
-              "term": "kind",
-              "weight": 0.04246
+              "term": "begriff",
+              "weight": 0.01478
             },
             {
-              "term": "leben",
-              "weight": 0.03275
+              "term": "form",
+              "weight": 0.00907
             },
             {
-              "term": "mann",
-              "weight": 0.02438
+              "term": "grund",
+              "weight": 0.00889
             },
             {
-              "term": "familie",
-              "weight": 0.02236
+              "term": "art",
+              "weight": 0.00867
             },
             {
-              "term": "mensch",
-              "weight": 0.02117
+              "term": "frage",
+              "weight": 0.00857
             },
             {
-              "term": "jugendliche",
-              "weight": 0.01489
+              "term": "bestimmt",
+              "weight": 0.0084
             },
             {
-              "term": "geschlecht",
-              "weight": 0.01282
+              "term": "weise",
+              "weight": 0.00716
             },
             {
-              "term": "jung",
-              "weight": 0.01193
+              "term": "natur",
+              "weight": 0.00671
             },
             {
-              "term": "eltern",
-              "weight": 0.011
+              "term": "einzeln",
+              "weight": 0.00664
             },
             {
-              "term": "mutter",
-              "weight": 0.00914
+              "term": "denken",
+              "weight": 0.00657
             },
             {
-              "term": "alter",
-              "weight": 0.00864
+              "term": "fall",
+              "weight": 0.00607
             },
             {
-              "term": "spiritualität",
-              "weight": 0.00801
+              "term": "gegenstand",
+              "weight": 0.00569
             },
             {
-              "term": "liebe",
-              "weight": 0.00755
+              "term": "ding",
+              "weight": 0.00543
             },
             {
-              "term": "vater",
-              "weight": 0.00661
+              "term": "anderer",
+              "weight": 0.00529
             }
           ],
           "top_publishers": [
             {
               "publisher": "De Gruyter / Transcript",
-              "share": 5.9
+              "share": 6.2
             },
             {
-              "publisher": "Fischer",
-              "share": 5.7
-            },
-            {
-              "publisher": "Böhlau",
-              "share": 5.6
-            },
-            {
-              "publisher": "Rowohlt",
-              "share": 4.2
+              "publisher": "Frommann-Holzboog",
+              "share": 5.8
             },
             {
               "publisher": "Vandenhoeck & Ruprecht",
+              "share": 5.5
+            },
+            {
+              "publisher": "Schöningh",
+              "share": 5.5
+            },
+            {
+              "publisher": "Suhrkamp",
               "share": 4.2
             },
             {
-              "publisher": "Gütersloher Verlagshaus",
+              "publisher": "Klett-Cotta",
               "share": 3.8
             }
           ],
           "representative_docs": [
             {
-              "title": "Der kleine Unterschied und seine großen Folgen: Frauen über sich ; Beginn einer Befreiung [HTRC-Vollbuch-Abschnitt 14/75]",
-              "author": "Schwarzer, Alice",
-              "publisher": "Fischer",
-              "date": "2013",
+              "title": "Tod und Erfahrung: Rosenzweigs \"erfahrende Philosophie\" und Hegels \"Wissenschaft der Erfahrung des Bewußtseins\" [HTRC-Vollbuch-Abschnitt 31/75]",
+              "author": "Görtz, Heinz-Jürgen",
+              "publisher": "Patmos",
+              "date": "1984",
               "corpus_layer": "hathitrust_ef_fullbook_print",
-              "probability": 74.5,
+              "probability": 92.3,
               "keywords": [
                 "nan"
               ],
-              "snippet": "dass dass dass darauf doch überspielen müssen geglaubt beruflich Monat Monate voller Szenen dachte dachte Leben Krankenhaus anderen ist ist ist ist ist aufhört wohnte wirst das das das das das das das das taucht zogen war war war war war wa",
-              "apa_citation": "Schwarzer, Alice (2013). Der kleine Unterschied und seine großen Folgen: Frauen über sich ; Beginn einer Befreiung [HTRC-Vollbuch-Abschnitt 14/75]. Fischer."
+              "snippet": "gegenwärtig gegenwärtig Kraft Allgemeinen festhält Verstandes Verstandes ebenso übersinnlichen zusammenschließt denn Abbild dies allgemein Moment Geschehens Zugehen Gesetze Gesetze aufgehen Wahrheit gleichbleibender Hegel zwar wahrgenommene",
+              "apa_citation": "Görtz, Heinz-Jürgen (1984). Tod und Erfahrung: Rosenzweigs \"erfahrende Philosophie\" und Hegels \"Wissenschaft der Erfahrung des Bewußtseins\" [HTRC-Vollbuch-Abschnitt 31/75]. Patmos."
             },
             {
-              "title": "Mütter der Bibel: 20 Porträts für unsere Zeit [DNB-Inhaltsverzeichnis & Leseprobe]",
-              "author": "Käßmann, Margot",
-              "publisher": "Herder",
-              "date": "2010",
-              "corpus_layer": "dnb_toc_pdf_fulltext",
-              "probability": 73.9,
-              "keywords": [
-                "nan"
-              ],
-              "snippet": "Inhaltsverzeichnis Vorwort Bats eh a Mutter durch Gewalt 15 Elisabeth Spätgebärende Mutter 23 Ester Mutter des Volkes 31 Eva Verwaiste Mutter 39 Hagar Sitzengelassene Mutter 47 Hanna Rabenmutter 55 Kanaanäische Frau Mutter eines kranken Kin",
-              "apa_citation": "Käßmann, Margot (2010). Mütter der Bibel: 20 Porträts für unsere Zeit [DNB-Inhaltsverzeichnis & Leseprobe]. Herder."
-            },
-            {
-              "title": "Familien brauchen Väter: Ermutigung und Rituale",
-              "author": "Rohner-Dobler, Felix",
-              "publisher": "Kösel",
+              "title": "Domänen des Subjekts [DNB-OA-Vollbuch-Abschnitt 5/20]",
+              "author": "Thaliath, Babu",
+              "publisher": "Humboldt-Universität zu Berlin",
               "date": "2006",
-              "corpus_layer": "dnb_deposit_inhaltstext",
-              "probability": 73.1,
+              "corpus_layer": "dnb_oa_fullbook",
+              "probability": 91.6,
               "keywords": [
                 "nan"
               ],
-              "snippet": "Väter haben eine besondere Kraft Der Autor, selbst Vater, bietet Männern leicht umsetzbare Anregungen, das Wachstum ihrer Kinder liebevoll zu begleiten. Dabei helfen lebensnahe Rituale für den Familienalltag, beim Spielen, Einkaufen, Zubett",
-              "apa_citation": "Rohner-Dobler, Felix (2006). Familien brauchen Väter: Ermutigung und Rituale. Kösel."
-            }
-          ]
-        },
-        {
-          "topic_id": 7,
-          "archetype": {
-            "label": "Hybrid / Discursive Mediation",
-            "confidence": 0.0,
-            "scores": {
-              "Traditional / Ecclesiastical": 33.3,
-              "Neoliberal / Self-Optimization": 33.3,
-              "Critical / Secular-Humanist": 33.3
-            }
-          },
-          "seeded_prior": null,
-          "top_terms": [
-            {
-              "term": "deutsch",
-              "weight": 0.01442
+              "snippet": "Empfindungen gegeben werden, offensichtlich zur Domäne (oder Sphäre) der ästhetischen Subjektivität, und der logische Verstand, der die in der Anschauung gegebenen Gegenstände begrifflich erkennt, zur Domäne der logischen Subjektivität. Dah",
+              "apa_citation": "Thaliath, Babu (2006). Domänen des Subjekts [DNB-OA-Vollbuch-Abschnitt 5/20]. Humboldt-Universität zu Berlin."
             },
             {
-              "term": "arbeit",
-              "weight": 0.01383
-            },
-            {
-              "term": "stadt",
-              "weight": 0.01023
-            },
-            {
-              "term": "land",
-              "weight": 0.00759
-            },
-            {
-              "term": "projekt",
-              "weight": 0.0075
-            },
-            {
-              "term": "schule",
-              "weight": 0.00578
-            },
-            {
-              "term": "universität",
-              "weight": 0.00542
-            },
-            {
-              "term": "gruppe",
-              "weight": 0.00491
-            },
-            {
-              "term": "datum",
-              "weight": 0.00481
-            },
-            {
-              "term": "mitglied",
-              "weight": 0.00468
-            },
-            {
-              "term": "unternehmen",
-              "weight": 0.00455
-            },
-            {
-              "term": "prozent",
-              "weight": 0.00451
-            },
-            {
-              "term": "unterstützung",
-              "weight": 0.00439
-            },
-            {
-              "term": "interview",
-              "weight": 0.0043
-            },
-            {
-              "term": "sozial_ungleichheit",
-              "weight": 0.00422
-            }
-          ],
-          "top_publishers": [
-            {
-              "publisher": "De Gruyter / Transcript",
-              "share": 9.3
-            },
-            {
-              "publisher": "Böhlau",
-              "share": 9.1
-            },
-            {
-              "publisher": "Schöningh",
-              "share": 6.8
-            },
-            {
-              "publisher": "Vandenhoeck & Ruprecht",
-              "share": 4.7
-            },
-            {
-              "publisher": "Evangelische Verlagsanstalt",
-              "share": 4.0
-            },
-            {
-              "publisher": "Aschendorff",
-              "share": 4.0
-            }
-          ],
-          "representative_docs": [
-            {
-              "title": "Presbyterialprotokolle der evangelischen Gemeinde Brenndorf 1868 - 1885 [DNB-Inhaltsverzeichnis & Leseprobe]",
-              "author": "Schmidts, Hermann",
-              "publisher": "Arbeitskreis für Siebenbürgische Landeskunde Heidelberg",
-              "date": "2000",
-              "corpus_layer": "dnb_toc_pdf_fulltext",
-              "probability": 88.5,
+              "title": "Kritik an der Problemlage in Kants transzendentaler Deduktion der Kategorien [DNB-OA-Vollbuch-Abschnitt 9/12]",
+              "author": "Erdmann, Benno",
+              "publisher": "Berlin-Brandenburgische Akademie der Wissenschaften",
+              "date": "2025",
+              "corpus_layer": "dnb_oa_fullbook",
+              "probability": 91.3,
               "keywords": [
                 "nan"
               ],
-              "snippet": "Inhaltsverzeichnis VORWORT ,3 SITZUNG NR. 95 VOM 06. 01.1868 7 SITZUNG NR. 96 VOM 01. 03.1868 8 SITZUNG NR. 97 VOM 03. 05.1868 11 SITZUNG NR. 98 VOM 21. 05.1868 12 SITZUNG NR. 99 VOM 26. 07.1868 13 SITZUNG NR. 100 VOM 02. 08.1868 13 SITZUNG",
-              "apa_citation": "Schmidts, Hermann (2000). Presbyterialprotokolle der evangelischen Gemeinde Brenndorf 1868 - 1885 [DNB-Inhaltsverzeichnis & Leseprobe]. Arbeitskreis für Siebenbürgische Landeskunde Heidelberg."
-            },
-            {
-              "title": "Frauen in der Medienwirtschaft: Chancen und Hemmnisse für Frauenerwerbstätgkeit in einer prosperierenden Zukunftsbranche [HTRC-Vollbuch-Abschnitt 33/61]",
-              "author": "Rehberg, Frank",
-              "publisher": "Fischer",
-              "date": "2002",
-              "corpus_layer": "hathitrust_ef_fullbook_print",
-              "probability": 74.9,
-              "keywords": [
-                "nan"
-              ],
-              "snippet": "geschaffenen schwerpunktmäßig machten existenten Arbeitgeber Beschäftigungssaldo Industrieregion Industrieregion Industrieregion Frauen Frauen Frauen Frauen Frauen dabei dabei einmal diejenige erhebliche zwar deutlichsten Ebenso hohen selbe",
-              "apa_citation": "Rehberg, Frank (2002). Frauen in der Medienwirtschaft: Chancen und Hemmnisse für Frauenerwerbstätgkeit in einer prosperierenden Zukunftsbranche [HTRC-Vollbuch-Abschnitt 33/61]. Fischer."
-            },
-            {
-              "title": "Das grosse Schott-Fürbittbuch [DNB-Inhaltsverzeichnis & Leseprobe]",
-              "author": "Schütz, Franz",
-              "publisher": "Herder",
-              "date": "1995",
-              "corpus_layer": "dnb_toc_pdf_fulltext",
-              "probability": 74.6,
-              "keywords": [
-                "nan"
-              ],
-              "snippet": "ID HALT Vorwort 5 Das Allgemeine Schuldbekenntnis 9 ADVENT UND WEIHNACHTSZEIT 1. Woche 13 2. Woche 19 3. Woche 25 17.-24. Dezember 30 29.-31. Dezember 38 2.-12. Januar 41 FASTENZEIT UND OSTERZEIT Aschermittwoch 55 Donnerstag nach Aschermitt",
-              "apa_citation": "Schütz, Franz (1995). Das grosse Schott-Fürbittbuch [DNB-Inhaltsverzeichnis & Leseprobe]. Herder."
+              "snippet": "die das Unbedingte enthält, also etwas betrifft, worunter zwar alle Erfahrung gehört, das aber niemals ein Gegenstand der Erfahrung sein kann. Sie ist demnach ihrem Wesen nach tran- szendent. Als solche Idee der Freiheit findet sie deshalb",
+              "apa_citation": "Erdmann, Benno (2025). Kritik an der Problemlage in Kants transzendentaler Deduktion der Kategorien [DNB-OA-Vollbuch-Abschnitt 9/12]. Berlin-Brandenburgische Akademie der Wissenschaften."
             }
           ]
         },
@@ -2897,562 +2897,278 @@
           "seeded_prior": null,
           "top_terms": [
             {
-              "term": "gott",
-              "weight": 0.10341
-            },
-            {
-              "term": "bibel",
-              "weight": 0.0278
-            },
-            {
-              "term": "glaube",
-              "weight": 0.02327
-            },
-            {
-              "term": "mensch",
-              "weight": 0.01871
-            },
-            {
-              "term": "christlich",
-              "weight": 0.01732
-            },
-            {
-              "term": "theologie",
-              "weight": 0.01382
+              "term": "jüdisch",
+              "weight": 0.02667
             },
             {
               "term": "jesus",
-              "weight": 0.01169
+              "weight": 0.01988
             },
             {
-              "term": "jüdisch",
-              "weight": 0.01168
+              "term": "jude",
+              "weight": 0.01661
             },
             {
-              "term": "biblisch",
-              "weight": 0.01091
+              "term": "israel",
+              "weight": 0.01634
+            },
+            {
+              "term": "paulus",
+              "weight": 0.0142
             },
             {
               "term": "text",
-              "weight": 0.00998
+              "weight": 0.01279
             },
             {
-              "term": "wort",
-              "weight": 0.00927
+              "term": "bibel",
+              "weight": 0.01167
             },
             {
-              "term": "leben",
-              "weight": 0.00866
+              "term": "jesu",
+              "weight": 0.01143
             },
             {
-              "term": "christentum",
-              "weight": 0.00861
+              "term": "volk",
+              "weight": 0.01107
+            },
+            {
+              "term": "erfolgen",
+              "weight": 0.01034
+            },
+            {
+              "term": "judentum",
+              "weight": 0.00958
             },
             {
               "term": "testament",
-              "weight": 0.00849
+              "weight": 0.00792
             },
             {
-              "term": "christus",
-              "weight": 0.00828
+              "term": "johannes",
+              "weight": 0.00775
+            },
+            {
+              "term": "biblisch",
+              "weight": 0.00744
+            },
+            {
+              "term": "umfasst",
+              "weight": 0.0073
             }
           ],
           "top_publishers": [
             {
               "publisher": "Neukirchener",
-              "share": 8.3
+              "share": 10.1
             },
             {
               "publisher": "Mohr Siebeck",
-              "share": 7.3
+              "share": 7.9
             },
             {
               "publisher": "Vandenhoeck & Ruprecht",
-              "share": 6.2
+              "share": 7.1
+            },
+            {
+              "publisher": "De Gruyter / Transcript",
+              "share": 5.9
             },
             {
               "publisher": "Kohlhammer",
-              "share": 5.1
+              "share": 5.3
             },
             {
-              "publisher": "Gütersloher Verlagshaus",
-              "share": 4.8
-            },
-            {
-              "publisher": "Gütersloher Verlagshaus (Chr. Kaiser)",
-              "share": 4.4
+              "publisher": "Böhlau",
+              "share": 3.7
             }
           ],
           "representative_docs": [
             {
-              "title": "Glauben [DNB-Inhaltsverzeichnis & Leseprobe]",
-              "author": "Hermisson, Hans-Jürgen",
-              "publisher": "Kohlhammer",
-              "date": "1978",
+              "title": "Psalmen 101 - 150 [DNB-Inhaltsverzeichnis & Leseprobe]",
+              "author": "Hossfeld, Frank-Lothar",
+              "publisher": "Herder",
+              "date": "2008",
               "corpus_layer": "dnb_toc_pdf_fulltext",
-              "probability": 88.4,
+              "probability": 81.2,
               "keywords": [
                 "nan"
               ],
-              "snippet": "Inhalt Glauben 7 A. Glauben im Alten Testament 9 I. Erzählungen vom Glauben 9 1. Die Verheißung 11 2. Glaube und Gerechtigkeit 18 3. Erwartung und Bewährung 25 4. Glaube und Wunder 30 II. Israels Klagen und die Bewährung des Glaubens 38 1.",
-              "apa_citation": "Hermisson, Hans-Jürgen (1978). Glauben [DNB-Inhaltsverzeichnis & Leseprobe]. Kohlhammer."
+              "snippet": "Inhalt V o r w o r t 9 A l l g e m e i n e s Literaturverzeichnis für diesen K o m m e n t a r b a n d . . . . 1 1 1. K o m m e n t a r e 1 1 2. M o n o g r a p h i e n u n d Artikel 14 Einleitung Skizze zur Entstehung von Ps 101-150 (Z) 17",
+              "apa_citation": "Hossfeld, Frank-Lothar (2008). Psalmen 101 - 150 [DNB-Inhaltsverzeichnis & Leseprobe]. Herder."
             },
             {
-              "title": "Gotteserkenntnis als Heilsgeschehen",
-              "author": "Führer, Werner",
-              "publisher": "Vandenhoeck & Ruprecht",
-              "date": "2022",
-              "corpus_layer": "dnb_deposit_inhaltstext",
-              "probability": 87.3,
+              "title": "Das Thomasevangelium: Einleitung, Kommentar und Systematik [DNB-Inhaltsverzeichnis & Leseprobe]",
+              "author": "Fieger, Michael",
+              "publisher": "Aschendorff",
+              "date": "1991",
+              "corpus_layer": "dnb_toc_pdf_fulltext",
+              "probability": 79.9,
               "keywords": [
                 "nan"
               ],
-              "snippet": "Die Erkenntnis Gottes wird zum Heilswiderfahrnis, wenn Gott den der Sünde schuldigen und an den Tod verlorenen Menschen rechtfertigt. Das geschieht im Glauben an das Evangelium von Jesus Christus. Die Erkenntnis Gottes durch den Glauben an",
-              "apa_citation": "Führer, Werner (2022). Gotteserkenntnis als Heilsgeschehen. Vandenhoeck & Ruprecht."
+              "snippet": "Vorwort VII IX X Literaturverzeichnis XI A. in das Thomasevangelium 1 1. Das - Ein Bestandteil des Textfundes von Nag 1 2. Die literarische Originalitat des ThEv 3 3. Das Verhaltnis des ThEv NT 6 3.1. Das Verhaltnis zu den Synoptikern 6 3.2",
+              "apa_citation": "Fieger, Michael (1991). Das Thomasevangelium: Einleitung, Kommentar und Systematik [DNB-Inhaltsverzeichnis & Leseprobe]. Aschendorff."
             },
             {
-              "title": "Familienandachten zu Gottes einzigartige Geschichte [DNB-Inhaltsverzeichnis & Leseprobe]",
-              "author": "Helm, David",
-              "publisher": "3L Verlag",
-              "date": "2025",
+              "title": "Die Komposition der Tora im Buch Exodus [DNB-Inhaltsverzeichnis & Leseprobe]",
+              "author": "Achenbach, Reinhard",
+              "publisher": "Mohr Siebeck",
+              "date": "2024",
               "corpus_layer": "dnb_toc_pdf_fulltext",
-              "probability": 86.9,
+              "probability": 78.7,
               "keywords": [
                 "nan"
               ],
-              "snippet": "Inhaltsver2eicknis Wie dieses Andachtsbuch anzuwenden ist 8 Teil 1: Gott erschafft sein Königreich 11 Fragen 1-9 11 1. Gott erschafft einen Ort 12 2. Gott erschafft den Menschen 15 3. Gott ist zufrieden mit allem, was er geschaffen hat 18 4",
-              "apa_citation": "Helm, David (2025). Familienandachten zu Gottes einzigartige Geschichte [DNB-Inhaltsverzeichnis & Leseprobe]. 3L Verlag."
+              "snippet": "Inhaltsverzeichnis Einleitung 1 I. Israel in Ägypten und die Berufung des Mose Exodus 1: Die Versklavung der Israeliten durch den Pharao 5 Exodus 2: Mose Kindheit, Jugend und Flucht nach Midian 17 Exodus 3: Mose Berufung am Gottesberg 27 Ex",
+              "apa_citation": "Achenbach, Reinhard (2024). Die Komposition der Tora im Buch Exodus [DNB-Inhaltsverzeichnis & Leseprobe]. Mohr Siebeck."
             }
           ]
         },
         {
           "topic_id": 9,
           "archetype": {
-            "label": "Critical / Secular-Humanist",
+            "label": "Traditional / Ecclesiastical",
             "confidence": 100.0,
             "scores": {
-              "Traditional / Ecclesiastical": 0.0,
+              "Traditional / Ecclesiastical": 100.0,
               "Neoliberal / Self-Optimization": 0.0,
-              "Critical / Secular-Humanist": 100.0
+              "Critical / Secular-Humanist": 0.0
             }
           },
           "seeded_prior": null,
           "top_terms": [
             {
-              "term": "politisch",
-              "weight": 0.05462
+              "term": "bischof",
+              "weight": 0.01222
             },
             {
-              "term": "politik",
-              "weight": 0.02187
+              "term": "stadt",
+              "weight": 0.01162
             },
             {
-              "term": "staat",
-              "weight": 0.02005
+              "term": "jahrhundert",
+              "weight": 0.01001
             },
             {
-              "term": "gesellschaft",
-              "weight": 0.01901
+              "term": "kloster",
+              "weight": 0.00935
             },
             {
-              "term": "sozial",
-              "weight": 0.01753
+              "term": "könig",
+              "weight": 0.00677
             },
             {
-              "term": "islam",
-              "weight": 0.01083
+              "term": "mai",
+              "weight": 0.00655
             },
             {
-              "term": "gewalt",
-              "weight": 0.00988
+              "term": "papst",
+              "weight": 0.0063
             },
             {
-              "term": "europa",
-              "weight": 0.00927
+              "term": "juni",
+              "weight": 0.00625
             },
             {
-              "term": "europäisch",
-              "weight": 0.00828
+              "term": "juli",
+              "weight": 0.00589
             },
             {
-              "term": "kultur",
-              "weight": 0.00749
+              "term": "reich",
+              "weight": 0.00561
             },
             {
-              "term": "demokratie",
-              "weight": 0.00724
+              "term": "april",
+              "weight": 0.0056
             },
             {
-              "term": "bewegung",
-              "weight": 0.00717
+              "term": "oktober",
+              "weight": 0.00559
             },
             {
-              "term": "deutsch",
-              "weight": 0.0068
+              "term": "bistum",
+              "weight": 0.00555
             },
             {
-              "term": "land",
-              "weight": 0.00671
+              "term": "november",
+              "weight": 0.00548
             },
             {
-              "term": "konflikt",
-              "weight": 0.0065
+              "term": "heilig",
+              "weight": 0.00546
             }
           ],
           "top_publishers": [
             {
-              "publisher": "De Gruyter / Transcript",
-              "share": 8.7
+              "publisher": "Böhlau",
+              "share": 14.1
             },
             {
               "publisher": "Schöningh",
-              "share": 6.6
+              "share": 7.4
             },
             {
-              "publisher": "Böhlau",
-              "share": 5.6
+              "publisher": "Aschendorff",
+              "share": 6.4
             },
             {
-              "publisher": "Suhrkamp",
-              "share": 4.6
+              "publisher": "De Gruyter / Transcript",
+              "share": 5.2
             },
             {
               "publisher": "Vandenhoeck & Ruprecht",
-              "share": 4.6
+              "share": 4.9
             },
             {
-              "publisher": "Fischer",
-              "share": 4.1
+              "publisher": "Kohlhammer",
+              "share": 2.7
             }
           ],
           "representative_docs": [
             {
-              "title": "Islam und Rechtsstaat: zwischen Scharia und Säkularisierung",
-              "author": "Krawietz, Birgit",
-              "publisher": "SSOAR - Social Science Open Access Repository",
-              "date": "2008",
-              "corpus_layer": "dnb_deposit_inhaltstext",
-              "probability": 81.7,
+              "title": "750 Jahre Kleiner Schied [DNB-OA-Vollbuch-Abschnitt 2/21]",
+              "author": "Strauch, Dieter Prof. Dr.",
+              "publisher": "Universitäts- und Stadtbibliothek Köln",
+              "date": "2003",
+              "corpus_layer": "dnb_oa_fullbook",
+              "probability": 83.4,
               "keywords": [
                 "nan"
               ],
-              "snippet": "Islam, Islamisches Recht, Rechtsstaat, Säkularisierung, Recht, Politisches System, Verfassung, Verfassungsstaat, Rechtsordnung, Gerechtigkeit, Religion, Verfassunggebung, Gesellschaftsordnung, (thesoz)Scharia, (thesoz)politisches System, (t",
-              "apa_citation": "Krawietz, Birgit (2008). Islam und Rechtsstaat: zwischen Scharia und Säkularisierung. SSOAR - Social Science Open Access Repository."
+              "snippet": "506; Thorau, S. 526; Matscha, S. 173 ff; 182. 7 Vgl. Catalogus Archiepiscoporum Coloniensium MGH SS. Bd. 24, S. 353; vgl.. Cardauns, S. 151f; Wendehorst, S. 54. Matthäus Parisiensis beurteilt ihn ähnlich, vgl. ed. Liebermann MGH, SS 28, S.",
+              "apa_citation": "Strauch, Dieter Prof. Dr. (2003). 750 Jahre Kleiner Schied [DNB-OA-Vollbuch-Abschnitt 2/21]. Universitäts- und Stadtbibliothek Köln."
             },
             {
-              "title": "Demokratie im Islam: Der Kampf für Toleranz und Freiheit in der arabischen Welt",
-              "author": "Krämer, Gudrun",
-              "publisher": "C.H. Beck",
-              "date": "2011",
-              "corpus_layer": "dnb_deposit_inhaltstext",
-              "probability": 77.7,
+              "title": "Geschichte der Kirche Osteuropas im 20. Jahrhundert [HTRC-Vollbuch-Abschnitt 50/51]",
+              "author": "Adriányi, Gabriel",
+              "publisher": "Schöningh",
+              "date": "1992",
+              "corpus_layer": "hathitrust_ef_fullbook_print",
+              "probability": 82.9,
               "keywords": [
                 "nan"
               ],
-              "snippet": "In Tunesien, Ägypten, Libyen und anderen arabischen Ländern kämpfen Bürger für die Demokratie – aber für welche? Steht am Ende eine «islamische Republik» oder ein säkularer Staat nach westlichem Muster? Ist ein demokratischer Rechtsstaat au",
-              "apa_citation": "Krämer, Gudrun (2011). Demokratie im Islam: Der Kampf für Toleranz und Freiheit in der arabischen Welt. C.H. Beck."
+              "snippet": "Bistum Bistum Bistum Bistum Bistum Bistum Brno Olomouc Baläz Praha Liska Filo Trnava Frankovsky Neutra Kajetän Dubovsky Vladimir Karel Matousek Koukl Dominik Cikrle Tyrnau Krälove Frantisek Frantisek Frantisek Sokol Weihbischöfe Weihbischöf",
+              "apa_citation": "Adriányi, Gabriel (1992). Geschichte der Kirche Osteuropas im 20. Jahrhundert [HTRC-Vollbuch-Abschnitt 50/51]. Schöningh."
             },
             {
-              "title": "Das Schweigen der Mitte: Wege aus der Polarisierungsfalle",
-              "author": "Ackermann, Ulrike",
-              "publisher": "wbg Theiss",
-              "date": "2020",
-              "corpus_layer": "dnb_deposit_inhaltstext",
-              "probability": 77.0,
+              "title": "Verzeichnis der Briefe an Matthias Hoe von Hoenegg (1580-1645) in der Universitätsbibliothek Gießen (Cod. Giess. 114 u. 115) [DNB-OA-Vollbuch-Abschnitt 5/10]",
+              "author": "Schüling, Hermann",
+              "publisher": "Universitätsbibliothek",
+              "date": "2006",
+              "corpus_layer": "dnb_oa_fullbook",
+              "probability": 82.7,
               "keywords": [
                 "nan"
               ],
-              "snippet": "Warum wir eine starke politische Mitte brauchen Haben Intellektuelle ihr Deutungsmonopol verloren? Die großen gesellschaftlichen Debatten werden heute nicht mehr aus der politischen Mitte heraus geführt. Sie entzünden sich von den Rändern h",
-              "apa_citation": "Ackermann, Ulrike (2020). Das Schweigen der Mitte: Wege aus der Polarisierungsfalle. wbg Theiss."
+              "snippet": "1639 (verbessert. 13.. April 1640) (114.346-347) 1 Brief \"Ad Sereniss. Regis . . , Britanniae Legatumw Am Ende: lf.. . Stephano Losieroff : - 3. Aug. 1613 (115.519) 12 Verse an Maria Elisabeth, 2. Tochter des Kurfürsten V. Sachsen: - 14. Se",
+              "apa_citation": "Schüling, Hermann (2006). Verzeichnis der Briefe an Matthias Hoe von Hoenegg (1580-1645) in der Universitätsbibliothek Gießen (Cod. Giess. 114 u. 115) [DNB-OA-Vollbuch-Abschnitt 5/10]. Universitätsbibliothek."
             }
           ]
         },
         {
           "topic_id": 10,
-          "archetype": {
-            "label": "Critical / Secular-Humanist",
-            "confidence": 65.3,
-            "scores": {
-              "Traditional / Ecclesiastical": 34.7,
-              "Neoliberal / Self-Optimization": 0.0,
-              "Critical / Secular-Humanist": 65.3
-            }
-          },
-          "seeded_prior": null,
-          "top_terms": [
-            {
-              "term": "geschichte",
-              "weight": 0.0211
-            },
-            {
-              "term": "wissenschaft",
-              "weight": 0.01756
-            },
-            {
-              "term": "forschung",
-              "weight": 0.01719
-            },
-            {
-              "term": "theologie",
-              "weight": 0.014
-            },
-            {
-              "term": "wissenschaftlich",
-              "weight": 0.01241
-            },
-            {
-              "term": "historisch",
-              "weight": 0.01161
-            },
-            {
-              "term": "studie",
-              "weight": 0.01101
-            },
-            {
-              "term": "arbeit",
-              "weight": 0.01091
-            },
-            {
-              "term": "frage",
-              "weight": 0.01029
-            },
-            {
-              "term": "theorie",
-              "weight": 0.0099
-            },
-            {
-              "term": "kritik",
-              "weight": 0.00874
-            },
-            {
-              "term": "thema",
-              "weight": 0.00785
-            },
-            {
-              "term": "soziologie",
-              "weight": 0.00748
-            },
-            {
-              "term": "perspektive",
-              "weight": 0.00729
-            },
-            {
-              "term": "methode",
-              "weight": 0.00729
-            }
-          ],
-          "top_publishers": [
-            {
-              "publisher": "De Gruyter / Transcript",
-              "share": 10.0
-            },
-            {
-              "publisher": "Vandenhoeck & Ruprecht",
-              "share": 5.7
-            },
-            {
-              "publisher": "Schöningh",
-              "share": 5.0
-            },
-            {
-              "publisher": "Mohr Siebeck",
-              "share": 4.8
-            },
-            {
-              "publisher": "Kohlhammer",
-              "share": 4.1
-            },
-            {
-              "publisher": "Suhrkamp",
-              "share": 3.7
-            }
-          ],
-          "representative_docs": [
-            {
-              "title": "Technikentwicklung und Arbeitsteilung im internationalen Vergleich: fünf Aufsätze zur Zukunft industrieller Arbeit [DNB-OA-Vollbuch-Abschnitt 1/25]",
-              "author": "Düll, Klaus",
-              "publisher": "Campus",
-              "date": "1989",
-              "corpus_layer": "dnb_oa_fullbook",
-              "probability": 83.5,
-              "keywords": [
-                "nan"
-              ],
-              "snippet": "www.ssoar.info Technikentwicklung und Arbeitsteilung im internationalen Vergleich: fünf Aufsätze zur Zukunft industrieller Arbeit Düll, Klaus (Ed.); Lutz, Burkart (Ed.) Veröffentlichungsversion / Published Version Sammelwerk / collection Zu",
-              "apa_citation": "Düll, Klaus (1989). Technikentwicklung und Arbeitsteilung im internationalen Vergleich: fünf Aufsätze zur Zukunft industrieller Arbeit [DNB-OA-Vollbuch-Abschnitt 1/25]. Campus."
-            },
-            {
-              "title": "Die Religion [DNB-Inhaltsverzeichnis & Leseprobe]",
-              "author": "Simmel, Georg",
-              "publisher": "Metropolis-Verl.",
-              "date": "2011",
-              "corpus_layer": "dnb_toc_pdf_fulltext",
-              "probability": 82.8,
-              "keywords": [
-                "nan"
-              ],
-              "snippet": "Inhaltsverzeichnis Die Religion 7 Georg Simmel Anmerkungen der Herausgeber 105 Hans Diefenbacher/Dorothee Rodenhäuser Die Religion 119 Volkhard Krech 1. Zum Autor 121 2. Zur Entstehungsgeschichte des Textes 123 3. Der Werkkontext 130 3.1 Re",
-              "apa_citation": "Simmel, Georg (2011). Die Religion [DNB-Inhaltsverzeichnis & Leseprobe]. Metropolis-Verl.."
-            },
-            {
-              "title": "\"Different Cultures, Different Rationalities\"? Marshall Sahlins und die Theorie kultureller Differenz",
-              "author": "Kumoll, Karsten",
-              "publisher": "Campus",
-              "date": "2006",
-              "corpus_layer": "dnb_deposit_inhaltstext",
-              "probability": 82.3,
-              "keywords": [
-                "nan"
-              ],
-              "snippet": "Abstract: \"Der Begriff der 'Kultur' hat an Bedeutung gewonnen - auch und gerade in der soziologischen Theorie. Der cultural turn in der soziologischen Theorie und der Soziologie im allgemeinen wird begleitet von einer 'Kulturalisierung' der",
-              "apa_citation": "Kumoll, Karsten (2006). \"Different Cultures, Different Rationalities\"? Marshall Sahlins und die Theorie kultureller Differenz. Campus."
-            }
-          ]
-        },
-        {
-          "topic_id": 11,
-          "archetype": {
-            "label": "Critical / Secular-Humanist",
-            "confidence": 100.0,
-            "scores": {
-              "Traditional / Ecclesiastical": 0.0,
-              "Neoliberal / Self-Optimization": 0.0,
-              "Critical / Secular-Humanist": 100.0
-            }
-          },
-          "seeded_prior": null,
-          "top_terms": [
-            {
-              "term": "sozial",
-              "weight": 0.03134
-            },
-            {
-              "term": "mensch",
-              "weight": 0.01454
-            },
-            {
-              "term": "form",
-              "weight": 0.01075
-            },
-            {
-              "term": "gesellschaftlich",
-              "weight": 0.00978
-            },
-            {
-              "term": "gesellschaft",
-              "weight": 0.00977
-            },
-            {
-              "term": "erfahrung",
-              "weight": 0.0089
-            },
-            {
-              "term": "religiös",
-              "weight": 0.00875
-            },
-            {
-              "term": "welt",
-              "weight": 0.00862
-            },
-            {
-              "term": "medium",
-              "weight": 0.00833
-            },
-            {
-              "term": "struktur",
-              "weight": 0.00812
-            },
-            {
-              "term": "raum",
-              "weight": 0.00802
-            },
-            {
-              "term": "konzept",
-              "weight": 0.00791
-            },
-            {
-              "term": "kontext",
-              "weight": 0.0078
-            },
-            {
-              "term": "begriff",
-              "weight": 0.00779
-            },
-            {
-              "term": "unterschiedlich",
-              "weight": 0.00754
-            }
-          ],
-          "top_publishers": [
-            {
-              "publisher": "De Gruyter / Transcript",
-              "share": 12.9
-            },
-            {
-              "publisher": "Campus",
-              "share": 5.1
-            },
-            {
-              "publisher": "Suhrkamp",
-              "share": 4.8
-            },
-            {
-              "publisher": "Vandenhoeck & Ruprecht",
-              "share": 4.6
-            },
-            {
-              "publisher": "Schöningh",
-              "share": 4.4
-            },
-            {
-              "publisher": "Kohlhammer",
-              "share": 3.9
-            }
-          ],
-          "representative_docs": [
-            {
-              "title": "Die Säkularisierungsthese nach Charles Taylor: religionspädagogische Erkundungen und Perspektiven in der Postmoderne [DNB-OA-Vollbuch-Abschnitt 34/55]",
-              "author": "Frey, Alexandra",
-              "publisher": "Universitätsbibliothek der RWTH Aachen",
-              "date": "2017",
-              "corpus_layer": "dnb_oa_fullbook",
-              "probability": 80.1,
-              "keywords": [
-                "nan"
-              ],
-              "snippet": "die religiöse Verfassung menschlichen Daseins im Grunde erhalten geblieben ist“304. Die religiöse Individualisierung erschließt die Religion durch einen individuellen Zugang und eine individuelle Funktion, so dass die Religion durch das sub",
-              "apa_citation": "Frey, Alexandra (2017). Die Säkularisierungsthese nach Charles Taylor: religionspädagogische Erkundungen und Perspektiven in der Postmoderne [DNB-OA-Vollbuch-Abschnitt 34/55]. Universitätsbibliothek der RWTH Aachen."
-            },
-            {
-              "title": "Religiöse Aneignung bei Jugendlichen: Sozialwissenschaftliche Perspektiven [DNB-OA-Vollbuch-Abschnitt 22/42]",
-              "author": "Reiner, Martina",
-              "publisher": "De Gruyter / Transcript",
-              "date": "2025",
-              "corpus_layer": "dnb_oa_fullbook",
-              "probability": 76.3,
-              "keywords": [
-                "nan"
-              ],
-              "snippet": "Grundlage dieses Forschungsüberblicks kann begründet werden, warum genau dieser Begriff, und zwar in seiner kulturhistorischen Ausprägung, der im Sach­ zusammenhang der Forschungsfragen am besten geeignete ist. Zum einen weist er eine deutl",
-              "apa_citation": "Reiner, Martina (2025). Religiöse Aneignung bei Jugendlichen: Sozialwissenschaftliche Perspektiven [DNB-OA-Vollbuch-Abschnitt 22/42]. De Gruyter / Transcript."
-            },
-            {
-              "title": "Religion und Sozialkapital in der Schweiz [OpenAlex-Vollbuch-Abschnitt 8/55]",
-              "author": "Anastas Odermatt",
-              "publisher": "Springer Nature (Holtzbrinck)",
-              "date": "2023",
-              "corpus_layer": "entire_fulltext_book_cloud",
-              "probability": 75.3,
-              "keywords": [
-                "nan"
-              ],
-              "snippet": "Wirklichkeit zu entsprechen scheinen». Dieses kulturelle Symbolsystem wird durch religiöse Vergemeinschaftungen getragen und vermittelt und bildet sich beim Individuum als Religiosität im Sinne einer Positionierung zu Religion ab. Um Religi",
-              "apa_citation": "Anastas Odermatt (2023). Religion und Sozialkapital in der Schweiz [OpenAlex-Vollbuch-Abschnitt 8/55]. Springer Nature (Holtzbrinck)."
-            }
-          ]
-        },
-        {
-          "topic_id": 12,
           "archetype": {
             "label": "Hybrid / Discursive Mediation",
             "confidence": 0.0,
@@ -3465,343 +3181,627 @@
           "seeded_prior": null,
           "top_terms": [
             {
-              "term": "bild",
-              "weight": 0.01467
-            },
-            {
-              "term": "kunst",
-              "weight": 0.01061
+              "term": "text",
+              "weight": 0.02397
             },
             {
               "term": "wort",
-              "weight": 0.00891
+              "weight": 0.01214
             },
             {
-              "term": "alt",
-              "weight": 0.00832
+              "term": "brief",
+              "weight": 0.01139
             },
             {
-              "term": "welt",
-              "weight": 0.00806
-            },
-            {
-              "term": "sprache",
-              "weight": 0.00636
-            },
-            {
-              "term": "hand",
-              "weight": 0.00535
-            },
-            {
-              "term": "tier",
-              "weight": 0.00514
-            },
-            {
-              "term": "musik",
-              "weight": 0.00504
-            },
-            {
-              "term": "mensch",
-              "weight": 0.00484
-            },
-            {
-              "term": "text",
-              "weight": 0.00464
+              "term": "schrift",
+              "weight": 0.00975
             },
             {
               "term": "name",
+              "weight": 0.00966
+            },
+            {
+              "term": "stelle",
+              "weight": 0.00936
+            },
+            {
+              "term": "übersetzung",
+              "weight": 0.00917
+            },
+            {
+              "term": "folgend",
+              "weight": 0.00806
+            },
+            {
+              "term": "ver",
+              "weight": 0.007
+            },
+            {
+              "term": "hand",
+              "weight": 0.00663
+            },
+            {
+              "term": "zitat",
+              "weight": 0.00536
+            },
+            {
+              "term": "lateinisch",
+              "weight": 0.00508
+            },
+            {
+              "term": "musik",
               "weight": 0.00461
             },
             {
-              "term": "ort",
-              "weight": 0.00457
+              "term": "art",
+              "weight": 0.00441
             },
             {
-              "term": "auge",
-              "weight": 0.00451
-            },
-            {
-              "term": "leben",
-              "weight": 0.0045
+              "term": "stammen",
+              "weight": 0.00434
             }
           ],
           "top_publishers": [
             {
               "publisher": "Böhlau",
-              "share": 6.2
-            },
-            {
-              "publisher": "Vandenhoeck & Ruprecht",
-              "share": 5.5
+              "share": 8.5
             },
             {
               "publisher": "De Gruyter / Transcript",
-              "share": 5.4
+              "share": 6.6
+            },
+            {
+              "publisher": "Vandenhoeck & Ruprecht",
+              "share": 5.8
+            },
+            {
+              "publisher": "Aschendorff",
+              "share": 4.9
             },
             {
               "publisher": "Schöningh",
-              "share": 4.7
+              "share": 4.9
             },
             {
-              "publisher": "Fischer",
-              "share": 4.4
-            },
-            {
-              "publisher": "Neukirchener",
-              "share": 4.1
+              "publisher": "Wilhelm Fink",
+              "share": 3.6
             }
           ],
           "representative_docs": [
             {
-              "title": "Text und Textwert der griechischen Handschriften des Neuen Testaments [HTRC-Vollbuch-Abschnitt 17/19]",
+              "title": "Text und Textwert der griechischen Handschriften des Neuen Testaments [HTRC-Vollbuch-Abschnitt 13/19]",
               "author": "o. V.",
               "publisher": "De Gruyter / Transcript",
               "date": "1987",
               "corpus_layer": "hathitrust_ef_fullbook_print",
-              "probability": 84.6,
+              "probability": 92.7,
               "keywords": [
                 "nan"
               ],
-              "snippet": "LESART LESART LESART LESART SINGULAERLESARTEN SINGULAERLESARTEN JAK UNLESERLICH XPIOTOU ERFASSTE SONDERLESARTEN SONDERLESARTEN TESTSTELLEN TESTSTELLEN TESTSTELLEN TESTSTELLEN TESTSTELLEN TESTSTELLEN TESTSTELLEN TESTSTELLEN TESTSTELLEN iUV K",
-              "apa_citation": "o. V. (1987). Text und Textwert der griechischen Handschriften des Neuen Testaments [HTRC-Vollbuch-Abschnitt 17/19]. De Gruyter / Transcript."
+              "snippet": "TESTSTELLEN TESTSTELLEN LUECKE TST TST TST STELLEN Kupiov KoKoTToioik JUD JUD JUD JUD unep unep SUMME SUMME TESTSTELLE TESTSTELLE npoi LESART LESART LESART LESART LESART LESART LESART LESART LESART LESART SINGULAERLESARTEN JAK JAK JAK KaprT",
+              "apa_citation": "o. V. (1987). Text und Textwert der griechischen Handschriften des Neuen Testaments [HTRC-Vollbuch-Abschnitt 13/19]. De Gruyter / Transcript."
             },
             {
-              "title": "Also sprach Zarathustra: e. Buch für alle u. keinen [HTRC-Vollbuch-Abschnitt 45/75]",
-              "author": "Nietzsche, Friedrich",
-              "publisher": "Insel",
-              "date": "1976",
+              "title": "Verse und Lieder bei den Ostslaven [HTRC-Vollbuch-Abschnitt 14/17]",
+              "author": "Rothe, Hans",
+              "publisher": "Böhlau",
+              "date": "1984",
               "corpus_layer": "hathitrust_ef_fullbook_print",
-              "probability": 82.4,
+              "probability": 88.8,
               "keywords": [
                 "nan"
               ],
-              "snippet": "Größ sprechen sprechen sprechen jetzt aller zerbreche meinem ihnen kehrt damit Schlafenden mein mein Stunde ähnlich großem Übermenschen Worte schwinde Ich Ich Ich verneinende kennst Scham Schlange behutsam welches Schicksal Namen Spinnen St",
-              "apa_citation": "Nietzsche, Friedrich (1976). Also sprach Zarathustra: e. Buch für alle u. keinen [HTRC-Vollbuch-Abschnitt 45/75]. Insel."
+              "snippet": "Text Text Text Umfang Umfang Reim Voznjak PURML Erwähnungen Dragomanov naroda pan Vers Vers Oto Bemerkungen chozuz chodyla chtoz moiom Machnovec teszyti berehom berezenkowi diwczynonka trawonka Text Text Text Umfang Umfang Umfang identisch",
+              "apa_citation": "Rothe, Hans (1984). Verse und Lieder bei den Ostslaven [HTRC-Vollbuch-Abschnitt 14/17]. Böhlau."
             },
             {
-              "title": "Aus der Welt der Azteken: die Chronik des Fray Bernardino de Sahagún [HTRC-Vollbuch-Abschnitt 25/60]",
-              "author": "Sahagún, Bernardino de",
-              "publisher": "Insel",
-              "date": "1989",
-              "corpus_layer": "hathitrust_ef_fullbook_print",
-              "probability": 80.3,
+              "title": "In secundum librum sententiarum [DNB-Inhaltsverzeichnis & Leseprobe]",
+              "author": "Richard",
+              "publisher": "C.H. Beck",
+              "date": "2011",
+              "corpus_layer": "dnb_toc_pdf_fulltext",
+              "probability": 79.7,
               "keywords": [
                 "nan"
               ],
-              "snippet": "nehmen sagte auch ganz Götter Götter Götter Götter Götter aneinander aneinander hatte Ende vorüber sein sein sein Korallen sprach bedeckten sich sich sich sich sich sich sich zurück seinen machen zuletzt keinen gab gebündelt gleich ungesäum",
-              "apa_citation": "Sahagún, Bernardino de (1989). Aus der Welt der Azteken: die Chronik des Fray Bernardino de Sahagún [HTRC-Vollbuch-Abschnitt 25/60]. Insel."
+              "snippet": "INDEX RERUM QUAE IN DIST. 21-44 ET APPENDICIBUS TRACTANTUR DISTINCTIO 21 1 Utrum diabolus deorsum lapsus dici possit 3 Utrum ratio in femina minus vigeat 4 Utrum diabolus homini per violentiam nocere potuisset 5 Utrum diabolus serpente velu",
+              "apa_citation": "Richard (2011). In secundum librum sententiarum [DNB-Inhaltsverzeichnis & Leseprobe]. C.H. Beck."
+            }
+          ]
+        },
+        {
+          "topic_id": 11,
+          "archetype": {
+            "label": "Neoliberal / Self-Optimization",
+            "confidence": 100.0,
+            "scores": {
+              "Traditional / Ecclesiastical": 0.0,
+              "Neoliberal / Self-Optimization": 100.0,
+              "Critical / Secular-Humanist": 0.0
+            }
+          },
+          "seeded_prior": null,
+          "top_terms": [
+            {
+              "term": "frau",
+              "weight": 0.03572
+            },
+            {
+              "term": "kind",
+              "weight": 0.03268
+            },
+            {
+              "term": "mann",
+              "weight": 0.01937
+            },
+            {
+              "term": "leben",
+              "weight": 0.01509
+            },
+            {
+              "term": "familie",
+              "weight": 0.0138
+            },
+            {
+              "term": "jung",
+              "weight": 0.00987
+            },
+            {
+              "term": "haus",
+              "weight": 0.00904
+            },
+            {
+              "term": "mutter",
+              "weight": 0.00747
+            },
+            {
+              "term": "körper",
+              "weight": 0.00712
+            },
+            {
+              "term": "vater",
+              "weight": 0.00677
+            },
+            {
+              "term": "alt",
+              "weight": 0.00673
+            },
+            {
+              "term": "achtsamkeit",
+              "weight": 0.00646
+            },
+            {
+              "term": "ehe",
+              "weight": 0.00616
+            },
+            {
+              "term": "eltern",
+              "weight": 0.00602
+            },
+            {
+              "term": "gefühl",
+              "weight": 0.00577
+            }
+          ],
+          "top_publishers": [
+            {
+              "publisher": "De Gruyter / Transcript",
+              "share": 6.2
+            },
+            {
+              "publisher": "Böhlau",
+              "share": 5.4
+            },
+            {
+              "publisher": "Fischer",
+              "share": 5.1
+            },
+            {
+              "publisher": "Vandenhoeck & Ruprecht",
+              "share": 4.2
+            },
+            {
+              "publisher": "Rowohlt",
+              "share": 4.0
+            },
+            {
+              "publisher": "Suhrkamp",
+              "share": 3.4
+            }
+          ],
+          "representative_docs": [
+            {
+              "title": "Ehe?: eine Pastorin plädiert für neue Formen der Partnerschaft [HTRC-Vollbuch-Abschnitt 37/52]",
+              "author": "Frisch, Helga",
+              "publisher": "Fischer",
+              "date": "1983",
+              "corpus_layer": "hathitrust_ef_fullbook_print",
+              "probability": 77.7,
+              "keywords": [
+                "nan"
+              ],
+              "snippet": "Frau Frau Frau Frau Frau Gelassenheit Jahre Jahre Jahre beneiden davon erlebt nie Geschäftigkeit immerhin ohne darauf doch doch wissen allem War müssen ihr ihr ihr ihr weniger begegnete ihrer ihrer gewinnenden aus aus unaufdringlich jünger",
+              "apa_citation": "Frisch, Helga (1983). Ehe?: eine Pastorin plädiert für neue Formen der Partnerschaft [HTRC-Vollbuch-Abschnitt 37/52]. Fischer."
+            },
+            {
+              "title": "Vatermutterkind: deutsches Familienleben zwischen Kulturromantik und sozialer Revolution [HTRC-Vollbuch-Abschnitt 23/43]",
+              "author": "Gottschalch, Wilfried",
+              "publisher": "Wagenbach",
+              "date": "1979",
+              "corpus_layer": "hathitrust_ef_fullbook_print",
+              "probability": 77.7,
+              "keywords": [
+                "nan"
+              ],
+              "snippet": "wir wir wir wir wir sehr sehr Bett durften Wald Wald Stück Einmal sagten gab gab gab was Mutter Mutter Mutter Mutter Mutter Mutter roßen warme noch noch noch noch fluchen die die die die zurückkommen zwar halben aber anchmal helfen Geld wec",
+              "apa_citation": "Gottschalch, Wilfried (1979). Vatermutterkind: deutsches Familienleben zwischen Kulturromantik und sozialer Revolution [HTRC-Vollbuch-Abschnitt 23/43]. Wagenbach."
+            },
+            {
+              "title": "Der kleine Unterschied und seine großen Folgen: Frauen über sich ; Beginn einer Befreiung [HTRC-Vollbuch-Abschnitt 10/75]",
+              "author": "Schwarzer, Alice",
+              "publisher": "Fischer",
+              "date": "2013",
+              "corpus_layer": "hathitrust_ef_fullbook_print",
+              "probability": 76.7,
+              "keywords": [
+                "nan"
+              ],
+              "snippet": "Ich Ich Ich Ich eisern Schichtarbeit gelernt eins sie sie sie Die Die erste schön Tür des Arzt manches geredet ungewollt ungewollt und und und und und Kinder mir mir mir mir mir Neue Oft Ersten dritten jetziger gesagt wird wird nie Renate R",
+              "apa_citation": "Schwarzer, Alice (2013). Der kleine Unterschied und seine großen Folgen: Frauen über sich ; Beginn einer Befreiung [HTRC-Vollbuch-Abschnitt 10/75]. Fischer."
+            }
+          ]
+        },
+        {
+          "topic_id": 12,
+          "archetype": {
+            "label": "Traditional / Ecclesiastical",
+            "confidence": 100.0,
+            "scores": {
+              "Traditional / Ecclesiastical": 100.0,
+              "Neoliberal / Self-Optimization": 0.0,
+              "Critical / Secular-Humanist": 0.0
+            }
+          },
+          "seeded_prior": null,
+          "top_terms": [
+            {
+              "term": "gott",
+              "weight": 0.0769
+            },
+            {
+              "term": "mensch",
+              "weight": 0.05922
+            },
+            {
+              "term": "leben",
+              "weight": 0.02925
+            },
+            {
+              "term": "welt",
+              "weight": 0.02106
+            },
+            {
+              "term": "glaube",
+              "weight": 0.01493
+            },
+            {
+              "term": "wort",
+              "weight": 0.01152
+            },
+            {
+              "term": "christlich",
+              "weight": 0.00981
+            },
+            {
+              "term": "geist",
+              "weight": 0.0098
+            },
+            {
+              "term": "liebe",
+              "weight": 0.00937
+            },
+            {
+              "term": "menschlich",
+              "weight": 0.00874
+            },
+            {
+              "term": "tod",
+              "weight": 0.00805
+            },
+            {
+              "term": "seele",
+              "weight": 0.00763
+            },
+            {
+              "term": "göttlich",
+              "weight": 0.00686
+            },
+            {
+              "term": "bild",
+              "weight": 0.00593
+            },
+            {
+              "term": "christus",
+              "weight": 0.00545
+            }
+          ],
+          "top_publishers": [
+            {
+              "publisher": "Schöningh",
+              "share": 4.9
+            },
+            {
+              "publisher": "Vandenhoeck & Ruprecht",
+              "share": 4.6
+            },
+            {
+              "publisher": "Herder",
+              "share": 3.9
+            },
+            {
+              "publisher": "Mohr Siebeck",
+              "share": 3.9
+            },
+            {
+              "publisher": "De Gruyter / Transcript",
+              "share": 3.9
+            },
+            {
+              "publisher": "Neukirchener",
+              "share": 3.6
+            }
+          ],
+          "representative_docs": [
+            {
+              "title": "Wie kann Gott Leid und Katastrophen zulassen? [DNB-Inhaltsverzeichnis & Leseprobe]",
+              "author": "Berger, Klaus",
+              "publisher": "Gütersloher Verlagshaus",
+              "date": "1999",
+              "corpus_layer": "dnb_toc_pdf_fulltext",
+              "probability": 87.5,
+              "keywords": [
+                "nan"
+              ],
+              "snippet": "Inhalt 13 13 15 17 18 19 19 21 23 23 24 25 25 28 29 31 36 38 40 43 I Einführung Die Grundlagen Unsere Erfahrungen Was ist das: Böses, Leid, Sünde? Der Fall Hiob Über Hiob hinaus Was hat das Böse mit Gott zu tun? Warum fragen wir das? Nieman",
+              "apa_citation": "Berger, Klaus (1999). Wie kann Gott Leid und Katastrophen zulassen? [DNB-Inhaltsverzeichnis & Leseprobe]. Gütersloher Verlagshaus."
+            },
+            {
+              "title": "Gott kann nur lieben: Erfahrungen und Begegnungen [DNB-Inhaltsverzeichnis & Leseprobe]",
+              "author": "Roger",
+              "publisher": "Herder",
+              "date": "2022",
+              "corpus_layer": "dnb_toc_pdf_fulltext",
+              "probability": 86.4,
+              "keywords": [
+                "nan"
+              ],
+              "snippet": "Inhalt Was macht unser Leben schön? Ganz einfach vertrauen 9 Den Anderen zutiefst verstehen wollen .. 11 Siehst du den Weg der Hoffnung? 12 Eine geheimnisvolle Gegenwart Christus ist mit jedem Menschen verbunden 19 Der Heilige Geist - Beist",
+              "apa_citation": "Roger (2022). Gott kann nur lieben: Erfahrungen und Begegnungen [DNB-Inhaltsverzeichnis & Leseprobe]. Herder."
+            },
+            {
+              "title": "Der uns trägt und führt: von Gottes Grösse, Liebe u. Treue [DNB-Inhaltsverzeichnis & Leseprobe]",
+              "author": "Popp, Georg",
+              "publisher": "Pustet",
+              "date": "1987",
+              "corpus_layer": "dnb_toc_pdf_fulltext",
+              "probability": 86.2,
+              "keywords": [
+                "nan"
+              ],
+              "snippet": "Inhalt Vorwort 9 Wer ist Gott? Die wichtigsten Fragen unseres Lebens 12 Wo komme ich her? 13 Wer bist du, Gott? 14 Ich brauche keinen Gott 16 Wer ist Gott? 18 Was Gott nicht ist 19 Gott, der Unendliche 21 Seit wann lebt der Mensch? 22 Wir l",
+              "apa_citation": "Popp, Georg (1987). Der uns trägt und führt: von Gottes Grösse, Liebe u. Treue [DNB-Inhaltsverzeichnis & Leseprobe]. Pustet."
             }
           ]
         }
       ],
       "diachronic_decade_shares": {
         "1970s": {
-          "Topic 1": 12.9,
-          "Topic 2": 6.8,
-          "Topic 3": 1.8,
-          "Topic 4": 20.9,
-          "Topic 5": 6.2,
-          "Topic 6": 3.5,
-          "Topic 7": 7.0,
-          "Topic 8": 9.8,
-          "Topic 9": 6.0,
-          "Topic 10": 6.8,
-          "Topic 11": 6.1,
-          "Topic 12": 12.1
+          "Topic 1": 6.4,
+          "Topic 2": 6.0,
+          "Topic 3": 2.9,
+          "Topic 4": 8.3,
+          "Topic 5": 5.2,
+          "Topic 6": 8.0,
+          "Topic 7": 24.5,
+          "Topic 8": 5.5,
+          "Topic 9": 7.5,
+          "Topic 10": 7.7,
+          "Topic 11": 5.8,
+          "Topic 12": 12.0
         },
         "1980s": {
-          "Topic 1": 12.1,
-          "Topic 2": 6.7,
-          "Topic 3": 1.9,
-          "Topic 4": 19.4,
-          "Topic 5": 5.9,
-          "Topic 6": 4.5,
-          "Topic 7": 7.3,
-          "Topic 8": 9.9,
-          "Topic 9": 6.2,
-          "Topic 10": 6.9,
-          "Topic 11": 6.4,
-          "Topic 12": 13.0
+          "Topic 1": 6.8,
+          "Topic 2": 6.0,
+          "Topic 3": 3.0,
+          "Topic 4": 8.6,
+          "Topic 5": 5.1,
+          "Topic 6": 8.2,
+          "Topic 7": 22.6,
+          "Topic 8": 5.4,
+          "Topic 9": 7.4,
+          "Topic 10": 7.5,
+          "Topic 11": 7.2,
+          "Topic 12": 12.3
         },
         "1990s": {
-          "Topic 1": 9.6,
-          "Topic 2": 7.3,
-          "Topic 3": 2.4,
-          "Topic 4": 18.0,
-          "Topic 5": 6.9,
-          "Topic 6": 4.9,
-          "Topic 7": 8.1,
-          "Topic 8": 10.1,
-          "Topic 9": 6.0,
-          "Topic 10": 7.7,
-          "Topic 11": 6.6,
-          "Topic 12": 12.5
+          "Topic 1": 6.7,
+          "Topic 2": 6.5,
+          "Topic 3": 3.1,
+          "Topic 4": 9.5,
+          "Topic 5": 5.3,
+          "Topic 6": 8.8,
+          "Topic 7": 18.8,
+          "Topic 8": 6.2,
+          "Topic 9": 8.4,
+          "Topic 10": 7.9,
+          "Topic 11": 7.3,
+          "Topic 12": 11.5
         },
         "2000s": {
-          "Topic 1": 8.8,
-          "Topic 2": 6.9,
-          "Topic 3": 2.6,
-          "Topic 4": 16.7,
-          "Topic 5": 6.2,
-          "Topic 6": 5.3,
-          "Topic 7": 9.0,
-          "Topic 8": 8.7,
-          "Topic 9": 6.7,
-          "Topic 10": 9.2,
-          "Topic 11": 8.0,
-          "Topic 12": 11.9
+          "Topic 1": 7.4,
+          "Topic 2": 6.3,
+          "Topic 3": 3.4,
+          "Topic 4": 10.6,
+          "Topic 5": 7.0,
+          "Topic 6": 10.5,
+          "Topic 7": 16.7,
+          "Topic 8": 5.6,
+          "Topic 9": 7.9,
+          "Topic 10": 7.2,
+          "Topic 11": 7.4,
+          "Topic 12": 10.0
         },
         "2010s": {
-          "Topic 1": 6.2,
-          "Topic 2": 8.5,
-          "Topic 3": 5.0,
-          "Topic 4": 11.8,
-          "Topic 5": 4.1,
-          "Topic 6": 6.1,
-          "Topic 7": 7.9,
-          "Topic 8": 9.5,
-          "Topic 9": 7.3,
-          "Topic 10": 15.1,
-          "Topic 11": 9.7,
-          "Topic 12": 8.7
+          "Topic 1": 7.4,
+          "Topic 2": 8.6,
+          "Topic 3": 5.6,
+          "Topic 4": 12.4,
+          "Topic 5": 8.1,
+          "Topic 6": 13.6,
+          "Topic 7": 12.5,
+          "Topic 8": 4.6,
+          "Topic 9": 5.1,
+          "Topic 10": 5.2,
+          "Topic 11": 6.6,
+          "Topic 12": 10.3
         },
         "2020s": {
-          "Topic 1": 4.8,
-          "Topic 2": 5.8,
-          "Topic 3": 7.9,
-          "Topic 4": 13.5,
-          "Topic 5": 3.2,
-          "Topic 6": 5.6,
-          "Topic 7": 9.6,
-          "Topic 8": 6.7,
-          "Topic 9": 6.8,
-          "Topic 10": 15.3,
-          "Topic 11": 13.8,
-          "Topic 12": 7.0
+          "Topic 1": 7.0,
+          "Topic 2": 6.4,
+          "Topic 3": 7.2,
+          "Topic 4": 12.3,
+          "Topic 5": 10.9,
+          "Topic 6": 17.0,
+          "Topic 7": 12.0,
+          "Topic 8": 4.0,
+          "Topic 9": 4.4,
+          "Topic 10": 4.9,
+          "Topic 11": 6.2,
+          "Topic 12": 7.7
         }
       },
       "slda_diagnostics": {
-        "regime_cv_accuracy": 75.2,
-        "regime_in_sample_accuracy": 75.2,
-        "regime_macro_f1": 51.1,
-        "publisher_accuracy": 33.1,
-        "r2_explanatory_power": 0.3107,
+        "regime_cv_accuracy": 74.0,
+        "regime_in_sample_accuracy": 74.0,
+        "regime_macro_f1": 50.3,
+        "publisher_accuracy": 33.3,
+        "r2_explanatory_power": 0.2951,
         "regime_class_metrics": {
           "Traditional / Ecclesiastical": {
-            "precision": 83.6,
-            "recall": 82.3,
-            "f1": 83.0,
-            "support": 224390
+            "precision": 80.9,
+            "recall": 83.3,
+            "f1": 82.1,
+            "support": 268906
           },
           "Neoliberal / Self-Optimization": {
             "precision": 0.0,
             "recall": 0.0,
             "f1": 0.0,
-            "support": 27527
+            "support": 36083
           },
           "Critical / Secular-Humanist": {
-            "precision": 63.7,
-            "recall": 78.7,
-            "f1": 70.4,
-            "support": 132154
+            "precision": 63.5,
+            "recall": 74.9,
+            "f1": 68.8,
+            "support": 156793
           }
         },
         "topic_regression_weights": [
           {
             "topic_id": 1,
             "predicted_regime": "Critical / Secular-Humanist",
-            "w_traditional": -0.617,
-            "w_neoliberal": 0.074,
-            "w_critical": 0.543,
-            "discriminative_power": 0.477
+            "w_traditional": -0.893,
+            "w_neoliberal": -0.155,
+            "w_critical": 1.048,
+            "discriminative_power": 0.8
           },
           {
             "topic_id": 2,
             "predicted_regime": "Traditional / Ecclesiastical",
-            "w_traditional": 1.56,
-            "w_neoliberal": -0.203,
+            "w_traditional": 1.602,
+            "w_neoliberal": -0.244,
             "w_critical": -1.358,
-            "discriminative_power": 1.2
+            "discriminative_power": 1.221
           },
           {
             "topic_id": 3,
             "predicted_regime": "Critical / Secular-Humanist",
-            "w_traditional": -0.116,
-            "w_neoliberal": -0.026,
-            "w_critical": 0.142,
-            "discriminative_power": 0.107
+            "w_traditional": -0.515,
+            "w_neoliberal": -0.101,
+            "w_critical": 0.615,
+            "discriminative_power": 0.467
           },
           {
             "topic_id": 4,
-            "predicted_regime": "Neoliberal / Self-Optimization",
-            "w_traditional": -0.128,
-            "w_neoliberal": 0.237,
-            "w_critical": -0.109,
-            "discriminative_power": 0.168
+            "predicted_regime": "Critical / Secular-Humanist",
+            "w_traditional": -0.428,
+            "w_neoliberal": -0.063,
+            "w_critical": 0.492,
+            "discriminative_power": 0.378
           },
           {
             "topic_id": 5,
-            "predicted_regime": "Traditional / Ecclesiastical",
-            "w_traditional": 0.228,
-            "w_neoliberal": -0.101,
-            "w_critical": -0.128,
-            "discriminative_power": 0.162
+            "predicted_regime": "Neoliberal / Self-Optimization",
+            "w_traditional": -0.096,
+            "w_neoliberal": 0.15,
+            "w_critical": -0.054,
+            "discriminative_power": 0.107
           },
           {
             "topic_id": 6,
-            "predicted_regime": "Neoliberal / Self-Optimization",
-            "w_traditional": -0.271,
-            "w_neoliberal": 0.337,
-            "w_critical": -0.066,
-            "discriminative_power": 0.253
+            "predicted_regime": "Critical / Secular-Humanist",
+            "w_traditional": -0.483,
+            "w_neoliberal": 0.158,
+            "w_critical": 0.326,
+            "discriminative_power": 0.348
           },
           {
             "topic_id": 7,
             "predicted_regime": "Critical / Secular-Humanist",
-            "w_traditional": -0.142,
-            "w_neoliberal": -0.076,
-            "w_critical": 0.218,
-            "discriminative_power": 0.156
+            "w_traditional": -0.618,
+            "w_neoliberal": 0.236,
+            "w_critical": 0.382,
+            "discriminative_power": 0.441
           },
           {
             "topic_id": 8,
             "predicted_regime": "Traditional / Ecclesiastical",
-            "w_traditional": 1.234,
-            "w_neoliberal": -0.216,
-            "w_critical": -1.018,
-            "discriminative_power": 0.932
+            "w_traditional": 0.75,
+            "w_neoliberal": -0.111,
+            "w_critical": -0.639,
+            "discriminative_power": 0.572
           },
           {
             "topic_id": 9,
-            "predicted_regime": "Critical / Secular-Humanist",
-            "w_traditional": -0.804,
-            "w_neoliberal": -0.166,
-            "w_critical": 0.969,
-            "discriminative_power": 0.733
+            "predicted_regime": "Traditional / Ecclesiastical",
+            "w_traditional": 0.373,
+            "w_neoliberal": -0.043,
+            "w_critical": -0.33,
+            "discriminative_power": 0.289
           },
           {
             "topic_id": 10,
-            "predicted_regime": "Critical / Secular-Humanist",
-            "w_traditional": -0.316,
-            "w_neoliberal": -0.11,
-            "w_critical": 0.426,
-            "discriminative_power": 0.313
+            "predicted_regime": "Traditional / Ecclesiastical",
+            "w_traditional": 0.111,
+            "w_neoliberal": -0.003,
+            "w_critical": -0.108,
+            "discriminative_power": 0.089
           },
           {
             "topic_id": 11,
             "predicted_regime": "Critical / Secular-Humanist",
-            "w_traditional": -0.455,
-            "w_neoliberal": 0.178,
-            "w_critical": 0.277,
-            "discriminative_power": 0.324
+            "w_traditional": -0.49,
+            "w_neoliberal": 0.189,
+            "w_critical": 0.301,
+            "discriminative_power": 0.349
           },
           {
             "topic_id": 12,
-            "predicted_regime": "Critical / Secular-Humanist",
-            "w_traditional": -0.173,
-            "w_neoliberal": 0.07,
-            "w_critical": 0.103,
-            "discriminative_power": 0.123
+            "predicted_regime": "Traditional / Ecclesiastical",
+            "w_traditional": 0.688,
+            "w_neoliberal": -0.011,
+            "w_critical": -0.676,
+            "discriminative_power": 0.557
           }
         ]
       }
@@ -3817,7 +3817,7 @@
         "formula": "φ_k ~ Dir(η_k^{(RQ_m)}), η_{k,w∈S_m} = 15.0",
         "description": "Constructs an asymmetric K × |V| conjugate Dirichlet prior matrix η anchoring topic slots to RQ₁ (Traditional), RQ₂ (Neoliberal), and RQ₃ (Critical) seed lexicons (Jagarlamudi et al., 2012)."
       },
-      "corpus_documents": 384071,
+      "corpus_documents": 461782,
       "vocabulary_size": 25000,
       "coherence_score": -3.435,
       "topics": [
@@ -5689,7 +5689,7 @@
         "formula": "ŷ_d = ArgMax(θ_d · W + b), η_{k,w} ∝ P(w | y_d)",
         "description": "Combines empirical document-label co-occurrence priors with a 5-fold cross-validated L2 Ridge/Softmax response head predicting Ideological Regime (RQ₁–RQ₃) and Publisher from θ_d (Blei & McAuliffe, 2007)."
       },
-      "corpus_documents": 384071,
+      "corpus_documents": 461782,
       "vocabulary_size": 25000,
       "coherence_score": -1.965,
       "topics": [
@@ -7564,7 +7564,7 @@
       "regime_macro_f1": 43.6,
       "publisher_accuracy": 53.6,
       "r2_explanatory_power": 0.2021,
-      "documents": 384071
+      "documents": 461782
     },
     {
       "mode": "unsupervised",
@@ -7572,13 +7572,13 @@
       "short_label": "Unsupervised",
       "prior_type": "Auto η + 2× Domain Salience",
       "supervision": "Post-Hoc Archetype Projection",
-      "u_mass": -2.695,
+      "u_mass": -2.476,
       "vocab_size": 25000,
       "regime_cv_accuracy": 71.3,
       "regime_macro_f1": 45.7,
       "publisher_accuracy": 52.0,
       "r2_explanatory_power": 0.1985,
-      "documents": 384071
+      "documents": 461782
     },
     {
       "mode": "seeded",
@@ -7592,7 +7592,7 @@
       "regime_macro_f1": 40.2,
       "publisher_accuracy": 46.0,
       "r2_explanatory_power": 0.1711,
-      "documents": 384071
+      "documents": 461782
     },
     {
       "mode": "supervised",
@@ -7606,7 +7606,7 @@
       "regime_macro_f1": 56.9,
       "publisher_accuracy": 52.9,
       "r2_explanatory_power": 0.3092,
-      "documents": 384071
+      "documents": 461782
     }
   ]
 }

@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException, Query, UploadFile, File
+from fastapi import FastAPI, HTTPException, Query, UploadFile, File, Body
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
@@ -32,6 +32,9 @@ current_lda_mode = "unsupervised"
 current_year_filter = None
 current_decade_filter = None
 current_publishers_filter = []
+current_custom_seeds = None
+current_seed_boost = 15.0
+current_base_eta = 0.05
 current_viz_html = ""
 
 # In-memory memoization cache for instant switching across (dataset, K, year, decade)
@@ -194,15 +197,52 @@ def _publisher_matches_filter(pub_name: str, selected_pubs: list) -> bool:
     return False
 
 
+@app.post("/api/update-seeds")
+async def update_seeds(payload: dict = Body(...)):
+    global current_custom_seeds, current_seed_boost, current_base_eta
+    if "seed_lexicons" in payload and isinstance(payload["seed_lexicons"], dict):
+        current_custom_seeds = {
+            k: [str(w).strip().lower() for w in v if str(w).strip()]
+            for k, v in payload["seed_lexicons"].items()
+            if isinstance(v, list)
+        }
+    if "seed_boost" in payload and payload["seed_boost"] is not None:
+        current_seed_boost = float(payload["seed_boost"])
+    if "base_eta" in payload and payload["base_eta"] is not None:
+        current_base_eta = float(payload["base_eta"])
+    return {
+        "status": "success",
+        "seed_lexicons": current_custom_seeds or {k: sorted(list(v)) for k, v in config.ARCHETYPE_LEXICONS.items()},
+        "seed_boost": current_seed_boost,
+        "base_eta": current_base_eta,
+    }
+
+
+@app.post("/api/reset-seeds")
+async def reset_seeds():
+    global current_custom_seeds, current_seed_boost, current_base_eta
+    current_custom_seeds = None
+    current_seed_boost = 15.0
+    current_base_eta = 0.05
+    return {
+        "status": "success",
+        "seed_lexicons": {k: sorted(list(v)) for k, v in config.ARCHETYPE_LEXICONS.items()},
+        "seed_boost": current_seed_boost,
+        "base_eta": current_base_eta,
+    }
+
+
 @app.post("/api/run-lda")
 async def run_lda(
     year: int = Query(None),
     decade: int = Query(None),
     publishers: str = Query(None),
     num_topics: int = Query(None),
-    lda_mode: str = Query("unsupervised")
+    lda_mode: str = Query("unsupervised"),
+    seed_boost: float = Query(None),
+    base_eta: float = Query(None),
 ):
-    global current_model, current_corpus, current_dictionary, current_viz_html, current_coherence, current_top_docs, current_num_topics, current_lda_mode, current_year_filter, current_decade_filter, current_publishers_filter
+    global current_model, current_corpus, current_dictionary, current_viz_html, current_coherence, current_top_docs, current_num_topics, current_lda_mode, current_year_filter, current_decade_filter, current_publishers_filter, current_seed_boost, current_base_eta
 
     mode_key = lda_mode if lda_mode in lda_pipeline.LDA_MODES_META else "unsupervised"
     current_lda_mode = mode_key
@@ -210,6 +250,10 @@ async def run_lda(
     current_decade_filter = decade
     parsed_pubs = [p.strip() for p in (publishers or "").split(",") if p.strip()]
     current_publishers_filter = parsed_pubs
+    if seed_boost is not None:
+        current_seed_boost = float(seed_boost)
+    if base_eta is not None:
+        current_base_eta = float(base_eta)
 
     data_path = _get_active_data_path()
     k_target = int(num_topics) if num_topics else config.NUM_TOPICS
@@ -232,6 +276,8 @@ async def run_lda(
             "publishers_filtered": parsed_pubs,
             "num_topics": k_target,
             "lda_mode": mode_key,
+            "seed_boost": current_seed_boost,
+            "base_eta": current_base_eta,
             "cached": True
         }
 
@@ -283,7 +329,19 @@ async def run_lda(
             data_path = filtered_path
 
         mtime = os.path.getmtime(data_path) if os.path.exists(data_path) else 0
-        cache_key = (data_path, mtime, year, decade, tuple(sorted(parsed_pubs)), k_target, mode_key)
+        seeds_sig = str(sorted((k, tuple(sorted(v))) for k, v in (current_custom_seeds or {}).items()))
+        cache_key = (
+            data_path,
+            mtime,
+            year,
+            decade,
+            tuple(sorted(parsed_pubs)),
+            k_target,
+            mode_key,
+            current_seed_boost,
+            current_base_eta,
+            seeds_sig,
+        )
 
         if cache_key in _MODEL_RUN_CACHE:
             current_model, current_corpus, current_dictionary, current_coherence, current_top_docs = _MODEL_RUN_CACHE[cache_key]
@@ -291,7 +349,10 @@ async def run_lda(
             current_model, current_corpus, current_dictionary, current_coherence, current_top_docs = lda_pipeline.run_pipeline(
                 data_path,
                 num_topics=k_target,
-                lda_mode=mode_key
+                lda_mode=mode_key,
+                seed_boost=current_seed_boost,
+                base_eta=current_base_eta,
+                custom_seed_lexicons=current_custom_seeds,
             )
             _MODEL_RUN_CACHE[cache_key] = (
                 current_model,
@@ -310,6 +371,8 @@ async def run_lda(
             "publishers_filtered": parsed_pubs,
             "num_topics": current_num_topics,
             "lda_mode": mode_key,
+            "seed_boost": current_seed_boost,
+            "base_eta": current_base_eta,
             "cached": cache_key in _MODEL_RUN_CACHE
         }
     except HTTPException:
@@ -394,12 +457,18 @@ async def get_topics(lda_mode: str = Query(None)):
     modes_cache = _load_modes_report_cache()
     modes_comparison = modes_cache.get("comparison", [])
     available_modes = list(lda_pipeline.LDA_MODES_META.values())
-    seed_lexicons_payload = {k: sorted(list(v)) for k, v in config.ARCHETYPE_LEXICONS.items()}
+    seed_lexicons_payload = (
+        current_custom_seeds
+        if current_custom_seeds
+        else {k: sorted(list(v)) for k, v in config.ARCHETYPE_LEXICONS.items()}
+    )
     boost_words_payload = sorted(list(config.RELIGIOUS_VOICE_KEYWORDS))
     active_filters_payload = {
         "year": current_year_filter,
         "decade": current_decade_filter,
-        "publishers": current_publishers_filter
+        "publishers": current_publishers_filter,
+        "seed_boost": current_seed_boost,
+        "base_eta": current_base_eta,
     }
 
     # Fast-path if current_model is None (cold start, Vercel serverless, or precomputed full-corpus K=12 mode switch)
