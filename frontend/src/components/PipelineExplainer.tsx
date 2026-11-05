@@ -727,11 +727,22 @@ export const PipelineExplainer: React.FC<PipelineExplainerProps> = ({
                         RQ₁ · Traditional / Ecclesiastical
                       </span>
                       <span className="font-mono text-[9px] text-parchment-300">
-                        {(resolvedSeeds['Traditional / Theological'] || []).length} seeds
+                        {
+                          (
+                            resolvedSeeds['Traditional / Ecclesiastical'] ||
+                            resolvedSeeds['Traditional / Theological'] ||
+                            []
+                          ).length
+                        }{' '}
+                        seeds
                       </span>
                     </div>
                     <div className="flex flex-wrap gap-1 max-h-[145px] overflow-y-auto pr-1 custom-scrollbar">
-                      {(resolvedSeeds['Traditional / Theological'] || []).map((w) => (
+                      {(
+                        resolvedSeeds['Traditional / Ecclesiastical'] ||
+                        resolvedSeeds['Traditional / Theological'] ||
+                        []
+                      ).map((w) => (
                         <span
                           key={w}
                           className="px-1.5 py-0.5 rounded bg-traditional/15 border border-traditional/30 font-mono text-[10px] text-traditional"
@@ -749,11 +760,22 @@ export const PipelineExplainer: React.FC<PipelineExplainerProps> = ({
                         RQ₂ · Neoliberal / Self-Help
                       </span>
                       <span className="font-mono text-[9px] text-parchment-300">
-                        {(resolvedSeeds['Neoliberal / Self-Help'] || []).length} seeds
+                        {
+                          (
+                            resolvedSeeds['Neoliberal / Self-Optimization'] ||
+                            resolvedSeeds['Neoliberal / Self-Help'] ||
+                            []
+                          ).length
+                        }{' '}
+                        seeds
                       </span>
                     </div>
                     <div className="flex flex-wrap gap-1 max-h-[145px] overflow-y-auto pr-1 custom-scrollbar">
-                      {(resolvedSeeds['Neoliberal / Self-Help'] || []).map((w) => (
+                      {(
+                        resolvedSeeds['Neoliberal / Self-Optimization'] ||
+                        resolvedSeeds['Neoliberal / Self-Help'] ||
+                        []
+                      ).map((w) => (
                         <span
                           key={w}
                           className="px-1.5 py-0.5 rounded bg-neoliberal/15 border border-neoliberal/30 font-mono text-[10px] text-neoliberal"
@@ -771,11 +793,22 @@ export const PipelineExplainer: React.FC<PipelineExplainerProps> = ({
                         RQ₃ · Critical / Secular
                       </span>
                       <span className="font-mono text-[9px] text-parchment-300">
-                        {(resolvedSeeds['Critical / Secular'] || []).length} seeds
+                        {
+                          (
+                            resolvedSeeds['Critical / Secular-Humanist'] ||
+                            resolvedSeeds['Critical / Secular'] ||
+                            []
+                          ).length
+                        }{' '}
+                        seeds
                       </span>
                     </div>
                     <div className="flex flex-wrap gap-1 max-h-[145px] overflow-y-auto pr-1 custom-scrollbar">
-                      {(resolvedSeeds['Critical / Secular'] || []).map((w) => (
+                      {(
+                        resolvedSeeds['Critical / Secular-Humanist'] ||
+                        resolvedSeeds['Critical / Secular'] ||
+                        []
+                      ).map((w) => (
                         <span
                           key={w}
                           className="px-1.5 py-0.5 rounded bg-critical/15 border border-critical/30 font-mono text-[10px] text-critical"

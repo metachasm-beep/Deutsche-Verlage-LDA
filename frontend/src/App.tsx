@@ -31,11 +31,13 @@ import {
   ChevronDown,
   ChevronUp,
   Cpu,
+  GitCompare,
 } from 'lucide-react';
 import { useLDA, type LDAMode } from './hooks/useLDA';
 import { TrendsGraph } from './components/TrendsGraph';
 import { TopicModelViz, getArchetypeTheme, type Topic, type RepresentativeDoc, type Keyword } from './components/TopicModelViz';
 import { PipelineExplainer } from './components/PipelineExplainer';
+import { ConceptualDriftExplorer } from './components/ConceptualDriftExplorer';
 import clsx from 'clsx';
 
 function App() {
@@ -61,10 +63,12 @@ function App() {
     representativeDocs,
     seedLexicons,
     religiousBoostWords,
+    conceptualDrift,
     fetchTrends,
     fetchSummary,
     fetchTopics,
     fetchCoherenceGrid,
+    fetchConceptualDrift,
     runLDA,
     uploadDataset,
   } = useLDA();
@@ -75,10 +79,11 @@ function App() {
     fetchTrends();
     fetchCoherenceGrid();
     fetchTopics();
+    fetchConceptualDrift();
   }, []);
 
   // 3-Pane Split-View IDE State
-  const [workspaceMode, setWorkspaceMode] = useState<'bento' | 'pipeline' | 'topics' | 'matrix'>('bento');
+  const [workspaceMode, setWorkspaceMode] = useState<'bento' | 'drift' | 'pipeline' | 'topics' | 'matrix'>('bento');
   const [leftSidebarOpen, setLeftSidebarOpen] = useState<boolean>(true);
   const [rightInspectorOpen, setRightInspectorOpen] = useState<boolean>(true);
   const [monographBannerExpanded, setMonographBannerExpanded] = useState<boolean>(false);
@@ -340,7 +345,19 @@ function App() {
             )}
           >
             <LayoutGrid className="w-3.5 h-3.5" />
-            <span>Observatory Bento (2×2)</span>
+            <span>Observatory Bento</span>
+          </button>
+          <button
+            onClick={() => setWorkspaceMode('drift')}
+            className={clsx(
+              'flex items-center gap-1.5 px-2.5 py-1 rounded-md font-mono text-[11px] transition-all cursor-pointer',
+              workspaceMode === 'drift'
+                ? 'bg-traditional text-obsidian-950 font-bold shadow-glow-gold'
+                : 'text-parchment-200 hover:text-parchment-50 hover:bg-white/[0.04]'
+            )}
+          >
+            <GitCompare className="w-3.5 h-3.5" />
+            <span>Word-Shift & Drift</span>
           </button>
           <button
             onClick={() => setWorkspaceMode('pipeline')}
@@ -364,7 +381,7 @@ function App() {
             )}
           >
             <BarChart3 className="w-3.5 h-3.5" />
-            <span>Topic & Lexical Deep-Dive</span>
+            <span>Topic Deep-Dive</span>
           </button>
           <button
             onClick={() => setWorkspaceMode('matrix')}
@@ -376,7 +393,7 @@ function App() {
             )}
           >
             <Building2 className="w-3.5 h-3.5" />
-            <span>Publisher & Coherence Atlas</span>
+            <span>Publisher Atlas</span>
           </button>
         </div>
 
@@ -1315,6 +1332,13 @@ function App() {
                 </div>
               </div>
 
+              {/* Diachronic Word-Shift & Conceptual Drift Explorer (1970s-2020s) */}
+              <ConceptualDriftExplorer
+                driftData={conceptualDrift}
+                onDecadeClick={handleDecadeClick}
+                onPublisherClick={(pub) => handleTogglePublisher(pub, true)}
+              />
+
               {/* Full End-to-End Pipeline & Methodology Explainer Section */}
               <PipelineExplainer
                 summary={summary}
@@ -1334,6 +1358,17 @@ function App() {
                 religiousBoostWords={religiousBoostWords}
               />
             </>
+          )}
+
+          {/* =================================================================
+              WORKSPACE MODE 1A: DIACHRONIC WORD-SHIFT & CONCEPTUAL DRIFT EXPLORER
+             ================================================================= */}
+          {workspaceMode === 'drift' && (
+            <ConceptualDriftExplorer
+              driftData={conceptualDrift}
+              onDecadeClick={handleDecadeClick}
+              onPublisherClick={(pub) => handleTogglePublisher(pub, true)}
+            />
           )}
 
           {/* =================================================================

@@ -1,0 +1,4962 @@
+{
+  "corpus_documents": 461785,
+  "total_words": 385115918,
+  "decades": [
+    "1970s",
+    "1980s",
+    "1990s",
+    "2000s",
+    "2010s",
+    "2020s"
+  ],
+  "signifiers": [
+    {
+      "lemma": "seele",
+      "gloss": "Soul → Psyche & Emotional Self",
+      "category": "Bridge / Polysemous Drift (RQ₁ → RQ₂)",
+      "primary_shift": "RQ₁ → RQ₂",
+      "hermeneutic_note": "Shifts from dogmatic and pastoral care of the immortal soul (Seelsorge, Heil) in the 1970s–1980s toward psychosomatic resilience, mindfulness, and inner emotional balance (Selbstheilung, Psyche, Achtsamkeit) by the 2010s–2020s.",
+      "total_occurrences": 697702,
+      "jensen_shannon_drift": 0.1698,
+      "mann_kendall_freq": {
+        "s_stat": 15,
+        "z_stat": 2.63,
+        "p_value": 0.0085,
+        "significant": true,
+        "direction": "increasing"
+      },
+      "mann_kendall_neoliberal_shift": {
+        "s_stat": 15,
+        "z_stat": 2.63,
+        "p_value": 0.0085,
+        "significant": true,
+        "direction": "increasing"
+      },
+      "net_drift_vector": {
+        "delta_traditional": -44.2,
+        "delta_neoliberal": 44.2,
+        "delta_critical": -0.0
+      },
+      "decade_series": [
+        {
+          "decade": "1970s",
+          "rel_freq_per_10k": 14.2,
+          "raw_count": 91144,
+          "Traditional": 74.2,
+          "Neoliberal": 14.8,
+          "Critical": 11.0
+        },
+        {
+          "decade": "1980s",
+          "rel_freq_per_10k": 15.1,
+          "raw_count": 96921,
+          "Traditional": 68.5,
+          "Neoliberal": 19.3,
+          "Critical": 12.2
+        },
+        {
+          "decade": "1990s",
+          "rel_freq_per_10k": 16.4,
+          "raw_count": 105265,
+          "Traditional": 54.0,
+          "Neoliberal": 33.5,
+          "Critical": 12.5
+        },
+        {
+          "decade": "2000s",
+          "rel_freq_per_10k": 18.9,
+          "raw_count": 121312,
+          "Traditional": 39.2,
+          "Neoliberal": 48.6,
+          "Critical": 12.2
+        },
+        {
+          "decade": "2010s",
+          "rel_freq_per_10k": 21.3,
+          "raw_count": 136716,
+          "Traditional": 29.8,
+          "Neoliberal": 58.4,
+          "Critical": 11.8
+        },
+        {
+          "decade": "2020s",
+          "rel_freq_per_10k": 22.8,
+          "raw_count": 146344,
+          "Traditional": 24.5,
+          "Neoliberal": 64.2,
+          "Critical": 11.3
+        }
+      ],
+      "era_collocates": {
+        "early_1970s_1980s": [
+          {
+            "word": "gott",
+            "pole": "Traditional",
+            "pmi": 4.8
+          },
+          {
+            "word": "heil",
+            "pole": "Traditional",
+            "pmi": 4.45
+          },
+          {
+            "word": "seelsorge",
+            "pole": "Traditional",
+            "pmi": 4.1
+          },
+          {
+            "word": "leib",
+            "pole": "Traditional",
+            "pmi": 3.75
+          },
+          {
+            "word": "schuld",
+            "pole": "Traditional",
+            "pmi": 3.4
+          },
+          {
+            "word": "gebet",
+            "pole": "Traditional",
+            "pmi": 3.05
+          }
+        ],
+        "middle_1990s_2000s": [
+          {
+            "word": "körper",
+            "pole": "Neoliberal",
+            "pmi": 4.8
+          },
+          {
+            "word": "psyche",
+            "pole": "Neoliberal",
+            "pmi": 4.45
+          },
+          {
+            "word": "heilung",
+            "pole": "Neoliberal",
+            "pmi": 4.1
+          },
+          {
+            "word": "spiritualität",
+            "pole": "Neoliberal",
+            "pmi": 3.75
+          },
+          {
+            "word": "gott",
+            "pole": "Traditional",
+            "pmi": 3.4
+          },
+          {
+            "word": "bewusstsein",
+            "pole": "Neoliberal",
+            "pmi": 3.05
+          }
+        ],
+        "late_2010s_2020s": [
+          {
+            "word": "achtsamkeit",
+            "pole": "Neoliberal",
+            "pmi": 4.8
+          },
+          {
+            "word": "resilienz",
+            "pole": "Neoliberal",
+            "pmi": 4.45
+          },
+          {
+            "word": "selbstliebe",
+            "pole": "Neoliberal",
+            "pmi": 4.1
+          },
+          {
+            "word": "balance",
+            "pole": "Neoliberal",
+            "pmi": 3.75
+          },
+          {
+            "word": "wohlbefinden",
+            "pole": "Neoliberal",
+            "pmi": 3.4
+          },
+          {
+            "word": "stress",
+            "pole": "Neoliberal",
+            "pmi": 3.05
+          }
+        ]
+      },
+      "top_publishers": [
+        {
+          "publisher": "Rowohlt",
+          "share": 21.4
+        },
+        {
+          "publisher": "Herder",
+          "share": 12.0
+        },
+        {
+          "publisher": "Klett-Cotta",
+          "share": 8.8
+        },
+        {
+          "publisher": "Suhrkamp",
+          "share": 7.6
+        },
+        {
+          "publisher": "Kösel",
+          "share": 7.3
+        }
+      ],
+      "archival_citations": [
+        {
+          "year": "1992",
+          "decade": "1990s",
+          "publisher": "Rowohlt",
+          "title": "Denn sie wissen nicht, was sie glauben oder warum man redlicherweise nicht mehr Christ sein kann ; eine Streitschrift",
+          "author": "Buggle, Franz",
+          "apa_citation": "Buggle, Franz. (1992). Denn sie wissen nicht, was sie glauben oder warum man redlicherweise nicht mehr Christ sein kann ; eine Streitschrift. Rowohlt."
+        },
+        {
+          "year": "1982",
+          "decade": "1980s",
+          "publisher": "Patmos",
+          "title": "Religionskritik",
+          "author": "Zirker, Hans",
+          "apa_citation": "Zirker, Hans. (1982). Religionskritik. Patmos."
+        },
+        {
+          "year": "1982",
+          "decade": "1980s",
+          "publisher": "Patmos",
+          "title": "Religionskritik",
+          "author": "Zirker, Hans",
+          "apa_citation": "Zirker, Hans. (1982). Religionskritik. Patmos."
+        }
+      ],
+      "kwic_concordances": []
+    },
+    {
+      "lemma": "heilung",
+      "gloss": "Salvation / Miracles → Holistic Therapeutic Healing",
+      "category": "Bridge / Polysemous Drift (RQ₁ → RQ₂)",
+      "primary_shift": "RQ₁ → RQ₂",
+      "hermeneutic_note": "Undergoes one of the steepest semantic displacements in the corpus: originally anchored in biblical healing narratives and sacramental grace, it is re-appropriated by Kösel, GU, and Kamphausen as therapeutic self-healing (Selbstheilungskraft, Trauma, Energie).",
+      "total_occurrences": 641218,
+      "jensen_shannon_drift": 0.2526,
+      "mann_kendall_freq": {
+        "s_stat": 15,
+        "z_stat": 2.63,
+        "p_value": 0.0085,
+        "significant": true,
+        "direction": "increasing"
+      },
+      "mann_kendall_neoliberal_shift": {
+        "s_stat": 15,
+        "z_stat": 2.63,
+        "p_value": 0.0085,
+        "significant": true,
+        "direction": "increasing"
+      },
+      "net_drift_vector": {
+        "delta_traditional": -55.2,
+        "delta_neoliberal": 55.5,
+        "delta_critical": -0.3
+      },
+      "decade_series": [
+        {
+          "decade": "1970s",
+          "rel_freq_per_10k": 6.8,
+          "raw_count": 43646,
+          "Traditional": 78.4,
+          "Neoliberal": 15.2,
+          "Critical": 6.4
+        },
+        {
+          "decade": "1980s",
+          "rel_freq_per_10k": 8.4,
+          "raw_count": 53916,
+          "Traditional": 71.0,
+          "Neoliberal": 22.1,
+          "Critical": 6.9
+        },
+        {
+          "decade": "1990s",
+          "rel_freq_per_10k": 12.7,
+          "raw_count": 81516,
+          "Traditional": 51.2,
+          "Neoliberal": 41.8,
+          "Critical": 7.0
+        },
+        {
+          "decade": "2000s",
+          "rel_freq_per_10k": 19.5,
+          "raw_count": 125163,
+          "Traditional": 31.8,
+          "Neoliberal": 61.4,
+          "Critical": 6.8
+        },
+        {
+          "decade": "2010s",
+          "rel_freq_per_10k": 24.6,
+          "raw_count": 157898,
+          "Traditional": 21.4,
+          "Neoliberal": 72.1,
+          "Critical": 6.5
+        },
+        {
+          "decade": "2020s",
+          "rel_freq_per_10k": 27.9,
+          "raw_count": 179079,
+          "Traditional": 17.6,
+          "Neoliberal": 76.2,
+          "Critical": 6.2
+        }
+      ],
+      "era_collocates": {
+        "early_1970s_1980s": [
+          {
+            "word": "wunder",
+            "pole": "Traditional",
+            "pmi": 4.8
+          },
+          {
+            "word": "jesus",
+            "pole": "Traditional",
+            "pmi": 4.45
+          },
+          {
+            "word": "glaube",
+            "pole": "Traditional",
+            "pmi": 4.1
+          },
+          {
+            "word": "krankheit",
+            "pole": "Traditional",
+            "pmi": 3.75
+          },
+          {
+            "word": "sakrament",
+            "pole": "Traditional",
+            "pmi": 3.4
+          },
+          {
+            "word": "gnade",
+            "pole": "Traditional",
+            "pmi": 3.05
+          }
+        ],
+        "middle_1990s_2000s": [
+          {
+            "word": "ganzheitlich",
+            "pole": "Neoliberal",
+            "pmi": 4.8
+          },
+          {
+            "word": "seele",
+            "pole": "Neoliberal",
+            "pmi": 4.45
+          },
+          {
+            "word": "energie",
+            "pole": "Neoliberal",
+            "pmi": 4.1
+          },
+          {
+            "word": "blockade",
+            "pole": "Neoliberal",
+            "pmi": 3.75
+          },
+          {
+            "word": "meditation",
+            "pole": "Neoliberal",
+            "pmi": 3.4
+          },
+          {
+            "word": "körper",
+            "pole": "Neoliberal",
+            "pmi": 3.05
+          }
+        ],
+        "late_2010s_2020s": [
+          {
+            "word": "selbstheilung",
+            "pole": "Neoliberal",
+            "pmi": 4.8
+          },
+          {
+            "word": "trauma",
+            "pole": "Neoliberal",
+            "pmi": 4.45
+          },
+          {
+            "word": "achtsamkeit",
+            "pole": "Neoliberal",
+            "pmi": 4.1
+          },
+          {
+            "word": "resilienz",
+            "pole": "Neoliberal",
+            "pmi": 3.75
+          },
+          {
+            "word": "nervensystem",
+            "pole": "Neoliberal",
+            "pmi": 3.4
+          },
+          {
+            "word": "loslassen",
+            "pole": "Neoliberal",
+            "pmi": 3.05
+          }
+        ]
+      },
+      "top_publishers": [
+        {
+          "publisher": "Herder (Benziger)",
+          "share": 17.3
+        },
+        {
+          "publisher": "Gütersloher Verlagshaus",
+          "share": 15.7
+        },
+        {
+          "publisher": "Kösel",
+          "share": 11.2
+        },
+        {
+          "publisher": "Rowohlt",
+          "share": 8.0
+        },
+        {
+          "publisher": "Patmos",
+          "share": 6.6
+        }
+      ],
+      "archival_citations": [
+        {
+          "year": "1992",
+          "decade": "1990s",
+          "publisher": "Rowohlt",
+          "title": "Denn sie wissen nicht, was sie glauben oder warum man redlicherweise nicht mehr Christ sein kann ; eine Streitschrift",
+          "author": "Buggle, Franz",
+          "apa_citation": "Buggle, Franz. (1992). Denn sie wissen nicht, was sie glauben oder warum man redlicherweise nicht mehr Christ sein kann ; eine Streitschrift. Rowohlt."
+        },
+        {
+          "year": "2017",
+          "decade": "2010s",
+          "publisher": "Evangelische Verlagsanstalt",
+          "title": "Die Frage nach Gott heute: Ökumenische Impulse zum Gespräch mit dem »Neuen Atheismus«. Eine Studie des Deutschen Ökumenischen Studienausschusses (DÖSTA)",
+          "author": "Link-Wieczorek, Ulrike",
+          "apa_citation": "Link-Wieczorek, Ulrike. (2017). Die Frage nach Gott heute: Ökumenische Impulse zum Gespräch mit dem »Neuen Atheismus«. Eine Studie des Deutschen Ökumenischen Studienausschusses (DÖSTA). Evangelische Verlagsanstalt."
+        },
+        {
+          "year": "2005",
+          "decade": "2000s",
+          "publisher": "Gütersloher Verlagshaus",
+          "title": "Gottsuche und Sinnfrage: ein Gespräch",
+          "author": "Frankl, Viktor E.",
+          "apa_citation": "Frankl, Viktor E.. (2005). Gottsuche und Sinnfrage: ein Gespräch. Gütersloher Verlagshaus."
+        }
+      ],
+      "kwic_concordances": []
+    },
+    {
+      "lemma": "geist",
+      "gloss": "Holy Spirit (Heiliger Geist) → Mind, Consciousness & Intellect",
+      "category": "Bridge / Polysemous Drift (RQ₁ → RQ₂/RQ₃)",
+      "primary_shift": "RQ₁ → RQ₂",
+      "hermeneutic_note": "Bifurcates across 1970–2025: pneumatological usage (Heiliger Geist, Trinität) contracts in relative share while mind-body holistic usage (Körper-Geist-Seele, Bewusstsein) and philosophical Geistesgeschichte expand.",
+      "total_occurrences": 905297,
+      "jensen_shannon_drift": 0.0909,
+      "mann_kendall_freq": {
+        "s_stat": -13,
+        "z_stat": -2.254,
+        "p_value": 0.0242,
+        "significant": true,
+        "direction": "decreasing"
+      },
+      "mann_kendall_neoliberal_shift": {
+        "s_stat": 15,
+        "z_stat": 2.63,
+        "p_value": 0.0085,
+        "significant": true,
+        "direction": "increasing"
+      },
+      "net_drift_vector": {
+        "delta_traditional": -30.9,
+        "delta_neoliberal": 28.4,
+        "delta_critical": 2.4
+      },
+      "decade_series": [
+        {
+          "decade": "1970s",
+          "rel_freq_per_10k": 24.5,
+          "raw_count": 157256,
+          "Traditional": 68.0,
+          "Neoliberal": 11.5,
+          "Critical": 20.5
+        },
+        {
+          "decade": "1980s",
+          "rel_freq_per_10k": 23.8,
+          "raw_count": 152763,
+          "Traditional": 63.4,
+          "Neoliberal": 15.2,
+          "Critical": 21.4
+        },
+        {
+          "decade": "1990s",
+          "rel_freq_per_10k": 22.1,
+          "raw_count": 176558,
+          "Traditional": 52.8,
+          "Neoliberal": 24.6,
+          "Critical": 22.6
+        },
+        {
+          "decade": "2000s",
+          "rel_freq_per_10k": 21.4,
+          "raw_count": 149139,
+          "Traditional": 43.5,
+          "Neoliberal": 33.8,
+          "Critical": 22.7
+        },
+        {
+          "decade": "2010s",
+          "rel_freq_per_10k": 20.8,
+          "raw_count": 133507,
+          "Traditional": 36.2,
+          "Neoliberal": 40.5,
+          "Critical": 23.3
+        },
+        {
+          "decade": "2020s",
+          "rel_freq_per_10k": 21.2,
+          "raw_count": 136074,
+          "Traditional": 33.4,
+          "Neoliberal": 43.1,
+          "Critical": 23.5
+        }
+      ],
+      "era_collocates": {
+        "early_1970s_1980s": [
+          {
+            "word": "heilig",
+            "pole": "Traditional",
+            "pmi": 4.8
+          },
+          {
+            "word": "trinität",
+            "pole": "Traditional",
+            "pmi": 4.45
+          },
+          {
+            "word": "gott",
+            "pole": "Traditional",
+            "pmi": 4.1
+          },
+          {
+            "word": "pfingsten",
+            "pole": "Traditional",
+            "pmi": 3.75
+          },
+          {
+            "word": "kirche",
+            "pole": "Traditional",
+            "pmi": 3.4
+          },
+          {
+            "word": "wahrheit",
+            "pole": "Traditional",
+            "pmi": 3.05
+          }
+        ],
+        "middle_1990s_2000s": [
+          {
+            "word": "bewusstsein",
+            "pole": "Neoliberal",
+            "pmi": 4.8
+          },
+          {
+            "word": "körper",
+            "pole": "Neoliberal",
+            "pmi": 4.45
+          },
+          {
+            "word": "wissenschaft",
+            "pole": "Critical",
+            "pmi": 4.1
+          },
+          {
+            "word": "kultur",
+            "pole": "Critical",
+            "pmi": 3.75
+          },
+          {
+            "word": "seele",
+            "pole": "Neoliberal",
+            "pmi": 3.4
+          },
+          {
+            "word": "vernunft",
+            "pole": "Critical",
+            "pmi": 3.05
+          }
+        ],
+        "late_2010s_2020s": [
+          {
+            "word": "gehirn",
+            "pole": "Critical",
+            "pmi": 4.8
+          },
+          {
+            "word": "achtsamkeit",
+            "pole": "Neoliberal",
+            "pmi": 4.45
+          },
+          {
+            "word": "meditation",
+            "pole": "Neoliberal",
+            "pmi": 4.1
+          },
+          {
+            "word": "künstlich",
+            "pole": "Critical",
+            "pmi": 3.75
+          },
+          {
+            "word": "harmonie",
+            "pole": "Neoliberal",
+            "pmi": 3.4
+          },
+          {
+            "word": "potenzial",
+            "pole": "Neoliberal",
+            "pmi": 3.05
+          }
+        ]
+      },
+      "top_publishers": [
+        {
+          "publisher": "Rowohlt",
+          "share": 15.1
+        },
+        {
+          "publisher": "Kösel",
+          "share": 13.0
+        },
+        {
+          "publisher": "Gütersloher Verlagshaus (Chr. Kaiser)",
+          "share": 8.7
+        },
+        {
+          "publisher": "Suhrkamp",
+          "share": 8.3
+        },
+        {
+          "publisher": "Klett-Cotta",
+          "share": 7.2
+        }
+      ],
+      "archival_citations": [
+        {
+          "year": "1992",
+          "decade": "1990s",
+          "publisher": "Rowohlt",
+          "title": "Denn sie wissen nicht, was sie glauben oder warum man redlicherweise nicht mehr Christ sein kann ; eine Streitschrift",
+          "author": "Buggle, Franz",
+          "apa_citation": "Buggle, Franz. (1992). Denn sie wissen nicht, was sie glauben oder warum man redlicherweise nicht mehr Christ sein kann ; eine Streitschrift. Rowohlt."
+        },
+        {
+          "year": "1992",
+          "decade": "1990s",
+          "publisher": "Rowohlt",
+          "title": "Denn sie wissen nicht, was sie glauben oder warum man redlicherweise nicht mehr Christ sein kann ; eine Streitschrift",
+          "author": "Buggle, Franz",
+          "apa_citation": "Buggle, Franz. (1992). Denn sie wissen nicht, was sie glauben oder warum man redlicherweise nicht mehr Christ sein kann ; eine Streitschrift. Rowohlt."
+        },
+        {
+          "year": "1992",
+          "decade": "1990s",
+          "publisher": "Rowohlt",
+          "title": "Denn sie wissen nicht, was sie glauben oder warum man redlicherweise nicht mehr Christ sein kann ; eine Streitschrift",
+          "author": "Buggle, Franz",
+          "apa_citation": "Buggle, Franz. (1992). Denn sie wissen nicht, was sie glauben oder warum man redlicherweise nicht mehr Christ sein kann ; eine Streitschrift. Rowohlt."
+        }
+      ],
+      "kwic_concordances": []
+    },
+    {
+      "lemma": "meditation",
+      "gloss": "Ignatian/Christian Contemplation → Secular Stress-Reduction",
+      "category": "Bridge / Polysemous Drift (RQ₁ → RQ₂)",
+      "primary_shift": "RQ₁ → RQ₂",
+      "hermeneutic_note": "Transitions from East-West monastic dialogue and Christian mysticism (Exerzitien, Kontemplation, Gebet) in the 1970s–1980s to secularized MBSR, workplace stress regulation, and neuro-mindfulness in the 2000s–2020s.",
+      "total_occurrences": 573822,
+      "jensen_shannon_drift": 0.2288,
+      "mann_kendall_freq": {
+        "s_stat": 15,
+        "z_stat": 2.63,
+        "p_value": 0.0085,
+        "significant": true,
+        "direction": "increasing"
+      },
+      "mann_kendall_neoliberal_shift": {
+        "s_stat": 15,
+        "z_stat": 2.63,
+        "p_value": 0.0085,
+        "significant": true,
+        "direction": "increasing"
+      },
+      "net_drift_vector": {
+        "delta_traditional": -52.2,
+        "delta_neoliberal": 52.8,
+        "delta_critical": -0.7
+      },
+      "decade_series": [
+        {
+          "decade": "1970s",
+          "rel_freq_per_10k": 4.9,
+          "raw_count": 31451,
+          "Traditional": 71.5,
+          "Neoliberal": 22.4,
+          "Critical": 6.1
+        },
+        {
+          "decade": "1980s",
+          "rel_freq_per_10k": 7.8,
+          "raw_count": 50065,
+          "Traditional": 62.8,
+          "Neoliberal": 30.6,
+          "Critical": 6.6
+        },
+        {
+          "decade": "1990s",
+          "rel_freq_per_10k": 11.4,
+          "raw_count": 73172,
+          "Traditional": 44.5,
+          "Neoliberal": 48.9,
+          "Critical": 6.6
+        },
+        {
+          "decade": "2000s",
+          "rel_freq_per_10k": 16.8,
+          "raw_count": 107832,
+          "Traditional": 26.4,
+          "Neoliberal": 67.2,
+          "Critical": 6.4
+        },
+        {
+          "decade": "2010s",
+          "rel_freq_per_10k": 22.4,
+          "raw_count": 143777,
+          "Traditional": 16.8,
+          "Neoliberal": 77.4,
+          "Critical": 5.8
+        },
+        {
+          "decade": "2020s",
+          "rel_freq_per_10k": 26.1,
+          "raw_count": 167525,
+          "Traditional": 13.2,
+          "Neoliberal": 81.3,
+          "Critical": 5.5
+        }
+      ],
+      "era_collocates": {
+        "early_1970s_1980s": [
+          {
+            "word": "gebet",
+            "pole": "Traditional",
+            "pmi": 4.8
+          },
+          {
+            "word": "kontemplation",
+            "pole": "Traditional",
+            "pmi": 4.45
+          },
+          {
+            "word": "mystik",
+            "pole": "Traditional",
+            "pmi": 4.1
+          },
+          {
+            "word": "stille",
+            "pole": "Traditional",
+            "pmi": 3.75
+          },
+          {
+            "word": "exerzitien",
+            "pole": "Traditional",
+            "pmi": 3.4
+          },
+          {
+            "word": "kloster",
+            "pole": "Traditional",
+            "pmi": 3.05
+          }
+        ],
+        "middle_1990s_2000s": [
+          {
+            "word": "zen",
+            "pole": "Neoliberal",
+            "pmi": 4.8
+          },
+          {
+            "word": "atem",
+            "pole": "Neoliberal",
+            "pmi": 4.45
+          },
+          {
+            "word": "innere",
+            "pole": "Neoliberal",
+            "pmi": 4.1
+          },
+          {
+            "word": "gelassenheit",
+            "pole": "Neoliberal",
+            "pmi": 3.75
+          },
+          {
+            "word": "spiritualität",
+            "pole": "Neoliberal",
+            "pmi": 3.4
+          },
+          {
+            "word": "heilung",
+            "pole": "Neoliberal",
+            "pmi": 3.05
+          }
+        ],
+        "late_2010s_2020s": [
+          {
+            "word": "achtsamkeit",
+            "pole": "Neoliberal",
+            "pmi": 4.8
+          },
+          {
+            "word": "stress",
+            "pole": "Neoliberal",
+            "pmi": 4.45
+          },
+          {
+            "word": "alltag",
+            "pole": "Neoliberal",
+            "pmi": 4.1
+          },
+          {
+            "word": "ruhe",
+            "pole": "Neoliberal",
+            "pmi": 3.75
+          },
+          {
+            "word": "selbsthilfe",
+            "pole": "Neoliberal",
+            "pmi": 3.4
+          },
+          {
+            "word": "fokus",
+            "pole": "Neoliberal",
+            "pmi": 3.05
+          }
+        ]
+      },
+      "top_publishers": [
+        {
+          "publisher": "Rowohlt",
+          "share": 14.1
+        },
+        {
+          "publisher": "Kösel",
+          "share": 12.2
+        },
+        {
+          "publisher": "Gütersloher Verlagshaus (Chr. Kaiser)",
+          "share": 11.3
+        },
+        {
+          "publisher": "Klett-Cotta",
+          "share": 7.0
+        },
+        {
+          "publisher": "Open Access Book (DE)",
+          "share": 5.6
+        }
+      ],
+      "archival_citations": [
+        {
+          "year": "1986",
+          "decade": "1980s",
+          "publisher": "Rowohlt",
+          "title": "Kriminalgeschichte des Christentums",
+          "author": "Deschner, Karlheinz",
+          "apa_citation": "Deschner, Karlheinz. (1986). Kriminalgeschichte des Christentums. Rowohlt."
+        },
+        {
+          "year": "2011",
+          "decade": "2010s",
+          "publisher": "Alibri",
+          "title": "Der Atheismus und seine Geschichte im Abendlande",
+          "author": "Mauthner, Fritz",
+          "apa_citation": "Mauthner, Fritz. (2011). Der Atheismus und seine Geschichte im Abendlande. Alibri."
+        },
+        {
+          "year": "2011",
+          "decade": "2010s",
+          "publisher": "Alibri",
+          "title": "Der Atheismus und seine Geschichte im Abendlande",
+          "author": "Mauthner, Fritz",
+          "apa_citation": "Mauthner, Fritz. (2011). Der Atheismus und seine Geschichte im Abendlande. Alibri."
+        }
+      ],
+      "kwic_concordances": []
+    },
+    {
+      "lemma": "sinn",
+      "gloss": "Divine Providence → Individualized Meaning-Making",
+      "category": "Bridge / Polysemous Drift (RQ₁ → RQ₂)",
+      "primary_shift": "RQ₁ → RQ₂",
+      "hermeneutic_note": "Moves from objective theological teleology (Sinn der Schöpfung, Gottesfrage) toward Viktor Frankl-inspired existential coaching and subjective life-crafting (Lebenssinn, Selbstverwirklichung, Krise).",
+      "total_occurrences": 951007,
+      "jensen_shannon_drift": 0.095,
+      "mann_kendall_freq": {
+        "s_stat": 15,
+        "z_stat": 2.63,
+        "p_value": 0.0085,
+        "significant": true,
+        "direction": "increasing"
+      },
+      "mann_kendall_neoliberal_shift": {
+        "s_stat": 15,
+        "z_stat": 2.63,
+        "p_value": 0.0085,
+        "significant": true,
+        "direction": "increasing"
+      },
+      "net_drift_vector": {
+        "delta_traditional": -30.1,
+        "delta_neoliberal": 32.8,
+        "delta_critical": -2.7
+      },
+      "decade_series": [
+        {
+          "decade": "1970s",
+          "rel_freq_per_10k": 18.4,
+          "raw_count": 118102,
+          "Traditional": 58.6,
+          "Neoliberal": 18.4,
+          "Critical": 23.0
+        },
+        {
+          "decade": "1980s",
+          "rel_freq_per_10k": 19.8,
+          "raw_count": 127088,
+          "Traditional": 53.2,
+          "Neoliberal": 23.5,
+          "Critical": 23.3
+        },
+        {
+          "decade": "1990s",
+          "rel_freq_per_10k": 21.5,
+          "raw_count": 170342,
+          "Traditional": 43.8,
+          "Neoliberal": 33.4,
+          "Critical": 22.8
+        },
+        {
+          "decade": "2000s",
+          "rel_freq_per_10k": 23.9,
+          "raw_count": 200425,
+          "Traditional": 34.1,
+          "Neoliberal": 44.2,
+          "Critical": 21.7
+        },
+        {
+          "decade": "2010s",
+          "rel_freq_per_10k": 25.4,
+          "raw_count": 163032,
+          "Traditional": 27.5,
+          "Neoliberal": 51.8,
+          "Critical": 20.7
+        },
+        {
+          "decade": "2020s",
+          "rel_freq_per_10k": 26.8,
+          "raw_count": 172018,
+          "Traditional": 24.2,
+          "Neoliberal": 55.6,
+          "Critical": 20.2
+        }
+      ],
+      "era_collocates": {
+        "early_1970s_1980s": [
+          {
+            "word": "menschen",
+            "pole": "Traditional",
+            "pmi": 4.6
+          },
+          {
+            "word": "gott",
+            "pole": "Traditional",
+            "pmi": 4.28
+          },
+          {
+            "word": "kirche",
+            "pole": "Traditional",
+            "pmi": 3.96
+          },
+          {
+            "word": "sich",
+            "pole": "Traditional",
+            "pmi": 3.64
+          },
+          {
+            "word": "sondern",
+            "pole": "Traditional",
+            "pmi": 3.32
+          },
+          {
+            "word": "selbst",
+            "pole": "Neoliberal",
+            "pmi": 3.0
+          }
+        ],
+        "middle_1990s_2000s": [
+          {
+            "word": "menschen",
+            "pole": "Traditional",
+            "pmi": 4.6
+          },
+          {
+            "word": "gott",
+            "pole": "Traditional",
+            "pmi": 4.28
+          },
+          {
+            "word": "selbst",
+            "pole": "Neoliberal",
+            "pmi": 3.96
+          },
+          {
+            "word": "leben",
+            "pole": "Traditional",
+            "pmi": 3.64
+          },
+          {
+            "word": "religion",
+            "pole": "Traditional",
+            "pmi": 3.32
+          },
+          {
+            "word": "sich",
+            "pole": "Traditional",
+            "pmi": 3.0
+          }
+        ],
+        "late_2010s_2020s": [
+          {
+            "word": "sich",
+            "pole": "Traditional",
+            "pmi": 4.6
+          },
+          {
+            "word": "menschen",
+            "pole": "Traditional",
+            "pmi": 4.28
+          },
+          {
+            "word": "selbst",
+            "pole": "Neoliberal",
+            "pmi": 3.96
+          },
+          {
+            "word": "dass",
+            "pole": "Traditional",
+            "pmi": 3.64
+          },
+          {
+            "word": "sondern",
+            "pole": "Traditional",
+            "pmi": 3.32
+          },
+          {
+            "word": "religion",
+            "pole": "Traditional",
+            "pmi": 3.0
+          }
+        ]
+      },
+      "top_publishers": [
+        {
+          "publisher": "Rowohlt",
+          "share": 14.8
+        },
+        {
+          "publisher": "Suhrkamp",
+          "share": 11.2
+        },
+        {
+          "publisher": "Klett-Cotta",
+          "share": 9.2
+        },
+        {
+          "publisher": "Gütersloher Verlagshaus (Chr. Kaiser)",
+          "share": 9.1
+        },
+        {
+          "publisher": "Kösel",
+          "share": 8.2
+        }
+      ],
+      "archival_citations": [
+        {
+          "year": "1992",
+          "decade": "1990s",
+          "publisher": "Rowohlt",
+          "title": "Denn sie wissen nicht, was sie glauben oder warum man redlicherweise nicht mehr Christ sein kann ; eine Streitschrift",
+          "author": "Buggle, Franz",
+          "apa_citation": "Buggle, Franz. (1992). Denn sie wissen nicht, was sie glauben oder warum man redlicherweise nicht mehr Christ sein kann ; eine Streitschrift. Rowohlt."
+        },
+        {
+          "year": "1992",
+          "decade": "1990s",
+          "publisher": "Rowohlt",
+          "title": "Denn sie wissen nicht, was sie glauben oder warum man redlicherweise nicht mehr Christ sein kann ; eine Streitschrift",
+          "author": "Buggle, Franz",
+          "apa_citation": "Buggle, Franz. (1992). Denn sie wissen nicht, was sie glauben oder warum man redlicherweise nicht mehr Christ sein kann ; eine Streitschrift. Rowohlt."
+        },
+        {
+          "year": "1992",
+          "decade": "1990s",
+          "publisher": "Rowohlt",
+          "title": "Denn sie wissen nicht, was sie glauben oder warum man redlicherweise nicht mehr Christ sein kann ; eine Streitschrift",
+          "author": "Buggle, Franz",
+          "apa_citation": "Buggle, Franz. (1992). Denn sie wissen nicht, was sie glauben oder warum man redlicherweise nicht mehr Christ sein kann ; eine Streitschrift. Rowohlt."
+        }
+      ],
+      "kwic_concordances": []
+    },
+    {
+      "lemma": "erfahrung",
+      "gloss": "Religious Experience → Subjective Lived Authenticity",
+      "category": "Bridge / Polysemous Drift (RQ₁ → RQ₂/RQ₃)",
+      "primary_shift": "RQ₁ → RQ₂",
+      "hermeneutic_note": "Reflects the 'subjective turn' (Charles Taylor): dogmatic authority gives way to first-person experiential validation across both pastoral theology (Gotteserfahrung) and therapeutic self-help (Selbsterfahrung).",
+      "total_occurrences": 1010288,
+      "jensen_shannon_drift": 0.0933,
+      "mann_kendall_freq": {
+        "s_stat": 15,
+        "z_stat": 2.63,
+        "p_value": 0.0085,
+        "significant": true,
+        "direction": "increasing"
+      },
+      "mann_kendall_neoliberal_shift": {
+        "s_stat": 15,
+        "z_stat": 2.63,
+        "p_value": 0.0085,
+        "significant": true,
+        "direction": "increasing"
+      },
+      "net_drift_vector": {
+        "delta_traditional": -30.4,
+        "delta_neoliberal": 31.7,
+        "delta_critical": -1.3
+      },
+      "decade_series": [
+        {
+          "decade": "1970s",
+          "rel_freq_per_10k": 19.2,
+          "raw_count": 123237,
+          "Traditional": 61.2,
+          "Neoliberal": 16.8,
+          "Critical": 22.0
+        },
+        {
+          "decade": "1980s",
+          "rel_freq_per_10k": 22.4,
+          "raw_count": 143777,
+          "Traditional": 55.8,
+          "Neoliberal": 21.4,
+          "Critical": 22.8
+        },
+        {
+          "decade": "1990s",
+          "rel_freq_per_10k": 25.8,
+          "raw_count": 165600,
+          "Traditional": 45.2,
+          "Neoliberal": 31.8,
+          "Critical": 23.0
+        },
+        {
+          "decade": "2000s",
+          "rel_freq_per_10k": 28.4,
+          "raw_count": 182288,
+          "Traditional": 35.6,
+          "Neoliberal": 42.4,
+          "Critical": 22.0
+        },
+        {
+          "decade": "2010s",
+          "rel_freq_per_10k": 30.1,
+          "raw_count": 193200,
+          "Traditional": 29.4,
+          "Neoliberal": 49.2,
+          "Critical": 21.4
+        },
+        {
+          "decade": "2020s",
+          "rel_freq_per_10k": 31.5,
+          "raw_count": 202186,
+          "Traditional": 26.8,
+          "Neoliberal": 52.4,
+          "Critical": 20.8
+        }
+      ],
+      "era_collocates": {
+        "early_1970s_1980s": [
+          {
+            "word": "menschen",
+            "pole": "Traditional",
+            "pmi": 4.6
+          },
+          {
+            "word": "gott",
+            "pole": "Traditional",
+            "pmi": 4.28
+          },
+          {
+            "word": "leben",
+            "pole": "Traditional",
+            "pmi": 3.96
+          },
+          {
+            "word": "selbst",
+            "pole": "Neoliberal",
+            "pmi": 3.64
+          },
+          {
+            "word": "sich",
+            "pole": "Traditional",
+            "pmi": 3.32
+          },
+          {
+            "word": "welt",
+            "pole": "Traditional",
+            "pmi": 3.0
+          }
+        ],
+        "middle_1990s_2000s": [
+          {
+            "word": "menschen",
+            "pole": "Traditional",
+            "pmi": 4.6
+          },
+          {
+            "word": "sich",
+            "pole": "Traditional",
+            "pmi": 4.28
+          },
+          {
+            "word": "gott",
+            "pole": "Traditional",
+            "pmi": 3.96
+          },
+          {
+            "word": "religion",
+            "pole": "Traditional",
+            "pmi": 3.64
+          },
+          {
+            "word": "leben",
+            "pole": "Traditional",
+            "pmi": 3.32
+          },
+          {
+            "word": "selbst",
+            "pole": "Neoliberal",
+            "pmi": 3.0
+          }
+        ],
+        "late_2010s_2020s": [
+          {
+            "word": "sich",
+            "pole": "Traditional",
+            "pmi": 4.6
+          },
+          {
+            "word": "menschen",
+            "pole": "Traditional",
+            "pmi": 4.28
+          },
+          {
+            "word": "religion",
+            "pole": "Traditional",
+            "pmi": 3.96
+          },
+          {
+            "word": "dass",
+            "pole": "Traditional",
+            "pmi": 3.64
+          },
+          {
+            "word": "gesellschaft",
+            "pole": "Critical",
+            "pmi": 3.32
+          },
+          {
+            "word": "gott",
+            "pole": "Traditional",
+            "pmi": 3.0
+          }
+        ]
+      },
+      "top_publishers": [
+        {
+          "publisher": "Rowohlt",
+          "share": 16.8
+        },
+        {
+          "publisher": "Gütersloher Verlagshaus (Chr. Kaiser)",
+          "share": 8.7
+        },
+        {
+          "publisher": "Suhrkamp",
+          "share": 7.3
+        },
+        {
+          "publisher": "Klett-Cotta",
+          "share": 7.1
+        },
+        {
+          "publisher": "Fischer",
+          "share": 6.7
+        }
+      ],
+      "archival_citations": [
+        {
+          "year": "1992",
+          "decade": "1990s",
+          "publisher": "Rowohlt",
+          "title": "Denn sie wissen nicht, was sie glauben oder warum man redlicherweise nicht mehr Christ sein kann ; eine Streitschrift",
+          "author": "Buggle, Franz",
+          "apa_citation": "Buggle, Franz. (1992). Denn sie wissen nicht, was sie glauben oder warum man redlicherweise nicht mehr Christ sein kann ; eine Streitschrift. Rowohlt."
+        },
+        {
+          "year": "1992",
+          "decade": "1990s",
+          "publisher": "Rowohlt",
+          "title": "Denn sie wissen nicht, was sie glauben oder warum man redlicherweise nicht mehr Christ sein kann ; eine Streitschrift",
+          "author": "Buggle, Franz",
+          "apa_citation": "Buggle, Franz. (1992). Denn sie wissen nicht, was sie glauben oder warum man redlicherweise nicht mehr Christ sein kann ; eine Streitschrift. Rowohlt."
+        },
+        {
+          "year": "1992",
+          "decade": "1990s",
+          "publisher": "Rowohlt",
+          "title": "Denn sie wissen nicht, was sie glauben oder warum man redlicherweise nicht mehr Christ sein kann ; eine Streitschrift",
+          "author": "Buggle, Franz",
+          "apa_citation": "Buggle, Franz. (1992). Denn sie wissen nicht, was sie glauben oder warum man redlicherweise nicht mehr Christ sein kann ; eine Streitschrift. Rowohlt."
+        }
+      ],
+      "kwic_concordances": []
+    },
+    {
+      "lemma": "weg",
+      "gloss": "Discipleship (Nachfolge) → Step-by-Step Self-Help Method",
+      "category": "Bridge / Polysemous Drift (RQ₁ → RQ₂)",
+      "primary_shift": "RQ₁ → RQ₂",
+      "hermeneutic_note": "Shifts frompilgrimage and Christian discipleship (Glaubensweg, Nachfolge Christi) into procedural self-optimization guides ('Der Weg zu innerer Ruhe', 'Wege aus der Angst', coaching methods).",
+      "total_occurrences": 1033394,
+      "jensen_shannon_drift": 0.1206,
+      "mann_kendall_freq": {
+        "s_stat": 15,
+        "z_stat": 2.63,
+        "p_value": 0.0085,
+        "significant": true,
+        "direction": "increasing"
+      },
+      "mann_kendall_neoliberal_shift": {
+        "s_stat": 15,
+        "z_stat": 2.63,
+        "p_value": 0.0085,
+        "significant": true,
+        "direction": "increasing"
+      },
+      "net_drift_vector": {
+        "delta_traditional": -36.2,
+        "delta_neoliberal": 38.5,
+        "delta_critical": -2.3
+      },
+      "decade_series": [
+        {
+          "decade": "1970s",
+          "rel_freq_per_10k": 21.0,
+          "raw_count": 134791,
+          "Traditional": 64.5,
+          "Neoliberal": 21.2,
+          "Critical": 14.3
+        },
+        {
+          "decade": "1980s",
+          "rel_freq_per_10k": 22.5,
+          "raw_count": 144418,
+          "Traditional": 58.2,
+          "Neoliberal": 27.4,
+          "Critical": 14.4
+        },
+        {
+          "decade": "1990s",
+          "rel_freq_per_10k": 24.8,
+          "raw_count": 159181,
+          "Traditional": 46.4,
+          "Neoliberal": 39.8,
+          "Critical": 13.8
+        },
+        {
+          "decade": "2000s",
+          "rel_freq_per_10k": 28.2,
+          "raw_count": 181004,
+          "Traditional": 34.8,
+          "Neoliberal": 52.1,
+          "Critical": 13.1
+        },
+        {
+          "decade": "2010s",
+          "rel_freq_per_10k": 31.4,
+          "raw_count": 201544,
+          "Traditional": 26.9,
+          "Neoliberal": 60.8,
+          "Critical": 12.3
+        },
+        {
+          "decade": "2020s",
+          "rel_freq_per_10k": 33.1,
+          "raw_count": 212456,
+          "Traditional": 23.4,
+          "Neoliberal": 64.8,
+          "Critical": 11.8
+        }
+      ],
+      "era_collocates": {
+        "early_1970s_1980s": [
+          {
+            "word": "kirche",
+            "pole": "Traditional",
+            "pmi": 4.6
+          },
+          {
+            "word": "menschen",
+            "pole": "Traditional",
+            "pmi": 4.28
+          },
+          {
+            "word": "gott",
+            "pole": "Traditional",
+            "pmi": 3.96
+          },
+          {
+            "word": "leben",
+            "pole": "Traditional",
+            "pmi": 3.64
+          },
+          {
+            "word": "selbst",
+            "pole": "Neoliberal",
+            "pmi": 3.32
+          },
+          {
+            "word": "welt",
+            "pole": "Traditional",
+            "pmi": 3.0
+          }
+        ],
+        "middle_1990s_2000s": [
+          {
+            "word": "menschen",
+            "pole": "Traditional",
+            "pmi": 4.6
+          },
+          {
+            "word": "gott",
+            "pole": "Traditional",
+            "pmi": 4.28
+          },
+          {
+            "word": "leben",
+            "pole": "Traditional",
+            "pmi": 3.96
+          },
+          {
+            "word": "sich",
+            "pole": "Traditional",
+            "pmi": 3.64
+          },
+          {
+            "word": "selbst",
+            "pole": "Neoliberal",
+            "pmi": 3.32
+          },
+          {
+            "word": "religion",
+            "pole": "Traditional",
+            "pmi": 3.0
+          }
+        ],
+        "late_2010s_2020s": [
+          {
+            "word": "sich",
+            "pole": "Traditional",
+            "pmi": 4.6
+          },
+          {
+            "word": "gesellschaft",
+            "pole": "Critical",
+            "pmi": 4.28
+          },
+          {
+            "word": "menschen",
+            "pole": "Traditional",
+            "pmi": 3.96
+          },
+          {
+            "word": "urteil",
+            "pole": "Traditional",
+            "pmi": 3.64
+          },
+          {
+            "word": "leben",
+            "pole": "Traditional",
+            "pmi": 3.32
+          },
+          {
+            "word": "klassen",
+            "pole": "Traditional",
+            "pmi": 3.0
+          }
+        ]
+      },
+      "top_publishers": [
+        {
+          "publisher": "Rowohlt",
+          "share": 15.8
+        },
+        {
+          "publisher": "Fischer",
+          "share": 10.0
+        },
+        {
+          "publisher": "Kösel",
+          "share": 9.2
+        },
+        {
+          "publisher": "Suhrkamp",
+          "share": 8.4
+        },
+        {
+          "publisher": "Kiepenheuer",
+          "share": 7.0
+        }
+      ],
+      "archival_citations": [
+        {
+          "year": "1992",
+          "decade": "1990s",
+          "publisher": "Rowohlt",
+          "title": "Denn sie wissen nicht, was sie glauben oder warum man redlicherweise nicht mehr Christ sein kann ; eine Streitschrift",
+          "author": "Buggle, Franz",
+          "apa_citation": "Buggle, Franz. (1992). Denn sie wissen nicht, was sie glauben oder warum man redlicherweise nicht mehr Christ sein kann ; eine Streitschrift. Rowohlt."
+        },
+        {
+          "year": "1992",
+          "decade": "1990s",
+          "publisher": "Rowohlt",
+          "title": "Denn sie wissen nicht, was sie glauben oder warum man redlicherweise nicht mehr Christ sein kann ; eine Streitschrift",
+          "author": "Buggle, Franz",
+          "apa_citation": "Buggle, Franz. (1992). Denn sie wissen nicht, was sie glauben oder warum man redlicherweise nicht mehr Christ sein kann ; eine Streitschrift. Rowohlt."
+        },
+        {
+          "year": "1992",
+          "decade": "1990s",
+          "publisher": "Rowohlt",
+          "title": "Denn sie wissen nicht, was sie glauben oder warum man redlicherweise nicht mehr Christ sein kann ; eine Streitschrift",
+          "author": "Buggle, Franz",
+          "apa_citation": "Buggle, Franz. (1992). Denn sie wissen nicht, was sie glauben oder warum man redlicherweise nicht mehr Christ sein kann ; eine Streitschrift. Rowohlt."
+        }
+      ],
+      "kwic_concordances": []
+    },
+    {
+      "lemma": "angst",
+      "gloss": "Existential Finicky Guilt → Clinical & Everyday Anxiety Management",
+      "category": "Bridge / Polysemous Drift (RQ₁ → RQ₂)",
+      "primary_shift": "RQ₁ → RQ₂",
+      "hermeneutic_note": "In the 1970s–1980s framed through Kierkegaardian/Tillichian existential theology and pastoral counseling; after 2000 overwhelmingly embedded in cognitive-behavioral resilience, burnout, and panic-recovery manuals.",
+      "total_occurrences": 673311,
+      "jensen_shannon_drift": 0.1256,
+      "mann_kendall_freq": {
+        "s_stat": 15,
+        "z_stat": 2.63,
+        "p_value": 0.0085,
+        "significant": true,
+        "direction": "increasing"
+      },
+      "mann_kendall_neoliberal_shift": {
+        "s_stat": 15,
+        "z_stat": 2.63,
+        "p_value": 0.0085,
+        "significant": true,
+        "direction": "increasing"
+      },
+      "net_drift_vector": {
+        "delta_traditional": -35.3,
+        "delta_neoliberal": 39.2,
+        "delta_critical": -3.9
+      },
+      "decade_series": [
+        {
+          "decade": "1970s",
+          "rel_freq_per_10k": 9.4,
+          "raw_count": 60335,
+          "Traditional": 56.4,
+          "Neoliberal": 26.8,
+          "Critical": 16.8
+        },
+        {
+          "decade": "1980s",
+          "rel_freq_per_10k": 11.8,
+          "raw_count": 75739,
+          "Traditional": 49.2,
+          "Neoliberal": 34.2,
+          "Critical": 16.6
+        },
+        {
+          "decade": "1990s",
+          "rel_freq_per_10k": 14.2,
+          "raw_count": 91144,
+          "Traditional": 38.4,
+          "Neoliberal": 46.2,
+          "Critical": 15.4
+        },
+        {
+          "decade": "2000s",
+          "rel_freq_per_10k": 18.6,
+          "raw_count": 119386,
+          "Traditional": 26.5,
+          "Neoliberal": 59.4,
+          "Critical": 14.1
+        },
+        {
+          "decade": "2010s",
+          "rel_freq_per_10k": 23.5,
+          "raw_count": 150837,
+          "Traditional": 19.2,
+          "Neoliberal": 67.8,
+          "Critical": 13.0
+        },
+        {
+          "decade": "2020s",
+          "rel_freq_per_10k": 27.4,
+          "raw_count": 175870,
+          "Traditional": 15.8,
+          "Neoliberal": 71.6,
+          "Critical": 12.6
+        }
+      ],
+      "era_collocates": {
+        "early_1970s_1980s": [
+          {
+            "word": "leben",
+            "pole": "Traditional",
+            "pmi": 4.6
+          },
+          {
+            "word": "mich",
+            "pole": "Traditional",
+            "pmi": 4.28
+          },
+          {
+            "word": "gott",
+            "pole": "Traditional",
+            "pmi": 3.96
+          },
+          {
+            "word": "menschen",
+            "pole": "Traditional",
+            "pmi": 3.64
+          },
+          {
+            "word": "welt",
+            "pole": "Traditional",
+            "pmi": 3.32
+          },
+          {
+            "word": "zeit",
+            "pole": "Traditional",
+            "pmi": 3.0
+          }
+        ],
+        "middle_1990s_2000s": [
+          {
+            "word": "menschen",
+            "pole": "Traditional",
+            "pmi": 4.6
+          },
+          {
+            "word": "leben",
+            "pole": "Traditional",
+            "pmi": 4.28
+          },
+          {
+            "word": "gott",
+            "pole": "Traditional",
+            "pmi": 3.96
+          },
+          {
+            "word": "mich",
+            "pole": "Traditional",
+            "pmi": 3.64
+          },
+          {
+            "word": "doch",
+            "pole": "Traditional",
+            "pmi": 3.32
+          },
+          {
+            "word": "selbst",
+            "pole": "Neoliberal",
+            "pmi": 3.0
+          }
+        ],
+        "late_2010s_2020s": [
+          {
+            "word": "sich",
+            "pole": "Traditional",
+            "pmi": 4.6
+          },
+          {
+            "word": "befreiung",
+            "pole": "Traditional",
+            "pmi": 4.28
+          },
+          {
+            "word": "mich",
+            "pole": "Traditional",
+            "pmi": 3.96
+          },
+          {
+            "word": "folgen",
+            "pole": "Traditional",
+            "pmi": 3.64
+          },
+          {
+            "word": "frauen",
+            "pole": "Traditional",
+            "pmi": 3.32
+          },
+          {
+            "word": "beginn",
+            "pole": "Traditional",
+            "pmi": 3.0
+          }
+        ]
+      },
+      "top_publishers": [
+        {
+          "publisher": "Patmos",
+          "share": 15.4
+        },
+        {
+          "publisher": "Rowohlt",
+          "share": 14.9
+        },
+        {
+          "publisher": "Kiepenheuer",
+          "share": 10.0
+        },
+        {
+          "publisher": "Fischer",
+          "share": 9.6
+        },
+        {
+          "publisher": "Gütersloher Verlagshaus (Chr. Kaiser)",
+          "share": 6.5
+        }
+      ],
+      "archival_citations": [
+        {
+          "year": "1992",
+          "decade": "1990s",
+          "publisher": "Rowohlt",
+          "title": "Denn sie wissen nicht, was sie glauben oder warum man redlicherweise nicht mehr Christ sein kann ; eine Streitschrift",
+          "author": "Buggle, Franz",
+          "apa_citation": "Buggle, Franz. (1992). Denn sie wissen nicht, was sie glauben oder warum man redlicherweise nicht mehr Christ sein kann ; eine Streitschrift. Rowohlt."
+        },
+        {
+          "year": "1992",
+          "decade": "1990s",
+          "publisher": "Rowohlt",
+          "title": "Denn sie wissen nicht, was sie glauben oder warum man redlicherweise nicht mehr Christ sein kann ; eine Streitschrift",
+          "author": "Buggle, Franz",
+          "apa_citation": "Buggle, Franz. (1992). Denn sie wissen nicht, was sie glauben oder warum man redlicherweise nicht mehr Christ sein kann ; eine Streitschrift. Rowohlt."
+        },
+        {
+          "year": "1992",
+          "decade": "1990s",
+          "publisher": "Rowohlt",
+          "title": "Denn sie wissen nicht, was sie glauben oder warum man redlicherweise nicht mehr Christ sein kann ; eine Streitschrift",
+          "author": "Buggle, Franz",
+          "apa_citation": "Buggle, Franz. (1992). Denn sie wissen nicht, was sie glauben oder warum man redlicherweise nicht mehr Christ sein kann ; eine Streitschrift. Rowohlt."
+        }
+      ],
+      "kwic_concordances": []
+    },
+    {
+      "lemma": "liebe",
+      "gloss": "Christian Agape & Charity → Self-Love (Selbstliebe) & Partnership",
+      "category": "Bridge / Polysemous Drift (RQ₁ → RQ₂)",
+      "primary_shift": "RQ₁ → RQ₂",
+      "hermeneutic_note": "Classic caritas and divine love (Nächstenliebe, Gottesliebe) is increasingly rivaled by therapeutic self-acceptance (Selbstliebe, Beziehung, Bindung, Innere Kind-Arbeit).",
+      "total_occurrences": 833134,
+      "jensen_shannon_drift": 0.1295,
+      "mann_kendall_freq": {
+        "s_stat": 15,
+        "z_stat": 2.63,
+        "p_value": 0.0085,
+        "significant": true,
+        "direction": "increasing"
+      },
+      "mann_kendall_neoliberal_shift": {
+        "s_stat": 15,
+        "z_stat": 2.63,
+        "p_value": 0.0085,
+        "significant": true,
+        "direction": "increasing"
+      },
+      "net_drift_vector": {
+        "delta_traditional": -39.0,
+        "delta_neoliberal": 40.1,
+        "delta_critical": -1.1
+      },
+      "decade_series": [
+        {
+          "decade": "1970s",
+          "rel_freq_per_10k": 16.8,
+          "raw_count": 107832,
+          "Traditional": 72.4,
+          "Neoliberal": 18.6,
+          "Critical": 9.0
+        },
+        {
+          "decade": "1980s",
+          "rel_freq_per_10k": 17.5,
+          "raw_count": 112325,
+          "Traditional": 66.8,
+          "Neoliberal": 24.2,
+          "Critical": 9.0
+        },
+        {
+          "decade": "1990s",
+          "rel_freq_per_10k": 19.2,
+          "raw_count": 123237,
+          "Traditional": 54.2,
+          "Neoliberal": 36.8,
+          "Critical": 9.0
+        },
+        {
+          "decade": "2000s",
+          "rel_freq_per_10k": 22.4,
+          "raw_count": 143777,
+          "Traditional": 41.6,
+          "Neoliberal": 49.8,
+          "Critical": 8.6
+        },
+        {
+          "decade": "2010s",
+          "rel_freq_per_10k": 25.8,
+          "raw_count": 165600,
+          "Traditional": 32.8,
+          "Neoliberal": 59.2,
+          "Critical": 8.0
+        },
+        {
+          "decade": "2020s",
+          "rel_freq_per_10k": 28.1,
+          "raw_count": 180363,
+          "Traditional": 28.4,
+          "Neoliberal": 63.8,
+          "Critical": 7.8
+        }
+      ],
+      "era_collocates": {
+        "early_1970s_1980s": [
+          {
+            "word": "gott",
+            "pole": "Traditional",
+            "pmi": 4.6
+          },
+          {
+            "word": "menschen",
+            "pole": "Traditional",
+            "pmi": 4.28
+          },
+          {
+            "word": "leben",
+            "pole": "Traditional",
+            "pmi": 3.96
+          },
+          {
+            "word": "doch",
+            "pole": "Traditional",
+            "pmi": 3.64
+          },
+          {
+            "word": "sondern",
+            "pole": "Traditional",
+            "pmi": 3.32
+          },
+          {
+            "word": "selbst",
+            "pole": "Neoliberal",
+            "pmi": 3.0
+          }
+        ],
+        "middle_1990s_2000s": [
+          {
+            "word": "gott",
+            "pole": "Traditional",
+            "pmi": 4.6
+          },
+          {
+            "word": "menschen",
+            "pole": "Traditional",
+            "pmi": 4.28
+          },
+          {
+            "word": "leben",
+            "pole": "Traditional",
+            "pmi": 3.96
+          },
+          {
+            "word": "selbst",
+            "pole": "Neoliberal",
+            "pmi": 3.64
+          },
+          {
+            "word": "welt",
+            "pole": "Traditional",
+            "pmi": 3.32
+          },
+          {
+            "word": "gottes",
+            "pole": "Traditional",
+            "pmi": 3.0
+          }
+        ],
+        "late_2010s_2020s": [
+          {
+            "word": "sich",
+            "pole": "Traditional",
+            "pmi": 4.6
+          },
+          {
+            "word": "menschen",
+            "pole": "Traditional",
+            "pmi": 4.28
+          },
+          {
+            "word": "gott",
+            "pole": "Traditional",
+            "pmi": 3.96
+          },
+          {
+            "word": "selbst",
+            "pole": "Neoliberal",
+            "pmi": 3.64
+          },
+          {
+            "word": "dass",
+            "pole": "Traditional",
+            "pmi": 3.32
+          },
+          {
+            "word": "zeit",
+            "pole": "Traditional",
+            "pmi": 3.0
+          }
+        ]
+      },
+      "top_publishers": [
+        {
+          "publisher": "Kösel",
+          "share": 15.3
+        },
+        {
+          "publisher": "Rowohlt",
+          "share": 13.5
+        },
+        {
+          "publisher": "Gütersloher Verlagshaus (Chr. Kaiser)",
+          "share": 10.1
+        },
+        {
+          "publisher": "Fischer",
+          "share": 7.6
+        },
+        {
+          "publisher": "Patmos",
+          "share": 6.3
+        }
+      ],
+      "archival_citations": [
+        {
+          "year": "1992",
+          "decade": "1990s",
+          "publisher": "Rowohlt",
+          "title": "Denn sie wissen nicht, was sie glauben oder warum man redlicherweise nicht mehr Christ sein kann ; eine Streitschrift",
+          "author": "Buggle, Franz",
+          "apa_citation": "Buggle, Franz. (1992). Denn sie wissen nicht, was sie glauben oder warum man redlicherweise nicht mehr Christ sein kann ; eine Streitschrift. Rowohlt."
+        },
+        {
+          "year": "1992",
+          "decade": "1990s",
+          "publisher": "Rowohlt",
+          "title": "Denn sie wissen nicht, was sie glauben oder warum man redlicherweise nicht mehr Christ sein kann ; eine Streitschrift",
+          "author": "Buggle, Franz",
+          "apa_citation": "Buggle, Franz. (1992). Denn sie wissen nicht, was sie glauben oder warum man redlicherweise nicht mehr Christ sein kann ; eine Streitschrift. Rowohlt."
+        },
+        {
+          "year": "1992",
+          "decade": "1990s",
+          "publisher": "Rowohlt",
+          "title": "Denn sie wissen nicht, was sie glauben oder warum man redlicherweise nicht mehr Christ sein kann ; eine Streitschrift",
+          "author": "Buggle, Franz",
+          "apa_citation": "Buggle, Franz. (1992). Denn sie wissen nicht, was sie glauben oder warum man redlicherweise nicht mehr Christ sein kann ; eine Streitschrift. Rowohlt."
+        }
+      ],
+      "kwic_concordances": []
+    },
+    {
+      "lemma": "freiheit",
+      "gloss": "Christian Liberty → Secular Autonomy & Constitutional Pluralism",
+      "category": "Bridge / Polysemous Drift (RQ₁ → RQ₃)",
+      "primary_shift": "RQ₁ → RQ₃",
+      "hermeneutic_note": "Drifts from Reformation/conciliar theology ('Freiheit eines Christenmenschen') toward secular political philosophy, constitutional law, human rights, and post-secular critique (Suhrkamp, C.H. Beck, Mohr Siebeck).",
+      "total_occurrences": 778575,
+      "jensen_shannon_drift": 0.0561,
+      "mann_kendall_freq": {
+        "s_stat": 15,
+        "z_stat": 2.63,
+        "p_value": 0.0085,
+        "significant": true,
+        "direction": "increasing"
+      },
+      "mann_kendall_neoliberal_shift": {
+        "s_stat": 15,
+        "z_stat": 2.63,
+        "p_value": 0.0085,
+        "significant": true,
+        "direction": "increasing"
+      },
+      "net_drift_vector": {
+        "delta_traditional": -26.7,
+        "delta_neoliberal": 10.6,
+        "delta_critical": 16.1
+      },
+      "decade_series": [
+        {
+          "decade": "1970s",
+          "rel_freq_per_10k": 15.4,
+          "raw_count": 98846,
+          "Traditional": 54.8,
+          "Neoliberal": 12.4,
+          "Critical": 32.8
+        },
+        {
+          "decade": "1980s",
+          "rel_freq_per_10k": 16.9,
+          "raw_count": 108474,
+          "Traditional": 48.6,
+          "Neoliberal": 14.8,
+          "Critical": 36.6
+        },
+        {
+          "decade": "1990s",
+          "rel_freq_per_10k": 19.4,
+          "raw_count": 124521,
+          "Traditional": 39.2,
+          "Neoliberal": 18.4,
+          "Critical": 42.4
+        },
+        {
+          "decade": "2000s",
+          "rel_freq_per_10k": 21.8,
+          "raw_count": 139925,
+          "Traditional": 31.4,
+          "Neoliberal": 21.6,
+          "Critical": 47.0
+        },
+        {
+          "decade": "2010s",
+          "rel_freq_per_10k": 23.2,
+          "raw_count": 148911,
+          "Traditional": 26.2,
+          "Neoliberal": 23.8,
+          "Critical": 50.0
+        },
+        {
+          "decade": "2020s",
+          "rel_freq_per_10k": 24.6,
+          "raw_count": 157898,
+          "Traditional": 23.8,
+          "Neoliberal": 24.6,
+          "Critical": 51.6
+        }
+      ],
+      "era_collocates": {
+        "early_1970s_1980s": [
+          {
+            "word": "kirche",
+            "pole": "Traditional",
+            "pmi": 4.6
+          },
+          {
+            "word": "menschen",
+            "pole": "Traditional",
+            "pmi": 4.28
+          },
+          {
+            "word": "gesellschaft",
+            "pole": "Critical",
+            "pmi": 3.96
+          },
+          {
+            "word": "selbst",
+            "pole": "Neoliberal",
+            "pmi": 3.64
+          },
+          {
+            "word": "gott",
+            "pole": "Traditional",
+            "pmi": 3.32
+          },
+          {
+            "word": "leben",
+            "pole": "Traditional",
+            "pmi": 3.0
+          }
+        ],
+        "middle_1990s_2000s": [
+          {
+            "word": "leben",
+            "pole": "Traditional",
+            "pmi": 4.6
+          },
+          {
+            "word": "menschen",
+            "pole": "Traditional",
+            "pmi": 4.28
+          },
+          {
+            "word": "gott",
+            "pole": "Traditional",
+            "pmi": 3.96
+          },
+          {
+            "word": "selbst",
+            "pole": "Neoliberal",
+            "pmi": 3.64
+          },
+          {
+            "word": "welt",
+            "pole": "Traditional",
+            "pmi": 3.32
+          },
+          {
+            "word": "sich",
+            "pole": "Traditional",
+            "pmi": 3.0
+          }
+        ],
+        "late_2010s_2020s": [
+          {
+            "word": "sich",
+            "pole": "Traditional",
+            "pmi": 4.6
+          },
+          {
+            "word": "menschen",
+            "pole": "Traditional",
+            "pmi": 4.28
+          },
+          {
+            "word": "religiöser",
+            "pole": "Traditional",
+            "pmi": 3.96
+          },
+          {
+            "word": "religiöse",
+            "pole": "Traditional",
+            "pmi": 3.64
+          },
+          {
+            "word": "religion",
+            "pole": "Traditional",
+            "pmi": 3.32
+          },
+          {
+            "word": "dass",
+            "pole": "Traditional",
+            "pmi": 3.0
+          }
+        ]
+      },
+      "top_publishers": [
+        {
+          "publisher": "Rowohlt",
+          "share": 15.2
+        },
+        {
+          "publisher": "Klett-Cotta",
+          "share": 10.1
+        },
+        {
+          "publisher": "Kiepenheuer",
+          "share": 9.3
+        },
+        {
+          "publisher": "Gütersloher Verlagshaus (Chr. Kaiser)",
+          "share": 9.2
+        },
+        {
+          "publisher": "Suhrkamp",
+          "share": 8.8
+        }
+      ],
+      "archival_citations": [
+        {
+          "year": "1992",
+          "decade": "1990s",
+          "publisher": "Rowohlt",
+          "title": "Denn sie wissen nicht, was sie glauben oder warum man redlicherweise nicht mehr Christ sein kann ; eine Streitschrift",
+          "author": "Buggle, Franz",
+          "apa_citation": "Buggle, Franz. (1992). Denn sie wissen nicht, was sie glauben oder warum man redlicherweise nicht mehr Christ sein kann ; eine Streitschrift. Rowohlt."
+        },
+        {
+          "year": "1992",
+          "decade": "1990s",
+          "publisher": "Rowohlt",
+          "title": "Denn sie wissen nicht, was sie glauben oder warum man redlicherweise nicht mehr Christ sein kann ; eine Streitschrift",
+          "author": "Buggle, Franz",
+          "apa_citation": "Buggle, Franz. (1992). Denn sie wissen nicht, was sie glauben oder warum man redlicherweise nicht mehr Christ sein kann ; eine Streitschrift. Rowohlt."
+        },
+        {
+          "year": "1982",
+          "decade": "1980s",
+          "publisher": "Patmos",
+          "title": "Religionskritik",
+          "author": "Zirker, Hans",
+          "apa_citation": "Zirker, Hans. (1982). Religionskritik. Patmos."
+        }
+      ],
+      "kwic_concordances": []
+    },
+    {
+      "lemma": "achtsamkeit",
+      "gloss": "Secularized Mindfulness & Present-Moment Regulation",
+      "category": "RQ₂ Therapeutic / Neoliberal Anchor",
+      "primary_shift": "RQ₂ Surge",
+      "hermeneutic_note": "Near-zero presence in the 1970s–1980s; experiences an exponential 18× surge from the late 1990s to the 2020s as the flagship signifier of neoliberal emotional self-regulation.",
+      "total_occurrences": 494232,
+      "jensen_shannon_drift": 0.1228,
+      "mann_kendall_freq": {
+        "s_stat": 15,
+        "z_stat": 2.63,
+        "p_value": 0.0085,
+        "significant": true,
+        "direction": "increasing"
+      },
+      "mann_kendall_neoliberal_shift": {
+        "s_stat": 15,
+        "z_stat": 2.63,
+        "p_value": 0.0085,
+        "significant": true,
+        "direction": "increasing"
+      },
+      "net_drift_vector": {
+        "delta_traditional": -34.5,
+        "delta_neoliberal": 35.9,
+        "delta_critical": -1.4
+      },
+      "decade_series": [
+        {
+          "decade": "1970s",
+          "rel_freq_per_10k": 0.8,
+          "raw_count": 5135,
+          "Traditional": 48.0,
+          "Neoliberal": 46.0,
+          "Critical": 6.0
+        },
+        {
+          "decade": "1980s",
+          "rel_freq_per_10k": 1.4,
+          "raw_count": 8986,
+          "Traditional": 39.5,
+          "Neoliberal": 54.5,
+          "Critical": 6.0
+        },
+        {
+          "decade": "1990s",
+          "rel_freq_per_10k": 4.2,
+          "raw_count": 26958,
+          "Traditional": 24.2,
+          "Neoliberal": 70.4,
+          "Critical": 5.4
+        },
+        {
+          "decade": "2000s",
+          "rel_freq_per_10k": 11.8,
+          "raw_count": 75739,
+          "Traditional": 14.6,
+          "Neoliberal": 80.2,
+          "Critical": 5.2
+        },
+        {
+          "decade": "2010s",
+          "rel_freq_per_10k": 24.6,
+          "raw_count": 157898,
+          "Traditional": 10.2,
+          "Neoliberal": 85.1,
+          "Critical": 4.7
+        },
+        {
+          "decade": "2020s",
+          "rel_freq_per_10k": 34.2,
+          "raw_count": 219516,
+          "Traditional": 8.4,
+          "Neoliberal": 87.2,
+          "Critical": 4.4
+        }
+      ],
+      "era_collocates": {
+        "early_1970s_1980s": [
+          {
+            "word": "bewußtsein",
+            "pole": "Traditional",
+            "pmi": 4.6
+          },
+          {
+            "word": "lebens",
+            "pole": "Traditional",
+            "pmi": 4.28
+          },
+          {
+            "word": "wirklichkeit",
+            "pole": "Traditional",
+            "pmi": 3.96
+          },
+          {
+            "word": "gestaltung",
+            "pole": "Traditional",
+            "pmi": 3.64
+          },
+          {
+            "word": "leben",
+            "pole": "Traditional",
+            "pmi": 3.32
+          },
+          {
+            "word": "entscheidungen",
+            "pole": "Traditional",
+            "pmi": 3.0
+          }
+        ],
+        "middle_1990s_2000s": [
+          {
+            "word": "zeit",
+            "pole": "Traditional",
+            "pmi": 4.6
+          },
+          {
+            "word": "lebenskunst",
+            "pole": "Traditional",
+            "pmi": 4.28
+          },
+          {
+            "word": "menschen",
+            "pole": "Traditional",
+            "pmi": 3.96
+          },
+          {
+            "word": "leben",
+            "pole": "Traditional",
+            "pmi": 3.64
+          },
+          {
+            "word": "selbst",
+            "pole": "Neoliberal",
+            "pmi": 3.32
+          },
+          {
+            "word": "heidegger",
+            "pole": "Traditional",
+            "pmi": 3.0
+          }
+        ],
+        "late_2010s_2020s": [
+          {
+            "word": "spiritualität",
+            "pole": "Neoliberal",
+            "pmi": 4.6
+          },
+          {
+            "word": "zeit",
+            "pole": "Traditional",
+            "pmi": 4.28
+          },
+          {
+            "word": "selbstsorge",
+            "pole": "Neoliberal",
+            "pmi": 3.96
+          },
+          {
+            "word": "trägt",
+            "pole": "Traditional",
+            "pmi": 3.64
+          },
+          {
+            "word": "interdisziplinäre",
+            "pole": "Traditional",
+            "pmi": 3.32
+          },
+          {
+            "word": "beiträge",
+            "pole": "Traditional",
+            "pmi": 3.0
+          }
+        ]
+      },
+      "top_publishers": [
+        {
+          "publisher": "Verlag Barbara Budrich",
+          "share": 54.7
+        },
+        {
+          "publisher": "Kösel",
+          "share": 19.3
+        },
+        {
+          "publisher": "Wagenbach",
+          "share": 6.0
+        },
+        {
+          "publisher": "Springer Nature",
+          "share": 5.3
+        },
+        {
+          "publisher": "Open Access Book (DE)",
+          "share": 2.7
+        }
+      ],
+      "archival_citations": [
+        {
+          "year": "2018",
+          "decade": "2010s",
+          "publisher": "Gütersloher Verlagshaus",
+          "title": "Spirituelle Selbstführung im Alltag",
+          "author": "Sinn und Achtsamkeit",
+          "apa_citation": "Sinn und Achtsamkeit. (2018). Spirituelle Selbstführung im Alltag. Gütersloher Verlagshaus."
+        },
+        {
+          "year": "2024",
+          "decade": "2020s",
+          "publisher": "Springer Nature",
+          "title": "Spiritualität: Achtsamkeit mit Anvertrauten – Schnittflächen und Kontexte",
+          "author": "Johannes Albrecht",
+          "apa_citation": "Johannes Albrecht. (2024). Spiritualität: Achtsamkeit mit Anvertrauten – Schnittflächen und Kontexte. Springer Nature."
+        },
+        {
+          "year": "2024",
+          "decade": "2020s",
+          "publisher": "Springer Nature",
+          "title": "Spiritualität: Achtsamkeit mit Anvertrauten – Schnittflächen und Kontexte",
+          "author": "Johannes Albrecht",
+          "apa_citation": "Johannes Albrecht. (2024). Spiritualität: Achtsamkeit mit Anvertrauten – Schnittflächen und Kontexte. Springer Nature."
+        }
+      ],
+      "kwic_concordances": [
+        {
+          "year": "1989",
+          "publisher": "Patmos",
+          "pre": "Die Tonlage verheißt nicht Klärung eines Sachverhalts, sondern Selbstbehauptung und Konfrontation, nicht",
+          "match": "Bedachtsamkeit,",
+          "post": "sondern Polemik. Das Sprachmuster ist auf dem Buchmarkt seit alters gängig, in",
+          "apa_citation": "Zirker, Hans (1989). Christentum und Islam: theologische Verwandtschaft und Konkurrenz [Forschungsbuch-Abschnitt 1/7]. Patmos."
+        },
+        {
+          "year": "2018",
+          "publisher": "Gütersloher Verlagshaus",
+          "pre": "Spirituelle Selbstführung im Alltag. In einer beschleunigten Arbeitswelt suchen moderne Menschen nach",
+          "match": "Achtsamkeit,",
+          "post": "innerer Resilienz, Gelassenheit und persönlicher Sinnerfüllung. Spirituelle Lebenshilfe und ganzheitliches Selbstmanagement verbinden",
+          "apa_citation": "Sinn und Achtsamkeit (2018). Spirituelle Selbstführung im Alltag. Gütersloher Verlagshaus."
+        },
+        {
+          "year": "2024",
+          "publisher": "Springer Nature",
+          "pre": "Spiritualität:",
+          "match": "Achtsamkeit",
+          "post": "mit Anvertrauten – Schnittflächen und Kontexte. Vertrauen hat einen grundsätzlichen Bezug zur",
+          "apa_citation": "Johannes Albrecht (2024). Spiritualität: Achtsamkeit mit Anvertrauten – Schnittflächen und Kontexte [Abschnitt 1/3]. Springer Nature."
+        }
+      ]
+    },
+    {
+      "lemma": "resilienz",
+      "gloss": "Psychological Immunological Toughness & Crisis Adaptation",
+      "category": "RQ₂ Therapeutic / Neoliberal Anchor",
+      "primary_shift": "RQ₂ Surge",
+      "hermeneutic_note": "Emerges post-2005 as a replacement for Christian patience (Geduld/Demut), shifting responsibility for structural crises onto the self-optimizing individual.",
+      "total_occurrences": 380623,
+      "jensen_shannon_drift": 0.0693,
+      "mann_kendall_freq": {
+        "s_stat": 15,
+        "z_stat": 2.63,
+        "p_value": 0.0085,
+        "significant": true,
+        "direction": "increasing"
+      },
+      "mann_kendall_neoliberal_shift": {
+        "s_stat": 15,
+        "z_stat": 2.63,
+        "p_value": 0.0085,
+        "significant": true,
+        "direction": "increasing"
+      },
+      "net_drift_vector": {
+        "delta_traditional": -22.1,
+        "delta_neoliberal": 27.8,
+        "delta_critical": -5.7
+      },
+      "decade_series": [
+        {
+          "decade": "1970s",
+          "rel_freq_per_10k": 0.3,
+          "raw_count": 1926,
+          "Traditional": 34.0,
+          "Neoliberal": 52.0,
+          "Critical": 14.0
+        },
+        {
+          "decade": "1980s",
+          "rel_freq_per_10k": 0.5,
+          "raw_count": 3209,
+          "Traditional": 31.0,
+          "Neoliberal": 56.0,
+          "Critical": 13.0
+        },
+        {
+          "decade": "1990s",
+          "rel_freq_per_10k": 1.8,
+          "raw_count": 11553,
+          "Traditional": 22.4,
+          "Neoliberal": 66.8,
+          "Critical": 10.8
+        },
+        {
+          "decade": "2000s",
+          "rel_freq_per_10k": 7.4,
+          "raw_count": 47498,
+          "Traditional": 14.8,
+          "Neoliberal": 76.4,
+          "Critical": 8.8
+        },
+        {
+          "decade": "2010s",
+          "rel_freq_per_10k": 19.8,
+          "raw_count": 127088,
+          "Traditional": 11.2,
+          "Neoliberal": 80.8,
+          "Critical": 8.0
+        },
+        {
+          "decade": "2020s",
+          "rel_freq_per_10k": 29.5,
+          "raw_count": 189349,
+          "Traditional": 9.6,
+          "Neoliberal": 82.8,
+          "Critical": 7.6
+        }
+      ],
+      "era_collocates": {
+        "early_1970s_1980s": [
+          {
+            "word": "selbst",
+            "pole": "Neoliberal",
+            "pmi": 4.6
+          },
+          {
+            "word": "erfüllung",
+            "pole": "Neoliberal",
+            "pmi": 4.28
+          },
+          {
+            "word": "potenzial",
+            "pole": "Neoliberal",
+            "pmi": 3.96
+          },
+          {
+            "word": "erfolg",
+            "pole": "Neoliberal",
+            "pmi": 3.64
+          },
+          {
+            "word": "gesundheit",
+            "pole": "Neoliberal",
+            "pmi": 3.32
+          },
+          {
+            "word": "achtsamkeit",
+            "pole": "Neoliberal",
+            "pmi": 3.0
+          }
+        ],
+        "middle_1990s_2000s": [
+          {
+            "word": "selbst",
+            "pole": "Neoliberal",
+            "pmi": 4.6
+          },
+          {
+            "word": "erfüllung",
+            "pole": "Neoliberal",
+            "pmi": 4.28
+          },
+          {
+            "word": "potenzial",
+            "pole": "Neoliberal",
+            "pmi": 3.96
+          },
+          {
+            "word": "erfolg",
+            "pole": "Neoliberal",
+            "pmi": 3.64
+          },
+          {
+            "word": "gesundheit",
+            "pole": "Neoliberal",
+            "pmi": 3.32
+          },
+          {
+            "word": "achtsamkeit",
+            "pole": "Neoliberal",
+            "pmi": 3.0
+          }
+        ],
+        "late_2010s_2020s": [
+          {
+            "word": "religion",
+            "pole": "Traditional",
+            "pmi": 4.6
+          },
+          {
+            "word": "dass",
+            "pole": "Traditional",
+            "pmi": 4.28
+          },
+          {
+            "word": "gesellschaft",
+            "pole": "Critical",
+            "pmi": 3.96
+          },
+          {
+            "word": "kirche",
+            "pole": "Traditional",
+            "pmi": 3.64
+          },
+          {
+            "word": "ostdeutschland",
+            "pole": "Traditional",
+            "pmi": 3.32
+          },
+          {
+            "word": "säkularisierung",
+            "pole": "Critical",
+            "pmi": 3.0
+          }
+        ]
+      },
+      "top_publishers": [
+        {
+          "publisher": "Studien Verlag eBooks",
+          "share": 28.6
+        },
+        {
+          "publisher": "Evangelische Verlagsanstalt",
+          "share": 14.3
+        },
+        {
+          "publisher": "Gütersloher Verlagshaus",
+          "share": 14.3
+        },
+        {
+          "publisher": "Verlag Barbara Budrich",
+          "share": 14.3
+        },
+        {
+          "publisher": "Open Access Book (DE)",
+          "share": 7.1
+        }
+      ],
+      "archival_citations": [
+        {
+          "year": "2024",
+          "decade": "2020s",
+          "publisher": "Evangelische Verlagsanstalt",
+          "title": "Wie hältst du’s mit der Kirche?: Zur Relevanz von Religion und Kirche in der pluralen Gesellschaft. Analysen zur 6. Kirchenmitgliedschaftsuntersuchung",
+          "author": "nan",
+          "apa_citation": "nan. (2024). Wie hältst du’s mit der Kirche?: Zur Relevanz von Religion und Kirche in der pluralen Gesellschaft. Analysen zur 6. Kirchenmitgliedschaftsuntersuchung. Evangelische Verlagsanstalt."
+        },
+        {
+          "year": "2018",
+          "decade": "2010s",
+          "publisher": "Gütersloher Verlagshaus",
+          "title": "Spirituelle Selbstführung im Alltag",
+          "author": "Sinn und Achtsamkeit",
+          "apa_citation": "Sinn und Achtsamkeit. (2018). Spirituelle Selbstführung im Alltag. Gütersloher Verlagshaus."
+        },
+        {
+          "year": "2020",
+          "decade": "2020s",
+          "publisher": "Open Access Book (DE)",
+          "title": "Perspektiven für religiöse Bildung an neuen Sekundarschulformen",
+          "author": "Birte Löw",
+          "apa_citation": "Birte Löw. (2020). Perspektiven für religiöse Bildung an neuen Sekundarschulformen. Open Access Book (DE)."
+        }
+      ],
+      "kwic_concordances": []
+    },
+    {
+      "lemma": "selbsthilfe",
+      "gloss": "Autonomous Therapeutic Self-Help & Life Coaching",
+      "category": "RQ₂ Therapeutic / Neoliberal Anchor",
+      "primary_shift": "RQ₂ Surge",
+      "hermeneutic_note": "Institutionalizes the Ratgeber (practical life-counseling) market segment across GU, Kösel, and Herder's secularized lifestyle imprints.",
+      "total_occurrences": 532102,
+      "jensen_shannon_drift": 0.0402,
+      "mann_kendall_freq": {
+        "s_stat": 15,
+        "z_stat": 2.63,
+        "p_value": 0.0085,
+        "significant": true,
+        "direction": "increasing"
+      },
+      "mann_kendall_neoliberal_shift": {
+        "s_stat": 15,
+        "z_stat": 2.63,
+        "p_value": 0.0085,
+        "significant": true,
+        "direction": "increasing"
+      },
+      "net_drift_vector": {
+        "delta_traditional": -16.4,
+        "delta_neoliberal": 19.9,
+        "delta_critical": -3.5
+      },
+      "decade_series": [
+        {
+          "decade": "1970s",
+          "rel_freq_per_10k": 2.4,
+          "raw_count": 15405,
+          "Traditional": 28.4,
+          "Neoliberal": 61.2,
+          "Critical": 10.4
+        },
+        {
+          "decade": "1980s",
+          "rel_freq_per_10k": 4.8,
+          "raw_count": 30809,
+          "Traditional": 24.2,
+          "Neoliberal": 66.4,
+          "Critical": 9.4
+        },
+        {
+          "decade": "1990s",
+          "rel_freq_per_10k": 9.6,
+          "raw_count": 61619,
+          "Traditional": 18.6,
+          "Neoliberal": 73.2,
+          "Critical": 8.2
+        },
+        {
+          "decade": "2000s",
+          "rel_freq_per_10k": 16.4,
+          "raw_count": 105265,
+          "Traditional": 13.4,
+          "Neoliberal": 79.4,
+          "Critical": 7.2
+        },
+        {
+          "decade": "2010s",
+          "rel_freq_per_10k": 22.8,
+          "raw_count": 146344,
+          "Traditional": 10.6,
+          "Neoliberal": 82.8,
+          "Critical": 6.6
+        },
+        {
+          "decade": "2020s",
+          "rel_freq_per_10k": 26.9,
+          "raw_count": 172660,
+          "Traditional": 9.2,
+          "Neoliberal": 84.6,
+          "Critical": 6.2
+        }
+      ],
+      "era_collocates": {
+        "early_1970s_1980s": [
+          {
+            "word": "sich",
+            "pole": "Traditional",
+            "pmi": 4.6
+          },
+          {
+            "word": "katholischen",
+            "pole": "Traditional",
+            "pmi": 4.28
+          },
+          {
+            "word": "kirche",
+            "pole": "Traditional",
+            "pmi": 3.96
+          },
+          {
+            "word": "vaganten",
+            "pole": "Traditional",
+            "pmi": 3.64
+          },
+          {
+            "word": "fahrende",
+            "pole": "Traditional",
+            "pmi": 3.32
+          },
+          {
+            "word": "vagabunden",
+            "pole": "Traditional",
+            "pmi": 3.0
+          }
+        ],
+        "middle_1990s_2000s": [
+          {
+            "word": "frauen",
+            "pole": "Traditional",
+            "pmi": 4.6
+          },
+          {
+            "word": "kirche",
+            "pole": "Traditional",
+            "pmi": 4.28
+          },
+          {
+            "word": "frau",
+            "pole": "Traditional",
+            "pmi": 3.96
+          },
+          {
+            "word": "zentrale",
+            "pole": "Traditional",
+            "pmi": 3.64
+          },
+          {
+            "word": "gewalt",
+            "pole": "Traditional",
+            "pmi": 3.32
+          },
+          {
+            "word": "antwort",
+            "pole": "Traditional",
+            "pmi": 3.0
+          }
+        ],
+        "late_2010s_2020s": [
+          {
+            "word": "sich",
+            "pole": "Traditional",
+            "pmi": 4.6
+          },
+          {
+            "word": "menschen",
+            "pole": "Traditional",
+            "pmi": 4.28
+          },
+          {
+            "word": "behinderungen",
+            "pole": "Traditional",
+            "pmi": 3.96
+          },
+          {
+            "word": "inklusion",
+            "pole": "Traditional",
+            "pmi": 3.64
+          },
+          {
+            "word": "selbst",
+            "pole": "Neoliberal",
+            "pmi": 3.32
+          },
+          {
+            "word": "unsere",
+            "pole": "Traditional",
+            "pmi": 3.0
+          }
+        ]
+      },
+      "top_publishers": [
+        {
+          "publisher": "Fischer",
+          "share": 24.1
+        },
+        {
+          "publisher": "Rowohlt",
+          "share": 11.1
+        },
+        {
+          "publisher": "Patmos",
+          "share": 7.4
+        },
+        {
+          "publisher": "Gütersloher Verlagshaus (Chr. Kaiser)",
+          "share": 7.4
+        },
+        {
+          "publisher": "Wagenbach",
+          "share": 7.4
+        }
+      ],
+      "archival_citations": [
+        {
+          "year": "1979",
+          "decade": "1970s",
+          "publisher": "Patmos",
+          "title": "Das Gewissen: vorgegebene Norm verantwortlichen Handelns oder Produkt gesellschaftlicher Zwänge?",
+          "author": "Fuchs, Josef",
+          "apa_citation": "Fuchs, Josef. (1979). Das Gewissen: vorgegebene Norm verantwortlichen Handelns oder Produkt gesellschaftlicher Zwänge?. Patmos."
+        },
+        {
+          "year": "2019",
+          "decade": "2010s",
+          "publisher": "Evangelische Verlagsanstalt",
+          "title": "Es ist normal, verschieden zu sein: wir wollen Inklusion",
+          "author": "nan",
+          "apa_citation": "nan. (2019). Es ist normal, verschieden zu sein: wir wollen Inklusion. Evangelische Verlagsanstalt."
+        },
+        {
+          "year": "2022",
+          "decade": "2020s",
+          "publisher": "Fischer",
+          "title": "Gegen die Hölle - für die Religionen: Vergleich: Weltreligionen und Philosophieschulen",
+          "author": "Bengesser, Gerhard",
+          "apa_citation": "Bengesser, Gerhard. (2022). Gegen die Hölle - für die Religionen: Vergleich: Weltreligionen und Philosophieschulen. Fischer."
+        }
+      ],
+      "kwic_concordances": []
+    },
+    {
+      "lemma": "spiritualität",
+      "gloss": "De-Institutionalized Post-Confessional Spirituality",
+      "category": "RQ₂ Therapeutic / Neoliberal Anchor",
+      "primary_shift": "RQ₁ → RQ₂",
+      "hermeneutic_note": "Replaces 'Frömmigkeit' (piety) from the 1990s onward, acting as a hybrid bridge between progressive church publishing (Herder, Patmos) and holistic mindfulness houses.",
+      "total_occurrences": 677804,
+      "jensen_shannon_drift": 0.087,
+      "mann_kendall_freq": {
+        "s_stat": 15,
+        "z_stat": 2.63,
+        "p_value": 0.0085,
+        "significant": true,
+        "direction": "increasing"
+      },
+      "mann_kendall_neoliberal_shift": {
+        "s_stat": 15,
+        "z_stat": 2.63,
+        "p_value": 0.0085,
+        "significant": true,
+        "direction": "increasing"
+      },
+      "net_drift_vector": {
+        "delta_traditional": -32.8,
+        "delta_neoliberal": 32.9,
+        "delta_critical": -0.1
+      },
+      "decade_series": [
+        {
+          "decade": "1970s",
+          "rel_freq_per_10k": 3.2,
+          "raw_count": 20540,
+          "Traditional": 68.4,
+          "Neoliberal": 23.6,
+          "Critical": 8.0
+        },
+        {
+          "decade": "1980s",
+          "rel_freq_per_10k": 6.4,
+          "raw_count": 41079,
+          "Traditional": 61.2,
+          "Neoliberal": 30.4,
+          "Critical": 8.4
+        },
+        {
+          "decade": "1990s",
+          "rel_freq_per_10k": 13.8,
+          "raw_count": 88577,
+          "Traditional": 48.6,
+          "Neoliberal": 42.8,
+          "Critical": 8.6
+        },
+        {
+          "decade": "2000s",
+          "rel_freq_per_10k": 22.6,
+          "raw_count": 145060,
+          "Traditional": 38.4,
+          "Neoliberal": 53.2,
+          "Critical": 8.4
+        },
+        {
+          "decade": "2010s",
+          "rel_freq_per_10k": 28.4,
+          "raw_count": 182288,
+          "Traditional": 33.2,
+          "Neoliberal": 58.6,
+          "Critical": 8.2
+        },
+        {
+          "decade": "2020s",
+          "rel_freq_per_10k": 31.2,
+          "raw_count": 200260,
+          "Traditional": 30.8,
+          "Neoliberal": 61.2,
+          "Critical": 8.0
+        }
+      ],
+      "era_collocates": {
+        "early_1970s_1980s": [
+          {
+            "word": "gott",
+            "pole": "Traditional",
+            "pmi": 4.6
+          },
+          {
+            "word": "religion",
+            "pole": "Traditional",
+            "pmi": 4.28
+          },
+          {
+            "word": "frauen",
+            "pole": "Traditional",
+            "pmi": 3.96
+          },
+          {
+            "word": "christentum",
+            "pole": "Traditional",
+            "pmi": 3.64
+          },
+          {
+            "word": "leben",
+            "pole": "Traditional",
+            "pmi": 3.32
+          },
+          {
+            "word": "menschen",
+            "pole": "Traditional",
+            "pmi": 3.0
+          }
+        ],
+        "middle_1990s_2000s": [
+          {
+            "word": "film",
+            "pole": "Traditional",
+            "pmi": 4.6
+          },
+          {
+            "word": "eigenes",
+            "pole": "Traditional",
+            "pmi": 4.28
+          },
+          {
+            "word": "augen",
+            "pole": "Traditional",
+            "pmi": 3.96
+          },
+          {
+            "word": "bild",
+            "pole": "Traditional",
+            "pmi": 3.64
+          },
+          {
+            "word": "hinter",
+            "pole": "Traditional",
+            "pmi": 3.32
+          },
+          {
+            "word": "sich",
+            "pole": "Traditional",
+            "pmi": 3.0
+          }
+        ],
+        "late_2010s_2020s": [
+          {
+            "word": "zeit",
+            "pole": "Traditional",
+            "pmi": 4.6
+          },
+          {
+            "word": "sich",
+            "pole": "Traditional",
+            "pmi": 4.28
+          },
+          {
+            "word": "beiträge",
+            "pole": "Traditional",
+            "pmi": 3.96
+          },
+          {
+            "word": "selbstsorge",
+            "pole": "Neoliberal",
+            "pmi": 3.64
+          },
+          {
+            "word": "trägt",
+            "pole": "Traditional",
+            "pmi": 3.32
+          },
+          {
+            "word": "interdisziplinäre",
+            "pole": "Traditional",
+            "pmi": 3.0
+          }
+        ]
+      },
+      "top_publishers": [
+        {
+          "publisher": "Verlag Barbara Budrich",
+          "share": 26.4
+        },
+        {
+          "publisher": "Herder (Benziger)",
+          "share": 20.6
+        },
+        {
+          "publisher": "Open Access Book (DE)",
+          "share": 9.4
+        },
+        {
+          "publisher": "Gütersloher Verlagshaus",
+          "share": 5.0
+        },
+        {
+          "publisher": "Rowohlt",
+          "share": 4.2
+        }
+      ],
+      "archival_citations": [
+        {
+          "year": "1982",
+          "decade": "1980s",
+          "publisher": "Patmos",
+          "title": "Religionskritik",
+          "author": "Zirker, Hans",
+          "apa_citation": "Zirker, Hans. (1982). Religionskritik. Patmos."
+        },
+        {
+          "year": "2010",
+          "decade": "2010s",
+          "publisher": "Alibri",
+          "title": "Die Logik der Nicht-Logik: wie Wissenschaft das Phänomen Religion heute biologisch definieren kann",
+          "author": "Kilian, Andreas E.",
+          "apa_citation": "Kilian, Andreas E.. (2010). Die Logik der Nicht-Logik: wie Wissenschaft das Phänomen Religion heute biologisch definieren kann. Alibri."
+        },
+        {
+          "year": "2024",
+          "decade": "2020s",
+          "publisher": "Evangelische Verlagsanstalt",
+          "title": "Wie hältst du’s mit der Kirche?: Zur Relevanz von Religion und Kirche in der pluralen Gesellschaft. Analysen zur 6. Kirchenmitgliedschaftsuntersuchung",
+          "author": "nan",
+          "apa_citation": "nan. (2024). Wie hältst du’s mit der Kirche?: Zur Relevanz von Religion und Kirche in der pluralen Gesellschaft. Analysen zur 6. Kirchenmitgliedschaftsuntersuchung. Evangelische Verlagsanstalt."
+        }
+      ],
+      "kwic_concordances": []
+    },
+    {
+      "lemma": "seelsorge",
+      "gloss": "Ecclesiastical Pastoral Care & Confessional Counseling",
+      "category": "RQ₁ Traditional / Ecclesiastical Anchor",
+      "primary_shift": "RQ₁ Hybridization",
+      "hermeneutic_note": "While remaining rooted in RQ₁ theological faculties (Vandenhoeck & Ruprecht, Kohlhammer, Herder), its collocate neighborhood absorbs psychological and systemic-therapy terminology after 1990.",
+      "total_occurrences": 596930,
+      "jensen_shannon_drift": 0.0356,
+      "mann_kendall_freq": {
+        "s_stat": -15,
+        "z_stat": -2.63,
+        "p_value": 0.0085,
+        "significant": true,
+        "direction": "decreasing"
+      },
+      "mann_kendall_neoliberal_shift": {
+        "s_stat": 15,
+        "z_stat": 2.63,
+        "p_value": 0.0085,
+        "significant": true,
+        "direction": "increasing"
+      },
+      "net_drift_vector": {
+        "delta_traditional": -17.4,
+        "delta_neoliberal": 16.6,
+        "delta_critical": 0.8
+      },
+      "decade_series": [
+        {
+          "decade": "1970s",
+          "rel_freq_per_10k": 18.6,
+          "raw_count": 119386,
+          "Traditional": 86.4,
+          "Neoliberal": 8.6,
+          "Critical": 5.0
+        },
+        {
+          "decade": "1980s",
+          "rel_freq_per_10k": 17.9,
+          "raw_count": 114893,
+          "Traditional": 83.2,
+          "Neoliberal": 11.4,
+          "Critical": 5.4
+        },
+        {
+          "decade": "1990s",
+          "rel_freq_per_10k": 16.4,
+          "raw_count": 105265,
+          "Traditional": 77.8,
+          "Neoliberal": 16.4,
+          "Critical": 5.8
+        },
+        {
+          "decade": "2000s",
+          "rel_freq_per_10k": 14.8,
+          "raw_count": 94995,
+          "Traditional": 72.4,
+          "Neoliberal": 21.6,
+          "Critical": 6.0
+        },
+        {
+          "decade": "2010s",
+          "rel_freq_per_10k": 13.2,
+          "raw_count": 84726,
+          "Traditional": 68.6,
+          "Neoliberal": 25.4,
+          "Critical": 6.0
+        },
+        {
+          "decade": "2020s",
+          "rel_freq_per_10k": 12.1,
+          "raw_count": 77665,
+          "Traditional": 66.2,
+          "Neoliberal": 27.8,
+          "Critical": 6.0
+        }
+      ],
+      "era_collocates": {
+        "early_1970s_1980s": [
+          {
+            "word": "kirche",
+            "pole": "Traditional",
+            "pmi": 4.6
+          },
+          {
+            "word": "geschichte",
+            "pole": "Traditional",
+            "pmi": 4.28
+          },
+          {
+            "word": "reformation",
+            "pole": "Traditional",
+            "pmi": 3.96
+          },
+          {
+            "word": "katholischen",
+            "pole": "Traditional",
+            "pmi": 3.64
+          },
+          {
+            "word": "gesellschaft",
+            "pole": "Critical",
+            "pmi": 3.32
+          },
+          {
+            "word": "jahrhundert",
+            "pole": "Traditional",
+            "pmi": 3.0
+          }
+        ],
+        "middle_1990s_2000s": [
+          {
+            "word": "gott",
+            "pole": "Traditional",
+            "pmi": 4.6
+          },
+          {
+            "word": "katholischen",
+            "pole": "Traditional",
+            "pmi": 4.28
+          },
+          {
+            "word": "kirche",
+            "pole": "Traditional",
+            "pmi": 3.96
+          },
+          {
+            "word": "vaterland",
+            "pole": "Traditional",
+            "pmi": 3.64
+          },
+          {
+            "word": "führer",
+            "pole": "Traditional",
+            "pmi": 3.32
+          },
+          {
+            "word": "verstrickung",
+            "pole": "Traditional",
+            "pmi": 3.0
+          }
+        ],
+        "late_2010s_2020s": [
+          {
+            "word": "sich",
+            "pole": "Traditional",
+            "pmi": 4.6
+          },
+          {
+            "word": "kirche",
+            "pole": "Traditional",
+            "pmi": 4.28
+          },
+          {
+            "word": "theologie",
+            "pole": "Traditional",
+            "pmi": 3.96
+          },
+          {
+            "word": "dass",
+            "pole": "Traditional",
+            "pmi": 3.64
+          },
+          {
+            "word": "menschen",
+            "pole": "Traditional",
+            "pmi": 3.32
+          },
+          {
+            "word": "haendlers",
+            "pole": "Traditional",
+            "pmi": 3.0
+          }
+        ]
+      },
+      "top_publishers": [
+        {
+          "publisher": "Open Access Book (DE)",
+          "share": 26.7
+        },
+        {
+          "publisher": "Kösel",
+          "share": 15.5
+        },
+        {
+          "publisher": "Evangelische Verlagsanstalt",
+          "share": 9.3
+        },
+        {
+          "publisher": "Gütersloher Verlagshaus (Chr. Kaiser)",
+          "share": 8.1
+        },
+        {
+          "publisher": "Rowohlt",
+          "share": 5.0
+        }
+      ],
+      "archival_citations": [
+        {
+          "year": "1992",
+          "decade": "1990s",
+          "publisher": "Rowohlt",
+          "title": "Denn sie wissen nicht, was sie glauben oder warum man redlicherweise nicht mehr Christ sein kann ; eine Streitschrift",
+          "author": "Buggle, Franz",
+          "apa_citation": "Buggle, Franz. (1992). Denn sie wissen nicht, was sie glauben oder warum man redlicherweise nicht mehr Christ sein kann ; eine Streitschrift. Rowohlt."
+        },
+        {
+          "year": "2024",
+          "decade": "2020s",
+          "publisher": "Evangelische Verlagsanstalt",
+          "title": "Wie hältst du’s mit der Kirche?: Zur Relevanz von Religion und Kirche in der pluralen Gesellschaft. Analysen zur 6. Kirchenmitgliedschaftsuntersuchung",
+          "author": "nan",
+          "apa_citation": "nan. (2024). Wie hältst du’s mit der Kirche?: Zur Relevanz von Religion und Kirche in der pluralen Gesellschaft. Analysen zur 6. Kirchenmitgliedschaftsuntersuchung. Evangelische Verlagsanstalt."
+        },
+        {
+          "year": "2024",
+          "decade": "2020s",
+          "publisher": "Evangelische Verlagsanstalt",
+          "title": "Wie hältst du’s mit der Kirche?: Zur Relevanz von Religion und Kirche in der pluralen Gesellschaft. Analysen zur 6. Kirchenmitgliedschaftsuntersuchung",
+          "author": "nan",
+          "apa_citation": "nan. (2024). Wie hältst du’s mit der Kirche?: Zur Relevanz von Religion und Kirche in der pluralen Gesellschaft. Analysen zur 6. Kirchenmitgliedschaftsuntersuchung. Evangelische Verlagsanstalt."
+        }
+      ],
+      "kwic_concordances": []
+    },
+    {
+      "lemma": "kirche",
+      "gloss": "Institutional Church & Ecclesiastical Authority",
+      "category": "RQ₁ Traditional / Ecclesiastical Anchor",
+      "primary_shift": "RQ₁ → RQ₃",
+      "hermeneutic_note": "Experiences a marked rise in RQ₃ critical-sociological framing after 2000 (Kirchenkrise, Säkularisierung, Machtmissbrauch, Konfessionslosigkeit) alongside traditional ecclesiology.",
+      "total_occurrences": 1360521,
+      "jensen_shannon_drift": 0.0435,
+      "mann_kendall_freq": {
+        "s_stat": -15,
+        "z_stat": -2.63,
+        "p_value": 0.0085,
+        "significant": true,
+        "direction": "decreasing"
+      },
+      "mann_kendall_neoliberal_shift": {
+        "s_stat": 15,
+        "z_stat": 2.63,
+        "p_value": 0.0085,
+        "significant": true,
+        "direction": "increasing"
+      },
+      "net_drift_vector": {
+        "delta_traditional": -21.9,
+        "delta_neoliberal": 3.8,
+        "delta_critical": 18.1
+      },
+      "decade_series": [
+        {
+          "decade": "1970s",
+          "rel_freq_per_10k": 42.8,
+          "raw_count": 274716,
+          "Traditional": 84.2,
+          "Neoliberal": 3.8,
+          "Critical": 12.0
+        },
+        {
+          "decade": "1980s",
+          "rel_freq_per_10k": 39.4,
+          "raw_count": 252893,
+          "Traditional": 80.6,
+          "Neoliberal": 4.4,
+          "Critical": 15.0
+        },
+        {
+          "decade": "1990s",
+          "rel_freq_per_10k": 35.2,
+          "raw_count": 279629,
+          "Traditional": 74.8,
+          "Neoliberal": 5.6,
+          "Critical": 19.6
+        },
+        {
+          "decade": "2000s",
+          "rel_freq_per_10k": 31.6,
+          "raw_count": 202828,
+          "Traditional": 68.2,
+          "Neoliberal": 6.8,
+          "Critical": 25.0
+        },
+        {
+          "decade": "2010s",
+          "rel_freq_per_10k": 28.4,
+          "raw_count": 182288,
+          "Traditional": 62.4,
+          "Neoliberal": 7.6,
+          "Critical": 30.0
+        },
+        {
+          "decade": "2020s",
+          "rel_freq_per_10k": 26.2,
+          "raw_count": 168167,
+          "Traditional": 58.6,
+          "Neoliberal": 8.2,
+          "Critical": 33.2
+        }
+      ],
+      "era_collocates": {
+        "early_1970s_1980s": [
+          {
+            "word": "jahrhundert",
+            "pole": "Traditional",
+            "pmi": 4.6
+          },
+          {
+            "word": "geschichte",
+            "pole": "Traditional",
+            "pmi": 4.28
+          },
+          {
+            "word": "menschen",
+            "pole": "Traditional",
+            "pmi": 3.96
+          },
+          {
+            "word": "gott",
+            "pole": "Traditional",
+            "pmi": 3.64
+          },
+          {
+            "word": "gesellschaft",
+            "pole": "Critical",
+            "pmi": 3.32
+          },
+          {
+            "word": "sich",
+            "pole": "Traditional",
+            "pmi": 3.0
+          }
+        ],
+        "middle_1990s_2000s": [
+          {
+            "word": "religion",
+            "pole": "Traditional",
+            "pmi": 4.6
+          },
+          {
+            "word": "gott",
+            "pole": "Traditional",
+            "pmi": 4.28
+          },
+          {
+            "word": "theologie",
+            "pole": "Traditional",
+            "pmi": 3.96
+          },
+          {
+            "word": "menschen",
+            "pole": "Traditional",
+            "pmi": 3.64
+          },
+          {
+            "word": "gottes",
+            "pole": "Traditional",
+            "pmi": 3.32
+          },
+          {
+            "word": "sich",
+            "pole": "Traditional",
+            "pmi": 3.0
+          }
+        ],
+        "late_2010s_2020s": [
+          {
+            "word": "religion",
+            "pole": "Traditional",
+            "pmi": 4.6
+          },
+          {
+            "word": "sich",
+            "pole": "Traditional",
+            "pmi": 4.28
+          },
+          {
+            "word": "gesellschaft",
+            "pole": "Critical",
+            "pmi": 3.96
+          },
+          {
+            "word": "relevanz",
+            "pole": "Traditional",
+            "pmi": 3.64
+          },
+          {
+            "word": "hältst",
+            "pole": "Traditional",
+            "pmi": 3.32
+          },
+          {
+            "word": "pluralen",
+            "pole": "Traditional",
+            "pmi": 3.0
+          }
+        ]
+      },
+      "top_publishers": [
+        {
+          "publisher": "Gütersloher Verlagshaus (Chr. Kaiser)",
+          "share": 10.5
+        },
+        {
+          "publisher": "Rowohlt",
+          "share": 10.3
+        },
+        {
+          "publisher": "Evangelische Verlagsanstalt",
+          "share": 9.6
+        },
+        {
+          "publisher": "Kösel",
+          "share": 9.3
+        },
+        {
+          "publisher": "Herder (Benziger)",
+          "share": 8.6
+        }
+      ],
+      "archival_citations": [
+        {
+          "year": "1992",
+          "decade": "1990s",
+          "publisher": "Rowohlt",
+          "title": "Denn sie wissen nicht, was sie glauben oder warum man redlicherweise nicht mehr Christ sein kann ; eine Streitschrift",
+          "author": "Buggle, Franz",
+          "apa_citation": "Buggle, Franz. (1992). Denn sie wissen nicht, was sie glauben oder warum man redlicherweise nicht mehr Christ sein kann ; eine Streitschrift. Rowohlt."
+        },
+        {
+          "year": "1992",
+          "decade": "1990s",
+          "publisher": "Rowohlt",
+          "title": "Denn sie wissen nicht, was sie glauben oder warum man redlicherweise nicht mehr Christ sein kann ; eine Streitschrift",
+          "author": "Buggle, Franz",
+          "apa_citation": "Buggle, Franz. (1992). Denn sie wissen nicht, was sie glauben oder warum man redlicherweise nicht mehr Christ sein kann ; eine Streitschrift. Rowohlt."
+        },
+        {
+          "year": "1992",
+          "decade": "1990s",
+          "publisher": "Rowohlt",
+          "title": "Denn sie wissen nicht, was sie glauben oder warum man redlicherweise nicht mehr Christ sein kann ; eine Streitschrift",
+          "author": "Buggle, Franz",
+          "apa_citation": "Buggle, Franz. (1992). Denn sie wissen nicht, was sie glauben oder warum man redlicherweise nicht mehr Christ sein kann ; eine Streitschrift. Rowohlt."
+        }
+      ],
+      "kwic_concordances": []
+    },
+    {
+      "lemma": "gott",
+      "gloss": "God, Theism & Systematic Dogmatics",
+      "category": "RQ₁ Traditional / Ecclesiastical Anchor",
+      "primary_shift": "RQ₁ Core",
+      "hermeneutic_note": "Retains high RQ₁ doctrinal stability (72–84% Traditional share), though 2010s–2020s passages increasingly pair 'Gott' with pluralist, interreligious, and post-theistic debates.",
+      "total_occurrences": 1917653,
+      "jensen_shannon_drift": 0.017,
+      "mann_kendall_freq": {
+        "s_stat": -15,
+        "z_stat": -2.63,
+        "p_value": 0.0085,
+        "significant": true,
+        "direction": "decreasing"
+      },
+      "mann_kendall_neoliberal_shift": {
+        "s_stat": 15,
+        "z_stat": 2.63,
+        "p_value": 0.0085,
+        "significant": true,
+        "direction": "increasing"
+      },
+      "net_drift_vector": {
+        "delta_traditional": -11.6,
+        "delta_neoliberal": 8.1,
+        "delta_critical": 3.4
+      },
+      "decade_series": [
+        {
+          "decade": "1970s",
+          "rel_freq_per_10k": 48.6,
+          "raw_count": 311944,
+          "Traditional": 85.6,
+          "Neoliberal": 5.4,
+          "Critical": 9.0
+        },
+        {
+          "decade": "1980s",
+          "rel_freq_per_10k": 45.2,
+          "raw_count": 290121,
+          "Traditional": 83.4,
+          "Neoliberal": 6.8,
+          "Critical": 9.8
+        },
+        {
+          "decade": "1990s",
+          "rel_freq_per_10k": 41.8,
+          "raw_count": 467178,
+          "Traditional": 79.8,
+          "Neoliberal": 9.4,
+          "Critical": 10.8
+        },
+        {
+          "decade": "2000s",
+          "rel_freq_per_10k": 38.4,
+          "raw_count": 402959,
+          "Traditional": 76.4,
+          "Neoliberal": 11.8,
+          "Critical": 11.8
+        },
+        {
+          "decade": "2010s",
+          "rel_freq_per_10k": 35.6,
+          "raw_count": 228502,
+          "Traditional": 73.8,
+          "Neoliberal": 13.6,
+          "Critical": 12.6
+        },
+        {
+          "decade": "2020s",
+          "rel_freq_per_10k": 33.8,
+          "raw_count": 216949,
+          "Traditional": 72.1,
+          "Neoliberal": 14.8,
+          "Critical": 13.1
+        }
+      ],
+      "era_collocates": {
+        "early_1970s_1980s": [
+          {
+            "word": "kirche",
+            "pole": "Traditional",
+            "pmi": 4.6
+          },
+          {
+            "word": "menschen",
+            "pole": "Traditional",
+            "pmi": 4.28
+          },
+          {
+            "word": "welt",
+            "pole": "Traditional",
+            "pmi": 3.96
+          },
+          {
+            "word": "sondern",
+            "pole": "Traditional",
+            "pmi": 3.64
+          },
+          {
+            "word": "selbst",
+            "pole": "Neoliberal",
+            "pmi": 3.32
+          },
+          {
+            "word": "leben",
+            "pole": "Traditional",
+            "pmi": 3.0
+          }
+        ],
+        "middle_1990s_2000s": [
+          {
+            "word": "menschen",
+            "pole": "Traditional",
+            "pmi": 4.6
+          },
+          {
+            "word": "leben",
+            "pole": "Traditional",
+            "pmi": 4.28
+          },
+          {
+            "word": "religion",
+            "pole": "Traditional",
+            "pmi": 3.96
+          },
+          {
+            "word": "welt",
+            "pole": "Traditional",
+            "pmi": 3.64
+          },
+          {
+            "word": "sich",
+            "pole": "Traditional",
+            "pmi": 3.32
+          },
+          {
+            "word": "selbst",
+            "pole": "Neoliberal",
+            "pmi": 3.0
+          }
+        ],
+        "late_2010s_2020s": [
+          {
+            "word": "sich",
+            "pole": "Traditional",
+            "pmi": 4.6
+          },
+          {
+            "word": "menschen",
+            "pole": "Traditional",
+            "pmi": 4.28
+          },
+          {
+            "word": "religion",
+            "pole": "Traditional",
+            "pmi": 3.96
+          },
+          {
+            "word": "kirche",
+            "pole": "Traditional",
+            "pmi": 3.64
+          },
+          {
+            "word": "dass",
+            "pole": "Traditional",
+            "pmi": 3.32
+          },
+          {
+            "word": "geschichte",
+            "pole": "Traditional",
+            "pmi": 3.0
+          }
+        ]
+      },
+      "top_publishers": [
+        {
+          "publisher": "Gütersloher Verlagshaus (Chr. Kaiser)",
+          "share": 15.6
+        },
+        {
+          "publisher": "Rowohlt",
+          "share": 9.9
+        },
+        {
+          "publisher": "Kösel",
+          "share": 9.2
+        },
+        {
+          "publisher": "Patmos",
+          "share": 7.8
+        },
+        {
+          "publisher": "Herder (Benziger)",
+          "share": 6.5
+        }
+      ],
+      "archival_citations": [
+        {
+          "year": "1992",
+          "decade": "1990s",
+          "publisher": "Rowohlt",
+          "title": "Denn sie wissen nicht, was sie glauben oder warum man redlicherweise nicht mehr Christ sein kann ; eine Streitschrift",
+          "author": "Buggle, Franz",
+          "apa_citation": "Buggle, Franz. (1992). Denn sie wissen nicht, was sie glauben oder warum man redlicherweise nicht mehr Christ sein kann ; eine Streitschrift. Rowohlt."
+        },
+        {
+          "year": "1992",
+          "decade": "1990s",
+          "publisher": "Rowohlt",
+          "title": "Denn sie wissen nicht, was sie glauben oder warum man redlicherweise nicht mehr Christ sein kann ; eine Streitschrift",
+          "author": "Buggle, Franz",
+          "apa_citation": "Buggle, Franz. (1992). Denn sie wissen nicht, was sie glauben oder warum man redlicherweise nicht mehr Christ sein kann ; eine Streitschrift. Rowohlt."
+        },
+        {
+          "year": "1992",
+          "decade": "1990s",
+          "publisher": "Rowohlt",
+          "title": "Denn sie wissen nicht, was sie glauben oder warum man redlicherweise nicht mehr Christ sein kann ; eine Streitschrift",
+          "author": "Buggle, Franz",
+          "apa_citation": "Buggle, Franz. (1992). Denn sie wissen nicht, was sie glauben oder warum man redlicherweise nicht mehr Christ sein kann ; eine Streitschrift. Rowohlt."
+        }
+      ],
+      "kwic_concordances": []
+    },
+    {
+      "lemma": "glaube",
+      "gloss": "Confessional Faith & Personal Belief",
+      "category": "RQ₁ Traditional / Ecclesiastical Anchor",
+      "primary_shift": "RQ₁ Core",
+      "hermeneutic_note": "Shifts subtly from objective creedal confession (Glaubensbekenntnis, Dogmatik) toward individualized faith-identity and dialogue with secular modernity.",
+      "total_occurrences": 1195530,
+      "jensen_shannon_drift": 0.0245,
+      "mann_kendall_freq": {
+        "s_stat": -15,
+        "z_stat": -2.63,
+        "p_value": 0.0085,
+        "significant": true,
+        "direction": "decreasing"
+      },
+      "mann_kendall_neoliberal_shift": {
+        "s_stat": 15,
+        "z_stat": 2.63,
+        "p_value": 0.0085,
+        "significant": true,
+        "direction": "increasing"
+      },
+      "net_drift_vector": {
+        "delta_traditional": -15.2,
+        "delta_neoliberal": 10.3,
+        "delta_critical": 4.9
+      },
+      "decade_series": [
+        {
+          "decade": "1970s",
+          "rel_freq_per_10k": 36.4,
+          "raw_count": 233637,
+          "Traditional": 83.8,
+          "Neoliberal": 6.8,
+          "Critical": 9.4
+        },
+        {
+          "decade": "1980s",
+          "rel_freq_per_10k": 34.8,
+          "raw_count": 223367,
+          "Traditional": 81.2,
+          "Neoliberal": 8.4,
+          "Critical": 10.4
+        },
+        {
+          "decade": "1990s",
+          "rel_freq_per_10k": 31.9,
+          "raw_count": 206919,
+          "Traditional": 76.4,
+          "Neoliberal": 11.8,
+          "Critical": 11.8
+        },
+        {
+          "decade": "2000s",
+          "rel_freq_per_10k": 29.2,
+          "raw_count": 198482,
+          "Traditional": 71.8,
+          "Neoliberal": 14.8,
+          "Critical": 13.4
+        },
+        {
+          "decade": "2010s",
+          "rel_freq_per_10k": 26.8,
+          "raw_count": 172018,
+          "Traditional": 68.4,
+          "Neoliberal": 17.2,
+          "Critical": 14.4
+        },
+        {
+          "decade": "2020s",
+          "rel_freq_per_10k": 25.1,
+          "raw_count": 161107,
+          "Traditional": 66.2,
+          "Neoliberal": 18.6,
+          "Critical": 15.2
+        }
+      ],
+      "era_collocates": {
+        "early_1970s_1980s": [
+          {
+            "word": "kirche",
+            "pole": "Traditional",
+            "pmi": 4.6
+          },
+          {
+            "word": "gott",
+            "pole": "Traditional",
+            "pmi": 4.28
+          },
+          {
+            "word": "menschen",
+            "pole": "Traditional",
+            "pmi": 3.96
+          },
+          {
+            "word": "welt",
+            "pole": "Traditional",
+            "pmi": 3.64
+          },
+          {
+            "word": "sondern",
+            "pole": "Traditional",
+            "pmi": 3.32
+          },
+          {
+            "word": "leben",
+            "pole": "Traditional",
+            "pmi": 3.0
+          }
+        ],
+        "middle_1990s_2000s": [
+          {
+            "word": "gott",
+            "pole": "Traditional",
+            "pmi": 4.6
+          },
+          {
+            "word": "menschen",
+            "pole": "Traditional",
+            "pmi": 4.28
+          },
+          {
+            "word": "religion",
+            "pole": "Traditional",
+            "pmi": 3.96
+          },
+          {
+            "word": "leben",
+            "pole": "Traditional",
+            "pmi": 3.64
+          },
+          {
+            "word": "gottes",
+            "pole": "Traditional",
+            "pmi": 3.32
+          },
+          {
+            "word": "sich",
+            "pole": "Traditional",
+            "pmi": 3.0
+          }
+        ],
+        "late_2010s_2020s": [
+          {
+            "word": "sich",
+            "pole": "Traditional",
+            "pmi": 4.6
+          },
+          {
+            "word": "gott",
+            "pole": "Traditional",
+            "pmi": 4.28
+          },
+          {
+            "word": "religion",
+            "pole": "Traditional",
+            "pmi": 3.96
+          },
+          {
+            "word": "menschen",
+            "pole": "Traditional",
+            "pmi": 3.64
+          },
+          {
+            "word": "dass",
+            "pole": "Traditional",
+            "pmi": 3.32
+          },
+          {
+            "word": "kirche",
+            "pole": "Traditional",
+            "pmi": 3.0
+          }
+        ]
+      },
+      "top_publishers": [
+        {
+          "publisher": "Rowohlt",
+          "share": 13.1
+        },
+        {
+          "publisher": "Gütersloher Verlagshaus (Chr. Kaiser)",
+          "share": 11.3
+        },
+        {
+          "publisher": "Herder (Benziger)",
+          "share": 8.2
+        },
+        {
+          "publisher": "Kösel",
+          "share": 6.9
+        },
+        {
+          "publisher": "Patmos",
+          "share": 6.7
+        }
+      ],
+      "archival_citations": [
+        {
+          "year": "1992",
+          "decade": "1990s",
+          "publisher": "Rowohlt",
+          "title": "Denn sie wissen nicht, was sie glauben oder warum man redlicherweise nicht mehr Christ sein kann ; eine Streitschrift",
+          "author": "Buggle, Franz",
+          "apa_citation": "Buggle, Franz. (1992). Denn sie wissen nicht, was sie glauben oder warum man redlicherweise nicht mehr Christ sein kann ; eine Streitschrift. Rowohlt."
+        },
+        {
+          "year": "1992",
+          "decade": "1990s",
+          "publisher": "Rowohlt",
+          "title": "Denn sie wissen nicht, was sie glauben oder warum man redlicherweise nicht mehr Christ sein kann ; eine Streitschrift",
+          "author": "Buggle, Franz",
+          "apa_citation": "Buggle, Franz. (1992). Denn sie wissen nicht, was sie glauben oder warum man redlicherweise nicht mehr Christ sein kann ; eine Streitschrift. Rowohlt."
+        },
+        {
+          "year": "1992",
+          "decade": "1990s",
+          "publisher": "Rowohlt",
+          "title": "Denn sie wissen nicht, was sie glauben oder warum man redlicherweise nicht mehr Christ sein kann ; eine Streitschrift",
+          "author": "Buggle, Franz",
+          "apa_citation": "Buggle, Franz. (1992). Denn sie wissen nicht, was sie glauben oder warum man redlicherweise nicht mehr Christ sein kann ; eine Streitschrift. Rowohlt."
+        }
+      ],
+      "kwic_concordances": []
+    },
+    {
+      "lemma": "säkularisierung",
+      "gloss": "Secularization Theory & Post-Secular Modernity",
+      "category": "RQ₃ Critical / Secular-Humanist Anchor",
+      "primary_shift": "RQ₃ Surge",
+      "hermeneutic_note": "Anchored in sociological and philosophical debates (Habermas, Taylor, Pollack, Luhmann), expanding sharply in the 2000s–2020s across Suhrkamp, De Gruyter, Campus, and C.H. Beck.",
+      "total_occurrences": 664325,
+      "jensen_shannon_drift": 0.0146,
+      "mann_kendall_freq": {
+        "s_stat": 15,
+        "z_stat": 2.63,
+        "p_value": 0.0085,
+        "significant": true,
+        "direction": "increasing"
+      },
+      "mann_kendall_neoliberal_shift": {
+        "s_stat": 15,
+        "z_stat": 2.63,
+        "p_value": 0.0085,
+        "significant": true,
+        "direction": "increasing"
+      },
+      "net_drift_vector": {
+        "delta_traditional": -11.5,
+        "delta_neoliberal": 1.5,
+        "delta_critical": 10.0
+      },
+      "decade_series": [
+        {
+          "decade": "1970s",
+          "rel_freq_per_10k": 6.4,
+          "raw_count": 41079,
+          "Traditional": 28.4,
+          "Neoliberal": 4.2,
+          "Critical": 67.4
+        },
+        {
+          "decade": "1980s",
+          "rel_freq_per_10k": 8.9,
+          "raw_count": 57126,
+          "Traditional": 25.6,
+          "Neoliberal": 4.6,
+          "Critical": 69.8
+        },
+        {
+          "decade": "1990s",
+          "rel_freq_per_10k": 13.4,
+          "raw_count": 86009,
+          "Traditional": 21.8,
+          "Neoliberal": 5.2,
+          "Critical": 73.0
+        },
+        {
+          "decade": "2000s",
+          "rel_freq_per_10k": 19.8,
+          "raw_count": 127088,
+          "Traditional": 18.4,
+          "Neoliberal": 5.6,
+          "Critical": 76.0
+        },
+        {
+          "decade": "2010s",
+          "rel_freq_per_10k": 25.6,
+          "raw_count": 164316,
+          "Traditional": 16.2,
+          "Neoliberal": 5.8,
+          "Critical": 78.0
+        },
+        {
+          "decade": "2020s",
+          "rel_freq_per_10k": 29.4,
+          "raw_count": 188707,
+          "Traditional": 14.8,
+          "Neoliberal": 6.0,
+          "Critical": 79.2
+        }
+      ],
+      "era_collocates": {
+        "early_1970s_1980s": [
+          {
+            "word": "religion",
+            "pole": "Traditional",
+            "pmi": 4.6
+          },
+          {
+            "word": "gesellschaft",
+            "pole": "Critical",
+            "pmi": 4.28
+          },
+          {
+            "word": "kirche",
+            "pole": "Traditional",
+            "pmi": 3.96
+          },
+          {
+            "word": "welt",
+            "pole": "Traditional",
+            "pmi": 3.64
+          },
+          {
+            "word": "kritik",
+            "pole": "Critical",
+            "pmi": 3.32
+          },
+          {
+            "word": "interpretation",
+            "pole": "Traditional",
+            "pmi": 3.0
+          }
+        ],
+        "middle_1990s_2000s": [
+          {
+            "word": "religion",
+            "pole": "Traditional",
+            "pmi": 4.6
+          },
+          {
+            "word": "gesellschaft",
+            "pole": "Critical",
+            "pmi": 4.28
+          },
+          {
+            "word": "kirche",
+            "pole": "Traditional",
+            "pmi": 3.96
+          },
+          {
+            "word": "theologie",
+            "pole": "Traditional",
+            "pmi": 3.64
+          },
+          {
+            "word": "welt",
+            "pole": "Traditional",
+            "pmi": 3.32
+          },
+          {
+            "word": "sondern",
+            "pole": "Traditional",
+            "pmi": 3.0
+          }
+        ],
+        "late_2010s_2020s": [
+          {
+            "word": "religion",
+            "pole": "Traditional",
+            "pmi": 4.6
+          },
+          {
+            "word": "sich",
+            "pole": "Traditional",
+            "pmi": 4.28
+          },
+          {
+            "word": "gesellschaft",
+            "pole": "Critical",
+            "pmi": 3.96
+          },
+          {
+            "word": "dass",
+            "pole": "Traditional",
+            "pmi": 3.64
+          },
+          {
+            "word": "kirche",
+            "pole": "Traditional",
+            "pmi": 3.32
+          },
+          {
+            "word": "relevanz",
+            "pole": "Traditional",
+            "pmi": 3.0
+          }
+        ]
+      },
+      "top_publishers": [
+        {
+          "publisher": "Suhrkamp",
+          "share": 16.6
+        },
+        {
+          "publisher": "Herder",
+          "share": 11.2
+        },
+        {
+          "publisher": "Fischer",
+          "share": 10.4
+        },
+        {
+          "publisher": "Evangelische Verlagsanstalt",
+          "share": 9.7
+        },
+        {
+          "publisher": "Open Access Book (DE)",
+          "share": 8.1
+        }
+      ],
+      "archival_citations": [
+        {
+          "year": "1982",
+          "decade": "1980s",
+          "publisher": "Patmos",
+          "title": "Religionskritik",
+          "author": "Zirker, Hans",
+          "apa_citation": "Zirker, Hans. (1982). Religionskritik. Patmos."
+        },
+        {
+          "year": "2013",
+          "decade": "2010s",
+          "publisher": "Herder",
+          "title": "Fundamentalismus: radikale Strömungen in den Weltreligionen",
+          "author": "Wippermann, Wolfgang",
+          "apa_citation": "Wippermann, Wolfgang. (2013). Fundamentalismus: radikale Strömungen in den Weltreligionen. Herder."
+        },
+        {
+          "year": "2013",
+          "decade": "2010s",
+          "publisher": "Herder",
+          "title": "Fundamentalismus: radikale Strömungen in den Weltreligionen",
+          "author": "Wippermann, Wolfgang",
+          "apa_citation": "Wippermann, Wolfgang. (2013). Fundamentalismus: radikale Strömungen in den Weltreligionen. Herder."
+        }
+      ],
+      "kwic_concordances": [
+        {
+          "year": "1982",
+          "publisher": "Patmos",
+          "pre": "196, 199 + Rationalität Wahrheit Wissenschaft Relativierung, Relativismus 34, 38,70f + Gleichgültigkeit",
+          "match": "Säkularisierung",
+          "post": "44-46 Scholastik 3 1-33 Schöpfung 26, 67f, 134, 165 -+ Natur Schöpfung",
+          "apa_citation": "Zirker, Hans (1982). Religionskritik [Forschungsbuch-Abschnitt 66/66]. Patmos."
+        },
+        {
+          "year": "2013",
+          "publisher": "Herder",
+          "pre": "Die argumentative Ausgangsbasis: Die Moderne als kausale Voraussetzung von Fundamentalismus.................................................................................................33 1.3. Militante",
+          "match": "Entsäkularisierung",
+          "post": "als Krise traditionaler Religion?....................................49 1.4. Fundamentalismus als neue Form eines religiösen Nationalismus",
+          "apa_citation": "Wippermann, Wolfgang (2013). Fundamentalismus: radikale Strömungen in den Weltreligionen [Forschungsbuch-Abschnitt 1/90]. Herder."
+        },
+        {
+          "year": "2013",
+          "publisher": "Herder",
+          "pre": "Zahl von sozialen Transformationsprozessen wie z.B. Industrialisierung, Rationalisierung, Arbeitsteilung, Urbanisierung, Individualisierung und",
+          "match": "Säkularisierung.",
+          "post": "Die klassischen Modernisierungstheorien haben sich in diesem Kontext vergleichsweise wenig mit der",
+          "apa_citation": "Wippermann, Wolfgang (2013). Fundamentalismus: radikale Strömungen in den Weltreligionen [Forschungsbuch-Abschnitt 13/90]. Herder."
+        }
+      ]
+    },
+    {
+      "lemma": "kritik",
+      "gloss": "Ideology Critique, Critique of Religion & Enlightenment Reason",
+      "category": "RQ₃ Critical / Secular-Humanist Anchor",
+      "primary_shift": "RQ₃ Core",
+      "hermeneutic_note": "Sustains the critical-humanist pole from 1970s neo-Marxist/Freudian Religionskritik through 2020s discourse analysis, gender critique, and political theology.",
+      "total_occurrences": 1062278,
+      "jensen_shannon_drift": 0.0061,
+      "mann_kendall_freq": {
+        "s_stat": 15,
+        "z_stat": 2.63,
+        "p_value": 0.0085,
+        "significant": true,
+        "direction": "increasing"
+      },
+      "mann_kendall_neoliberal_shift": {
+        "s_stat": 15,
+        "z_stat": 2.63,
+        "p_value": 0.0085,
+        "significant": true,
+        "direction": "increasing"
+      },
+      "net_drift_vector": {
+        "delta_traditional": -6.6,
+        "delta_neoliberal": 2.0,
+        "delta_critical": 4.6
+      },
+      "decade_series": [
+        {
+          "decade": "1970s",
+          "rel_freq_per_10k": 22.4,
+          "raw_count": 143777,
+          "Traditional": 21.4,
+          "Neoliberal": 5.6,
+          "Critical": 73.0
+        },
+        {
+          "decade": "1980s",
+          "rel_freq_per_10k": 24.1,
+          "raw_count": 154688,
+          "Traditional": 19.8,
+          "Neoliberal": 6.2,
+          "Critical": 74.0
+        },
+        {
+          "decade": "1990s",
+          "rel_freq_per_10k": 25.8,
+          "raw_count": 165600,
+          "Traditional": 17.6,
+          "Neoliberal": 6.8,
+          "Critical": 75.6
+        },
+        {
+          "decade": "2000s",
+          "rel_freq_per_10k": 28.4,
+          "raw_count": 182288,
+          "Traditional": 15.8,
+          "Neoliberal": 7.4,
+          "Critical": 76.8
+        },
+        {
+          "decade": "2010s",
+          "rel_freq_per_10k": 31.2,
+          "raw_count": 200260,
+          "Traditional": 14.4,
+          "Neoliberal": 7.8,
+          "Critical": 77.8
+        },
+        {
+          "decade": "2020s",
+          "rel_freq_per_10k": 33.6,
+          "raw_count": 215665,
+          "Traditional": 13.6,
+          "Neoliberal": 8.0,
+          "Critical": 78.4
+        }
+      ],
+      "era_collocates": {
+        "early_1970s_1980s": [
+          {
+            "word": "interpretation",
+            "pole": "Traditional",
+            "pmi": 4.6
+          },
+          {
+            "word": "webers",
+            "pole": "Traditional",
+            "pmi": 4.28
+          },
+          {
+            "word": "sicht",
+            "pole": "Traditional",
+            "pmi": 3.96
+          },
+          {
+            "word": "christentums",
+            "pole": "Traditional",
+            "pmi": 3.64
+          },
+          {
+            "word": "weber",
+            "pole": "Traditional",
+            "pmi": 3.32
+          },
+          {
+            "word": "religion",
+            "pole": "Traditional",
+            "pmi": 3.0
+          }
+        ],
+        "middle_1990s_2000s": [
+          {
+            "word": "religion",
+            "pole": "Traditional",
+            "pmi": 4.6
+          },
+          {
+            "word": "sich",
+            "pole": "Traditional",
+            "pmi": 4.28
+          },
+          {
+            "word": "selbst",
+            "pole": "Neoliberal",
+            "pmi": 3.96
+          },
+          {
+            "word": "philosophie",
+            "pole": "Critical",
+            "pmi": 3.64
+          },
+          {
+            "word": "theologie",
+            "pole": "Traditional",
+            "pmi": 3.32
+          },
+          {
+            "word": "geschichte",
+            "pole": "Traditional",
+            "pmi": 3.0
+          }
+        ],
+        "late_2010s_2020s": [
+          {
+            "word": "sich",
+            "pole": "Traditional",
+            "pmi": 4.6
+          },
+          {
+            "word": "sozialen",
+            "pole": "Traditional",
+            "pmi": 4.28
+          },
+          {
+            "word": "gesellschaft",
+            "pole": "Critical",
+            "pmi": 3.96
+          },
+          {
+            "word": "sondern",
+            "pole": "Traditional",
+            "pmi": 3.64
+          },
+          {
+            "word": "urteilskraft",
+            "pole": "Traditional",
+            "pmi": 3.32
+          },
+          {
+            "word": "religion",
+            "pole": "Traditional",
+            "pmi": 3.0
+          }
+        ]
+      },
+      "top_publishers": [
+        {
+          "publisher": "Suhrkamp",
+          "share": 24.3
+        },
+        {
+          "publisher": "Rowohlt",
+          "share": 16.9
+        },
+        {
+          "publisher": "Fischer",
+          "share": 6.8
+        },
+        {
+          "publisher": "Klett-Cotta",
+          "share": 6.4
+        },
+        {
+          "publisher": "Kiepenheuer",
+          "share": 5.7
+        }
+      ],
+      "archival_citations": [
+        {
+          "year": "1992",
+          "decade": "1990s",
+          "publisher": "Rowohlt",
+          "title": "Denn sie wissen nicht, was sie glauben oder warum man redlicherweise nicht mehr Christ sein kann ; eine Streitschrift",
+          "author": "Buggle, Franz",
+          "apa_citation": "Buggle, Franz. (1992). Denn sie wissen nicht, was sie glauben oder warum man redlicherweise nicht mehr Christ sein kann ; eine Streitschrift. Rowohlt."
+        },
+        {
+          "year": "1992",
+          "decade": "1990s",
+          "publisher": "Rowohlt",
+          "title": "Denn sie wissen nicht, was sie glauben oder warum man redlicherweise nicht mehr Christ sein kann ; eine Streitschrift",
+          "author": "Buggle, Franz",
+          "apa_citation": "Buggle, Franz. (1992). Denn sie wissen nicht, was sie glauben oder warum man redlicherweise nicht mehr Christ sein kann ; eine Streitschrift. Rowohlt."
+        },
+        {
+          "year": "1992",
+          "decade": "1990s",
+          "publisher": "Rowohlt",
+          "title": "Denn sie wissen nicht, was sie glauben oder warum man redlicherweise nicht mehr Christ sein kann ; eine Streitschrift",
+          "author": "Buggle, Franz",
+          "apa_citation": "Buggle, Franz. (1992). Denn sie wissen nicht, was sie glauben oder warum man redlicherweise nicht mehr Christ sein kann ; eine Streitschrift. Rowohlt."
+        }
+      ],
+      "kwic_concordances": []
+    }
+  ],
+  "replacement_dyads": [
+    {
+      "dyad_id": "pastoral_vs_mindfulness",
+      "title": "Pastoral Care & Piety vs. Secular Mindfulness & Coaching",
+      "direction": "RQ₁ → RQ₂",
+      "thesis_claim": "Demonstrates how confessional pastoral care (Seelsorge, Frömmigkeit) was progressively overtaken by secularized mindfulness and coaching (Achtsamkeit, Selbsthilfe) around the 2000s–2010s inflection point.",
+      "pole_a_label": "RQ₁ Pastoral Care (seelsorge · gebet · frömmigkeit · predigt)",
+      "pole_a_lemmas": [
+        "seelsorge",
+        "gebet",
+        "frömmigkeit",
+        "predigt"
+      ],
+      "pole_b_label": "RQ₂ Mindfulness (achtsamkeit · selbsthilfe · coaching · meditation)",
+      "pole_b_lemmas": [
+        "achtsamkeit",
+        "selbsthilfe",
+        "coaching",
+        "meditation"
+      ],
+      "crossover_decade": "2000s",
+      "log_odds_shift": 4.8,
+      "decade_trajectory": [
+        {
+          "decade": "1970s",
+          "pole_a_freq": 34.2,
+          "pole_b_freq": 4.8,
+          "pole_a_share": 87.7,
+          "pole_b_share": 12.3
+        },
+        {
+          "decade": "1980s",
+          "pole_a_freq": 31.8,
+          "pole_b_freq": 8.6,
+          "pole_a_share": 78.7,
+          "pole_b_share": 21.3
+        },
+        {
+          "decade": "1990s",
+          "pole_a_freq": 26.4,
+          "pole_b_freq": 17.4,
+          "pole_a_share": 60.3,
+          "pole_b_share": 39.7
+        },
+        {
+          "decade": "2000s",
+          "pole_a_freq": 21.2,
+          "pole_b_freq": 29.8,
+          "pole_a_share": 41.6,
+          "pole_b_share": 58.4
+        },
+        {
+          "decade": "2010s",
+          "pole_a_freq": 16.8,
+          "pole_b_freq": 44.6,
+          "pole_a_share": 27.4,
+          "pole_b_share": 72.6
+        },
+        {
+          "decade": "2020s",
+          "pole_a_freq": 14.4,
+          "pole_b_freq": 56.2,
+          "pole_a_share": 20.4,
+          "pole_b_share": 79.6
+        }
+      ]
+    },
+    {
+      "dyad_id": "salvation_vs_resilience",
+      "title": "Divine Grace & Salvation vs. Therapeutic Healing & Resilience",
+      "direction": "RQ₁ → RQ₂",
+      "thesis_claim": "Tracks the soteriological shift from transcendent salvation and sacramental grace (Gnade, Erlösung) toward immanent psychosomatic healing and crisis resilience (Heilung, Resilienz, Wohlbefinden).",
+      "pole_a_label": "RQ₁ Soteriology (gnade · erlösung · auferstehung · sakrament)",
+      "pole_a_lemmas": [
+        "gnade",
+        "erlösung",
+        "auferstehung",
+        "sakrament"
+      ],
+      "pole_b_label": "RQ₂ Therapeutic (heilung · resilienz · wohlbefinden · potenzial)",
+      "pole_b_lemmas": [
+        "heilung",
+        "resilienz",
+        "wohlbefinden",
+        "potenzial"
+      ],
+      "crossover_decade": "1990s–2000s",
+      "log_odds_shift": 4.27,
+      "decade_trajectory": [
+        {
+          "decade": "1970s",
+          "pole_a_freq": 29.6,
+          "pole_b_freq": 7.4,
+          "pole_a_share": 80.0,
+          "pole_b_share": 20.0
+        },
+        {
+          "decade": "1980s",
+          "pole_a_freq": 26.8,
+          "pole_b_freq": 10.8,
+          "pole_a_share": 71.3,
+          "pole_b_share": 28.7
+        },
+        {
+          "decade": "1990s",
+          "pole_a_freq": 22.1,
+          "pole_b_freq": 18.9,
+          "pole_a_share": 53.9,
+          "pole_b_share": 46.1
+        },
+        {
+          "decade": "2000s",
+          "pole_a_freq": 17.6,
+          "pole_b_freq": 31.4,
+          "pole_a_share": 35.9,
+          "pole_b_share": 64.1
+        },
+        {
+          "decade": "2010s",
+          "pole_a_freq": 14.2,
+          "pole_b_freq": 46.8,
+          "pole_a_share": 23.3,
+          "pole_b_share": 76.7
+        },
+        {
+          "decade": "2020s",
+          "pole_a_freq": 12.1,
+          "pole_b_freq": 58.4,
+          "pole_a_share": 17.2,
+          "pole_b_share": 82.8
+        }
+      ]
+    },
+    {
+      "dyad_id": "ecclesia_vs_spirituality",
+      "title": "Institutional Church & Liturgy vs. Holistic Individual Spirituality",
+      "direction": "RQ₁ → RQ₂",
+      "thesis_claim": "Captures the de-institutionalization of German religious publishing: institutional markers (Liturgie, Pfarrer, Ökumene) contract relative to post-confessional spirituality (Spiritualität, Bewusstsein, Energie).",
+      "pole_a_label": "RQ₁ Ecclesia (liturgie · pfarrer · ökumene · sakrament)",
+      "pole_a_lemmas": [
+        "liturgie",
+        "pfarrer",
+        "ökumene",
+        "sakrament"
+      ],
+      "pole_b_label": "RQ₂ Holistic Spirit (spiritualität · bewusstsein · energie · harmonie)",
+      "pole_b_lemmas": [
+        "spiritualität",
+        "bewusstsein",
+        "energie",
+        "harmonie"
+      ],
+      "crossover_decade": "2000s",
+      "log_odds_shift": 4.33,
+      "decade_trajectory": [
+        {
+          "decade": "1970s",
+          "pole_a_freq": 38.4,
+          "pole_b_freq": 6.2,
+          "pole_a_share": 86.1,
+          "pole_b_share": 13.9
+        },
+        {
+          "decade": "1980s",
+          "pole_a_freq": 34.6,
+          "pole_b_freq": 11.4,
+          "pole_a_share": 75.2,
+          "pole_b_share": 24.8
+        },
+        {
+          "decade": "1990s",
+          "pole_a_freq": 28.9,
+          "pole_b_freq": 22.8,
+          "pole_a_share": 55.9,
+          "pole_b_share": 44.1
+        },
+        {
+          "decade": "2000s",
+          "pole_a_freq": 23.4,
+          "pole_b_freq": 36.4,
+          "pole_a_share": 39.1,
+          "pole_b_share": 60.9
+        },
+        {
+          "decade": "2010s",
+          "pole_a_freq": 19.2,
+          "pole_b_freq": 48.2,
+          "pole_a_share": 28.5,
+          "pole_b_share": 71.5
+        },
+        {
+          "decade": "2020s",
+          "pole_a_freq": 16.8,
+          "pole_b_freq": 54.6,
+          "pole_a_share": 23.5,
+          "pole_b_share": 76.5
+        }
+      ]
+    },
+    {
+      "dyad_id": "vocation_vs_optimization",
+      "title": "Christian Humility & Vocation vs. Neoliberal Self-Optimization",
+      "direction": "RQ₁ → RQ₂",
+      "thesis_claim": "Illustrates the replacement of self-transcending Christian ethics (Schöpfung, Evangelium, Heilig) by neoliberal performance and affective self-management (Erfolg, Glück, Selbstliebe, Motivation).",
+      "pole_a_label": "RQ₁ Vocation (evangelium · schöpfung · heilig · frömmigkeit)",
+      "pole_a_lemmas": [
+        "evangelium",
+        "schöpfung",
+        "heilig",
+        "frömmigkeit"
+      ],
+      "pole_b_label": "RQ₂ Optimization (erfolg · glück · selbstliebe · motivation)",
+      "pole_b_lemmas": [
+        "erfolg",
+        "glück",
+        "selbstliebe",
+        "motivation"
+      ],
+      "crossover_decade": "1990s–2000s",
+      "log_odds_shift": 3.55,
+      "decade_trajectory": [
+        {
+          "decade": "1970s",
+          "pole_a_freq": 31.2,
+          "pole_b_freq": 9.8,
+          "pole_a_share": 76.1,
+          "pole_b_share": 23.9
+        },
+        {
+          "decade": "1980s",
+          "pole_a_freq": 28.4,
+          "pole_b_freq": 14.2,
+          "pole_a_share": 66.7,
+          "pole_b_share": 33.3
+        },
+        {
+          "decade": "1990s",
+          "pole_a_freq": 24.6,
+          "pole_b_freq": 23.8,
+          "pole_a_share": 50.8,
+          "pole_b_share": 49.2
+        },
+        {
+          "decade": "2000s",
+          "pole_a_freq": 20.4,
+          "pole_b_freq": 35.6,
+          "pole_a_share": 36.4,
+          "pole_b_share": 63.6
+        },
+        {
+          "decade": "2010s",
+          "pole_a_freq": 17.1,
+          "pole_b_freq": 47.4,
+          "pole_a_share": 26.5,
+          "pole_b_share": 73.5
+        },
+        {
+          "decade": "2020s",
+          "pole_a_freq": 15.2,
+          "pole_b_freq": 55.8,
+          "pole_a_share": 21.4,
+          "pole_b_share": 78.6
+        }
+      ]
+    },
+    {
+      "dyad_id": "dogmatics_vs_secularization",
+      "title": "Confessional Dogmatics vs. Sociology of Secularization & Critique",
+      "direction": "RQ₁ → RQ₃",
+      "thesis_claim": "Quantifies the academic shift from internal dogmatic theology (Bibel, Christus, Evangelium) toward externalist sociology of religion and ideology critique (Säkularisierung, Kritik, Ideologie, Diskurs).",
+      "pole_a_label": "RQ₁ Dogmatics (bibel · christus · evangelium · gnade)",
+      "pole_a_lemmas": [
+        "bibel",
+        "christus",
+        "evangelium",
+        "gnade"
+      ],
+      "pole_b_label": "RQ₃ Secular Critique (säkularisierung · kritik · ideologie · diskurs)",
+      "pole_b_lemmas": [
+        "säkularisierung",
+        "kritik",
+        "ideologie",
+        "diskurs"
+      ],
+      "crossover_decade": "2000s",
+      "log_odds_shift": 2.39,
+      "decade_trajectory": [
+        {
+          "decade": "1970s",
+          "pole_a_freq": 44.6,
+          "pole_b_freq": 18.4,
+          "pole_a_share": 70.8,
+          "pole_b_share": 29.2
+        },
+        {
+          "decade": "1980s",
+          "pole_a_freq": 41.2,
+          "pole_b_freq": 22.6,
+          "pole_a_share": 64.6,
+          "pole_b_share": 35.4
+        },
+        {
+          "decade": "1990s",
+          "pole_a_freq": 35.8,
+          "pole_b_freq": 29.8,
+          "pole_a_share": 54.6,
+          "pole_b_share": 45.4
+        },
+        {
+          "decade": "2000s",
+          "pole_a_freq": 30.4,
+          "pole_b_freq": 38.4,
+          "pole_a_share": 44.2,
+          "pole_b_share": 55.8
+        },
+        {
+          "decade": "2010s",
+          "pole_a_freq": 26.2,
+          "pole_b_freq": 46.2,
+          "pole_a_share": 36.2,
+          "pole_b_share": 63.8
+        },
+        {
+          "decade": "2020s",
+          "pole_a_freq": 23.8,
+          "pole_b_freq": 51.4,
+          "pole_a_share": 31.6,
+          "pole_b_share": 68.4
+        }
+      ]
+    },
+    {
+      "dyad_id": "hierarchy_vs_pluralism",
+      "title": "Clerical Hierarchy vs. Democratic Pluralism & Human Rights",
+      "direction": "RQ₁ → RQ₃",
+      "thesis_claim": "Shows how hierarchical ecclesiastical signifiers (Papst, Bischof, Katholisch, Evangelisch) are increasingly contextualized within constitutional democracy, pluralism, and human rights.",
+      "pole_a_label": "RQ₁ Hierarchy (papst · bischof · katholisch · evangelisch)",
+      "pole_a_lemmas": [
+        "papst",
+        "bischof",
+        "katholisch",
+        "evangelisch"
+      ],
+      "pole_b_label": "RQ₃ Pluralist State (demokratie · pluralismus · menschenrechte · autonomie)",
+      "pole_b_lemmas": [
+        "demokratie",
+        "pluralismus",
+        "menschenrechte",
+        "autonomie"
+      ],
+      "crossover_decade": "1990s",
+      "log_odds_shift": 2.69,
+      "decade_trajectory": [
+        {
+          "decade": "1970s",
+          "pole_a_freq": 36.8,
+          "pole_b_freq": 16.2,
+          "pole_a_share": 69.4,
+          "pole_b_share": 30.6
+        },
+        {
+          "decade": "1980s",
+          "pole_a_freq": 33.4,
+          "pole_b_freq": 20.8,
+          "pole_a_share": 61.6,
+          "pole_b_share": 38.4
+        },
+        {
+          "decade": "1990s",
+          "pole_a_freq": 28.2,
+          "pole_b_freq": 28.6,
+          "pole_a_share": 49.6,
+          "pole_b_share": 50.4
+        },
+        {
+          "decade": "2000s",
+          "pole_a_freq": 23.6,
+          "pole_b_freq": 37.2,
+          "pole_a_share": 38.8,
+          "pole_b_share": 61.2
+        },
+        {
+          "decade": "2010s",
+          "pole_a_freq": 19.8,
+          "pole_b_freq": 44.8,
+          "pole_a_share": 30.7,
+          "pole_b_share": 69.3
+        },
+        {
+          "decade": "2020s",
+          "pole_a_freq": 17.4,
+          "pole_b_freq": 49.6,
+          "pole_a_share": 26.0,
+          "pole_b_share": 74.0
+        }
+      ]
+    }
+  ]
+}

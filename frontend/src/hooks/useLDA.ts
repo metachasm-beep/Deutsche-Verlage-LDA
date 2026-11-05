@@ -79,11 +79,22 @@ export const useLDA = () => {
   const [representativeDocs, setRepresentativeDocs] = useState<Record<number, any[]>>({});
   const [seedLexicons, setSeedLexicons] = useState<Record<string, string[]>>({});
   const [religiousBoostWords, setReligiousBoostWords] = useState<string[]>([]);
+  const [conceptualDrift, setConceptualDrift] = useState<any>(null);
   const [activeFilters, setActiveFilters] = useState<{
     year: number | null;
     decade: number | null;
     publishers: string[];
   }>({ year: null, decade: null, publishers: [] });
+
+  const fetchConceptualDrift = async () => {
+    try {
+      const res = await fetch(`${API_BASE}/api/conceptual-drift`);
+      const data = await res.json();
+      setConceptualDrift(data);
+    } catch (e) {
+      console.error("Failed to fetch conceptual drift", e);
+    }
+  };
 
   const fetchTrends = async () => {
     try {
@@ -244,11 +255,13 @@ export const useLDA = () => {
     representativeDocs,
     seedLexicons,
     religiousBoostWords,
+    conceptualDrift,
     activeFilters,
     fetchTrends,
     fetchSummary,
     fetchTopics,
     fetchCoherenceGrid,
+    fetchConceptualDrift,
     runLDA,
     uploadDataset,
     resetToMock

@@ -726,6 +726,30 @@ async def data_summary():
     return {"source": "Unknown Data", "count": 0, "publishers": []}
 
 
+@app.get("/api/conceptual-drift")
+async def get_conceptual_drift(lemma: str = Query(None)):
+    """
+    Returns the Diachronic Word-Shift & Conceptual Drift telemetry (1970s–2020s)
+    including 20 tracked German signifiers (Pr(RQ_m | w, Decade), relative frequency,
+    Jensen-Shannon drift, Mann-Kendall trend p-values, 3-era co-occurrence collocates)
+    and 6 canonical RQ1 -> RQ2/RQ3 Conceptual Replacement Dyads.
+    """
+    drift_path = os.path.join(config.BASE_DIR, "app", "conceptual_drift_report.json")
+    if os.path.exists(drift_path):
+        try:
+            import json
+            with open(drift_path, "r", encoding="utf-8") as df:
+                data = json.load(df)
+            if lemma:
+                q = lemma.strip().lower()
+                matched = [s for s in data.get("signifiers", []) if s.get("lemma") == q]
+                return {**data, "selected_signifier": matched[0] if matched else None}
+            return data
+        except Exception as e:
+            return {"error": str(e), "signifiers": [], "replacement_dyads": []}
+    return {"signifiers": [], "replacement_dyads": []}
+
+
 # Serve the React frontend (Mount after routes to avoid overlap)
 if os.path.exists("frontend/dist"):
     app.mount("/", StaticFiles(directory="frontend/dist", html=True), name="frontend")
