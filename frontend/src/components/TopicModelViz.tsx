@@ -39,6 +39,7 @@ export interface RepresentativeDoc {
 
 export interface Topic {
   id: number;
+  prevalence?: number;
   keywords: Keyword[];
   archetype?: ArchetypeInfo;
   seeded_prior?: string;

@@ -38,6 +38,7 @@ import { TrendsGraph } from './components/TrendsGraph';
 import { TopicModelViz, getArchetypeTheme, type Topic, type RepresentativeDoc, type Keyword } from './components/TopicModelViz';
 import { PipelineExplainer } from './components/PipelineExplainer';
 import { ConceptualDriftExplorer } from './components/ConceptualDriftExplorer';
+import { InterTopicDistanceMap } from './components/InterTopicDistanceMap';
 import clsx from 'clsx';
 
 function App() {
@@ -83,7 +84,9 @@ function App() {
   }, []);
 
   // 3-Pane Split-View IDE State
-  const [workspaceMode, setWorkspaceMode] = useState<'bento' | 'drift' | 'pipeline' | 'topics' | 'matrix'>('bento');
+  const [workspaceMode, setWorkspaceMode] = useState<
+    'bento' | 'distance' | 'drift' | 'pipeline' | 'topics' | 'matrix'
+  >('bento');
   const [leftSidebarOpen, setLeftSidebarOpen] = useState<boolean>(true);
   const [rightInspectorOpen, setRightInspectorOpen] = useState<boolean>(true);
   const [monographBannerExpanded, setMonographBannerExpanded] = useState<boolean>(false);
@@ -346,6 +349,18 @@ function App() {
           >
             <LayoutGrid className="w-3.5 h-3.5" />
             <span>Observatory Bento</span>
+          </button>
+          <button
+            onClick={() => setWorkspaceMode('distance')}
+            className={clsx(
+              'flex items-center gap-1.5 px-2.5 py-1 rounded-md font-mono text-[11px] transition-all cursor-pointer',
+              workspaceMode === 'distance'
+                ? 'bg-traditional text-obsidian-950 font-bold shadow-glow-gold'
+                : 'text-parchment-200 hover:text-parchment-50 hover:bg-white/[0.04]'
+            )}
+          >
+            <Compass className="w-3.5 h-3.5" />
+            <span>2D Distance Map</span>
           </button>
           <button
             onClick={() => setWorkspaceMode('drift')}
@@ -1332,6 +1347,16 @@ function App() {
                 </div>
               </div>
 
+              {/* pyLDAvis-Style 2D Inter-Topic Distance Map & λ-Relevance Salience Explorer */}
+              <InterTopicDistanceMap
+                topics={typedTopics}
+                selectedTopicIndex={safeTopicIndex}
+                onSelectTopicIndex={setSelectedTopicIndex}
+                ideologicalFilter={ideologicalFilter}
+                numTopics={numTopics}
+                ldaMode={ldaMode}
+              />
+
               {/* Diachronic Word-Shift & Conceptual Drift Explorer (1970s-2020s) */}
               <ConceptualDriftExplorer
                 driftData={conceptualDrift}
@@ -1358,6 +1383,20 @@ function App() {
                 religiousBoostWords={religiousBoostWords}
               />
             </>
+          )}
+
+          {/* =================================================================
+              WORKSPACE MODE 1Z: 2D INTER-TOPIC DISTANCE MAP (pyLDAvis)
+             ================================================================= */}
+          {workspaceMode === 'distance' && (
+            <InterTopicDistanceMap
+              topics={typedTopics}
+              selectedTopicIndex={safeTopicIndex}
+              onSelectTopicIndex={setSelectedTopicIndex}
+              ideologicalFilter={ideologicalFilter}
+              numTopics={numTopics}
+              ldaMode={ldaMode}
+            />
           )}
 
           {/* =================================================================
@@ -1398,15 +1437,25 @@ function App() {
               WORKSPACE MODE 2: TOPIC & LEXICAL DEEP-DIVE
              ================================================================= */}
           {workspaceMode === 'topics' && (
-            <TopicModelViz
-              topics={typedTopics}
-              loading={isTraining}
-              selectedYear={selectedYear}
-              selectedTopicIndex={safeTopicIndex}
-              onSelectTopicIndex={setSelectedTopicIndex}
-              ideologicalFilter={ideologicalFilter}
-              hideInlineInspector={false}
-            />
+            <div className="space-y-4">
+              <InterTopicDistanceMap
+                topics={typedTopics}
+                selectedTopicIndex={safeTopicIndex}
+                onSelectTopicIndex={setSelectedTopicIndex}
+                ideologicalFilter={ideologicalFilter}
+                numTopics={numTopics}
+                ldaMode={ldaMode}
+              />
+              <TopicModelViz
+                topics={typedTopics}
+                loading={isTraining}
+                selectedYear={selectedYear}
+                selectedTopicIndex={safeTopicIndex}
+                onSelectTopicIndex={setSelectedTopicIndex}
+                ideologicalFilter={ideologicalFilter}
+                hideInlineInspector={false}
+              />
+            </div>
           )}
 
           {/* =================================================================
