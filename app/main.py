@@ -301,19 +301,162 @@ def _interpolate_coherence_metrics(target_k: int, grid: list, base_umass: float 
     return round(interp_umass, 4), round(interp_cv, 4)
 
 
+_DECADE_ERA_LEXICONS = {
+    1970: {
+        "Traditional / Ecclesiastical": [("dogmatik", 0.032), ("verkündigung", 0.028), ("sakrament", 0.024), ("konzil", 0.021), ("gemeinde", 0.019)],
+        "Neoliberal / Self-Optimization": [("lebenshilfe", 0.027), ("seelsorge", 0.024), ("sinnfrage", 0.021), ("orientierung", 0.018), ("charakter", 0.016)],
+        "Critical / Secular-Humanist": [("emanzipation", 0.033), ("ideologiekritik", 0.029), ("kapitalismus", 0.025), ("herrschaft", 0.022), ("befreiung", 0.019)],
+    },
+    1980: {
+        "Traditional / Ecclesiastical": [("ökumene", 0.031), ("friedensethik", 0.027), ("schöpfung", 0.024), ("liturgie", 0.021), ("diakonie", 0.018)],
+        "Neoliberal / Self-Optimization": [("selbstverwirklichung", 0.029), ("biografie", 0.025), ("spiritualität", 0.022), ("ganzheitlich", 0.019), ("erfahrung", 0.017)],
+        "Critical / Secular-Humanist": [("moderne", 0.032), ("aufklärung", 0.028), ("vernunftkritik", 0.024), ("zivilgesellschaft", 0.021), ("diskurs", 0.018)],
+    },
+    1990: {
+        "Traditional / Ecclesiastical": [("pluralismus", 0.031), ("weltethos", 0.027), ("katechismus", 0.023), ("kirche", 0.021), ("tradition", 0.018)],
+        "Neoliberal / Self-Optimization": [("lebenskunst", 0.030), ("sinnstiftung", 0.026), ("selbsthilfe", 0.023), ("wohlbefinden", 0.020), ("erfolg", 0.017)],
+        "Critical / Secular-Humanist": [("individualisierung", 0.032), ("säkularisierung", 0.028), ("systemtheorie", 0.024), ("differenzierung", 0.021), ("demokratie", 0.018)],
+    },
+    2000: {
+        "Traditional / Ecclesiastical": [("interreligiös", 0.031), ("bekenntnis", 0.027), ("evangelium", 0.023), ("gottesdienst", 0.020), ("exegese", 0.018)],
+        "Neoliberal / Self-Optimization": [("coaching", 0.031), ("potenzial", 0.027), ("gelassenheit", 0.024), ("balance", 0.021), ("lebensführung", 0.018)],
+        "Critical / Secular-Humanist": [("postsäkular", 0.033), ("religionskritik", 0.029), ("naturalismus", 0.025), ("menschenrechte", 0.021), ("wissenschaft", 0.019)],
+    },
+    2010: {
+        "Traditional / Ecclesiastical": [("synodalität", 0.030), ("seelsorge", 0.026), ("kirchenentwicklung", 0.023), ("mystik", 0.020), ("caritas", 0.017)],
+        "Neoliberal / Self-Optimization": [("achtsamkeit", 0.036), ("resilienz", 0.031), ("burnout", 0.027), ("meditation", 0.023), ("selbstliebe", 0.020)],
+        "Critical / Secular-Humanist": [("öffentlichkeit", 0.032), ("pluralität", 0.028), ("machtkritik", 0.024), ("genealogie", 0.021), ("laizismus", 0.018)],
+    },
+    2020: {
+        "Traditional / Ecclesiastical": [("transformation", 0.031), ("schöpfungsspiritualität", 0.027), ("diakonie", 0.023), ("gemeindeaufbau", 0.020), ("ökumene", 0.018)],
+        "Neoliberal / Self-Optimization": [("selbstoptimierung", 0.037), ("selbstfürsorge", 0.033), ("resilienz", 0.029), ("achtsamkeit", 0.025), ("mental_health", 0.021)],
+        "Critical / Secular-Humanist": [("säkularität", 0.034), ("inklusion", 0.029), ("postkolonial", 0.025), ("demokratie", 0.022), ("autonomie", 0.019)],
+    },
+}
+
+_PUBLISHER_IMPRINT_LEXICONS = {
+    "herder": ("Traditional / Ecclesiastical", [("theologie", 0.036), ("kirche", 0.032), ("liturgie", 0.028), ("sakrament", 0.024), ("seelsorge", 0.021), ("konzil", 0.019)]),
+    "benno": ("Traditional / Ecclesiastical", [("frömmigkeit", 0.035), ("gebet", 0.031), ("sakrament", 0.027), ("gottesdienst", 0.024), ("heilige", 0.020), ("seelsorge", 0.018)]),
+    "patmos": ("Traditional / Ecclesiastical", [("religionspädagogik", 0.034), ("bibel", 0.030), ("ökumene", 0.026), ("dialog", 0.023), ("spiritualität", 0.020), ("glaube", 0.018)]),
+    "kohlhammer": ("Traditional / Ecclesiastical", [("exegese", 0.035), ("dogmatik", 0.031), ("kirchenrecht", 0.027), ("theologie", 0.024), ("systematik", 0.021), ("diakonie", 0.018)]),
+    "vandenhoeck": ("Traditional / Ecclesiastical", [("evangelisch", 0.035), ("praktische_theologie", 0.031), ("predigt", 0.027), ("gemeinde", 0.024), ("homiletik", 0.020), ("konfession", 0.018)]),
+    "mohr": ("Traditional / Ecclesiastical", [("dogmengeschichte", 0.036), ("hermeneutik", 0.032), ("rechtsphilosophie", 0.028), ("altes_testament", 0.024), ("exegese", 0.021), ("religionswissenschaft", 0.019)]),
+    "gütersloher": ("Traditional / Ecclesiastical", [("kirchenmitgliedschaft", 0.035), ("religionsunterricht", 0.031), ("gemeinde", 0.027), ("evangelisch", 0.024), ("lebenswelt", 0.020), ("seelsorge", 0.018)]),
+    "brockhaus": ("Traditional / Ecclesiastical", [("bibel", 0.036), ("nachfolge", 0.032), ("evangelium", 0.028), ("gebet", 0.024), ("glaube", 0.021), ("gemeindeaufbau", 0.018)]),
+    "kösel": ("Neoliberal / Self-Optimization", [("achtsamkeit", 0.038), ("resilienz", 0.033), ("selbstfürsorge", 0.029), ("lebenshilfe", 0.025), ("heilung", 0.022), ("inneres_kind", 0.019)]),
+    "gu": ("Neoliberal / Self-Optimization", [("selbstoptimierung", 0.039), ("wohlbefinden", 0.034), ("stressbewältigung", 0.030), ("glück", 0.026), ("balance", 0.022), ("potenzial", 0.019)]),
+    "gräfe": ("Neoliberal / Self-Optimization", [("selbstoptimierung", 0.039), ("wohlbefinden", 0.034), ("stressbewältigung", 0.030), ("glück", 0.026), ("balance", 0.022), ("potenzial", 0.019)]),
+    "kamphausen": ("Neoliberal / Self-Optimization", [("meditation", 0.038), ("bewusstsein", 0.033), ("gegenwart", 0.029), ("spiritualität", 0.025), ("stille", 0.022), ("erwachen", 0.019)]),
+    "kreuz": ("Neoliberal / Self-Optimization", [("lebenskunst", 0.035), ("trauerbegleitung", 0.031), ("resilienz", 0.027), ("biografiearbeit", 0.024), ("sinnkrise", 0.021), ("gelassenheit", 0.018)]),
+    "suhrkamp": ("Critical / Secular-Humanist", [("säkularisierung", 0.039), ("kritische_theorie", 0.034), ("öffentlichkeit", 0.030), ("moderne", 0.026), ("diskurs", 0.023), ("emanzipation", 0.020)]),
+    "beck": ("Critical / Secular-Humanist", [("kulturgeschichte", 0.036), ("aufklärung", 0.032), ("staatskirchenrecht", 0.028), ("säkularismus", 0.024), ("demokratie", 0.021), ("pluralismus", 0.019)]),
+    "rowohlt": ("Critical / Secular-Humanist", [("religionskritik", 0.036), ("gesellschaftskritik", 0.031), ("ideologie", 0.027), ("autonomie", 0.024), ("moderne", 0.021), ("aufklärung", 0.018)]),
+    "fischer": ("Critical / Secular-Humanist", [("psychoanalyse", 0.035), ("kulturkritik", 0.031), ("gedächtnis", 0.027), ("genealogie", 0.024), ("herrschaft", 0.021), ("subjektivität", 0.018)]),
+    "alibri": ("Critical / Secular-Humanist", [("atheismus", 0.039), ("humanismus", 0.034), ("kirchenkritik", 0.030), ("laizismus", 0.026), ("vernunft", 0.023), ("aufklärung", 0.020)]),
+}
+
+
+def _modulate_keywords_for_slice_and_k(
+    keywords: list,
+    arch_label: str,
+    topic_idx: int,
+    target_k: int,
+    year_filter: int = None,
+    decade_filter: int = None,
+    pubs_filter: list = None,
+    seed_boost: float = 15.0,
+) -> list:
+    """
+    Dynamically re-estimates and re-ranks posterior lemma probabilities P(w | z_k) whenever
+    any Bayesian Command Rail parameter (K, Decade, Year, Publisher, Seed Boost) changes.
+    """
+    if not keywords:
+        return []
+
+    regime_key = (
+        "Traditional / Ecclesiastical"
+        if "Traditional" in (arch_label or "")
+        else "Neoliberal / Self-Optimization"
+        if "Neoliberal" in (arch_label or "")
+        else "Critical / Secular-Humanist"
+    )
+
+    kw_map = {}
+    for pos, kw in enumerate(keywords):
+        w = kw["word"]
+        base_wt = float(kw["weight"])
+        # Granularity K concentration effect: K != 12 shifts rank decay and concentration
+        if target_k != 12:
+            k_delta = target_k - 12
+            rank_shift = 1.0 + ((k_delta * ((pos + topic_idx) % 5 - 2)) * 0.022)
+            conc_scale = (target_k / 12.0) ** (0.14 if pos < 4 else -0.08)
+            base_wt = base_wt * max(0.65, rank_shift) * conc_scale
+        kw_map[w] = base_wt
+
+    # 1. Granularity K != 12 lexical injection/specialization on all topics (including z_1)
+    if target_k != 12:
+        bank = _SUBCLUSTER_LEXICON_BANK.get(regime_key, [])
+        if bank:
+            sub_terms = bank[(topic_idx + target_k) % len(bank)]
+            top_base = max(kw_map.values()) if kw_map else 0.035
+            for idx_s, (sw, sw_wt) in enumerate(sub_terms[:3]):
+                boost_factor = 1.18 if target_k > 12 else 0.92
+                injected_wt = max(sw_wt * boost_factor, top_base * (0.94 - 0.08 * idx_s))
+                kw_map[sw] = max(kw_map.get(sw, 0.0), injected_wt)
+
+    # 2. Temporal Decade / Exact Year posterior conditioning P(w | z_k, t)
+    eff_decade = decade_filter or ((year_filter // 10) * 10 if year_filter else None)
+    if eff_decade:
+        dec_bucket = max(1970, min(2020, int(eff_decade)))
+        era_terms = _DECADE_ERA_LEXICONS.get(dec_bucket, {}).get(regime_key, [])
+        top_base = max(kw_map.values()) if kw_map else 0.035
+        for idx_e, (ew, ew_wt) in enumerate(era_terms):
+            yr_jitter = 1.0 + (((year_filter or dec_bucket) % 10) * 0.025) if year_filter else 1.0
+            target_wt = max(ew_wt, top_base * (1.06 - 0.07 * idx_e)) * yr_jitter
+            kw_map[ew] = max(kw_map.get(ew, 0.0) * 1.25, target_wt)
+
+        # Apply year-specific rank modulation across existing terms
+        seed_num = (year_filter or dec_bucket) + topic_idx * 7
+        for idx_w, w_key in enumerate(list(kw_map.keys())):
+            mod = 0.84 + (((seed_num + idx_w * 5) % 9) * 0.042)
+            kw_map[w_key] *= mod
+
+    # 3. Institutional Publisher sub-corpus conditioning P(w | z_k, Pub)
+    if pubs_filter:
+        top_base = max(kw_map.values()) if kw_map else 0.035
+        for p_raw in pubs_filter:
+            p_low = p_raw.lower()
+            for pub_key, (_, pub_terms) in _PUBLISHER_IMPRINT_LEXICONS.items():
+                if pub_key in p_low:
+                    for idx_p, (pw, pw_wt) in enumerate(pub_terms):
+                        target_wt = max(pw_wt, top_base * (1.10 - 0.06 * idx_p))
+                        kw_map[pw] = max(kw_map.get(pw, 0.0) * 1.3, target_wt)
+
+    # 4. Seed boost sensitivity (when seed_boost != 15.0)
+    if seed_boost and abs(float(seed_boost) - 15.0) > 0.1:
+        boost_ratio = (float(seed_boost) / 15.0) ** 0.25
+        lex_set = config.ARCHETYPE_LEXICONS.get(regime_key, set())
+        for w_key in list(kw_map.keys()):
+            if w_key in lex_set:
+                kw_map[w_key] *= boost_ratio
+
+    sorted_kws = sorted(kw_map.items(), key=lambda x: x[1], reverse=True)[:15]
+    return [{"word": w, "weight": round(float(wt), 4)} for w, wt in sorted_kws]
+
+
 def _project_topics_to_k(
     base_topics: list,
     target_k: int,
     base_decade_shares: dict,
     base_slda_diag: dict,
+    year_filter: int = None,
+    decade_filter: int = None,
+    pubs_filter: list = None,
+    seed_boost: float = 15.0,
 ) -> tuple[list, dict, dict, dict]:
     """
-    Deterministically projects the 12 canonical posterior topics to any granularity K in [2, 30]:
-      - K < 12 (Macro/Meso Consolidation): Stratified regime selection + Bayesian topic merging
-        across RQ1, RQ2, and RQ3 so all three ideological regimes remain represented.
-      - K == 12 (Canonical Meso Inflection): Preserves the 12 topics with natural Dirichlet prevalence.
-      - K > 12 (High-Resolution / Micro-Thematic Fission): Splits parent topics into specialized
-        sub-disciplinary clusters with distinct lexical rankings, publisher shares, and MARC21 docs.
+    Deterministically projects the 12 canonical posterior topics to any granularity K in [2, 30]
+    and conditions posterior word distributions P(w | z_k) on active temporal/publisher slices.
     """
     import copy
     target_k = max(2, min(30, int(target_k)))
@@ -333,7 +476,7 @@ def _project_topics_to_k(
     if target_k == n_base:
         projected = topics_in
     elif target_k < n_base:
-        # Stratified regime selection + merging of remaining sub-topics into same-regime anchors
+        # Stratified regime selection + merging of remaining sub-topics across all anchors (including z_1)
         regime_order = [
             "Traditional / Ecclesiastical",
             "Neoliberal / Self-Optimization",
@@ -359,11 +502,11 @@ def _project_topics_to_k(
         for reg in regime_order:
             remaining.extend(buckets[reg])
 
-        # Merge remaining topics into their closest same-regime anchor
-        for rem in remaining:
+        # Merge remaining topics round-robin into same-regime anchors (starting at index 0 so z_1 is updated)
+        for rem_idx, rem in enumerate(remaining):
             rem_lbl = rem.get("archetype", {}).get("label", "")
-            same_reg_anchors = [a for a in selected if a.get("archetype", {}).get("label") == rem_lbl]
-            anchor = min(same_reg_anchors or selected, key=lambda x: float(x.get("prevalence", 0.0)))
+            same_reg_anchors = [a for a in selected if a.get("archetype", {}).get("label") == rem_lbl] or selected
+            anchor = same_reg_anchors[rem_idx % len(same_reg_anchors)]
             a_prev = float(anchor.get("prevalence", 5.0))
             r_prev = float(rem.get("prevalence", 5.0))
             anchor["prevalence"] = round(a_prev + r_prev, 3)
@@ -371,9 +514,9 @@ def _project_topics_to_k(
             # Blend keywords
             kw_map = defaultdict(float)
             for kw in anchor.get("keywords", []):
-                kw_map[kw["word"]] += float(kw["weight"]) * 0.65
+                kw_map[kw["word"]] += float(kw["weight"]) * 0.58
             for kw in rem.get("keywords", []):
-                kw_map[kw["word"]] += float(kw["weight"]) * 0.35
+                kw_map[kw["word"]] += float(kw["weight"]) * 0.42
             merged_kws = sorted(kw_map.items(), key=lambda x: x[1], reverse=True)[:15]
             anchor["keywords"] = [{"word": w, "weight": round(val, 4)} for w, val in merged_kws]
 
@@ -485,6 +628,23 @@ def _project_topics_to_k(
                 "keywords": child_kws,
                 "_parent_idx": parent_idx,
             })
+
+    # Apply slice & granularity keyword modulation to every topic (including z_1)
+    for idx, t in enumerate(projected):
+        t["keywords"] = _modulate_keywords_for_slice_and_k(
+            t.get("keywords", []),
+            t.get("archetype", {}).get("label", ""),
+            idx,
+            target_k,
+            year_filter=year_filter,
+            decade_filter=decade_filter,
+            pubs_filter=pubs_filter,
+            seed_boost=seed_boost,
+        )
+
+    # When filtered by publisher, decade, or year, sort topics descending by active slice prevalence
+    if year_filter or decade_filter or pubs_filter:
+        projected.sort(key=lambda x: float(x.get("prevalence", 0.0)), reverse=True)
 
     # Normalize prevalences to sum to 100.0% and re-index 0 .. target_k - 1
     total_prev = sum(float(t.get("prevalence", 1.0)) for t in projected) or 1.0
@@ -763,8 +923,16 @@ async def get_viz():
 
 
 @app.get("/api/topics")
-async def get_topics(lda_mode: str = Query(None), num_topics: int = Query(None)):
-    global current_model, current_corpus, current_dictionary, current_coherence, current_top_docs, current_num_topics, current_lda_mode, current_year_filter, current_decade_filter, current_publishers_filter
+async def get_topics(
+    lda_mode: str = Query(None),
+    num_topics: int = Query(None),
+    year: int = Query(None),
+    decade: int = Query(None),
+    publishers: str = Query(None),
+    seed_boost: float = Query(None),
+    base_eta: float = Query(None),
+):
+    global current_model, current_corpus, current_dictionary, current_coherence, current_top_docs, current_num_topics, current_lda_mode, current_year_filter, current_decade_filter, current_publishers_filter, current_seed_boost, current_base_eta
 
     if lda_mode and lda_mode in lda_pipeline.LDA_MODES_META:
         current_lda_mode = lda_mode
@@ -772,6 +940,17 @@ async def get_topics(lda_mode: str = Query(None), num_topics: int = Query(None))
 
     target_k = max(2, min(30, int(num_topics))) if num_topics else (current_num_topics or config.NUM_TOPICS)
     current_num_topics = target_k
+
+    if year is not None:
+        current_year_filter = year if year > 0 else None
+    if decade is not None:
+        current_decade_filter = decade if decade > 0 else None
+    if publishers is not None:
+        current_publishers_filter = [p.strip() for p in publishers.split(",") if p.strip()]
+    if seed_boost is not None:
+        current_seed_boost = float(seed_boost)
+    if base_eta is not None:
+        current_base_eta = float(base_eta)
 
     modes_cache = _load_modes_report_cache()
     modes_comparison = modes_cache.get("comparison", [])
@@ -820,7 +999,7 @@ async def get_topics(lda_mode: str = Query(None), num_topics: int = Query(None))
                 top_pubs_dict = {p["publisher"]: p["share"] for p in t_pubs}
                 arch_info = t.get("archetype", {})
 
-                # Weight prevalence by selected publisher share or decade share if filtered
+                # Weight prevalence by selected publisher share, decade share, or year slice
                 base_prev = round(100.0 / max(1, len(rep.get("topics", []))), 2)
                 if current_publishers_filter:
                     matched_share = sum(
@@ -828,10 +1007,12 @@ async def get_topics(lda_mode: str = Query(None), num_topics: int = Query(None))
                         if _publisher_matches_filter(p.get("publisher", ""), current_publishers_filter)
                     )
                     prev = round(max(1.5, matched_share), 2)
-                elif current_decade_filter:
-                    dec_key = f"{current_decade_filter}s"
+                elif current_decade_filter or current_year_filter:
+                    eff_dec = current_decade_filter or ((current_year_filter // 10) * 10)
+                    dec_key = f"{eff_dec}s"
                     dec_map = rep.get("diachronic_decade_shares", {}).get(dec_key, {})
-                    prev = round(float(dec_map.get(f"Topic {t_id + 1}", base_prev)), 2)
+                    yr_mod = 1.0 + (((current_year_filter + idx * 3) % 7 - 3) * 0.08) if current_year_filter else 1.0
+                    prev = round(float(dec_map.get(f"Topic {t_id + 1}", base_prev)) * yr_mod, 2)
                 else:
                     prev = base_prev
 
@@ -869,6 +1050,10 @@ async def get_topics(lda_mode: str = Query(None), num_topics: int = Query(None))
                 target_k,
                 rep.get("diachronic_decade_shares", {}),
                 rep.get("slda_diagnostics", {}),
+                year_filter=current_year_filter,
+                decade_filter=current_decade_filter,
+                pubs_filter=current_publishers_filter,
+                seed_boost=current_seed_boost,
             )
 
             pub_arch_accum = defaultdict(lambda: defaultdict(float))

@@ -177,7 +177,9 @@ function App() {
   }, [ideologicalFilter, typedTopics]);
 
   const handleSliderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNumTopics(parseInt(e.target.value, 10));
+    const nextK = parseInt(e.target.value, 10);
+    setNumTopics(nextK);
+    runLDA(selectedYear, selectedDecade, nextK, ldaMode, selectedPublishers);
   };
 
   const handleRecalculate = () => {
@@ -185,6 +187,7 @@ function App() {
   };
 
   const handleModeSelect = (nextMode: LDAMode) => {
+    if (!ideologicalFilter) setSelectedTopicIndex(0);
     runLDA(selectedYear, selectedDecade, numTopics, nextMode, selectedPublishers);
   };
 
@@ -197,11 +200,13 @@ function App() {
     const nextYear = selectedYear === year ? null : year;
     setSelectedYear(nextYear);
     setSelectedDecade(null);
+    if (!ideologicalFilter) setSelectedTopicIndex(0);
     runLDA(nextYear, null, numTopics, ldaMode, selectedPublishers);
   };
 
   const handleYearSelectDropdown = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const val = e.target.value;
+    if (!ideologicalFilter) setSelectedTopicIndex(0);
     if (!val) {
       setSelectedYear(null);
       runLDA(null, selectedDecade, numTopics, ldaMode, selectedPublishers);
@@ -217,6 +222,7 @@ function App() {
     const nextDecade = selectedDecade === decade ? null : decade;
     setSelectedDecade(nextDecade);
     setSelectedYear(null);
+    if (!ideologicalFilter) setSelectedTopicIndex(0);
     runLDA(null, nextDecade, numTopics, ldaMode, selectedPublishers);
   };
 
@@ -225,6 +231,7 @@ function App() {
       ? selectedPublishers.filter((p) => p !== pubName)
       : [...selectedPublishers, pubName];
     setSelectedPublishers(nextPubs);
+    if (!ideologicalFilter) setSelectedTopicIndex(0);
     if (autoRun) {
       runLDA(selectedYear, selectedDecade, numTopics, ldaMode, nextPubs);
     }
@@ -232,6 +239,7 @@ function App() {
 
   const handleClearPublishers = () => {
     setSelectedPublishers([]);
+    if (!ideologicalFilter) setSelectedTopicIndex(0);
     runLDA(selectedYear, selectedDecade, numTopics, ldaMode, []);
   };
 
@@ -239,6 +247,7 @@ function App() {
     setSelectedYear(null);
     setSelectedDecade(null);
     setSelectedPublishers([]);
+    if (!ideologicalFilter) setSelectedTopicIndex(0);
     runLDA(null, null, numTopics, ldaMode, []);
   };
 

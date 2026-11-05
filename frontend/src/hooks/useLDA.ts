@@ -117,13 +117,36 @@ export const useLDA = () => {
     }
   };
 
-  const fetchTopics = async (modeOverride?: LDAMode, kOverride?: number) => {
+  const fetchTopics = async (
+    modeOverride?: LDAMode,
+    kOverride?: number,
+    yearOverride?: number | null,
+    decadeOverride?: number | null,
+    pubsOverride?: string[]
+  ) => {
     try {
       const targetMode = modeOverride ?? ldaMode;
       const targetK = kOverride ?? numTopics;
-      const res = await fetch(
-        `${API_BASE}/api/topics?lda_mode=${targetMode}&num_topics=${targetK}`
-      );
+      const targetYear = yearOverride !== undefined ? yearOverride : activeFilters.year;
+      const targetDecade = decadeOverride !== undefined ? decadeOverride : activeFilters.decade;
+      const targetPubs = pubsOverride !== undefined ? pubsOverride : activeFilters.publishers;
+
+      const params = new URLSearchParams();
+      params.append('lda_mode', targetMode);
+      params.append('num_topics', targetK.toString());
+      if (targetYear !== null && targetYear !== undefined) {
+        params.append('year', targetYear.toString());
+      } else {
+        params.append('year', '0');
+      }
+      if (targetDecade !== null && targetDecade !== undefined) {
+        params.append('decade', targetDecade.toString());
+      } else {
+        params.append('decade', '0');
+      }
+      params.append('publishers', (targetPubs || []).join(','));
+
+      const res = await fetch(`${API_BASE}/api/topics?${params.toString()}`);
       const data = await res.json();
       setTopics(data.topics || []);
       if (data.lda_mode) setLdaMode(data.lda_mode as LDAMode);
@@ -183,7 +206,7 @@ export const useLDA = () => {
       if (params.toString()) url += `?${params.toString()}`;
 
       await fetch(url, { method: 'POST' });
-      await fetchTopics(activeMode, activeK);
+      await fetchTopics(activeMode, activeK, year ?? null, decade ?? null, activePubs);
     } catch (e) {
       console.error("LDA training failed", e);
     } finally {
