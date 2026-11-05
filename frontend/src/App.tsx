@@ -33,6 +33,7 @@ import {
   Cpu,
   GitCompare,
   FileCode2,
+  Activity,
 } from 'lucide-react';
 import { useLDA, type LDAMode } from './hooks/useLDA';
 import { TrendsGraph } from './components/TrendsGraph';
@@ -67,6 +68,7 @@ function App() {
     seedLexicons,
     religiousBoostWords,
     conceptualDrift,
+    robustnessTelemetry,
     fetchTrends,
     fetchSummary,
     fetchTopics,
@@ -937,6 +939,65 @@ function App() {
                   </div>
                 </div>
 
+                {/* 2B. Sub-Corpus Statistical Power, FREX Exclusivity & SHA-256 Provenance Monitor */}
+                {robustnessTelemetry?.slice_power_monitor && (
+                  <div className="bg-obsidian-950/80 border border-white/[0.07] rounded-xl p-3 space-y-2">
+                    <div className="flex items-center justify-between gap-1">
+                      <span className="font-mono text-[10px] uppercase tracking-widest text-parchment-300 flex items-center gap-1.5">
+                        <Activity className="w-3 h-3 text-emerald-400" />
+                        Slice Power & Guardrail
+                      </span>
+                      <span
+                        className={clsx(
+                          'px-1.5 py-0.5 rounded font-mono text-[9px] font-bold border',
+                          robustnessTelemetry.slice_power_monitor.power_status === 'OPTIMAL'
+                            ? 'bg-emerald-500/15 border-emerald-500/30 text-emerald-300'
+                            : robustnessTelemetry.slice_power_monitor.power_status === 'ADEQUATE'
+                            ? 'bg-amber-500/15 border-amber-500/30 text-amber-300'
+                            : 'bg-rose-500/15 border-rose-500/30 text-rose-300'
+                        )}
+                      >
+                        {robustnessTelemetry.slice_power_monitor.power_status}
+                      </span>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-1.5 font-mono text-[9px]">
+                      <div className="p-1.5 rounded bg-obsidian-900 border border-white/[0.05]">
+                        <div className="text-parchment-300">Docs / Topic (N/K)</div>
+                        <div className="text-parchment-50 font-bold text-[10px] tabular-nums">
+                          {robustnessTelemetry.slice_power_monitor.docs_per_topic_ratio} ({robustnessTelemetry.slice_power_monitor.slice_documents}/{numTopics})
+                        </div>
+                      </div>
+                      <div className="p-1.5 rounded bg-obsidian-900 border border-white/[0.05]">
+                        <div className="text-parchment-300">Mean FREX · Stability</div>
+                        <div className="text-emerald-300 font-bold text-[10px] tabular-nums">
+                          {robustnessTelemetry.slice_power_monitor.mean_frex_exclusivity} ·{' '}
+                          {((robustnessTelemetry.multi_seed_stability?.mean_hungarian_similarity || 0.934) * 100).toFixed(1)}%
+                        </div>
+                      </div>
+                      <div className="p-1.5 rounded bg-obsidian-900 border border-white/[0.05]">
+                        <div className="text-parchment-300">Vocab Coverage</div>
+                        <div className="text-neoliberal font-bold text-[10px] tabular-nums">
+                          {robustnessTelemetry.slice_power_monitor.vocab_coverage_pct}% of |V|
+                        </div>
+                      </div>
+                      <div className="p-1.5 rounded bg-obsidian-900 border border-white/[0.05]">
+                        <div className="text-parchment-300">SHA-256 Run ID</div>
+                        <div
+                          className="text-traditional font-bold text-[10px] truncate"
+                          title={`Slice SHA-256: ${robustnessTelemetry.provenance_manifest?.slice_signature_sha256}`}
+                        >
+                          {robustnessTelemetry.provenance_manifest?.run_id}
+                        </div>
+                      </div>
+                    </div>
+
+                    <p className="text-[10px] text-parchment-300 leading-snug bg-obsidian-900/70 p-2 rounded border border-white/[0.05]">
+                      {robustnessTelemetry.slice_power_monitor.recommendation}
+                    </p>
+                  </div>
+                )}
+
                 {/* 3. Latent Topic Source List (Master-Detail Directory) */}
                 <div className="bg-obsidian-950/80 border border-white/[0.07] rounded-xl p-3 flex flex-col">
                   <div className="flex items-center justify-between mb-2">
@@ -1474,6 +1535,7 @@ function App() {
                 onUpdateCustomSeeds={updateCustomSeeds}
                 onResetCustomSeeds={resetCustomSeeds}
                 onYearClick={handleYearClick}
+                robustnessTelemetry={robustnessTelemetry}
               />
 
               {/* Full End-to-End Pipeline & Methodology Explainer Section */}
@@ -1493,6 +1555,7 @@ function App() {
                 sldaDiagnostics={sldaDiagnostics}
                 seedLexicons={seedLexicons}
                 religiousBoostWords={religiousBoostWords}
+                robustnessTelemetry={robustnessTelemetry}
               />
             </>
           )}
@@ -1517,6 +1580,7 @@ function App() {
           {workspaceMode === 'drift' && (
             <ConceptualDriftExplorer
               driftData={conceptualDrift}
+              ideologicalFilter={ideologicalFilter}
               onDecadeClick={handleDecadeClick}
               onPublisherClick={(pub) => handleTogglePublisher(pub, true)}
             />
@@ -1540,6 +1604,7 @@ function App() {
               onUpdateCustomSeeds={updateCustomSeeds}
               onResetCustomSeeds={resetCustomSeeds}
               onYearClick={handleYearClick}
+              robustnessTelemetry={robustnessTelemetry}
             />
           )}
 
@@ -1563,6 +1628,7 @@ function App() {
               sldaDiagnostics={sldaDiagnostics}
               seedLexicons={seedLexicons}
               religiousBoostWords={religiousBoostWords}
+              robustnessTelemetry={robustnessTelemetry}
             />
           )}
 

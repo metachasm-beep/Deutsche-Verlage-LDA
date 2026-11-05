@@ -80,6 +80,7 @@ export const useLDA = () => {
   const [seedLexicons, setSeedLexicons] = useState<Record<string, string[]>>({});
   const [religiousBoostWords, setReligiousBoostWords] = useState<string[]>([]);
   const [conceptualDrift, setConceptualDrift] = useState<any>(null);
+  const [robustnessTelemetry, setRobustnessTelemetry] = useState<any>(null);
   const [activeFilters, setActiveFilters] = useState<{
     year: number | null;
     decade: number | null;
@@ -172,6 +173,7 @@ export const useLDA = () => {
       if (data.seed_lexicons) setSeedLexicons(data.seed_lexicons);
       if (data.religious_boost_words) setReligiousBoostWords(data.religious_boost_words);
       if (data.active_filters) setActiveFilters(data.active_filters);
+      if (data.robustness_telemetry) setRobustnessTelemetry(data.robustness_telemetry);
     } catch (e) {
       console.error("Failed to fetch topics", e);
     }
@@ -357,6 +359,7 @@ export const useLDA = () => {
     setSeedLexicons,
     religiousBoostWords,
     conceptualDrift,
+    robustnessTelemetry,
     activeFilters,
     fetchTrends,
     fetchSummary,

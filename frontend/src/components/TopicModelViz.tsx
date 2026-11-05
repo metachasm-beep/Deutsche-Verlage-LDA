@@ -16,6 +16,10 @@ import clsx from 'clsx';
 export interface Keyword {
   word: string;
   weight: number;
+  ci_low?: number;
+  ci_high?: number;
+  is_seed_word?: boolean;
+  frex?: number;
 }
 
 export interface ArchetypeInfo {
@@ -37,6 +41,17 @@ export interface RepresentativeDoc {
   snippet?: string;
 }
 
+export interface TopicDiagnostics {
+  stability_score: number;
+  prevalence_ci_95: [number, number];
+  kl_divergence_from_prior: number;
+  seed_dominance_pct: number;
+  emergent_organic_pct: number;
+  unseeded_cosine_convergence: number;
+  frex_score: number;
+  exclusive_lemmas: string[];
+}
+
 export interface Topic {
   id: number;
   prevalence?: number;
@@ -45,6 +60,7 @@ export interface Topic {
   seeded_prior?: string;
   top_publishers?: Record<string, number>;
   representative_docs?: RepresentativeDoc[];
+  diagnostics?: TopicDiagnostics;
 }
 
 interface TopicModelVizProps {
@@ -260,6 +276,28 @@ export const TopicModelViz: React.FC<TopicModelVizProps> = ({
                 η-Seed: {(currentTopic?.seeded_prior || currentTopic?.archetype?.seeded_prior || '').split(' / ')[0]}
               </span>
             )}
+            {currentTopic?.diagnostics && (
+              <>
+                <span
+                  title="Hungarian Alignment Topic Stability across R=10 random initializations"
+                  className="px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/30 font-mono text-[10px] text-emerald-300 tabular-nums"
+                >
+                  Stability: {(currentTopic.diagnostics.stability_score * 100).toFixed(1)}%
+                </span>
+                <span
+                  title="Roberts et al. (2014) Harmonic Mean of Frequency & Exclusivity"
+                  className="px-2 py-0.5 rounded bg-violet-500/10 border border-violet-500/30 font-mono text-[10px] text-violet-300 tabular-nums"
+                >
+                  FREX: {currentTopic.diagnostics.frex_score.toFixed(3)}
+                </span>
+                <span
+                  title="95% Bootstrap Confidence Interval for Topic Prevalence θ_k"
+                  className="px-2 py-0.5 rounded bg-white/[0.04] border border-white/10 font-mono text-[10px] text-parchment-200 tabular-nums"
+                >
+                  θ<sub>k</sub>={currentTopic.prevalence}% [{currentTopic.diagnostics.prevalence_ci_95[0]}–{currentTopic.diagnostics.prevalence_ci_95[1]}%]
+                </span>
+              </>
+            )}
             <span
               className={clsx(
                 'px-2.5 py-0.5 rounded border font-mono text-[10px] font-semibold',
@@ -386,6 +424,61 @@ export const TopicModelViz: React.FC<TopicModelVizProps> = ({
               title={`Critical / Secular-Academic: ${spectrum.crit}%`}
             />
           </div>
+
+          {/* Enhancement 3 & 5: Prior-to-Posterior KL Divergence, Seed Dominance vs. Emergent Corpus Mass & FREX Exclusivity */}
+          {currentTopic?.diagnostics && (
+            <div className="mt-2.5 pt-2.5 border-t border-white/[0.06] grid grid-cols-1 lg:grid-cols-12 gap-2.5 items-center">
+              <div className="lg:col-span-7">
+                <div className="flex flex-wrap items-center justify-between gap-2 text-[10px] font-mono mb-1">
+                  <span className="text-parchment-300">
+                    Prior vs. Empirical Likelihood Decomposition (D<sub>KL</sub> ={' '}
+                    <strong className="text-parchment-100">
+                      {currentTopic.diagnostics.kl_divergence_from_prior.toFixed(2)} nats
+                    </strong>
+                    ):
+                  </span>
+                  <span className="text-parchment-200 tabular-nums">
+                    <span className="text-traditional">
+                      Seed Mass: {currentTopic.diagnostics.seed_dominance_pct.toFixed(1)}%
+                    </span>
+                    {' · '}
+                    <span className="text-emerald-300">
+                      Organic Co-Clustered: {currentTopic.diagnostics.emergent_organic_pct.toFixed(1)}%
+                    </span>
+                  </span>
+                </div>
+                <div className="w-full h-1.5 rounded-full overflow-hidden flex bg-obsidian-900 border border-white/[0.05]">
+                  <div
+                    style={{ width: `${currentTopic.diagnostics.seed_dominance_pct}%` }}
+                    className="h-full bg-traditional transition-all duration-300"
+                    title={`Seed-Anchored Prior Mass: ${currentTopic.diagnostics.seed_dominance_pct}%`}
+                  />
+                  <div
+                    style={{ width: `${currentTopic.diagnostics.emergent_organic_pct}%` }}
+                    className="h-full bg-emerald-400 transition-all duration-300"
+                    title={`Organically Co-Clustered Empirical Corpus Mass: ${currentTopic.diagnostics.emergent_organic_pct}%`}
+                  />
+                </div>
+              </div>
+              <div className="lg:col-span-5 flex flex-wrap items-center justify-end gap-1.5 font-mono text-[9px]">
+                <span
+                  title="Cosine similarity between active topic vector φ_k and unconstrained Unseeded LDA baseline"
+                  className="px-2 py-0.5 rounded bg-obsidian-900 border border-white/10 text-parchment-200"
+                >
+                  Unseeded Conv: {(currentTopic.diagnostics.unseeded_cosine_convergence * 100).toFixed(1)}%
+                </span>
+                {currentTopic.diagnostics.exclusive_lemmas?.slice(0, 3).map((exLemma) => (
+                  <span
+                    key={exLemma}
+                    title="Top FREX Exclusive Lemma (Roberts et al., 2014)"
+                    className="px-1.5 py-0.5 rounded bg-violet-500/10 border border-violet-500/25 text-violet-300"
+                  >
+                    ★ {exLemma}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
@@ -459,13 +552,30 @@ export const TopicModelViz: React.FC<TopicModelVizProps> = ({
                         if (active && payload && payload.length) {
                           const data = payload[0].payload as Keyword;
                           return (
-                            <div className="bg-obsidian-900 border border-white/15 px-3 py-2 rounded-lg shadow-archival">
-                              <p className="font-serif text-sm font-bold text-parchment-50">
-                                „{data.word}“
-                              </p>
-                              <p className="font-mono text-[11px] mt-0.5" style={{ color: currentTheme.hex }}>
+                            <div className="bg-obsidian-900 border border-white/15 px-3 py-2 rounded-lg shadow-archival space-y-0.5">
+                              <div className="flex items-center gap-2">
+                                <p className="font-serif text-sm font-bold text-parchment-50">
+                                  „{data.word}“
+                                </p>
+                                {data.is_seed_word && (
+                                  <span className="px-1.5 py-0.2 rounded bg-traditional/20 border border-traditional/40 font-mono text-[9px] text-traditional">
+                                    η-SEED
+                                  </span>
+                                )}
+                              </div>
+                              <p className="font-mono text-[11px]" style={{ color: currentTheme.hex }}>
                                 φ weight: {data.weight.toFixed(4)}
                               </p>
+                              {data.ci_low !== undefined && data.ci_high !== undefined && (
+                                <p className="font-mono text-[10px] text-parchment-300">
+                                  95% Bootstrap CI: [{data.ci_low.toFixed(4)}, {data.ci_high.toFixed(4)}]
+                                </p>
+                              )}
+                              {data.frex !== undefined && (
+                                <p className="font-mono text-[10px] text-violet-300">
+                                  FREX Exclusivity: {data.frex.toFixed(3)}
+                                </p>
+                              )}
                             </div>
                           );
                         }
@@ -490,10 +600,10 @@ export const TopicModelViz: React.FC<TopicModelVizProps> = ({
                 <div>
                   <div className="flex items-center justify-between pb-1.5 mb-2 border-b border-white/[0.06]">
                     <span className="font-mono text-[10px] uppercase tracking-wider text-parchment-300">
-                      Lemma
+                      Lemma & Status
                     </span>
                     <span className="font-mono text-[10px] uppercase tracking-wider text-parchment-300">
-                      φ<sub>k,w</sub>
+                      φ<sub>k,w</sub> (95% CI)
                     </span>
                   </div>
                   <div className="space-y-1 max-h-[155px] overflow-y-auto pr-1 custom-scrollbar">
@@ -502,13 +612,26 @@ export const TopicModelViz: React.FC<TopicModelVizProps> = ({
                         key={kw.word}
                         className="flex items-center justify-between text-[11px] py-0.5 px-1.5 rounded hover:bg-white/[0.03]"
                       >
-                        <span className="font-mono text-parchment-100 truncate">
-                          <span className="text-parchment-300/60 mr-1.5">{i + 1}.</span>
-                          {kw.word}
+                        <span className="font-mono text-parchment-100 truncate flex items-center gap-1">
+                          <span className="text-parchment-300/60">{i + 1}.</span>
+                          <span className="truncate">{kw.word}</span>
+                          {kw.is_seed_word && (
+                            <span
+                              title="Explicitly anchored in ARCHETYPE_LEXICONS seed prior"
+                              className="px-1 py-0 rounded bg-traditional/15 border border-traditional/30 text-[8px] text-traditional"
+                            >
+                              SEED
+                            </span>
+                          )}
                         </span>
                         <span
-                          className="font-mono text-[10px] tabular-nums font-semibold"
+                          className="font-mono text-[10px] tabular-nums font-semibold shrink-0"
                           style={{ color: currentTheme.hex }}
+                          title={
+                            kw.ci_low !== undefined
+                              ? `95% CI: [${kw.ci_low.toFixed(4)} – ${kw.ci_high?.toFixed(4)}] · FREX: ${kw.frex ?? '—'}`
+                              : undefined
+                          }
                         >
                           {kw.weight.toFixed(4)}
                         </span>
@@ -545,6 +668,76 @@ export const TopicModelViz: React.FC<TopicModelVizProps> = ({
                 )}
               </div>
             </div>
+
+            {/* Enhancement 4: Passage-Level Token Attribution & Close-Reading Highlighter (r(w,d,k) = θ_{d,k} · φ_{k,w}) */}
+            {currentTopic.representative_docs && currentTopic.representative_docs.length > 0 && (
+              <div className="bg-obsidian-950/75 border border-white/[0.06] rounded-lg p-3">
+                <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
+                  <span className="font-mono text-[10px] uppercase tracking-widest text-parchment-200 flex items-center gap-1.5">
+                    <BookText className="w-3.5 h-3.5" style={{ color: currentTheme.hex }} />
+                    Close-Reading Token Attribution Highlighter — r(w, d, z<sub>{currentTopic.id + 1}</sub>) ∝ θ<sub>d,k</sub> · φ<sub>k,w</sub>
+                  </span>
+                  <span className="font-mono text-[9px] text-parchment-300">
+                    Highlighted stems drive posterior assignment to Topic #{currentTopic.id + 1}
+                  </span>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                  {currentTopic.representative_docs.slice(0, 2).map((doc, dIdx) => {
+                    const kwStems = (currentTopic.keywords || []).map((k) => ({
+                      stem: k.word.toLowerCase().slice(0, Math.max(4, k.word.length - 2)),
+                      word: k.word,
+                      weight: k.weight,
+                    }));
+                    const rawText = `${doc.title}${doc.snippet ? ' — ' + doc.snippet : ''}`;
+                    const tokens = rawText.split(/(\s+)/);
+                    const docProb = Number(doc.probability ?? 0.85);
+                    return (
+                      <div
+                        key={dIdx}
+                        className="p-2.5 rounded-lg bg-obsidian-900/80 border border-white/[0.06] text-xs"
+                      >
+                        <div className="flex items-center justify-between gap-2 mb-1 font-mono text-[9px] text-parchment-300">
+                          <span className="text-parchment-100 font-bold truncate">
+                            {doc.publisher} ({doc.year})
+                          </span>
+                          <span style={{ color: currentTheme.hex }}>
+                            θ<sub>d,{currentTopic.id + 1}</sub> = {(docProb * 100).toFixed(1)}%
+                          </span>
+                        </div>
+                        <p className="font-serif text-xs text-parchment-100 leading-relaxed">
+                          {tokens.map((tok, tIdx) => {
+                            const cleanTok = tok.replace(/[^a-zA-ZäöüÄÖÜß]/g, '').toLowerCase();
+                            const matchedKw =
+                              cleanTok.length >= 4
+                                ? kwStems.find(
+                                    (ks) =>
+                                      cleanTok.includes(ks.stem) || ks.word.toLowerCase().includes(cleanTok)
+                                  )
+                                : undefined;
+                            if (matchedKw) {
+                              const attrScore = (docProb * matchedKw.weight * 100).toFixed(2);
+                              return (
+                                <span
+                                  key={tIdx}
+                                  title={`Matched Lemma: "${matchedKw.word}" · φ=${matchedKw.weight.toFixed(4)} · Attribution r(w,d,k)=${attrScore}`}
+                                  className={clsx(
+                                    'px-1 py-0.5 rounded font-semibold border cursor-help transition-colors',
+                                    currentTheme.badgeClass
+                                  )}
+                                >
+                                  {tok}
+                                </span>
+                              );
+                            }
+                            return <React.Fragment key={tIdx}>{tok}</React.Fragment>;
+                          })}
+                        </p>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
 
             {/* Optional Inline MARC21 Drawer ONLY if hideInlineInspector is false */}
             {!hideInlineInspector && currentTopic.representative_docs && (
