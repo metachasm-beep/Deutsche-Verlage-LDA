@@ -149,6 +149,33 @@ function App() {
     ])
   ).slice(0, 14);
 
+  const handleIdeologicalFilterSelect = (regime: 'Traditional' | 'Neoliberal' | 'Critical') => {
+    const nextFilter = ideologicalFilter === regime ? null : regime;
+    setIdeologicalFilter(nextFilter);
+    if (nextFilter) {
+      const firstMatchIdx = typedTopics.findIndex(
+        (t) => getArchetypeTheme(t.archetype?.label).id === nextFilter
+      );
+      if (firstMatchIdx !== -1) {
+        setSelectedTopicIndex(firstMatchIdx);
+      }
+    }
+  };
+
+  // Keep selectedTopicIndex aligned with ideologicalFilter when topics or filter change
+  useEffect(() => {
+    if (!ideologicalFilter || typedTopics.length === 0) return;
+    const currentThemeId = getArchetypeTheme(typedTopics[safeTopicIndex]?.archetype?.label).id;
+    if (currentThemeId !== ideologicalFilter) {
+      const firstMatchIdx = typedTopics.findIndex(
+        (t) => getArchetypeTheme(t.archetype?.label).id === ideologicalFilter
+      );
+      if (firstMatchIdx !== -1) {
+        setSelectedTopicIndex(firstMatchIdx);
+      }
+    }
+  }, [ideologicalFilter, typedTopics]);
+
   const handleSliderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNumTopics(parseInt(e.target.value, 10));
   };
@@ -602,15 +629,11 @@ function App() {
 
                   <div className="space-y-1.5">
                     <button
-                      onClick={() =>
-                        setIdeologicalFilter((prev) =>
-                          prev === 'Traditional' ? null : 'Traditional'
-                        )
-                      }
+                      onClick={() => handleIdeologicalFilterSelect('Traditional')}
                       className={clsx(
                         'w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg border text-left transition-all cursor-pointer',
                         ideologicalFilter === 'Traditional'
-                          ? 'bg-traditional/15 border-traditional text-parchment-50'
+                          ? 'bg-traditional/15 border-traditional text-parchment-50 shadow-glow-gold'
                           : 'bg-obsidian-900/70 border-white/[0.06] text-parchment-200 hover:border-traditional/40'
                       )}
                     >
@@ -626,15 +649,11 @@ function App() {
                     </button>
 
                     <button
-                      onClick={() =>
-                        setIdeologicalFilter((prev) =>
-                          prev === 'Neoliberal' ? null : 'Neoliberal'
-                        )
-                      }
+                      onClick={() => handleIdeologicalFilterSelect('Neoliberal')}
                       className={clsx(
                         'w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg border text-left transition-all cursor-pointer',
                         ideologicalFilter === 'Neoliberal'
-                          ? 'bg-neoliberal/15 border-neoliberal text-parchment-50'
+                          ? 'bg-neoliberal/15 border-neoliberal text-parchment-50 shadow-glow-cyan'
                           : 'bg-obsidian-900/70 border-white/[0.06] text-parchment-200 hover:border-neoliberal/40'
                       )}
                     >
@@ -650,13 +669,11 @@ function App() {
                     </button>
 
                     <button
-                      onClick={() =>
-                        setIdeologicalFilter((prev) => (prev === 'Critical' ? null : 'Critical'))
-                      }
+                      onClick={() => handleIdeologicalFilterSelect('Critical')}
                       className={clsx(
                         'w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg border text-left transition-all cursor-pointer',
                         ideologicalFilter === 'Critical'
-                          ? 'bg-critical/15 border-critical text-parchment-50'
+                          ? 'bg-critical/15 border-critical text-parchment-50 shadow-glow-rose'
                           : 'bg-obsidian-900/70 border-white/[0.06] text-parchment-200 hover:border-critical/40'
                       )}
                     >
@@ -916,59 +933,80 @@ function App() {
                   <div className="flex items-center justify-between mb-2">
                     <span className="font-mono text-[10px] uppercase tracking-widest text-parchment-300 flex items-center gap-1.5">
                       <Layers className="w-3 h-3 text-traditional" />
-                      Latent Topic Directory ({typedTopics.length})
+                      Latent Topic Directory (
+                      {ideologicalFilter
+                        ? `${
+                            typedTopics.filter(
+                              (t) => getArchetypeTheme(t.archetype?.label).id === ideologicalFilter
+                            ).length
+                          }/${typedTopics.length}`
+                        : typedTopics.length}
+                      )
                     </span>
-                    <span className="font-mono text-[9px] text-parchment-300">Click to inspect</span>
+                    {ideologicalFilter ? (
+                      <button
+                        onClick={() => setIdeologicalFilter(null)}
+                        className="font-mono text-[9px] text-traditional hover:underline cursor-pointer"
+                      >
+                        Show All ({typedTopics.length})
+                      </button>
+                    ) : (
+                      <span className="font-mono text-[9px] text-parchment-300">Click to inspect</span>
+                    )}
                   </div>
 
                   <div className="space-y-1 max-h-[290px] overflow-y-auto pr-1 custom-scrollbar">
-                    {typedTopics.map((t: Topic, idx: number) => {
-                      const theme = getArchetypeTheme(t.archetype?.label);
-                      const isSelected = idx === safeTopicIndex;
-                      const matchesFilter = !ideologicalFilter || theme.id === ideologicalFilter;
+                    {typedTopics
+                      .map((t: Topic, idx: number) => ({
+                        t,
+                        idx,
+                        theme: getArchetypeTheme(t.archetype?.label),
+                      }))
+                      .filter(({ theme }) => !ideologicalFilter || theme.id === ideologicalFilter)
+                      .map(({ t, idx, theme }) => {
+                        const isSelected = idx === safeTopicIndex;
 
-                      return (
-                        <button
-                          key={t.id}
-                          onClick={() => setSelectedTopicIndex(idx)}
-                          className={clsx(
-                            'w-full flex items-center justify-between gap-2 px-2.5 py-2 rounded-lg border text-left transition-all cursor-pointer',
-                            isSelected
-                              ? clsx('bg-obsidian-800', theme.borderGlow)
-                              : 'bg-obsidian-900/60 border-white/[0.05] hover:border-white/15',
-                            !matchesFilter && 'opacity-35'
-                          )}
-                        >
-                          <div className="flex items-center gap-2 min-w-0">
-                            <span
-                              className="w-2 h-2 rounded-full shrink-0"
-                              style={{ backgroundColor: theme.hex }}
-                            />
-                            <div className="min-w-0">
-                              <div className="flex items-center gap-1.5">
-                                <span className="font-mono text-[11px] font-bold text-parchment-50">
-                                  T{String(t.id + 1).padStart(2, '0')}
-                                </span>
-                                <span
-                                  className={clsx('font-mono text-[9px] truncate', theme.textClass)}
-                                >
-                                  {theme.id}
-                                </span>
+                        return (
+                          <button
+                            key={t.id}
+                            onClick={() => setSelectedTopicIndex(idx)}
+                            className={clsx(
+                              'w-full flex items-center justify-between gap-2 px-2.5 py-2 rounded-lg border text-left transition-all cursor-pointer',
+                              isSelected
+                                ? clsx('bg-obsidian-800', theme.borderGlow)
+                                : 'bg-obsidian-900/60 border-white/[0.05] hover:border-white/15'
+                            )}
+                          >
+                            <div className="flex items-center gap-2 min-w-0">
+                              <span
+                                className="w-2 h-2 rounded-full shrink-0"
+                                style={{ backgroundColor: theme.hex }}
+                              />
+                              <div className="min-w-0">
+                                <div className="flex items-center gap-1.5">
+                                  <span className="font-mono text-[11px] font-bold text-parchment-50">
+                                    T{String(t.id + 1).padStart(2, '0')}
+                                  </span>
+                                  <span
+                                    className={clsx('font-mono text-[9px] truncate', theme.textClass)}
+                                  >
+                                    {theme.id}
+                                  </span>
+                                </div>
+                                <p className="text-[11px] text-parchment-300 truncate">
+                                  {t.keywords
+                                    .slice(0, 3)
+                                    .map((k: Keyword) => k.word)
+                                    .join(' · ')}
+                                </p>
                               </div>
-                              <p className="text-[11px] text-parchment-300 truncate">
-                                {t.keywords
-                                  .slice(0, 3)
-                                  .map((k: Keyword) => k.word)
-                                  .join(' · ')}
-                              </p>
                             </div>
-                          </div>
-                          <span className="font-mono text-[10px] text-parchment-200 tabular-nums shrink-0">
-                            {t.archetype?.confidence || 0}%
-                          </span>
-                        </button>
-                      );
-                    })}
+                            <span className="font-mono text-[10px] text-parchment-200 tabular-nums shrink-0">
+                              {t.archetype?.confidence || 0}%
+                            </span>
+                          </button>
+                        );
+                      })}
                   </div>
                 </div>
               </div>
@@ -1048,25 +1086,46 @@ function App() {
                   className="overflow-hidden"
                 >
                   <div className="pt-3 mt-3 border-t border-white/[0.07] grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
-                    <div className="p-3 rounded-lg bg-obsidian-950/80 border-l-2 border-traditional">
-                      <div className="font-mono text-[10px] text-traditional uppercase mb-1">
-                        RQ₁ · Ecclesiastical Continuity
+                    <div
+                      onClick={() => handleIdeologicalFilterSelect('Traditional')}
+                      className={clsx(
+                        'p-3 rounded-lg bg-obsidian-950/80 border-l-2 border-traditional cursor-pointer transition-all hover:bg-traditional/10',
+                        ideologicalFilter === 'Traditional' && 'ring-1 ring-traditional bg-traditional/10'
+                      )}
+                    >
+                      <div className="font-mono text-[10px] text-traditional uppercase mb-1 flex items-center justify-between">
+                        <span>RQ₁ · Ecclesiastical Continuity</span>
+                        <span className="text-[9px]">{ideologicalFilter === 'Traditional' ? 'ACTIVE' : 'Filter →'}</span>
                       </div>
                       <p className="text-parchment-200 leading-relaxed">
                         Tracks classical dogmatic, liturgical, and pastoral vocabulary (*Kirche, Glaube, Liturgie, Sakrament*) across **Verlag Herder**, **St. Benno**, and **SCM R. Brockhaus**.
                       </p>
                     </div>
-                    <div className="p-3 rounded-lg bg-obsidian-950/80 border-l-2 border-neoliberal">
-                      <div className="font-mono text-[10px] text-neoliberal uppercase mb-1">
-                        RQ₂ · Neoliberal Therapeutic Turn
+                    <div
+                      onClick={() => handleIdeologicalFilterSelect('Neoliberal')}
+                      className={clsx(
+                        'p-3 rounded-lg bg-obsidian-950/80 border-l-2 border-neoliberal cursor-pointer transition-all hover:bg-neoliberal/10',
+                        ideologicalFilter === 'Neoliberal' && 'ring-1 ring-neoliberal bg-neoliberal/10'
+                      )}
+                    >
+                      <div className="font-mono text-[10px] text-neoliberal uppercase mb-1 flex items-center justify-between">
+                        <span>RQ₂ · Neoliberal Therapeutic Turn</span>
+                        <span className="text-[9px]">{ideologicalFilter === 'Neoliberal' ? 'ACTIVE' : 'Filter →'}</span>
                       </div>
                       <p className="text-parchment-200 leading-relaxed">
                         Measures the displacement of confessional theology by secularized mindfulness and resilience (*Achtsamkeit, Resilienz, Selbstoptimierung*) in **Kösel**, **GU**, and **Kamphausen**.
                       </p>
                     </div>
-                    <div className="p-3 rounded-lg bg-obsidian-950/80 border-l-2 border-critical">
-                      <div className="font-mono text-[10px] text-critical uppercase mb-1">
-                        RQ₃ · Post-Secular Critical Theory
+                    <div
+                      onClick={() => handleIdeologicalFilterSelect('Critical')}
+                      className={clsx(
+                        'p-3 rounded-lg bg-obsidian-950/80 border-l-2 border-critical cursor-pointer transition-all hover:bg-critical/10',
+                        ideologicalFilter === 'Critical' && 'ring-1 ring-critical bg-critical/10'
+                      )}
+                    >
+                      <div className="font-mono text-[10px] text-critical uppercase mb-1 flex items-center justify-between">
+                        <span>RQ₃ · Post-Secular Critical Theory</span>
+                        <span className="text-[9px]">{ideologicalFilter === 'Critical' ? 'ACTIVE' : 'Filter →'}</span>
                       </div>
                       <p className="text-parchment-200 leading-relaxed">
                         Examines macro-sociological critiques of religion, capitalism, and modernity (*Säkularisierung, Kapitalismus, Macht*) in **Suhrkamp / Insel** and **C.H. Beck**.
@@ -1222,7 +1281,13 @@ function App() {
                     </div>
 
                     <div className="space-y-2.5 max-h-[320px] overflow-y-auto pr-1 custom-scrollbar">
-                      {publisherArchetypes.map((item) => {
+                      {[...publisherArchetypes]
+                        .sort((a, b) => {
+                          if (!ideologicalFilter) return 0;
+                          const key = ideologicalFilter as 'Traditional' | 'Neoliberal' | 'Critical';
+                          return (b[key] ?? 0) - (a[key] ?? 0);
+                        })
+                        .map((item) => {
                         const trad = item.Traditional ?? 0;
                         const neo = item.Neoliberal ?? 0;
                         const crit = item.Critical ?? 0;
@@ -1240,6 +1305,7 @@ function App() {
                           : 'bg-critical/15 text-critical border-critical/30';
 
                         const isPubActive = selectedPublishers.includes(item.publisher);
+                        const matchesRq = !ideologicalFilter || dominantLabel === ideologicalFilter;
 
                         return (
                           <div
@@ -1250,7 +1316,10 @@ function App() {
                               'p-2.5 rounded-lg border transition-all cursor-pointer',
                               isPubActive
                                 ? 'bg-traditional/10 border-traditional shadow-glow-gold'
-                                : 'bg-obsidian-950/80 border-white/[0.06] hover:border-white/20'
+                                : matchesRq && ideologicalFilter
+                                ? 'bg-obsidian-900 border-white/25'
+                                : 'bg-obsidian-950/80 border-white/[0.06] hover:border-white/20',
+                              !matchesRq && ideologicalFilter && 'opacity-50'
                             )}
                           >
                             <div className="flex items-center justify-between gap-2 mb-1.5">
@@ -1376,6 +1445,7 @@ function App() {
               {/* Diachronic Word-Shift & Conceptual Drift Explorer (1970s-2020s) */}
               <ConceptualDriftExplorer
                 driftData={conceptualDrift}
+                ideologicalFilter={ideologicalFilter}
                 onDecadeClick={handleDecadeClick}
                 onPublisherClick={(pub) => handleTogglePublisher(pub, true)}
               />

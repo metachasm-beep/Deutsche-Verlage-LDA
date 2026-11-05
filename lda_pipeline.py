@@ -132,22 +132,33 @@ FRAKTUR_AND_META_NOISE = {
     "keit", "keiten", "heit", "heiten", "lich", "liche", "lichen", "licher", "liches", "ver", "ent", "zer"
 }
 
-# Canonical theological, philosophical, and biblical figures preserved during author/entity filtering
-# (Santana et al., 2025, DHQ 19.2 §56-64; Jiménez-Badillo et al., 2020)
+# Canonical sacred/theological terms preserved during entity filtering
+# All personal names (PER), philosopher/author surnames, and geographic locations (LOC) are stripped
+# per Santana et al. (2025, DHQ 19.2 §56-64) and Jiménez-Badillo et al. (2020)
 CANONICAL_THEO_PHIL_WHITELIST = {
-    "jesus", "christus", "paulus", "luther", "kant", "hegel", "habermas", "weber", "nietzsche",
-    "marx", "augustinus", "aquino", "schleiermacher", "barth", "rahner", "bonhoeffer", "bultmann",
-    "moltmann", "pannenberg", "jüngel", "küng", "ratzinger", "kasper", "tillich", "troeltsch",
-    "harnack", "kierkegaard", "heidegger", "husserl", "gadamer", "adorno", "horkheimer", "benjamin",
-    "blumenberg", "sloterdijk", "taylor", "spinoza", "leibniz", "fichte", "schelling", "feuerbach",
-    "foucault", "derrida", "ricoeur", "levinas", "buber", "rosenzweig", "scholem", "eckhart",
-    "origenes", "calvin", "zwingli", "melanchthon", "lessing", "israel", "jahwe", "moses", "abraham",
-    "david", "jesaja", "hiob", "jeremia", "lukas", "matthäus", "markus", "johannes"
+    "jesus", "christus", "jesu", "gott", "bibel", "kirche", "christentum",
+    "judentum", "islam", "buddhismus", "hinduismus", "evangelium", "koran", "torah"
 }
 
-# Non-canonical geographic locations (LOC) and modern person/contributor names (PER) filtered per
-# Santana et al. (2025, DHQ 19.2 §56-64, Figs. 4-6) to prevent geographic and homonym conflation
+# Non-canonical geographic locations (LOC) and person/author/philosopher names (PER) filtered per
+# Santana et al. (2025, DHQ 19.2 §56-64, Figs. 4-6) to prevent author, biography, and homonym conflation
 NON_CANONICAL_LOC_AND_PER_NOISE = {
+    # Author, philosopher, theologian & historical person names (PER) including Steiner, Grandt, etc.
+    "steiner", "rudolf", "rudolf_steiner", "grandt", "anthroposophe_grandt", "archiv_grandt",
+    "edelmann", "dietlind", "charles", "taylor", "charles_taylor", "kippenberg", "hans_kippenberg",
+    "jacques", "hans_joachim", "udo", "drewermann", "eugen", "drewermann_eugen", "annebelle",
+    "pithan", "vielfalt_pithan", "mauthner", "mauthner_fritz", "weizsäcker", "freud", "voltaire",
+    "holbach", "rousseau", "wittgenstein", "sartre", "nietzsche", "nietzsch", "luther", "kant",
+    "hegel", "habermas", "weber", "marx", "augustinus", "aquino", "schleiermacher", "barth",
+    "rahner", "bonhoeffer", "bultmann", "moltmann", "pannenberg", "jüngel", "küng", "ratzinger",
+    "kasper", "tillich", "troeltsch", "harnack", "kierkegaard", "heidegger", "husserl", "gadamer",
+    "adorno", "horkheimer", "benjamin", "blumenberg", "sloterdijk", "spinoza", "leibniz", "fichte",
+    "schelling", "feuerbach", "foucault", "derrida", "ricoeur", "levinas", "buber", "rosenzweig",
+    "scholem", "eckhart", "origenes", "calvin", "zwingli", "melanchthon", "lessing", "paulus",
+    "moses", "abraham", "david", "jesaja", "hiob", "jeremia", "lukas", "matthäus", "markus",
+    "johannes", "mohammed", "januar", "februar", "märz", "april", "mai", "juni", "juli", "august",
+    "september", "oktober", "november", "dezember", "daf", "dafi", "daz", "tiber", "bjp", "kmu",
+    "item", "abbildung", "befragter", "indien", "indisch", "chinesisch", "türkisch",
     # German federal states, historical regions, European countries & diocesan/university cities
     "bayern", "bayerisch", "württemberg", "baden", "westfalen", "westfälisch", "rheinland",
     "rheinisch", "sachsen", "sächsisch", "thüringen", "hessen", "hessisch", "niedersachsen",

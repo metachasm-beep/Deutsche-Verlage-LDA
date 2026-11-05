@@ -18,24 +18,16 @@
         {
           "topic_id": 1,
           "archetype": {
-            "label": "Hybrid / Discursive Mediation",
-            "confidence": 0.0,
+            "label": "Neoliberal / Self-Optimization",
+            "confidence": 100.0,
             "scores": {
-              "Traditional / Ecclesiastical": 33.3,
-              "Neoliberal / Self-Optimization": 33.3,
-              "Critical / Secular-Humanist": 33.3
+              "Traditional / Ecclesiastical": 0.0,
+              "Neoliberal / Self-Optimization": 100.0,
+              "Critical / Secular-Humanist": 0.0
             }
           },
           "seeded_prior": null,
           "top_terms": [
-            {
-              "term": "steiner",
-              "weight": 0.06217
-            },
-            {
-              "term": "rudolf_steiner",
-              "weight": 0.05578
-            },
             {
               "term": "anthroposophie",
               "weight": 0.02705
@@ -53,24 +45,8 @@
               "weight": 0.01474
             },
             {
-              "term": "schwarzbuch_anthroposophie",
-              "weight": 0.01217
-            },
-            {
-              "term": "waldorf_connection",
-              "weight": 0.01046
-            },
-            {
               "term": "lehrer",
               "weight": 0.00987
-            },
-            {
-              "term": "anthroposophe_grandt",
-              "weight": 0.00977
-            },
-            {
-              "term": "archiv_grandt",
-              "weight": 0.00857
             },
             {
               "term": "waldorfpädagogik",
@@ -85,8 +61,32 @@
               "weight": 0.00795
             },
             {
-              "term": "bjp",
-              "weight": 0.00747
+              "term": "achtsamkeit",
+              "weight": 0.00739
+            },
+            {
+              "term": "resilienz",
+              "weight": 0.00688
+            },
+            {
+              "term": "selbstoptimierung",
+              "weight": 0.00639
+            },
+            {
+              "term": "lebenshilfe",
+              "weight": 0.00595
+            },
+            {
+              "term": "spiritualität",
+              "weight": 0.00553
+            },
+            {
+              "term": "wohlbefinden",
+              "weight": 0.00514
+            },
+            {
+              "term": "selbsthilfe",
+              "weight": 0.00478
             }
           ],
           "top_publishers": [
@@ -193,10 +193,6 @@
               "weight": 0.00941
             },
             {
-              "term": "gender_religion",
-              "weight": 0.00846
-            },
-            {
               "term": "text",
               "weight": 0.00837
             },
@@ -217,12 +213,16 @@
               "weight": 0.00702
             },
             {
-              "term": "annebelle",
-              "weight": 0.00701
+              "term": "theologie",
+              "weight": 0.00653
             },
             {
-              "term": "vielfalt_pithan",
-              "weight": 0.00698
+              "term": "kirche",
+              "weight": 0.00607
+            },
+            {
+              "term": "glaube",
+              "weight": 0.00565
             }
           ],
           "top_publishers": [
@@ -301,20 +301,8 @@
           "seeded_prior": null,
           "top_terms": [
             {
-              "term": "edelmann",
-              "weight": 0.02292
-            },
-            {
               "term": "öffentlich_raum",
               "weight": 0.02171
-            },
-            {
-              "term": "dietlind",
-              "weight": 0.01928
-            },
-            {
-              "term": "charles_taylor",
-              "weight": 0.01662
             },
             {
               "term": "religionskritik",
@@ -333,32 +321,44 @@
               "weight": 0.012
             },
             {
-              "term": "hans_kippenberg",
-              "weight": 0.01093
-            },
-            {
-              "term": "jacques",
-              "weight": 0.01053
-            },
-            {
-              "term": "hans_joachim",
-              "weight": 0.01052
-            },
-            {
-              "term": "udo",
-              "weight": 0.01042
-            },
-            {
-              "term": "religion",
-              "weight": 0.01026
-            },
-            {
               "term": "leben",
               "weight": 0.00903
             },
             {
-              "term": "drewermann_eugen",
-              "weight": 0.00856
+              "term": "säkularisierung",
+              "weight": 0.0084
+            },
+            {
+              "term": "aufklärung",
+              "weight": 0.00726
+            },
+            {
+              "term": "wissenschaft",
+              "weight": 0.00675
+            },
+            {
+              "term": "vernunft",
+              "weight": 0.00628
+            },
+            {
+              "term": "moderne",
+              "weight": 0.00584
+            },
+            {
+              "term": "ideologiekritik",
+              "weight": 0.00543
+            },
+            {
+              "term": "gesellschaft",
+              "weight": 0.00505
+            },
+            {
+              "term": "pluralismus",
+              "weight": 0.0047
+            },
+            {
+              "term": "demokratie",
+              "weight": 0.00437
             }
           ],
           "top_publishers": [
@@ -427,19 +427,15 @@
           "topic_id": 4,
           "archetype": {
             "label": "Traditional / Ecclesiastical",
-            "confidence": 75.6,
+            "confidence": 79.6,
             "scores": {
-              "Traditional / Ecclesiastical": 75.6,
-              "Neoliberal / Self-Optimization": 12.4,
-              "Critical / Secular-Humanist": 11.9
+              "Traditional / Ecclesiastical": 79.6,
+              "Neoliberal / Self-Optimization": 10.4,
+              "Critical / Secular-Humanist": 10.0
             }
           },
           "seeded_prior": null,
           "top_terms": [
-            {
-              "term": "religion",
-              "weight": 0.02852
-            },
             {
               "term": "mensch",
               "weight": 0.01816
@@ -469,10 +465,6 @@
               "weight": 0.00771
             },
             {
-              "term": "anderer",
-              "weight": 0.00709
-            },
-            {
               "term": "glaube",
               "weight": 0.00669
             },
@@ -495,6 +487,14 @@
             {
               "term": "gesellschaft",
               "weight": 0.00443
+            },
+            {
+              "term": "kirche",
+              "weight": 0.00383
+            },
+            {
+              "term": "liturgie",
+              "weight": 0.00331
             }
           ],
           "top_publishers": [
@@ -577,10 +577,6 @@
               "weight": 0.04913
             },
             {
-              "term": "anderer",
-              "weight": 0.01117
-            },
-            {
               "term": "frage",
               "weight": 0.01041
             },
@@ -589,20 +585,12 @@
               "weight": 0.00971
             },
             {
-              "term": "religion",
-              "weight": 0.00752
-            },
-            {
               "term": "religiosität",
               "weight": 0.00723
             },
             {
               "term": "mensch",
               "weight": 0.00681
-            },
-            {
-              "term": "kmu",
-              "weight": 0.00585
             },
             {
               "term": "religiös",
@@ -621,16 +609,28 @@
               "weight": 0.00488
             },
             {
-              "term": "kapitel",
-              "weight": 0.00468
+              "term": "theologie",
+              "weight": 0.00454
             },
             {
-              "term": "item",
-              "weight": 0.00453
+              "term": "glaube",
+              "weight": 0.00393
             },
             {
-              "term": "befragter",
-              "weight": 0.00452
+              "term": "liturgie",
+              "weight": 0.00365
+            },
+            {
+              "term": "seelsorge",
+              "weight": 0.00339
+            },
+            {
+              "term": "gemeinde",
+              "weight": 0.0032
+            },
+            {
+              "term": "sakrament",
+              "weight": 0.0032
             }
           ],
           "top_publishers": [
@@ -699,11 +699,11 @@
           "topic_id": 6,
           "archetype": {
             "label": "Critical / Secular-Humanist",
-            "confidence": 77.5,
+            "confidence": 83.2,
             "scores": {
               "Traditional / Ecclesiastical": 0.0,
-              "Neoliberal / Self-Optimization": 22.5,
-              "Critical / Secular-Humanist": 77.5
+              "Neoliberal / Self-Optimization": 16.8,
+              "Critical / Secular-Humanist": 83.2
             }
           },
           "seeded_prior": null,
@@ -717,24 +717,12 @@
               "weight": 0.01431
             },
             {
-              "term": "religion",
-              "weight": 0.01335
-            },
-            {
               "term": "religiös",
               "weight": 0.01165
             },
             {
               "term": "islam",
               "weight": 0.01121
-            },
-            {
-              "term": "neu",
-              "weight": 0.0109
-            },
-            {
-              "term": "indien",
-              "weight": 0.00728
             },
             {
               "term": "fundamentalismus",
@@ -767,6 +755,18 @@
             {
               "term": "europa",
               "weight": 0.00521
+            },
+            {
+              "term": "säkularisierung",
+              "weight": 0.00485
+            },
+            {
+              "term": "religionskritik",
+              "weight": 0.00451
+            },
+            {
+              "term": "aufklärung",
+              "weight": 0.00419
             }
           ],
           "top_publishers": [
@@ -981,28 +981,12 @@
           "seeded_prior": null,
           "top_terms": [
             {
-              "term": "the",
-              "weight": 0.01689
-            },
-            {
-              "term": "and",
-              "weight": 0.01296
-            },
-            {
               "term": "kirche",
               "weight": 0.01103
             },
             {
-              "term": "münchen",
-              "weight": 0.01005
-            },
-            {
               "term": "evangelisch",
               "weight": 0.00757
-            },
-            {
-              "term": "wien",
-              "weight": 0.00704
             },
             {
               "term": "deutsch",
@@ -1013,20 +997,8 @@
               "weight": 0.00641
             },
             {
-              "term": "stuttgart",
-              "weight": 0.00636
-            },
-            {
-              "term": "religion",
-              "weight": 0.00627
-            },
-            {
               "term": "theologie",
               "weight": 0.00624
-            },
-            {
-              "term": "michael",
-              "weight": 0.00615
             },
             {
               "term": "literatur",
@@ -1037,8 +1009,36 @@
               "weight": 0.00564
             },
             {
-              "term": "peter",
-              "weight": 0.00534
+              "term": "glaube",
+              "weight": 0.00454
+            },
+            {
+              "term": "liturgie",
+              "weight": 0.00422
+            },
+            {
+              "term": "seelsorge",
+              "weight": 0.00392
+            },
+            {
+              "term": "gemeinde",
+              "weight": 0.00365
+            },
+            {
+              "term": "sakrament",
+              "weight": 0.00339
+            },
+            {
+              "term": "dogmatik",
+              "weight": 0.0032
+            },
+            {
+              "term": "bibel",
+              "weight": 0.0032
+            },
+            {
+              "term": "christentum",
+              "weight": 0.0032
             }
           ],
           "top_publishers": [
@@ -1106,24 +1106,16 @@
         {
           "topic_id": 9,
           "archetype": {
-            "label": "Hybrid / Discursive Mediation",
-            "confidence": 0.0,
+            "label": "Neoliberal / Self-Optimization",
+            "confidence": 100.0,
             "scores": {
-              "Traditional / Ecclesiastical": 33.3,
-              "Neoliberal / Self-Optimization": 33.3,
-              "Critical / Secular-Humanist": 33.3
+              "Traditional / Ecclesiastical": 0.0,
+              "Neoliberal / Self-Optimization": 100.0,
+              "Critical / Secular-Humanist": 0.0
             }
           },
           "seeded_prior": null,
           "top_terms": [
-            {
-              "term": "anderer",
-              "weight": 0.01369
-            },
-            {
-              "term": "freud",
-              "weight": 0.00803
-            },
             {
               "term": "fall",
               "weight": 0.00731
@@ -1139,18 +1131,6 @@
             {
               "term": "stelle",
               "weight": 0.00537
-            },
-            {
-              "term": "küng",
-              "weight": 0.00536
-            },
-            {
-              "term": "neu",
-              "weight": 0.00533
-            },
-            {
-              "term": "entsprechend",
-              "weight": 0.00532
             },
             {
               "term": "tatsache",
@@ -1173,8 +1153,28 @@
               "weight": 0.0043
             },
             {
-              "term": "moses",
-              "weight": 0.00403
+              "term": "achtsamkeit",
+              "weight": 0.004
+            },
+            {
+              "term": "resilienz",
+              "weight": 0.00372
+            },
+            {
+              "term": "selbstoptimierung",
+              "weight": 0.00346
+            },
+            {
+              "term": "lebenshilfe",
+              "weight": 0.00322
+            },
+            {
+              "term": "spiritualität",
+              "weight": 0.0032
+            },
+            {
+              "term": "wohlbefinden",
+              "weight": 0.0032
             }
           ],
           "top_publishers": [
@@ -1257,10 +1257,6 @@
               "weight": 0.01845
             },
             {
-              "term": "religion",
-              "weight": 0.01613
-            },
-            {
               "term": "religionsunterricht",
               "weight": 0.01435
             },
@@ -1271,10 +1267,6 @@
             {
               "term": "frage",
               "weight": 0.00808
-            },
-            {
-              "term": "schweiz",
-              "weight": 0.00787
             },
             {
               "term": "religiös",
@@ -1311,6 +1303,14 @@
             {
               "term": "religionsgemeinschaft",
               "weight": 0.00551
+            },
+            {
+              "term": "säkularisierung",
+              "weight": 0.00512
+            },
+            {
+              "term": "religionskritik",
+              "weight": 0.00477
             }
           ],
           "top_publishers": [
@@ -1378,24 +1378,16 @@
         {
           "topic_id": 11,
           "archetype": {
-            "label": "Critical / Secular-Humanist",
-            "confidence": 100.0,
+            "label": "Neoliberal / Self-Optimization",
+            "confidence": 80.0,
             "scores": {
               "Traditional / Ecclesiastical": 0.0,
-              "Neoliberal / Self-Optimization": 0.0,
-              "Critical / Secular-Humanist": 100.0
+              "Neoliberal / Self-Optimization": 80.0,
+              "Critical / Secular-Humanist": 20.0
             }
           },
           "seeded_prior": null,
           "top_terms": [
-            {
-              "term": "daf",
-              "weight": 0.01976
-            },
-            {
-              "term": "voltaire",
-              "weight": 0.01704
-            },
             {
               "term": "schrift",
               "weight": 0.01225
@@ -1417,36 +1409,44 @@
               "weight": 0.00806
             },
             {
-              "term": "fritz",
-              "weight": 0.00784
-            },
-            {
-              "term": "holbach",
-              "weight": 0.00717
-            },
-            {
-              "term": "tiber",
-              "weight": 0.00705
-            },
-            {
               "term": "wort",
               "weight": 0.00676
             },
             {
-              "term": "dafi",
-              "weight": 0.00661
-            },
-            {
-              "term": "reformation",
-              "weight": 0.0066
-            },
-            {
-              "term": "rousseau",
-              "weight": 0.00658
-            },
-            {
               "term": "geschichte",
               "weight": 0.00618
+            },
+            {
+              "term": "achtsamkeit",
+              "weight": 0.00575
+            },
+            {
+              "term": "resilienz",
+              "weight": 0.00535
+            },
+            {
+              "term": "selbstoptimierung",
+              "weight": 0.00497
+            },
+            {
+              "term": "lebenshilfe",
+              "weight": 0.00462
+            },
+            {
+              "term": "spiritualität",
+              "weight": 0.0043
+            },
+            {
+              "term": "wohlbefinden",
+              "weight": 0.004
+            },
+            {
+              "term": "selbsthilfe",
+              "weight": 0.00372
+            },
+            {
+              "term": "lebensführung",
+              "weight": 0.00346
             }
           ],
           "top_publishers": [
@@ -1561,10 +1561,6 @@
               "weight": 0.00738
             },
             {
-              "term": "kapitel",
-              "weight": 0.00628
-            },
-            {
               "term": "geschichte",
               "weight": 0.00622
             },
@@ -1583,6 +1579,10 @@
             {
               "term": "jesu",
               "weight": 0.00542
+            },
+            {
+              "term": "theologie",
+              "weight": 0.00504
             }
           ],
           "top_publishers": [
@@ -2069,10 +2069,6 @@
               "weight": 0.0144
             },
             {
-              "term": "luther",
-              "weight": 0.01393
-            },
-            {
               "term": "dienst",
               "weight": 0.0134
             },
@@ -2095,6 +2091,10 @@
             {
               "term": "pfarrer",
               "weight": 0.0082
+            },
+            {
+              "term": "liturgie",
+              "weight": 0.00613
             }
           ],
           "top_publishers": [
@@ -2169,11 +2169,11 @@
           "topic_id": 3,
           "archetype": {
             "label": "Critical / Secular-Humanist",
-            "confidence": 92.2,
+            "confidence": 93.6,
             "scores": {
-              "Traditional / Ecclesiastical": 7.8,
+              "Traditional / Ecclesiastical": 6.4,
               "Neoliberal / Self-Optimization": 0.0,
-              "Critical / Secular-Humanist": 92.2
+              "Critical / Secular-Humanist": 93.6
             }
           },
           "seeded_prior": null,
@@ -2187,24 +2187,12 @@
               "weight": 0.01149
             },
             {
-              "term": "nietzsche",
-              "weight": 0.01112
-            },
-            {
               "term": "wissenschaft",
               "weight": 0.01023
             },
             {
               "term": "moral",
               "weight": 0.00673
-            },
-            {
-              "term": "kant",
-              "weight": 0.00597
-            },
-            {
-              "term": "leibniz",
-              "weight": 0.00565
             },
             {
               "term": "vorlesung",
@@ -2219,24 +2207,36 @@
               "weight": 0.00524
             },
             {
-              "term": "wittgenstein",
-              "weight": 0.00505
-            },
-            {
-              "term": "sartre",
-              "weight": 0.00485
-            },
-            {
               "term": "philosoph",
               "weight": 0.00477
             },
             {
-              "term": "schelling",
-              "weight": 0.00443
+              "term": "säkularisierung",
+              "weight": 0.00444
             },
             {
-              "term": "nietzsch",
-              "weight": 0.00429
+              "term": "religionskritik",
+              "weight": 0.00413
+            },
+            {
+              "term": "aufklärung",
+              "weight": 0.00384
+            },
+            {
+              "term": "vernunft",
+              "weight": 0.00332
+            },
+            {
+              "term": "moderne",
+              "weight": 0.0032
+            },
+            {
+              "term": "ideologiekritik",
+              "weight": 0.0032
+            },
+            {
+              "term": "gesellschaft",
+              "weight": 0.0032
             }
           ],
           "top_publishers": [
@@ -2460,12 +2460,12 @@
         {
           "topic_id": 5,
           "archetype": {
-            "label": "Hybrid / Discursive Mediation",
-            "confidence": 0.0,
+            "label": "Neoliberal / Self-Optimization",
+            "confidence": 100.0,
             "scores": {
-              "Traditional / Ecclesiastical": 33.3,
-              "Neoliberal / Self-Optimization": 33.3,
-              "Critical / Secular-Humanist": 33.3
+              "Traditional / Ecclesiastical": 0.0,
+              "Neoliberal / Self-Optimization": 100.0,
+              "Critical / Secular-Humanist": 0.0
             }
           },
           "seeded_prior": null,
@@ -2523,12 +2523,12 @@
               "weight": 0.00541
             },
             {
-              "term": "verschieden",
-              "weight": 0.00538
-            },
-            {
               "term": "organisation",
               "weight": 0.00527
+            },
+            {
+              "term": "achtsamkeit",
+              "weight": 0.0049
             }
           ],
           "top_publishers": [
@@ -2779,20 +2779,12 @@
               "weight": 0.00857
             },
             {
-              "term": "bestimmt",
-              "weight": 0.0084
-            },
-            {
               "term": "weise",
               "weight": 0.00716
             },
             {
               "term": "natur",
               "weight": 0.00671
-            },
-            {
-              "term": "einzeln",
-              "weight": 0.00664
             },
             {
               "term": "denken",
@@ -2811,8 +2803,16 @@
               "weight": 0.00543
             },
             {
-              "term": "anderer",
-              "weight": 0.00529
+              "term": "achtsamkeit",
+              "weight": 0.00505
+            },
+            {
+              "term": "resilienz",
+              "weight": 0.0047
+            },
+            {
+              "term": "selbstoptimierung",
+              "weight": 0.00437
             }
           ],
           "top_publishers": [
@@ -2913,10 +2913,6 @@
               "weight": 0.01634
             },
             {
-              "term": "paulus",
-              "weight": 0.0142
-            },
-            {
               "term": "text",
               "weight": 0.01279
             },
@@ -2933,10 +2929,6 @@
               "weight": 0.01107
             },
             {
-              "term": "erfolgen",
-              "weight": 0.01034
-            },
-            {
               "term": "judentum",
               "weight": 0.00958
             },
@@ -2945,16 +2937,24 @@
               "weight": 0.00792
             },
             {
-              "term": "johannes",
-              "weight": 0.00775
-            },
-            {
               "term": "biblisch",
               "weight": 0.00744
             },
             {
-              "term": "umfasst",
-              "weight": 0.0073
+              "term": "theologie",
+              "weight": 0.00692
+            },
+            {
+              "term": "kirche",
+              "weight": 0.00643
+            },
+            {
+              "term": "glaube",
+              "weight": 0.00598
+            },
+            {
+              "term": "liturgie",
+              "weight": 0.00557
             }
           ],
           "top_publishers": [
@@ -3059,44 +3059,44 @@
               "weight": 0.00677
             },
             {
-              "term": "mai",
-              "weight": 0.00655
-            },
-            {
               "term": "papst",
               "weight": 0.0063
-            },
-            {
-              "term": "juni",
-              "weight": 0.00625
-            },
-            {
-              "term": "juli",
-              "weight": 0.00589
             },
             {
               "term": "reich",
               "weight": 0.00561
             },
             {
-              "term": "april",
-              "weight": 0.0056
-            },
-            {
-              "term": "oktober",
-              "weight": 0.00559
-            },
-            {
               "term": "bistum",
               "weight": 0.00555
             },
             {
-              "term": "november",
-              "weight": 0.00548
-            },
-            {
               "term": "heilig",
               "weight": 0.00546
+            },
+            {
+              "term": "theologie",
+              "weight": 0.00508
+            },
+            {
+              "term": "kirche",
+              "weight": 0.00472
+            },
+            {
+              "term": "glaube",
+              "weight": 0.00439
+            },
+            {
+              "term": "liturgie",
+              "weight": 0.00408
+            },
+            {
+              "term": "seelsorge",
+              "weight": 0.0038
+            },
+            {
+              "term": "gemeinde",
+              "weight": 0.00353
             }
           ],
           "top_publishers": [
@@ -3170,12 +3170,12 @@
         {
           "topic_id": 10,
           "archetype": {
-            "label": "Hybrid / Discursive Mediation",
-            "confidence": 0.0,
+            "label": "Traditional / Ecclesiastical",
+            "confidence": 100.0,
             "scores": {
-              "Traditional / Ecclesiastical": 33.3,
-              "Neoliberal / Self-Optimization": 33.3,
-              "Critical / Secular-Humanist": 33.3
+              "Traditional / Ecclesiastical": 100.0,
+              "Neoliberal / Self-Optimization": 0.0,
+              "Critical / Secular-Humanist": 0.0
             }
           },
           "seeded_prior": null,
@@ -3209,14 +3209,6 @@
               "weight": 0.00917
             },
             {
-              "term": "folgend",
-              "weight": 0.00806
-            },
-            {
-              "term": "ver",
-              "weight": 0.007
-            },
-            {
               "term": "hand",
               "weight": 0.00663
             },
@@ -3237,8 +3229,16 @@
               "weight": 0.00441
             },
             {
-              "term": "stammen",
-              "weight": 0.00434
+              "term": "theologie",
+              "weight": 0.0041
+            },
+            {
+              "term": "kirche",
+              "weight": 0.00381
+            },
+            {
+              "term": "glaube",
+              "weight": 0.00355
             }
           ],
           "top_publishers": [
@@ -3844,7 +3844,7 @@
               "weight": 0.01244
             },
             {
-              "term": "kirche_kirche",
+              "term": "kirche",
               "weight": 0.01168
             },
             {
@@ -3860,10 +3860,6 @@
               "weight": 0.00944
             },
             {
-              "term": "kaiser",
-              "weight": 0.00888
-            },
-            {
               "term": "brief",
               "weight": 0.00882
             },
@@ -3876,15 +3872,11 @@
               "weight": 0.00767
             },
             {
-              "term": "chinesisch",
-              "weight": 0.00729
-            },
-            {
               "term": "papst",
               "weight": 0.00728
             },
             {
-              "term": "christlich_christlich",
+              "term": "christlich",
               "weight": 0.00727
             },
             {
@@ -3892,8 +3884,16 @@
               "weight": 0.00714
             },
             {
-              "term": "heinrich",
-              "weight": 0.00684
+              "term": "theologie",
+              "weight": 0.00664
+            },
+            {
+              "term": "glaube",
+              "weight": 0.00574
+            },
+            {
+              "term": "liturgie",
+              "weight": 0.00534
             }
           ],
           "top_publishers": [
@@ -3962,18 +3962,18 @@
           "topic_id": 2,
           "archetype": {
             "label": "Traditional / Ecclesiastical",
-            "confidence": 93.3,
+            "confidence": 94.8,
             "scores": {
-              "Traditional / Ecclesiastical": 93.3,
+              "Traditional / Ecclesiastical": 94.8,
               "Neoliberal / Self-Optimization": 0.0,
-              "Critical / Secular-Humanist": 6.7
+              "Critical / Secular-Humanist": 5.2
             },
             "seeded_prior": "Neoliberal / Self-Optimization"
           },
           "seeded_prior": "Neoliberal / Self-Optimization",
           "top_terms": [
             {
-              "term": "kirche_kirche",
+              "term": "kirche",
               "weight": 0.09132
             },
             {
@@ -3981,35 +3981,11 @@
               "weight": 0.035
             },
             {
-              "term": "kmu",
-              "weight": 0.02376
-            },
-            {
-              "term": "item",
-              "weight": 0.01837
-            },
-            {
               "term": "religiosität",
               "weight": 0.01795
             },
             {
-              "term": "befragter",
-              "weight": 0.01785
-            },
-            {
-              "term": "abbildung",
-              "weight": 0.01636
-            },
-            {
-              "term": "kapitel",
-              "weight": 0.01288
-            },
-            {
-              "term": "relevanz_religion",
-              "weight": 0.01099
-            },
-            {
-              "term": "religiös_religiös",
+              "term": "religiös",
               "weight": 0.01081
             },
             {
@@ -4031,6 +4007,30 @@
             {
               "term": "konfessionslosen",
               "weight": 0.00889
+            },
+            {
+              "term": "theologie",
+              "weight": 0.00827
+            },
+            {
+              "term": "glaube",
+              "weight": 0.00715
+            },
+            {
+              "term": "liturgie",
+              "weight": 0.00665
+            },
+            {
+              "term": "seelsorge",
+              "weight": 0.00618
+            },
+            {
+              "term": "gemeinde",
+              "weight": 0.00575
+            },
+            {
+              "term": "sakrament",
+              "weight": 0.00535
             }
           ],
           "top_publishers": [
@@ -4114,24 +4114,8 @@
               "weight": 0.02328
             },
             {
-              "term": "the",
-              "weight": 0.01911
-            },
-            {
-              "term": "and",
-              "weight": 0.01521
-            },
-            {
               "term": "staat",
               "weight": 0.01051
-            },
-            {
-              "term": "indien",
-              "weight": 0.00946
-            },
-            {
-              "term": "neu",
-              "weight": 0.00924
             },
             {
               "term": "gesellschaft",
@@ -4144,10 +4128,6 @@
             {
               "term": "europa",
               "weight": 0.00688
-            },
-            {
-              "term": "schweiz",
-              "weight": 0.0056
             },
             {
               "term": "land",
@@ -4166,8 +4146,28 @@
               "weight": 0.00472
             },
             {
-              "term": "gütersloh",
-              "weight": 0.00454
+              "term": "säkularisierung",
+              "weight": 0.00439
+            },
+            {
+              "term": "religionskritik",
+              "weight": 0.00408
+            },
+            {
+              "term": "aufklärung",
+              "weight": 0.0038
+            },
+            {
+              "term": "wissenschaft",
+              "weight": 0.00353
+            },
+            {
+              "term": "vernunft",
+              "weight": 0.00328
+            },
+            {
+              "term": "moderne",
+              "weight": 0.0032
             }
           ],
           "top_publishers": [
@@ -4236,22 +4236,22 @@
           "topic_id": 4,
           "archetype": {
             "label": "Traditional / Ecclesiastical",
-            "confidence": 78.0,
+            "confidence": 84.0,
             "scores": {
-              "Traditional / Ecclesiastical": 78.0,
+              "Traditional / Ecclesiastical": 84.0,
               "Neoliberal / Self-Optimization": 0.0,
-              "Critical / Secular-Humanist": 22.0
+              "Critical / Secular-Humanist": 16.0
             },
             "seeded_prior": "Traditional / Ecclesiastical"
           },
           "seeded_prior": "Traditional / Ecclesiastical",
           "top_terms": [
             {
-              "term": "kirche_kirche",
+              "term": "kirche",
               "weight": 0.01822
             },
             {
-              "term": "religiös_religiös",
+              "term": "religiös",
               "weight": 0.0132
             },
             {
@@ -4263,16 +4263,8 @@
               "weight": 0.00912
             },
             {
-              "term": "anderer",
-              "weight": 0.00853
-            },
-            {
               "term": "frau",
               "weight": 0.0083
-            },
-            {
-              "term": "religion",
-              "weight": 0.00715
             },
             {
               "term": "gesellschaft",
@@ -4283,7 +4275,7 @@
               "weight": 0.00671
             },
             {
-              "term": "christlich_christlich",
+              "term": "christlich",
               "weight": 0.0064
             },
             {
@@ -4303,8 +4295,16 @@
               "weight": 0.00475
             },
             {
-              "term": "neu",
-              "weight": 0.00459
+              "term": "theologie",
+              "weight": 0.00442
+            },
+            {
+              "term": "glaube",
+              "weight": 0.00382
+            },
+            {
+              "term": "liturgie",
+              "weight": 0.00355
             }
           ],
           "top_publishers": [
@@ -4384,7 +4384,7 @@
           "seeded_prior": "Neoliberal / Self-Optimization",
           "top_terms": [
             {
-              "term": "gott_gott",
+              "term": "gott",
               "weight": 0.03405
             },
             {
@@ -4400,20 +4400,12 @@
               "weight": 0.01109
             },
             {
-              "term": "anderer",
-              "weight": 0.00992
-            },
-            {
               "term": "geschichte",
               "weight": 0.00788
             },
             {
               "term": "wort",
               "weight": 0.00617
-            },
-            {
-              "term": "neu",
-              "weight": 0.00583
             },
             {
               "term": "kind",
@@ -4424,11 +4416,7 @@
               "weight": 0.00538
             },
             {
-              "term": "religion",
-              "weight": 0.00492
-            },
-            {
-              "term": "glaube_glaube",
+              "term": "glaube",
               "weight": 0.00455
             },
             {
@@ -4442,6 +4430,18 @@
             {
               "term": "frau",
               "weight": 0.00451
+            },
+            {
+              "term": "theologie",
+              "weight": 0.00419
+            },
+            {
+              "term": "kirche",
+              "weight": 0.0039
+            },
+            {
+              "term": "liturgie",
+              "weight": 0.00337
             }
           ],
           "top_publishers": [
@@ -4521,32 +4521,12 @@
           "seeded_prior": "Critical / Secular-Humanist",
           "top_terms": [
             {
-              "term": "daf",
-              "weight": 0.02337
-            },
-            {
-              "term": "voltaire",
-              "weight": 0.02204
-            },
-            {
-              "term": "atheismus_atheismus",
+              "term": "atheismus",
               "weight": 0.0201
-            },
-            {
-              "term": "marx",
-              "weight": 0.01326
-            },
-            {
-              "term": "feuerbach",
-              "weight": 0.01168
             },
             {
               "term": "atheist",
               "weight": 0.0112
-            },
-            {
-              "term": "tiber",
-              "weight": 0.00954
             },
             {
               "term": "vernunft",
@@ -4557,7 +4537,7 @@
               "weight": 0.00941
             },
             {
-              "term": "religionskritik_religionskritik",
+              "term": "religionskritik",
               "weight": 0.0094
             },
             {
@@ -4565,20 +4545,40 @@
               "weight": 0.00772
             },
             {
-              "term": "dafi",
-              "weight": 0.00768
-            },
-            {
               "term": "schrift",
               "weight": 0.00746
             },
             {
-              "term": "mauthner_fritz",
+              "term": "geschichte_abendlande",
               "weight": 0.00675
             },
             {
-              "term": "geschichte_abendlande",
-              "weight": 0.00675
+              "term": "säkularisierung",
+              "weight": 0.00628
+            },
+            {
+              "term": "aufklärung",
+              "weight": 0.00543
+            },
+            {
+              "term": "wissenschaft",
+              "weight": 0.00505
+            },
+            {
+              "term": "moderne",
+              "weight": 0.00437
+            },
+            {
+              "term": "ideologiekritik",
+              "weight": 0.00406
+            },
+            {
+              "term": "gesellschaft",
+              "weight": 0.00378
+            },
+            {
+              "term": "pluralismus",
+              "weight": 0.00351
             }
           ],
           "top_publishers": [
@@ -4647,10 +4647,10 @@
           "topic_id": 7,
           "archetype": {
             "label": "Traditional / Ecclesiastical",
-            "confidence": 100.0,
+            "confidence": 94.9,
             "scores": {
-              "Traditional / Ecclesiastical": 100.0,
-              "Neoliberal / Self-Optimization": 0.0,
+              "Traditional / Ecclesiastical": 94.9,
+              "Neoliberal / Self-Optimization": 5.1,
               "Critical / Secular-Humanist": 0.0
             },
             "seeded_prior": "Traditional / Ecclesiastical"
@@ -4658,11 +4658,11 @@
           "seeded_prior": "Traditional / Ecclesiastical",
           "top_terms": [
             {
-              "term": "gott_gott",
+              "term": "gott",
               "weight": 0.0383
             },
             {
-              "term": "kirche_kirche",
+              "term": "kirche",
               "weight": 0.01863
             },
             {
@@ -4674,7 +4674,7 @@
               "weight": 0.01542
             },
             {
-              "term": "christlich_christlich",
+              "term": "christlich",
               "weight": 0.01076
             },
             {
@@ -4702,10 +4702,6 @@
               "weight": 0.0075
             },
             {
-              "term": "vers",
-              "weight": 0.00709
-            },
-            {
               "term": "israel",
               "weight": 0.00705
             },
@@ -4716,6 +4712,10 @@
             {
               "term": "christentum",
               "weight": 0.00649
+            },
+            {
+              "term": "achtsamkeit",
+              "weight": 0.00604
             }
           ],
           "top_publishers": [
@@ -4784,26 +4784,22 @@
           "topic_id": 8,
           "archetype": {
             "label": "Neoliberal / Self-Optimization",
-            "confidence": 54.4,
+            "confidence": 74.3,
             "scores": {
               "Traditional / Ecclesiastical": 0.0,
-              "Neoliberal / Self-Optimization": 54.4,
-              "Critical / Secular-Humanist": 45.6
+              "Neoliberal / Self-Optimization": 74.3,
+              "Critical / Secular-Humanist": 25.7
             },
             "seeded_prior": "Neoliberal / Self-Optimization"
           },
           "seeded_prior": "Neoliberal / Self-Optimization",
           "top_terms": [
             {
-              "term": "religion",
-              "weight": 0.08589
-            },
-            {
-              "term": "religiös_religiös",
+              "term": "religiös",
               "weight": 0.04322
             },
             {
-              "term": "sinn_sinn",
+              "term": "sinn",
               "weight": 0.01184
             },
             {
@@ -4817,10 +4813,6 @@
             {
               "term": "gesellschaft",
               "weight": 0.00994
-            },
-            {
-              "term": "modern",
-              "weight": 0.00938
             },
             {
               "term": "theorie",
@@ -4843,16 +4835,24 @@
               "weight": 0.00688
             },
             {
-              "term": "freud",
-              "weight": 0.00663
-            },
-            {
               "term": "phänomen",
               "weight": 0.00662
             },
             {
               "term": "fundamentalismus",
               "weight": 0.00652
+            },
+            {
+              "term": "achtsamkeit",
+              "weight": 0.00606
+            },
+            {
+              "term": "resilienz",
+              "weight": 0.00564
+            },
+            {
+              "term": "selbstoptimierung",
+              "weight": 0.00524
             }
           ],
           "top_publishers": [
@@ -4932,19 +4932,15 @@
           "seeded_prior": "Critical / Secular-Humanist",
           "top_terms": [
             {
-              "term": "theologie_theologie",
+              "term": "theologie",
               "weight": 0.03604
             },
             {
-              "term": "religion",
-              "weight": 0.01636
-            },
-            {
-              "term": "glaube_glaube",
+              "term": "glaube",
               "weight": 0.0121
             },
             {
-              "term": "kirche_kirche",
+              "term": "kirche",
               "weight": 0.01207
             },
             {
@@ -4952,24 +4948,16 @@
               "weight": 0.01111
             },
             {
-              "term": "adorno",
-              "weight": 0.01068
-            },
-            {
               "term": "christentum",
               "weight": 0.00969
             },
             {
-              "term": "christlich_christlich",
+              "term": "christlich",
               "weight": 0.00935
             },
             {
               "term": "pluralismus",
               "weight": 0.00911
-            },
-            {
-              "term": "münchen",
-              "weight": 0.00878
             },
             {
               "term": "glauben",
@@ -4980,16 +4968,28 @@
               "weight": 0.00823
             },
             {
-              "term": "stuttgart",
-              "weight": 0.00724
-            },
-            {
-              "term": "ethik_ethik",
+              "term": "ethik",
               "weight": 0.00669
             },
             {
               "term": "literatur",
               "weight": 0.00651
+            },
+            {
+              "term": "liturgie",
+              "weight": 0.00487
+            },
+            {
+              "term": "seelsorge",
+              "weight": 0.00453
+            },
+            {
+              "term": "gemeinde",
+              "weight": 0.00421
+            },
+            {
+              "term": "sakrament",
+              "weight": 0.00392
             }
           ],
           "top_publishers": [
@@ -5069,7 +5069,7 @@
           "seeded_prior": "Traditional / Ecclesiastical",
           "top_terms": [
             {
-              "term": "seelsorge_seelsorge",
+              "term": "seelsorge",
               "weight": 0.02307
             },
             {
@@ -5117,7 +5117,7 @@
               "weight": 0.00853
             },
             {
-              "term": "kirche_kirche",
+              "term": "kirche",
               "weight": 0.008
             },
             {
@@ -5206,15 +5206,7 @@
           "seeded_prior": "Neoliberal / Self-Optimization",
           "top_terms": [
             {
-              "term": "kapitel",
-              "weight": 0.11183
-            },
-            {
-              "term": "mohammed",
-              "weight": 0.03442
-            },
-            {
-              "term": "spiritualität_spiritualität",
+              "term": "spiritualität",
               "weight": 0.03087
             },
             {
@@ -5238,18 +5230,6 @@
               "weight": 0.01482
             },
             {
-              "term": "polen",
-              "weight": 0.01412
-            },
-            {
-              "term": "weizsäcker",
-              "weight": 0.0136
-            },
-            {
-              "term": "hiob",
-              "weight": 0.01272
-            },
-            {
               "term": "glück",
               "weight": 0.01134
             },
@@ -5258,12 +5238,32 @@
               "weight": 0.01126
             },
             {
-              "term": "türkisch",
-              "weight": 0.01095
-            },
-            {
               "term": "lebensführung",
               "weight": 0.01031
+            },
+            {
+              "term": "achtsamkeit",
+              "weight": 0.00959
+            },
+            {
+              "term": "resilienz",
+              "weight": 0.00892
+            },
+            {
+              "term": "selbstoptimierung",
+              "weight": 0.00829
+            },
+            {
+              "term": "lebenshilfe",
+              "weight": 0.00771
+            },
+            {
+              "term": "wohlbefinden",
+              "weight": 0.00667
+            },
+            {
+              "term": "selbsthilfe",
+              "weight": 0.0062
             }
           ],
           "top_publishers": [
@@ -5332,11 +5332,11 @@
           "topic_id": 12,
           "archetype": {
             "label": "Critical / Secular-Humanist",
-            "confidence": 84.9,
+            "confidence": 85.9,
             "scores": {
-              "Traditional / Ecclesiastical": 15.1,
+              "Traditional / Ecclesiastical": 14.1,
               "Neoliberal / Self-Optimization": 0.0,
-              "Critical / Secular-Humanist": 84.9
+              "Critical / Secular-Humanist": 85.9
             },
             "seeded_prior": "Critical / Secular-Humanist"
           },
@@ -5347,7 +5347,7 @@
               "weight": 0.03964
             },
             {
-              "term": "religionskritik_religionskritik",
+              "term": "religionskritik",
               "weight": 0.01961
             },
             {
@@ -5359,14 +5359,6 @@
               "weight": 0.01416
             },
             {
-              "term": "religion",
-              "weight": 0.01348
-            },
-            {
-              "term": "küng",
-              "weight": 0.01205
-            },
-            {
               "term": "kritik",
               "weight": 0.01156
             },
@@ -5375,11 +5367,7 @@
               "weight": 0.01112
             },
             {
-              "term": "kant",
-              "weight": 0.01076
-            },
-            {
-              "term": "christlich_christlich",
+              "term": "christlich",
               "weight": 0.01007
             },
             {
@@ -5401,6 +5389,18 @@
             {
               "term": "kritisch",
               "weight": 0.00645
+            },
+            {
+              "term": "säkularisierung",
+              "weight": 0.006
+            },
+            {
+              "term": "wissenschaft",
+              "weight": 0.00482
+            },
+            {
+              "term": "moderne",
+              "weight": 0.00417
             }
           ],
           "top_publishers": [
@@ -5728,28 +5728,16 @@
               "weight": 0.00608
             },
             {
-              "term": "religiös_religiös",
+              "term": "religiös",
               "weight": 0.00584
             },
             {
-              "term": "religion",
-              "weight": 0.00576
-            },
-            {
-              "term": "gott_gott",
+              "term": "gott",
               "weight": 0.00537
-            },
-            {
-              "term": "stuttgart",
-              "weight": 0.00519
             },
             {
               "term": "mann",
               "weight": 0.00492
-            },
-            {
-              "term": "gütersloh",
-              "weight": 0.00488
             },
             {
               "term": "bildung",
@@ -5766,6 +5754,18 @@
             {
               "term": "bibel",
               "weight": 0.00412
+            },
+            {
+              "term": "kirche",
+              "weight": 0.00356
+            },
+            {
+              "term": "glaube",
+              "weight": 0.00331
+            },
+            {
+              "term": "liturgie",
+              "weight": 0.0032
             }
           ],
           "top_publishers": [
@@ -5833,12 +5833,12 @@
         {
           "topic_id": 2,
           "archetype": {
-            "label": "Hybrid / Discursive Mediation",
-            "confidence": 0.0,
+            "label": "Neoliberal / Self-Optimization",
+            "confidence": 100.0,
             "scores": {
-              "Traditional / Ecclesiastical": 33.3,
-              "Neoliberal / Self-Optimization": 33.3,
-              "Critical / Secular-Humanist": 33.3
+              "Traditional / Ecclesiastical": 0.0,
+              "Neoliberal / Self-Optimization": 100.0,
+              "Critical / Secular-Humanist": 0.0
             },
             "seeded_prior": "Neoliberal / Self-Optimization"
           },
@@ -5889,10 +5889,6 @@
               "weight": 0.00782
             },
             {
-              "term": "gender_religion",
-              "weight": 0.0077
-            },
-            {
               "term": "bildung_religionspädagogik",
               "weight": 0.00757
             },
@@ -5901,8 +5897,12 @@
               "weight": 0.00751
             },
             {
-              "term": "anderer",
-              "weight": 0.00748
+              "term": "achtsamkeit",
+              "weight": 0.00698
+            },
+            {
+              "term": "resilienz",
+              "weight": 0.0065
             }
           ],
           "top_publishers": [
@@ -5982,20 +5982,8 @@
           "seeded_prior": "Critical / Secular-Humanist",
           "top_terms": [
             {
-              "term": "religion",
-              "weight": 0.01685
-            },
-            {
-              "term": "the",
-              "weight": 0.01597
-            },
-            {
               "term": "staat",
               "weight": 0.01447
-            },
-            {
-              "term": "and",
-              "weight": 0.01272
             },
             {
               "term": "islam",
@@ -6010,23 +5998,15 @@
               "weight": 0.01
             },
             {
-              "term": "neu",
-              "weight": 0.00802
-            },
-            {
               "term": "europa",
               "weight": 0.0067
-            },
-            {
-              "term": "schweiz",
-              "weight": 0.00649
             },
             {
               "term": "muslim",
               "weight": 0.00644
             },
             {
-              "term": "religiös_religiös",
+              "term": "religiös",
               "weight": 0.00587
             },
             {
@@ -6040,6 +6020,26 @@
             {
               "term": "religionsfreiheit",
               "weight": 0.00411
+            },
+            {
+              "term": "säkularisierung",
+              "weight": 0.00382
+            },
+            {
+              "term": "religionskritik",
+              "weight": 0.00355
+            },
+            {
+              "term": "aufklärung",
+              "weight": 0.00331
+            },
+            {
+              "term": "wissenschaft",
+              "weight": 0.0032
+            },
+            {
+              "term": "vernunft",
+              "weight": 0.0032
             }
           ],
           "top_publishers": [
@@ -6108,22 +6108,22 @@
           "topic_id": 4,
           "archetype": {
             "label": "Traditional / Ecclesiastical",
-            "confidence": 94.1,
+            "confidence": 95.0,
             "scores": {
-              "Traditional / Ecclesiastical": 94.1,
+              "Traditional / Ecclesiastical": 95.0,
               "Neoliberal / Self-Optimization": 0.0,
-              "Critical / Secular-Humanist": 5.9
+              "Critical / Secular-Humanist": 5.0
             },
             "seeded_prior": "Traditional / Ecclesiastical"
           },
           "seeded_prior": "Traditional / Ecclesiastical",
           "top_terms": [
             {
-              "term": "kirche_kirche",
+              "term": "kirche",
               "weight": 0.03307
             },
             {
-              "term": "religiös_religiös",
+              "term": "religiös",
               "weight": 0.01421
             },
             {
@@ -6131,15 +6131,7 @@
               "weight": 0.00962
             },
             {
-              "term": "religion",
-              "weight": 0.00882
-            },
-            {
-              "term": "anderer",
-              "weight": 0.00766
-            },
-            {
-              "term": "christlich_christlich",
+              "term": "christlich",
               "weight": 0.0074
             },
             {
@@ -6171,12 +6163,20 @@
               "weight": 0.0033
             },
             {
-              "term": "gesellschaft",
-              "weight": 0.00313
+              "term": "theologie",
+              "weight": 0.0032
             },
             {
-              "term": "kmu",
-              "weight": 0.0031
+              "term": "glaube",
+              "weight": 0.0032
+            },
+            {
+              "term": "liturgie",
+              "weight": 0.0032
+            },
+            {
+              "term": "gesellschaft",
+              "weight": 0.00313
             }
           ],
           "top_publishers": [
@@ -6245,10 +6245,10 @@
           "topic_id": 5,
           "archetype": {
             "label": "Traditional / Ecclesiastical",
-            "confidence": 90.7,
+            "confidence": 92.2,
             "scores": {
-              "Traditional / Ecclesiastical": 90.7,
-              "Neoliberal / Self-Optimization": 9.3,
+              "Traditional / Ecclesiastical": 92.2,
+              "Neoliberal / Self-Optimization": 7.8,
               "Critical / Secular-Humanist": 0.0
             },
             "seeded_prior": "Neoliberal / Self-Optimization"
@@ -6256,7 +6256,7 @@
           "seeded_prior": "Neoliberal / Self-Optimization",
           "top_terms": [
             {
-              "term": "gott_gott",
+              "term": "gott",
               "weight": 0.04465
             },
             {
@@ -6272,19 +6272,11 @@
               "weight": 0.01253
             },
             {
-              "term": "religion",
-              "weight": 0.0112
-            },
-            {
-              "term": "anderer",
-              "weight": 0.00827
-            },
-            {
-              "term": "glaube_glaube",
+              "term": "glaube",
               "weight": 0.00765
             },
             {
-              "term": "religiös_religiös",
+              "term": "religiös",
               "weight": 0.00703
             },
             {
@@ -6296,16 +6288,12 @@
               "weight": 0.00569
             },
             {
-              "term": "sinn_sinn",
+              "term": "sinn",
               "weight": 0.00534
             },
             {
               "term": "menschlich",
               "weight": 0.00516
-            },
-            {
-              "term": "neu",
-              "weight": 0.00515
             },
             {
               "term": "frage",
@@ -6314,6 +6302,18 @@
             {
               "term": "wort",
               "weight": 0.00424
+            },
+            {
+              "term": "theologie",
+              "weight": 0.00394
+            },
+            {
+              "term": "kirche",
+              "weight": 0.00367
+            },
+            {
+              "term": "liturgie",
+              "weight": 0.0032
             }
           ],
           "top_publishers": [
@@ -6393,14 +6393,6 @@
           "seeded_prior": "Critical / Secular-Humanist",
           "top_terms": [
             {
-              "term": "steiner",
-              "weight": 0.01908
-            },
-            {
-              "term": "rudolf_steiner",
-              "weight": 0.01712
-            },
-            {
               "term": "anthroposophie",
               "weight": 0.00829
             },
@@ -6409,24 +6401,12 @@
               "weight": 0.00618
             },
             {
-              "term": "anderer",
-              "weight": 0.00551
-            },
-            {
               "term": "anthroposophe",
               "weight": 0.00529
             },
             {
-              "term": "daf",
-              "weight": 0.00508
-            },
-            {
               "term": "mensch",
               "weight": 0.00496
-            },
-            {
-              "term": "daz",
-              "weight": 0.00482
             },
             {
               "term": "kind",
@@ -6441,16 +6421,36 @@
               "weight": 0.00446
             },
             {
-              "term": "voltaire",
-              "weight": 0.00445
-            },
-            {
               "term": "gesellschaft",
               "weight": 0.00429
             },
             {
-              "term": "neu",
-              "weight": 0.00392
+              "term": "säkularisierung",
+              "weight": 0.00399
+            },
+            {
+              "term": "religionskritik",
+              "weight": 0.00371
+            },
+            {
+              "term": "aufklärung",
+              "weight": 0.00345
+            },
+            {
+              "term": "wissenschaft",
+              "weight": 0.00321
+            },
+            {
+              "term": "vernunft",
+              "weight": 0.0032
+            },
+            {
+              "term": "moderne",
+              "weight": 0.0032
+            },
+            {
+              "term": "ideologiekritik",
+              "weight": 0.0032
             }
           ],
           "top_publishers": [
@@ -6519,10 +6519,10 @@
           "topic_id": 7,
           "archetype": {
             "label": "Traditional / Ecclesiastical",
-            "confidence": 100.0,
+            "confidence": 93.8,
             "scores": {
-              "Traditional / Ecclesiastical": 100.0,
-              "Neoliberal / Self-Optimization": 0.0,
+              "Traditional / Ecclesiastical": 93.8,
+              "Neoliberal / Self-Optimization": 6.2,
               "Critical / Secular-Humanist": 0.0
             },
             "seeded_prior": "Traditional / Ecclesiastical"
@@ -6530,11 +6530,11 @@
           "seeded_prior": "Traditional / Ecclesiastical",
           "top_terms": [
             {
-              "term": "gott_gott",
+              "term": "gott",
               "weight": 0.02049
             },
             {
-              "term": "christlich_christlich",
+              "term": "christlich",
               "weight": 0.00926
             },
             {
@@ -6542,7 +6542,7 @@
               "weight": 0.00906
             },
             {
-              "term": "kirche_kirche",
+              "term": "kirche",
               "weight": 0.00802
             },
             {
@@ -6586,8 +6586,8 @@
               "weight": 0.00426
             },
             {
-              "term": "anderer",
-              "weight": 0.00381
+              "term": "achtsamkeit",
+              "weight": 0.00396
             }
           ],
           "top_publishers": [
@@ -6656,22 +6656,18 @@
           "topic_id": 8,
           "archetype": {
             "label": "Critical / Secular-Humanist",
-            "confidence": 56.7,
+            "confidence": 74.1,
             "scores": {
               "Traditional / Ecclesiastical": 0.0,
-              "Neoliberal / Self-Optimization": 43.3,
-              "Critical / Secular-Humanist": 56.7
+              "Neoliberal / Self-Optimization": 25.9,
+              "Critical / Secular-Humanist": 74.1
             },
             "seeded_prior": "Neoliberal / Self-Optimization"
           },
           "seeded_prior": "Neoliberal / Self-Optimization",
           "top_terms": [
             {
-              "term": "religion",
-              "weight": 0.0316
-            },
-            {
-              "term": "religiös_religiös",
+              "term": "religiös",
               "weight": 0.02175
             },
             {
@@ -6683,20 +6679,12 @@
               "weight": 0.00946
             },
             {
-              "term": "neu",
-              "weight": 0.00924
-            },
-            {
               "term": "form",
               "weight": 0.0087
             },
             {
-              "term": "sinn_sinn",
+              "term": "sinn",
               "weight": 0.00816
-            },
-            {
-              "term": "modern",
-              "weight": 0.00756
             },
             {
               "term": "politisch",
@@ -6723,8 +6711,20 @@
               "weight": 0.00524
             },
             {
-              "term": "tradition",
-              "weight": 0.00471
+              "term": "säkularisierung",
+              "weight": 0.00487
+            },
+            {
+              "term": "religionskritik",
+              "weight": 0.00453
+            },
+            {
+              "term": "aufklärung",
+              "weight": 0.00421
+            },
+            {
+              "term": "wissenschaft",
+              "weight": 0.00392
             }
           ],
           "top_publishers": [
@@ -6793,23 +6793,19 @@
           "topic_id": 9,
           "archetype": {
             "label": "Traditional / Ecclesiastical",
-            "confidence": 88.6,
+            "confidence": 90.2,
             "scores": {
-              "Traditional / Ecclesiastical": 88.6,
+              "Traditional / Ecclesiastical": 90.2,
               "Neoliberal / Self-Optimization": 0.0,
-              "Critical / Secular-Humanist": 11.4
+              "Critical / Secular-Humanist": 9.8
             },
             "seeded_prior": "Critical / Secular-Humanist"
           },
           "seeded_prior": "Critical / Secular-Humanist",
           "top_terms": [
             {
-              "term": "theologie_theologie",
+              "term": "theologie",
               "weight": 0.02625
-            },
-            {
-              "term": "religion",
-              "weight": 0.01884
             },
             {
               "term": "theologisch",
@@ -6820,7 +6816,7 @@
               "weight": 0.0075
             },
             {
-              "term": "kirche_kirche",
+              "term": "kirche",
               "weight": 0.00721
             },
             {
@@ -6832,28 +6828,20 @@
               "weight": 0.00671
             },
             {
-              "term": "ethik_ethik",
+              "term": "ethik",
               "weight": 0.00653
             },
             {
-              "term": "christlich_christlich",
+              "term": "christlich",
               "weight": 0.00613
             },
             {
-              "term": "münchen",
-              "weight": 0.00593
-            },
-            {
-              "term": "glaube_glaube",
+              "term": "glaube",
               "weight": 0.00582
             },
             {
               "term": "geschichte",
               "weight": 0.00512
-            },
-            {
-              "term": "neu",
-              "weight": 0.00498
             },
             {
               "term": "literatur",
@@ -6862,6 +6850,18 @@
             {
               "term": "dialog",
               "weight": 0.00406
+            },
+            {
+              "term": "liturgie",
+              "weight": 0.0032
+            },
+            {
+              "term": "seelsorge",
+              "weight": 0.0032
+            },
+            {
+              "term": "gemeinde",
+              "weight": 0.0032
             }
           ],
           "top_publishers": [
@@ -6941,7 +6941,7 @@
           "seeded_prior": "Traditional / Ecclesiastical",
           "top_terms": [
             {
-              "term": "kirche_kirche",
+              "term": "kirche",
               "weight": 0.02867
             },
             {
@@ -6969,11 +6969,7 @@
               "weight": 0.00628
             },
             {
-              "term": "anderer",
-              "weight": 0.00611
-            },
-            {
-              "term": "gott_gott",
+              "term": "gott",
               "weight": 0.00602
             },
             {
@@ -6999,6 +6995,10 @@
             {
               "term": "angebot",
               "weight": 0.00473
+            },
+            {
+              "term": "theologie",
+              "weight": 0.0044
             }
           ],
           "top_publishers": [
@@ -7078,10 +7078,6 @@
           "seeded_prior": "Neoliberal / Self-Optimization",
           "top_terms": [
             {
-              "term": "indien",
-              "weight": 0.02583
-            },
-            {
               "term": "politisch",
               "weight": 0.01848
             },
@@ -7090,23 +7086,11 @@
               "weight": 0.01464
             },
             {
-              "term": "vers",
-              "weight": 0.01257
-            },
-            {
-              "term": "indisch",
-              "weight": 0.01171
-            },
-            {
-              "term": "sinn_sinn",
+              "term": "sinn",
               "weight": 0.00934
             },
             {
-              "term": "bjp",
-              "weight": 0.00834
-            },
-            {
-              "term": "religiös_religiös",
+              "term": "religiös",
               "weight": 0.00688
             },
             {
@@ -7122,10 +7106,6 @@
               "weight": 0.00581
             },
             {
-              "term": "neu",
-              "weight": 0.00557
-            },
-            {
               "term": "hinblick",
               "weight": 0.0053
             },
@@ -7134,8 +7114,28 @@
               "weight": 0.00527
             },
             {
-              "term": "kapitel",
-              "weight": 0.0052
+              "term": "achtsamkeit",
+              "weight": 0.0049
+            },
+            {
+              "term": "resilienz",
+              "weight": 0.00456
+            },
+            {
+              "term": "selbstoptimierung",
+              "weight": 0.00424
+            },
+            {
+              "term": "lebenshilfe",
+              "weight": 0.00394
+            },
+            {
+              "term": "spiritualität",
+              "weight": 0.00367
+            },
+            {
+              "term": "wohlbefinden",
+              "weight": 0.00341
             }
           ],
           "top_publishers": [
@@ -7204,34 +7204,26 @@
           "topic_id": 12,
           "archetype": {
             "label": "Critical / Secular-Humanist",
-            "confidence": 63.4,
+            "confidence": 67.8,
             "scores": {
-              "Traditional / Ecclesiastical": 36.6,
+              "Traditional / Ecclesiastical": 32.2,
               "Neoliberal / Self-Optimization": 0.0,
-              "Critical / Secular-Humanist": 63.4
+              "Critical / Secular-Humanist": 67.8
             },
             "seeded_prior": "Critical / Secular-Humanist"
           },
           "seeded_prior": "Critical / Secular-Humanist",
           "top_terms": [
             {
-              "term": "religion",
-              "weight": 0.02084
-            },
-            {
-              "term": "adorno",
-              "weight": 0.01746
-            },
-            {
-              "term": "religiös_religiös",
+              "term": "religiös",
               "weight": 0.01163
             },
             {
-              "term": "religionskritik_religionskritik",
+              "term": "religionskritik",
               "weight": 0.01053
             },
             {
-              "term": "theologie_theologie",
+              "term": "theologie",
               "weight": 0.00777
             },
             {
@@ -7247,23 +7239,15 @@
               "weight": 0.00709
             },
             {
-              "term": "freud",
-              "weight": 0.00642
-            },
-            {
-              "term": "anderer",
-              "weight": 0.00617
-            },
-            {
               "term": "aufklärung",
               "weight": 0.00614
             },
             {
-              "term": "glaube_glaube",
+              "term": "glaube",
               "weight": 0.00543
             },
             {
-              "term": "christlich_christlich",
+              "term": "christlich",
               "weight": 0.00484
             },
             {
@@ -7271,8 +7255,24 @@
               "weight": 0.00461
             },
             {
-              "term": "küng",
-              "weight": 0.0046
+              "term": "säkularisierung",
+              "weight": 0.00429
+            },
+            {
+              "term": "wissenschaft",
+              "weight": 0.00345
+            },
+            {
+              "term": "moderne",
+              "weight": 0.0032
+            },
+            {
+              "term": "ideologiekritik",
+              "weight": 0.0032
+            },
+            {
+              "term": "gesellschaft",
+              "weight": 0.0032
             }
           ],
           "top_publishers": [

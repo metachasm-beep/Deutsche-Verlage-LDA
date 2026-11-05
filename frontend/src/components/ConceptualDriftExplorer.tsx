@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   ResponsiveContainer,
   AreaChart,
@@ -113,6 +113,7 @@ interface ConceptualDriftExplorerProps {
     signifiers?: DriftSignifier[];
     replacement_dyads?: ReplacementDyad[];
   } | null;
+  ideologicalFilter?: string | null;
   onDecadeClick?: (decade: number) => void;
   onPublisherClick?: (publisher: string) => void;
 }
@@ -174,6 +175,7 @@ const FALLBACK_SIGNIFIERS: DriftSignifier[] = [
 
 export const ConceptualDriftExplorer: React.FC<ConceptualDriftExplorerProps> = ({
   driftData,
+  ideologicalFilter,
   onDecadeClick,
   onPublisherClick,
 }) => {
@@ -187,6 +189,26 @@ export const ConceptualDriftExplorer: React.FC<ConceptualDriftExplorerProps> = (
   const [selectedDyadId, setSelectedDyadId] = useState<string>('pastoral_vs_mindfulness');
   const [searchFilter, setSearchFilter] = useState<string>('');
   const [categoryFilter, setCategoryFilter] = useState<string>('ALL');
+
+  useEffect(() => {
+    if (!ideologicalFilter) {
+      setCategoryFilter('ALL');
+      return;
+    }
+    const nextCat =
+      ideologicalFilter === 'Traditional'
+        ? 'RQ1'
+        : ideologicalFilter === 'Neoliberal'
+        ? 'RQ2'
+        : 'RQ3';
+    setCategoryFilter(nextCat);
+    const rqToken =
+      nextCat === 'RQ1' ? 'RQ₁' : nextCat === 'RQ2' ? 'RQ₂' : 'RQ₃';
+    const match = signifiers.find((s) => s.category.includes(rqToken));
+    if (match) {
+      setSelectedLemma(match.lemma);
+    }
+  }, [ideologicalFilter, signifiers]);
 
   const activeSignifier =
     signifiers.find((s) => s.lemma === selectedLemma) || signifiers[0];

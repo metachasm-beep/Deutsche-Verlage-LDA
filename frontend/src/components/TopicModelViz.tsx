@@ -281,38 +281,80 @@ export const TopicModelViz: React.FC<TopicModelVizProps> = ({
           </div>
         </div>
 
+        {/* Active RQ Regime Filter Banner (when an RQ filter is selected in Left Rail) */}
+        {ideologicalFilter && (
+          <div className="mb-2.5 px-3 py-1.5 rounded-lg bg-obsidian-950/90 border border-white/10 flex items-center justify-between gap-2 font-mono text-[10px]">
+            <span className="text-parchment-200 flex items-center gap-1.5">
+              <span
+                className={clsx(
+                  'w-2 h-2 rounded-full',
+                  ideologicalFilter === 'Traditional'
+                    ? 'bg-traditional'
+                    : ideologicalFilter === 'Neoliberal'
+                    ? 'bg-neoliberal'
+                    : 'bg-critical'
+                )}
+              />
+              Active Regime Filter:{' '}
+              <strong
+                className={
+                  ideologicalFilter === 'Traditional'
+                    ? 'text-traditional'
+                    : ideologicalFilter === 'Neoliberal'
+                    ? 'text-neoliberal'
+                    : 'text-critical'
+                }
+              >
+                {ideologicalFilter === 'Traditional'
+                  ? 'RQ₁ · Traditional / Ecclesiastical'
+                  : ideologicalFilter === 'Neoliberal'
+                  ? 'RQ₂ · Neoliberal / Self-Optimization'
+                  : 'RQ₃ · Critical / Secular-Humanist'}
+              </strong>
+            </span>
+            <span className="text-parchment-300">
+              Showing{' '}
+              {
+                topics.filter((t) => getArchetypeTheme(t.archetype?.label).id === ideologicalFilter)
+                  .length
+              }{' '}
+              of {topics.length} Topics
+            </span>
+          </div>
+        )}
+
         {/* Compact Horizontal Topic Switcher Pill Bar */}
         <div className="flex items-center gap-1.5 overflow-x-auto pb-2.5 mb-3 custom-scrollbar">
-          {topics.map((t, idx) => {
-            const theme = getArchetypeTheme(t.archetype?.label);
-            const isSelected = idx === safeIndex;
-            const matchesFilter = !ideologicalFilter || theme.id === ideologicalFilter;
+          {topics
+            .map((t, idx) => ({ t, idx, theme: getArchetypeTheme(t.archetype?.label) }))
+            .filter(({ theme }) => !ideologicalFilter || theme.id === ideologicalFilter)
+            .map(({ t, idx, theme }) => {
+              const isSelected = idx === safeIndex;
 
-            return (
-              <button
-                key={t.id}
-                onClick={() => setSelectedTopicIndex(idx)}
-                className={clsx(
-                  'group relative shrink-0 flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border text-left transition-all duration-150 cursor-pointer',
-                  isSelected
-                    ? clsx('bg-obsidian-800', theme.borderGlow)
-                    : 'bg-obsidian-950/70 border-white/[0.07] hover:border-white/20 hover:bg-obsidian-850',
-                  !matchesFilter && 'opacity-35'
-                )}
-              >
-                <span
-                  className="w-2 h-2 rounded-full shrink-0"
-                  style={{ backgroundColor: theme.hex }}
-                />
-                <span className="font-mono text-[11px] font-bold text-parchment-100">
-                  T{String(t.id + 1).padStart(2, '0')}
-                </span>
-                <span className="text-[11px] text-parchment-300 max-w-[110px] truncate hidden sm:inline">
-                  {t.keywords.slice(0, 2).map((k) => k.word).join(' · ')}
-                </span>
-              </button>
-            );
-          })}
+              return (
+                <button
+                  key={t.id}
+                  onClick={() => setSelectedTopicIndex(idx)}
+                  className={clsx(
+                    'group relative shrink-0 flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border text-left transition-all duration-150 cursor-pointer',
+                    isSelected
+                      ? clsx('bg-obsidian-800', theme.borderGlow)
+                      : 'bg-obsidian-950/70 border-white/[0.07] hover:border-white/20 hover:bg-obsidian-850'
+                  )}
+                >
+                  <span
+                    className="w-2 h-2 rounded-full shrink-0"
+                    style={{ backgroundColor: theme.hex }}
+                  />
+                  <span className="font-mono text-[11px] font-bold text-parchment-100">
+                    T{String(t.id + 1).padStart(2, '0')}
+                  </span>
+                  <span className="text-[11px] text-parchment-300 max-w-[110px] truncate hidden sm:inline">
+                    {t.keywords.slice(0, 2).map((k) => k.word).join(' · ')}
+                  </span>
+                </button>
+              );
+            })}
         </div>
 
         {/* 3-Way Ideological Archetype Spectrum Bar */}
