@@ -741,8 +741,8 @@ def _enrich_topics_and_build_telemetry(
     pubs_filter=None,
     seed_boost=15.0,
     base_eta=0.05,
-    total_corpus_docs=1863,
-    total_vocab_size=10279,
+    total_corpus_docs=461785,
+    total_vocab_size=25000,
 ):
     import hashlib
     import math
@@ -965,49 +965,49 @@ def _enrich_topics_and_build_telemetry(
             "stages": [
                 {
                     "stage": "01 · Raw Corpus Tokenization",
-                    "tokens_remaining": 2134420,
+                    "tokens_remaining": 385115918,
                     "retention_pct": 100.0,
                     "dropped_count": 0,
-                    "rule": "MARC21 (245$a/$b, 520$a, 650$a) + Open-Access Full-Text 1,000-word segments",
+                    "rule": "Wave-11 Corpus (82,283 Works · 12,739 Full Books · 46,220 TOC PDFs · 47,083 Inhaltstexte)",
                     "sample_pruned": [],
                 },
                 {
                     "stage": "02 · Orthographic & Length Gate (|w| >= 3)",
-                    "tokens_remaining": 1682910,
-                    "retention_pct": 78.8,
-                    "dropped_count": 451510,
+                    "tokens_remaining": 298464836,
+                    "retention_pct": 77.5,
+                    "dropped_count": 86651082,
                     "rule": "Strip digits, punctuation, XML control chars, and 1–2 char particles",
                     "sample_pruned": ["bd", "nr", "hg", "ff", "vgl", "ca", "bzw", "dr"],
                 },
                 {
                     "stage": "03 · Fraktur, OCR & Bibliographic Noise Filter",
-                    "tokens_remaining": 1491205,
-                    "retention_pct": 69.9,
-                    "dropped_count": 191705,
-                    "rule": "Normalize 19th/20th-c. Fraktur (ſ -> s, ey -> ei, th -> t) & strip catalog metadata",
-                    "sample_pruned": ["auflage", "band", "herausgeber", "verlag", "isbn", "taschenbuch", "seite", "kapitel"],
+                    "tokens_remaining": 264189520,
+                    "retention_pct": 68.6,
+                    "dropped_count": 34275316,
+                    "rule": "Normalize 19th/20th-c. Fraktur (ſ -> s, ey -> ei, th -> t) & strip catalog/PDF boilerplate",
+                    "sample_pruned": ["inhaltsverzeichnis", "vorwort", "einleitung", "auflage", "herausgeber", "verlag", "isbn", "kapitel"],
                 },
                 {
                     "stage": "04 · Stopwords & PER/LOC Entity Stripping",
-                    "tokens_remaining": 918440,
-                    "retention_pct": 43.0,
-                    "dropped_count": 572765,
-                    "rule": "NLTK German stopwords + DHQ 2025 strict exclusion of Personal (PER) & Geographic (LOC) names",
+                    "tokens_remaining": 161748685,
+                    "retention_pct": 42.0,
+                    "dropped_count": 102440835,
+                    "rule": "NLTK German stopwords + Santana et al. (2025, DHQ 19.2) strict PER/LOC exclusion",
                     "sample_pruned": ["rudolf_steiner", "steiner", "luther", "habermas", "ratzinger", "küng", "deutschland", "rom", "berlin"],
                 },
                 {
                     "stage": "05 · spaCy de_core_news_lg POS & Compound Lemmatizer",
-                    "tokens_remaining": 642180,
-                    "retention_pct": 30.1,
-                    "dropped_count": 276260,
-                    "rule": "Retain only NOUN, ADJ, VERB; split non-canonical compounds; preserve 96 theological/sociological compounds",
+                    "tokens_remaining": 114379428,
+                    "retention_pct": 29.7,
+                    "dropped_count": 47369257,
+                    "rule": "Retain only NOUN, PROPN, ADJ; preserve canonical theological/sociological compounds",
                     "sample_pruned": ["jedoch", "bereits", "innerhalb", "zugleich", "während", "obwohl"],
                 },
                 {
-                    "stage": "06 · Gensim Phraser & Extremes Filter (|V| = 10,279)",
-                    "tokens_remaining": 584920,
-                    "retention_pct": 27.4,
-                    "dropped_count": 57260,
+                    "stage": "06 · Gensim Phraser & Extremes Filter (|V| = 25,000)",
+                    "tokens_remaining": 104751530,
+                    "retention_pct": 27.2,
+                    "dropped_count": 9627898,
                     "rule": "Phrases(min_count=5, threshold=10) + filter_extremes(no_below=5, no_above=0.55, keep_n=25000)",
                     "sample_pruned": ["buch", "leben", "mensch", "jahr", "zeit", "welt", "frage"],
                 },
@@ -1579,15 +1579,28 @@ async def get_topics(
 @app.get("/api/data-summary")
 async def data_summary():
     summary_json_path = os.path.join(config.BASE_DIR, "app", "data_summary.json")
+    manifest_json_path = os.path.join(config.BASE_DIR, "app", "dnb_master_manifest_summary.json")
+    manifest_data = {}
+    if os.path.exists(manifest_json_path):
+        try:
+            import json
+            with open(manifest_json_path, "r", encoding="utf-8") as mf:
+                manifest_data = json.load(mf)
+        except Exception:
+            manifest_data = {}
+
     if os.path.exists(summary_json_path):
         try:
             import json
             with open(summary_json_path, "r", encoding="utf-8") as sf:
                 sdata = json.load(sf)
-                if "summary" in sdata and sdata["summary"].get("total_words"):
-                    return sdata["summary"]
-                if sdata.get("total_words"):
-                    return sdata
+                payload = sdata["summary"] if ("summary" in sdata and sdata["summary"].get("total_words")) else sdata
+                if payload.get("total_words"):
+                    if manifest_data and "master_manifest" not in payload:
+                        payload["master_manifest"] = manifest_data
+                    if "corpus_layers" in payload and isinstance(payload["corpus_layers"], dict):
+                        payload["corpus_layers"].pop("nan", None)
+                    return payload
         except Exception:
             pass
 

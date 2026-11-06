@@ -1,9 +1,9 @@
 {
   "source": "DNB SRU v1.1 + GBV/K10plus + HathiTrust HTRC + OpenAlex Comprehensive German-Language Corpus (spr=ger, All Subjects 000–900, 1970–2025)",
-  "count": 462036,
-  "total_records": 462036,
-  "unique_books": 80362,
-  "total_words": 385171913,
+  "count": 461785,
+  "total_records": 461785,
+  "unique_books": 82283,
+  "total_words": 385115918,
   "vocabulary_size": 25000,
   "coherence_score": -2.476,
   "publishers": [
@@ -42,9 +42,9 @@
   },
   "corpus_layers": {
     "hathitrust_ef_fullbook_print": 243751,
-    "dnb_oa_fullbook": 115019,
-    "dnb_deposit_inhaltstext": 47269,
-    "dnb_toc_pdf_fulltext": 32069,
+    "dnb_oa_fullbook": 115002,
+    "dnb_deposit_inhaltstext": 47083,
+    "dnb_toc_pdf_fulltext": 32021,
     "gbv_direct_fulltext_pdf": 14199,
     "entire_fulltext_book_cloud": 4072,
     "drm_fallback_multi_api_enriched": 3561,
@@ -53,8 +53,7 @@
     "archive_org_fulltext_book": 502,
     "green_oa_repository_fulltext": 84,
     "primary_cloud_oa_fulltext": 15,
-    "nan": 6,
-    "primary_fulltext": 3
+    "primary_fulltext": 9
   },
   "decade_counts": {
     "1970s": 41369,
@@ -64,12 +63,12 @@
     "2010s": 67589,
     "2020s": 99530
   },
-  "year_range": "1970–2027",
+  "year_range": "1970–2025",
   "document_length_distribution": {
     "overall": {
-      "documents": 462036,
-      "unique_works": 80362,
-      "total_words": 385171913,
+      "documents": 461785,
+      "unique_works": 82283,
+      "total_words": 385115918,
       "mean_words": 834.0,
       "sd_words": 341.1,
       "median_words": 1000.0,
@@ -235,19 +234,6 @@
         "iqr_words": 169.0,
         "min_words": 184,
         "max_words": 1000
-      },
-      "nan": {
-        "documents": 6,
-        "unique_works": 6,
-        "total_words": 194,
-        "mean_words": 32.3,
-        "sd_words": 23.4,
-        "median_words": 24.5,
-        "p25_words": 13.0,
-        "p75_words": 48.8,
-        "iqr_words": 35.8,
-        "min_words": 8,
-        "max_words": 71
       },
       "primary_fulltext": {
         "documents": 3,
@@ -3269,5 +3255,50 @@
     "incorporated_unique_books": 80362,
     "incorporated_direct_dnb_sru_documents": 194357,
     "incorporated_unique_dnb_oa_books": 8486
+  },
+  "master_manifest": {
+    "total_unique_works_1970_2025": 82283,
+    "total_complete_fulltext_books": 12739,
+    "total_dnb_oa_fulltext_books": 8553,
+    "total_hathitrust_fulltext_books": 3950,
+    "total_direct_oa_fulltext_books": 236,
+    "total_toc_works": 45184,
+    "total_dnb_toc_works": 32010,
+    "total_gbv_toc_works": 13174,
+    "total_inhaltstext_works": 47065,
+    "total_passages_in_corpus": 461785,
+    "total_words_in_corpus": 385115918,
+    "works_by_highest_tier": {
+      "Tier 2A: DNB Digitized /04 Inhaltsverzeichnis & Reading-Sample PDF": 30306,
+      "Tier 3A: DNB Deposit.dnb.de Inhaltstext, MARC 520 Abstract & Indexing": 23370,
+      "Tier 2B: GBV/K10plus Digitized /04 Inhaltsverzeichnis & Reading-Sample PDF": 12488,
+      "Tier 1A: DNB Open-Access Full-Text Monograph/Dissertation (/34 & MARC 856)": 8553,
+      "Tier 1B: DNB/GBV Multi-ISBN Matched HathiTrust Full-Book Stream": 3950,
+      "Tier 3B: Extended Paratext & Abstract (drm_fallback_multi_api_enriched)": 2813,
+      "Tier 3C: Reconstructed OpenAlex Scholarly Abstract (primary_cloud_oa_abstract)": 567,
+      "Tier 1C: Direct Publisher / Repository Open-Access Full-Text Monograph": 236
+    },
+    "works_by_primary_layer": {
+      "dnb_toc_pdf_fulltext": 30306,
+      "dnb_deposit_inhaltstext": 23370,
+      "gbv_direct_fulltext_pdf": 12488,
+      "dnb_oa_fullbook": 8553,
+      "hathitrust_ef_fullbook_print": 3950,
+      "drm_fallback_multi_api_enriched": 2813,
+      "primary_cloud_oa_abstract": 567,
+      "entire_fulltext_book_cloud": 181,
+      "gbv_kostenfrei_fullbook_pdf": 28,
+      "archive_org_fulltext_book": 20,
+      "primary_cloud_oa_fulltext": 4,
+      "primary_fulltext": 3
+    },
+    "fulltext_books_by_decade": {
+      "1970s": 740,
+      "1980s": 1278,
+      "1990s": 1704,
+      "2000s": 3706,
+      "2010s": 2119,
+      "2020s": 3192
+    }
   }
 }
