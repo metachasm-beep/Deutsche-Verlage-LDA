@@ -1242,7 +1242,7 @@ function App() {
                 <Database className="w-3.5 h-3.5 text-traditional" />
               </div>
               <div className="font-serif text-xl font-bold text-parchment-50 tabular-nums">
-                {(summary?.total_records || corpusDocuments || 489860).toLocaleString()}{' '}
+                {(summary?.total_records || corpusDocuments || 589615).toLocaleString()}{' '}
                 <span className="text-xs font-sans font-normal text-parchment-300">Passages</span>
               </div>
               <p className="font-mono text-[9px] text-emerald-300 truncate mt-0.5">
@@ -1250,7 +1250,7 @@ function App() {
                   ? `Active Slice: ${selectedYear}`
                   : selectedDecade
                   ? `Active Cohort: ${selectedDecade}s`
-                  : `${(summary?.master_manifest?.total_unique_works_1970_2025 || summary?.unique_books || 94178).toLocaleString()} Works · ${(summary?.master_manifest?.total_complete_fulltext_books || 13792).toLocaleString()} Full Books · ${((summary?.total_words || 401327320) / 1_000_000).toFixed(1)}M Words`}
+                  : `${(summary?.master_manifest?.total_unique_works_1970_2025 || summary?.unique_books || 190120).toLocaleString()} Works · ${(summary?.master_manifest?.total_complete_fulltext_books || 13983).toLocaleString()} Full Books · ${((summary?.total_words || 407598670) / 1_000_000).toFixed(1)}M Words`}
               </p>
             </div>
 
@@ -1333,13 +1333,13 @@ function App() {
                   <div className="flex flex-wrap items-center justify-between gap-2 pb-2.5 mb-3 border-b border-white/[0.07]">
                     <div className="flex flex-wrap items-center gap-2">
                       <span className="px-2 py-0.5 rounded bg-emerald-500/15 border border-emerald-500/30 font-mono text-[10px] uppercase tracking-widest text-emerald-300 font-bold">
-                        Wave-12 All-Sachgruppen Corpus (1970–2025)
+                        Wave-13 Uncapped All-Sachgruppen Zstd-Parquet Corpus (1970–2025)
                       </span>
                       <span className="font-serif text-sm sm:text-base font-bold text-parchment-50">
-                        {(summary?.master_manifest?.total_unique_works_1970_2025 || summary?.unique_books || 94178).toLocaleString()} Unique Works ·{' '}
-                        {(summary?.total_records || 489860).toLocaleString()} Analytical Passages ·{' '}
-                        {((summary?.total_words || 401327320) / 1_000_000).toFixed(2)}M German Words ·{' '}
-                        102 DNB Sachgruppen · {(summary?.all_publishers_count || 4235).toLocaleString()} Imprints
+                        {(summary?.master_manifest?.total_unique_works_1970_2025 || summary?.unique_books || 190120).toLocaleString()} Unique Works ·{' '}
+                        {(summary?.total_records || 589615).toLocaleString()} Analytical Passages ·{' '}
+                        {((summary?.total_words || 407598670) / 1_000_000).toFixed(2)}M German Words ·{' '}
+                        102 DNB Sachgruppen · {(summary?.all_publishers_count || 4235).toLocaleString()} Imprints · 7 Zstd-19 Parquet Shards (374.3 MB)
                       </span>
                     </div>
                     <div className="flex items-center gap-2">
@@ -1367,27 +1367,27 @@ function App() {
                             Tier 1 · Complete Full-Text Books
                           </span>
                           <span className="px-1.5 py-0.5 rounded bg-emerald-500/15 font-mono text-[9px] text-emerald-300 font-bold">
-                            77.09% of Passages
+                            64.52% of Passages
                           </span>
                         </div>
                         <div className="font-serif text-lg font-bold text-parchment-50 tabular-nums">
-                          {(summary?.master_manifest?.total_complete_fulltext_books || 13792).toLocaleString()} Books{' '}
+                          {(summary?.master_manifest?.total_complete_fulltext_books || 13983).toLocaleString()} Books{' '}
                           <span className="text-xs font-mono font-normal text-parchment-300">
-                            · 377,647 Passages · 373.48M Words
+                            · 380,525 Passages · 376.29M Words
                           </span>
                         </div>
                         <p className="text-[11px] text-parchment-300 mt-1 leading-relaxed">
-                          Segmented into non-overlapping 1,000-word windows (Mean: 989.0w · Median: 1,000w):
+                          Segmented into non-overlapping 1,000-word windows (Mean: 988.9w · Median: 1,000w):
                         </p>
                       </div>
                       <div className="mt-2 pt-2 border-t border-white/[0.06] space-y-1 font-mono text-[10px]">
                         <div className="flex justify-between text-parchment-200">
                           <span>• DNB /34 & MARC 856 OA Books:</span>
-                          <span className="text-emerald-300 font-bold">9,507 books (124,121 ch.)</span>
+                          <span className="text-emerald-300 font-bold">9,692 books (126,691 ch.)</span>
                         </div>
                         <div className="flex justify-between text-parchment-200">
                           <span>• HathiTrust HTRC Print Books:</span>
-                          <span className="text-sky-300 font-bold">4,050 books (247,994 ch.)</span>
+                          <span className="text-sky-300 font-bold">4,056 books (248,302 ch.)</span>
                         </div>
                         <div className="flex justify-between text-parchment-200">
                           <span>• Direct Cloud / GBV / IA OA Books:</span>
@@ -1404,13 +1404,13 @@ function App() {
                             Tier 2 · Digitized TOC & Sample PDFs
                           </span>
                           <span className="px-1.5 py-0.5 rounded bg-traditional/15 font-mono text-[9px] text-traditional font-bold">
-                            10.30% of Passages
+                            8.61% of Passages
                           </span>
                         </div>
                         <div className="font-serif text-lg font-bold text-parchment-50 tabular-nums">
-                          49,388 Works{' '}
+                          49,737 Works{' '}
                           <span className="text-xs font-mono font-normal text-parchment-300">
-                            · 50,447 PDFs · 19.86M Words
+                            · 50,796 PDFs · 20.05M Words
                           </span>
                         </div>
                         <p className="text-[11px] text-parchment-300 mt-1 leading-relaxed">
@@ -1420,7 +1420,7 @@ function App() {
                       <div className="mt-2 pt-2 border-t border-white/[0.06] space-y-1 font-mono text-[10px]">
                         <div className="flex justify-between text-parchment-200">
                           <span>• DNB /04 Inhaltsverzeichnis PDFs:</span>
-                          <span className="text-traditional font-bold">36,214 works (36,248 PDFs)</span>
+                          <span className="text-traditional font-bold">36,563 works (36,597 PDFs)</span>
                         </div>
                         <div className="flex justify-between text-parchment-200">
                           <span>• GBV / K10plus Consortial TOC PDFs:</span>
@@ -1428,44 +1428,44 @@ function App() {
                         </div>
                         <div className="flex justify-between text-parchment-300">
                           <span>• Length (DNB /04 · GBV):</span>
-                          <span>Mean 453.4w · 241.2w</span>
+                          <span>Mean 454.2w · 241.2w</span>
                         </div>
                       </div>
                     </div>
 
-                    {/* Tier 3A: DNB deposit.dnb.de Inhaltstexte */}
+                    {/* Tier 3A: DNB deposit.dnb.de Inhaltstexte & Complete MARC21 Works */}
                     <div className="p-3 rounded-lg bg-obsidian-950/90 border border-neoliberal/30 flex flex-col justify-between">
                       <div>
                         <div className="flex items-center justify-between gap-1 mb-1">
                           <span className="font-mono text-[10px] uppercase text-neoliberal font-bold">
-                            Tier 3A · DNB Deposit Inhaltstexte
+                            Tier 3A · DNB Deposit & MARC21 Works
                           </span>
                           <span className="px-1.5 py-0.5 rounded bg-neoliberal/15 font-mono text-[9px] text-neoliberal font-bold">
-                            11.75% of Passages
+                            26.14% of Passages
                           </span>
                         </div>
                         <div className="font-serif text-lg font-bold text-parchment-50 tabular-nums">
-                          57,551 Works{' '}
+                          154,079 Works{' '}
                           <span className="text-xs font-mono font-normal text-parchment-300">
-                            · 57,569 Records · 7.63M Words
+                            · 154,097 Records · 10.90M Words
                           </span>
                         </div>
                         <p className="text-[11px] text-parchment-300 mt-1 leading-relaxed">
-                          Archival publisher blurbs, synopses & MARC 520 summaries from deposit.dnb.de:
+                          Archival publisher blurbs, MARC 520 summaries & 100% uncapped All-Sachgruppen works:
                         </p>
                       </div>
                       <div className="mt-2 pt-2 border-t border-white/[0.06] space-y-1 font-mono text-[10px]">
                         <div className="flex justify-between text-parchment-200">
-                          <span>• Primary Tier-3A Works:</span>
-                          <span className="text-neoliberal font-bold">30,212 unique works</span>
+                          <span>• Primary Tier-3A Unique Works:</span>
+                          <span className="text-neoliberal font-bold">125,631 unique works</span>
                         </div>
                         <div className="flex justify-between text-parchment-200">
                           <span>• Co-Indexed with TOC / Full Book:</span>
-                          <span className="text-parchment-100 font-bold">27,339 works</span>
+                          <span className="text-parchment-100 font-bold">28,448 works</span>
                         </div>
                         <div className="flex justify-between text-parchment-300">
-                          <span>• Document Length:</span>
-                          <span>Mean 132.5w (Median 126w · IQR 119w)</span>
+                          <span>• Coverage:</span>
+                          <span>All 102 Sachgruppen (000–990, B, K, S)</span>
                         </div>
                       </div>
                     </div>

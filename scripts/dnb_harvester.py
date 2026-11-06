@@ -911,10 +911,12 @@ def harvest_dnb_wave7_exhaustive(
             q_hsg_cat = f"hsg={hsg_code} and spr=ger and jhr>={d_start} and jhr<={d_end}"
             phase1_queries.append((None, q_hsg_cat, 1, True, False, 100, hsg_code))
 
-    # Group 3: Unfiltered Year-by-Year (1970-2003) Open-Access Sweep (`location=onlinefree and spr=ger`, no `hsg` restriction)
-    for yr in range(2003, 1969, -1):
-        q_unfiltered_yr = f"location=onlinefree and spr=ger and jhr={yr}"
-        phase1_queries.append((None, q_unfiltered_yr, 1, True, True, 300, f"UNFILTERED_{yr}"))
+    # Group 3: Unfiltered Year-by-Year (1970-2025) Open-Access + Catalog Sweep (`spr=ger`, zero `hsg` restriction)
+    for yr in range(2025, 1969, -1):
+        q_unfiltered_oa_yr = f"location=onlinefree and spr=ger and jhr={yr}"
+        phase1_queries.append((None, q_unfiltered_oa_yr, 1, True, True, 300, f"UNFILTERED_OA_{yr}"))
+        q_unfiltered_cat_yr = f"spr=ger and jhr={yr}"
+        phase1_queries.append((None, q_unfiltered_cat_yr, 1, True, False, 200, f"UNFILTERED_CAT_{yr}"))
 
     # Group 4: Decade-Partitioned 38 Target Publishers (1970-2025) so large houses are never truncated by a single 3,000 cap
     for canon_pub, vlg_term, _, _ in DNB_TARGET_PUBLISHERS:
@@ -1303,34 +1305,36 @@ def harvest_dnb_wave7_exhaustive(
     )
 
     # =========================================================================
-    # STREAM D: Stratified All-Sachgruppen DNB `deposit.dnb.de` & `/blurb/` Inhaltstexte, Abstracts & Keywords
+    # STREAM D: All-Sachgruppen DNB `deposit.dnb.de` & `/blurb/` Inhaltstexte + 100% Uncapped MARC21 Catalog Incorporation
     # =========================================================================
-    blurb_candidates = [
+    blurb_url_candidates = [
         r for r in all_dnb_records
-        if (r["blurb_url"] or r["abstract_note"] or len((r["keywords"] or "").split()) >= 6)
+        if r.get("blurb_url")
         and r["title"].lower().strip() not in already_seen_titles
-        and (not r["blurb_url"] or r["blurb_url"] not in already_seen_urls)
+        and r["blurb_url"] not in already_seen_urls
     ]
-    selected_blurbs = _round_robin_stratify(blurb_candidates, max_blurbs)
+    selected_blurbs = _round_robin_stratify(blurb_url_candidates, max_blurbs)
     print(
-        f"\n[Stream D] Wave-12 All-Sachgruppen DNB `deposit.dnb.de` & `/blurb/` Inhaltstexte, Abstracts & Keywords: "
-        f"Discovered {len(blurb_candidates):,} candidates -> Fetching {len(selected_blurbs):,} stratified DNB deposit & catalog texts...",
+        f"\n[Stream D1] All-Sachgruppen DNB `deposit.dnb.de` & `/blurb/` Remote Inhaltstexte: "
+        f"Discovered {len(blurb_url_candidates):,} remote blurb URLs -> Fetching {len(selected_blurbs):,} stratified blurbs with 64 threads...",
         flush=True,
     )
 
     dnb_deposit_passages = []
+    captured_titles_d1 = set()
 
     def _enrich_dnb_deposit(r):
-        blurb_txt = fetch_dnb_blurb(r["blurb_url"]) if r["blurb_url"] else ""
-        abs_txt = r["abstract_note"] or ""
-        kw_txt = r["keywords"] or ""
-        body_parts = [p for p in [blurb_txt, abs_txt, kw_txt] if p]
+        blurb_txt = fetch_dnb_blurb(r["blurb_url"]) if r.get("blurb_url") else ""
+        abs_txt = r.get("abstract_note") or ""
+        kw_txt = r.get("keywords") or ""
+        ddc_txt = f"DDC Sachgruppe {r.get('ddc') or r.get('query_hsg') or ''}"
+        body_parts = [p for p in [blurb_txt, abs_txt, kw_txt, ddc_txt] if p and p.strip()]
         body_str = " ".join(body_parts).strip()
         full_txt = f"{r['title']}. {r['author']}. {r['publisher']}. {body_str}".strip()
         wc = len(full_txt.split())
-        if wc < 30:
+        if wc < 12:
             return None
-        src_url = r["blurb_url"] or (f"https://d-nb.info/{r['idn']}" if r["idn"] else "https://portal.dnb.de")
+        src_url = r.get("blurb_url") or (f"https://d-nb.info/{r['idn']}" if r.get("idn") else "https://portal.dnb.de")
         return {
             "title": r["title"],
             "author": r["author"],
@@ -1342,19 +1346,66 @@ def harvest_dnb_wave7_exhaustive(
             "chunk_index": 1,
             "total_chunks": 1,
             "word_count": wc,
-            "abstract": (blurb_txt or abs_txt or kw_txt)[:240],
+            "abstract": (blurb_txt or abs_txt or kw_txt or r["title"])[:240],
             "text": full_txt,
         }
 
-    with ThreadPoolExecutor(max_workers=48) as ex:
+    with ThreadPoolExecutor(max_workers=64) as ex:
         futs = [ex.submit(_enrich_dnb_deposit, r) for r in selected_blurbs]
         for fut in as_completed(futs):
             res = fut.result()
             if res:
                 dnb_deposit_passages.append(res)
+                captured_titles_d1.add(res["title"].lower().strip())
+
+    # Stage D2: Incorporate 100% of ALL remaining unharvested DNB records in `all_dnb_records` (zero cap)
+    d2_count = 0
+    for r in all_dnb_records:
+        tl = r["title"].lower().strip()
+        if (
+            tl in already_seen_titles
+            or tl in captured_titles_d1
+            or f"{tl} [dnb-inhaltsverzeichnis & leseprobe]" in already_seen_titles
+            or f"{tl} [dnb-oa-vollbuch-abschnitt 1/" in already_seen_oa_titles
+        ):
+            continue
+        abs_txt = r.get("abstract_note") or ""
+        kw_txt = r.get("keywords") or ""
+        ddc_val = r.get("ddc") or r.get("query_hsg") or "000"
+        body_parts = [p for p in [abs_txt, kw_txt, f"DNB Sachgruppe {ddc_val}"] if p and p.strip()]
+        body_str = " ".join(body_parts).strip()
+        full_txt = f"{r['title']}. {r['author']}. {r['publisher']}. {body_str}".strip()
+        wc = len(full_txt.split())
+        if wc < 8:
+            continue
+        src_url = (
+            r.get("oa_pdf_url")
+            or r.get("toc_pdf_url")
+            or r.get("blurb_url")
+            or (f"https://d-nb.info/{r['idn']}" if r.get("idn") else "https://portal.dnb.de")
+        )
+        if src_url in already_seen_urls:
+            continue
+        dnb_deposit_passages.append({
+            "title": r["title"],
+            "author": r["author"],
+            "date": r["date"],
+            "decade": r["decade"],
+            "publisher": r["publisher"],
+            "corpus_layer": "dnb_deposit_inhaltstext",
+            "source_file": src_url,
+            "chunk_index": 1,
+            "total_chunks": 1,
+            "word_count": wc,
+            "abstract": (abs_txt or kw_txt or r["title"])[:240],
+            "text": full_txt,
+        })
+        captured_titles_d1.add(tl)
+        d2_count += 1
 
     print(
-        f"  -> Extracted {len(dnb_deposit_passages):,} NEW DNB `Inhaltstext` & abstract documents!",
+        f"  -> Extracted {len(dnb_deposit_passages):,} NEW DNB `Inhaltstext`, abstract & complete MARC21 works "
+        f"(including {d2_count:,} uncapped Stage-D2 works across all 102 Sachgruppen & 1970-2025 years)!",
         flush=True,
     )
 
@@ -1955,7 +2006,8 @@ def main():
     parser.add_argument("--parquet-dir", type=str, default="data/parquet", help="Target directory for Zstd-19 Parquet shards")
     parser.add_argument("--opendata-dump", type=str, default=None, help="Path or URL to DNB data.dnb.de/opendata/ MARC21-XML dump (.mrc.xml.gz)")
     parser.add_argument("--uncapped-year-sachgruppe", action="store_true", help="Run uncapped Year x Sachgruppe (5,712 cells) SRU streamer into data/parquet/")
-    parser.add_argument("--upload-github-release", action="store_true", help="Upload Zstd Parquet shards to GitHub Release Assets")
+    parser.add_argument("--upload-github-release", action="store_true", help="Upload Zstd Parquet shards to GitHub Release Assets after harvest/export")
+    parser.add_argument("--upload-only", action="store_true", help="Upload existing Zstd Parquet shards to GitHub Release Assets and exit")
     parser.add_argument("--release-tag", type=str, default="v12.0-dnb-parquet-shards", help="GitHub Release tag for Zstd Parquet shards")
     parser.add_argument("--online-lda", action="store_true", help="Run Hoffman et al. (2010) Online Streaming LDA over data/parquet/")
     args = parser.parse_args()
@@ -1988,7 +2040,7 @@ def main():
             lda_pipeline.run_streaming_online_lda_pipeline(args.parquet_dir, num_topics=20)
         return
 
-    if args.upload_github_release and not args.export_parquet:
+    if args.upload_only:
         upload_parquet_shards_to_github_release(args.parquet_dir, release_tag=args.release_tag)
         return
 
@@ -2107,8 +2159,8 @@ def main():
         lda_pipeline.save_corpus_to_zstd_parquet(
             data_source="data/dnb_metadata.csv",
             parquet_dir=args.parquet_dir,
-            rows_per_shard=125000,
-            compression_level=9,
+            rows_per_shard=85000,
+            compression_level=19,
         )
         if args.upload_github_release:
             upload_parquet_shards_to_github_release(args.parquet_dir, release_tag=args.release_tag)

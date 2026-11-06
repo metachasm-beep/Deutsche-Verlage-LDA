@@ -235,8 +235,12 @@ def main():
 
     # Remove stale nested "summary" duplicate so top-level and any consumer always see the exact same fields
     sdata.pop("summary", None)
+    sdata["count"] = int(total_docs)
+    sdata["total_records"] = int(total_docs)
     sdata["total_documents"] = int(total_docs)
     sdata["total_words"] = int(total_words_sum)
+    if manifest_summary and ("total_unique_works_1970_2025" in manifest_summary or "total_unique_works" in manifest_summary):
+        sdata["unique_books"] = int(manifest_summary.get("total_unique_works_1970_2025") or manifest_summary.get("total_unique_works"))
     sdata["corpus_layers"] = {k: int(v) for k, v in layer_counts.most_common()}
     sdata["document_length_distribution"] = doc_len_dist
     if manifest_summary:
@@ -246,6 +250,10 @@ def main():
     sdata["publisher_works_counts"] = publisher_works_dict
     sdata["publisher_directory"] = publisher_meta_list
     sdata["trends"] = trends_list
+    sdata["publisher_annual_curves"] = {
+        p: {str(yr): int(year_pub_counts[yr].get(p, 0)) for yr in range(1970, 2026)}
+        for p in top_pubs
+    }
 
     with open("app/data_summary.json", "w", encoding="utf-8") as f:
         json.dump(sdata, f, indent=2, ensure_ascii=False)

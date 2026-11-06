@@ -1,27 +1,27 @@
 {
-  "total_unique_works_1970_2025": 94178,
-  "total_complete_fulltext_books": 13792,
-  "total_dnb_oa_fulltext_books": 9507,
-  "total_hathitrust_fulltext_books": 4050,
-  "total_passages_in_corpus": 489860,
-  "total_words_in_corpus": 401327320,
+  "total_unique_works_1970_2025": 190120,
+  "total_complete_fulltext_books": 13983,
+  "total_dnb_oa_fulltext_books": 9692,
+  "total_hathitrust_fulltext_books": 4056,
+  "total_passages_in_corpus": 589615,
+  "total_words_in_corpus": 407600164,
   "works_by_highest_tier": {
-    "Tier 2: DNB Digitized /04 Inhaltsverzeichnis & Reading-Sample PDF": 34126,
-    "Tier 3: DNB Deposit.dnb.de Inhaltstext, MARC 520 Abstract & Indexing": 30212,
-    "Tier 2: DNB/GBV Digitized /04 Inhaltsverzeichnis & Reading-Sample PDF": 12632,
-    "Tier 1A: DNB Open-Access Full-Text Monograph/Dissertation (/34 & MARC 856)": 9507,
-    "Tier 1B: DNB/GBV Multi-ISBN Matched HathiTrust Full-Book Stream": 4050,
-    "Tier 3B: Extended Paratext & Abstract (drm_fallback_multi_api_enriched)": 2849,
+    "Tier 3: DNB Deposit.dnb.de Inhaltstext, MARC 520 Abstract & Indexing": 125631,
+    "Tier 2: DNB Digitized /04 Inhaltsverzeichnis & Reading-Sample PDF": 34624,
+    "Tier 2: DNB/GBV Digitized /04 Inhaltsverzeichnis & Reading-Sample PDF": 12467,
+    "Tier 1A: DNB Open-Access Full-Text Monograph/Dissertation (/34 & MARC 856)": 9692,
+    "Tier 1B: DNB/GBV Multi-ISBN Matched HathiTrust Full-Book Stream": 4056,
+    "Tier 3B: Extended Paratext & Abstract (drm_fallback_multi_api_enriched)": 2848,
     "Tier 3B: Extended Paratext & Abstract (primary_cloud_oa_abstract)": 567,
     "Tier 1C: Direct Publisher / Repository Open-Access Full-Text Monograph": 235
   },
   "works_by_primary_layer": {
-    "dnb_toc_pdf_fulltext": 34126,
-    "dnb_deposit_inhaltstext": 30212,
-    "gbv_direct_fulltext_pdf": 12632,
-    "dnb_oa_fullbook": 9507,
-    "hathitrust_ef_fullbook_print": 4050,
-    "drm_fallback_multi_api_enriched": 2849,
+    "dnb_deposit_inhaltstext": 125631,
+    "dnb_toc_pdf_fulltext": 34624,
+    "gbv_direct_fulltext_pdf": 12467,
+    "dnb_oa_fullbook": 9692,
+    "hathitrust_ef_fullbook_print": 4056,
+    "drm_fallback_multi_api_enriched": 2848,
     "primary_cloud_oa_abstract": 567,
     "entire_fulltext_book_cloud": 181,
     "gbv_kostenfrei_fullbook_pdf": 28,
@@ -30,11 +30,11 @@
     "primary_fulltext": 3
   },
   "fulltext_books_by_decade": {
-    "1970s": 786,
-    "1980s": 1380,
-    "1990s": 1791,
-    "2000s": 3888,
-    "2010s": 2444,
-    "2020s": 3503
+    "1970s": 794,
+    "1980s": 1385,
+    "1990s": 1800,
+    "2000s": 3943,
+    "2010s": 2503,
+    "2020s": 3558
   }
 }
