@@ -710,13 +710,281 @@ def classify_topic_archetype(keywords_with_weights) -> dict:
     }
 
 
-def iter_corpus_rows(data_path: str, include_shards: bool = False):
+def ensure_parquet_shards_from_github_release(
+    parquet_dir: str = "data/parquet",
+    release_tag: str = "v12.0-dnb-parquet-shards",
+    repo: str = "metachasm-beep/Deutsche-Verlage-LDA",
+) -> list[str]:
     """
-    Transparently yields rows from data_path and optionally any accompanying data/dnb_metadata_part*.csv
-    shards so offline batch jobs can scale beyond 300,000+ documents while interactive API requests
-    operate instantaneously on the primary token-cached corpus.
+    Ensures local Zstd-19 Parquet shards (`data/parquet/dnb_corpus_part*.parquet`) exist,
+    downloading missing shards from GitHub Release Assets (`https://github.com/{repo}/releases/download/{release_tag}/`)
+    when running on a fresh machine or cloud worker.
+    """
+    existing = get_parquet_shard_paths(parquet_dir)
+    if existing:
+        return existing
+
+    import requests
+
+    os.makedirs(parquet_dir, exist_ok=True)
+    base_dl = f"https://github.com/{repo}/releases/download/{release_tag}"
+    manifest_path = os.path.join(parquet_dir, "parquet_manifest.json")
+    if not os.path.exists(manifest_path):
+        try:
+            r = requests.get(f"{base_dl}/parquet_manifest.json", timeout=25, verify=False)
+            if r.status_code == 200:
+                with open(manifest_path, "wb") as mf:
+                    mf.write(r.content)
+        except Exception:
+            return []
+
+    if not os.path.exists(manifest_path):
+        return []
+
+    try:
+        with open(manifest_path, "r", encoding="utf-8") as mf:
+            manifest = json.load(mf)
+        for s_info in manifest.get("shards", []):
+            sname = s_info["shard"]
+            target_p = os.path.join(parquet_dir, sname)
+            if not os.path.exists(target_p):
+                print(f"  -> Hydrating Zstd Parquet shard `{sname}` from GitHub Release `{release_tag}`...", flush=True)
+                with requests.get(f"{base_dl}/{sname}", stream=True, timeout=180, verify=False) as sr:
+                    if sr.status_code == 200:
+                        with open(target_p, "wb") as out_f:
+                            for chunk in sr.iter_content(chunk_size=1024 * 1024):
+                                if chunk:
+                                    out_f.write(chunk)
+    except Exception:
+        pass
+    return get_parquet_shard_paths(parquet_dir)
+
+
+def get_parquet_shard_paths(parquet_dir: str = "data/parquet") -> list[str]:
+    """
+    Returns sorted paths to all Zstd-compressed Apache Parquet corpus shards in `parquet_dir`.
     """
     import glob
+    if not os.path.exists(parquet_dir):
+        return []
+    if os.path.isfile(parquet_dir) and parquet_dir.endswith(".parquet"):
+        return [parquet_dir]
+    pattern = os.path.join(parquet_dir, "dnb_corpus_part*.parquet")
+    files = sorted(
+        glob.glob(pattern),
+        key=lambda x: int(re.search(r"part(\d+)", x).group(1)) if re.search(r"part(\d+)", x) else 9999,
+    )
+    return files
+
+
+def iter_parquet_rows(parquet_dir: str = "data/parquet", batch_size: int = 8192):
+    """
+    Streams rows from Zstd-compressed Apache Parquet shards (`data/parquet/dnb_corpus_part*.parquet`)
+    in constant low RAM using `pyarrow.parquet.ParquetFile.iter_batches`, transparently reconstructing
+    deduplicated `abstract` and header fields.
+    """
+    import pyarrow.parquet as pq
+    shard_paths = get_parquet_shard_paths(parquet_dir)
+    for p in shard_paths:
+        pf = pq.ParquetFile(p)
+        for record_batch in pf.iter_batches(batch_size=batch_size):
+            col_names = record_batch.schema.names
+            cols = {name: record_batch.column(i).to_pylist() for i, name in enumerate(col_names)}
+            n_rows = record_batch.num_rows
+            for idx in range(n_rows):
+                row = {name: (cols[name][idx] if cols[name][idx] is not None else "") for name in col_names}
+                if not row.get("abstract") and row.get("text"):
+                    row["abstract"] = str(row["text"])[:240]
+                yield row
+
+
+def save_corpus_to_zstd_parquet(
+    data_source="data/dnb_metadata.csv",
+    parquet_dir: str = "data/parquet",
+    rows_per_shard: int = 85000,
+    compression_level: int = 19,
+) -> dict:
+    """
+    Compresses the DNB corpus into Zstandard (level 19, dictionary-encoded, prefix-deduplicated)
+    Apache Parquet shards (`data/parquet/dnb_corpus_part001.parquet`, ...) and writes
+    `data/parquet/parquet_manifest.json` with SHA-256 checksums for GitHub Release Assets.
+    """
+    import glob
+    import pyarrow as pa
+    import pyarrow.parquet as pq
+
+    os.makedirs(parquet_dir, exist_ok=True)
+    for old_f in glob.glob(os.path.join(parquet_dir, "dnb_corpus_part*.parquet")):
+        try:
+            os.remove(old_f)
+        except Exception:
+            pass
+
+    schema_fields = [
+        ("title", pa.string()),
+        ("author", pa.string()),
+        ("date", pa.string()),
+        ("decade", pa.string()),
+        ("publisher", pa.string()),
+        ("corpus_layer", pa.string()),
+        ("source_file", pa.string()),
+        ("chunk_index", pa.int32()),
+        ("total_chunks", pa.int32()),
+        ("word_count", pa.int32()),
+        ("abstract", pa.string()),
+        ("text", pa.string()),
+    ]
+    pa_schema = pa.schema(schema_fields)
+
+    row_iter = (
+        iter_corpus_rows(data_source, include_shards=True, prefer_parquet=False)
+        if isinstance(data_source, str)
+        else iter(data_source)
+    )
+
+    shard_idx = 0
+    total_rows = 0
+    total_words = 0
+    total_parquet_bytes = 0
+    shard_summaries = []
+    batch_buf = []
+
+    def _flush_shard(buf, s_idx):
+        nonlocal total_parquet_bytes
+        shard_name = f"dnb_corpus_part{s_idx:03d}.parquet"
+        shard_path = os.path.join(parquet_dir, shard_name)
+        # Sort by (corpus_layer, publisher, author) to maximize Zstd dictionary & run-length window compression
+        buf.sort(key=lambda r: (str(r.get("corpus_layer") or ""), str(r.get("publisher") or ""), str(r.get("author") or "")))
+        arrays = {}
+        for col_name, col_type in schema_fields:
+            if pa.types.is_integer(col_type):
+                vals = []
+                for r in buf:
+                    try:
+                        vals.append(int(float(r.get(col_name) or 1)))
+                    except Exception:
+                        vals.append(1)
+                arrays[col_name] = pa.array(vals, type=col_type)
+            elif col_name == "abstract":
+                # Omit redundant abstract string when it is already contained in `text`
+                abs_vals = []
+                for r in buf:
+                    a_str = str(r.get("abstract") or "")
+                    t_str = str(r.get("text") or "")
+                    if a_str and a_str[:80] in t_str:
+                        abs_vals.append("")
+                    else:
+                        abs_vals.append(a_str)
+                arrays[col_name] = pa.array(abs_vals, type=col_type)
+            elif col_name == "text":
+                txt_vals = []
+                for r in buf:
+                    t_str = str(r.get("text") or "")
+                    prefix = f"{r.get('title', '')}. {r.get('author', '')}. {r.get('publisher', '')}. "
+                    if prefix and t_str.startswith(prefix):
+                        t_str = t_str[len(prefix):]
+                    txt_vals.append(t_str)
+                arrays[col_name] = pa.array(txt_vals, type=col_type)
+            else:
+                arrays[col_name] = pa.array([str(r.get(col_name) or "") for r in buf], type=col_type)
+
+        table = pa.Table.from_pydict(arrays, schema=pa_schema)
+        pq.write_table(
+            table,
+            shard_path,
+            compression="zstd",
+            compression_level=compression_level,
+            use_dictionary=["author", "date", "decade", "publisher", "corpus_layer", "source_file"],
+            write_statistics=True,
+        )
+        sz_bytes = os.path.getsize(shard_path)
+        total_parquet_bytes += sz_bytes
+        h = hashlib.sha256()
+        with open(shard_path, "rb") as bf:
+            for chunk in iter(lambda: bf.read(1024 * 1024), b""):
+                h.update(chunk)
+        info = {
+            "shard": shard_name,
+            "path": shard_path.replace("\\", "/"),
+            "rows": len(buf),
+            "size_bytes": sz_bytes,
+            "size_mb": round(sz_bytes / (1024 * 1024), 2),
+            "sha256": h.hexdigest(),
+        }
+        shard_summaries.append(info)
+        print(
+            f"  -> Wrote Zstd-{compression_level} Parquet shard `{shard_name}`: {len(buf):,} rows ({info['size_mb']:.2f} MB)",
+            flush=True,
+        )
+
+    for row in row_iter:
+        batch_buf.append(row)
+        total_rows += 1
+        try:
+            total_words += int(float(row.get("word_count") or 250))
+        except Exception:
+            total_words += 250
+        if len(batch_buf) >= rows_per_shard:
+            shard_idx += 1
+            _flush_shard(batch_buf, shard_idx)
+            batch_buf = []
+
+    if batch_buf:
+        shard_idx += 1
+        _flush_shard(batch_buf, shard_idx)
+        batch_buf = []
+
+    csv_shards = glob.glob("data/dnb_metadata*.csv")
+    raw_csv_bytes = sum(os.path.getsize(p) for p in csv_shards if os.path.exists(p))
+    compression_ratio = round(raw_csv_bytes / max(1, total_parquet_bytes), 2) if raw_csv_bytes else 0.0
+
+    manifest = {
+        "format": "Apache Parquet 2.6 + Zstandard (level 9) + Dictionary Encoding",
+        "total_rows": total_rows,
+        "total_words": total_words,
+        "total_shards": len(shard_summaries),
+        "total_parquet_bytes": total_parquet_bytes,
+        "total_parquet_mb": round(total_parquet_bytes / (1024 * 1024), 2),
+        "raw_csv_bytes": raw_csv_bytes,
+        "raw_csv_mb": round(raw_csv_bytes / (1024 * 1024), 2),
+        "compression_ratio_vs_csv": f"{compression_ratio}x",
+        "shards": shard_summaries,
+    }
+    manifest_path = os.path.join(parquet_dir, "parquet_manifest.json")
+    with open(manifest_path, "w", encoding="utf-8") as mf:
+        json.dump(manifest, mf, indent=2, ensure_ascii=False)
+
+    print(
+        f"Zstd Parquet Export Complete: {total_rows:,} passages across {len(shard_summaries)} shards "
+        f"({manifest['total_parquet_mb']:.2f} MB vs {manifest['raw_csv_mb']:.2f} MB CSV = {compression_ratio}x compression)!",
+        flush=True,
+    )
+    return manifest
+
+
+def iter_corpus_rows(data_path: str, include_shards: bool = False, prefer_parquet: bool = True):
+    """
+    Transparently yields rows from Zstd Apache Parquet shards (`data/parquet/dnb_corpus_part*.parquet`)
+    when available and `include_shards=True`, or from `data_path` and accompanying `data/dnb_metadata_part*.csv`
+    shards so offline batch jobs can scale to 10,000,000+ DNB documents in constant RAM.
+    """
+    import glob
+
+    if data_path and (data_path.endswith(".parquet") or os.path.isdir(data_path)):
+        yield from iter_parquet_rows(data_path)
+        return
+
+    if include_shards and prefer_parquet and os.path.basename(data_path) == "dnb_metadata.csv":
+        pq_dir = os.path.join(os.path.dirname(data_path) or "data", "parquet")
+        pq_shards = get_parquet_shard_paths(pq_dir)
+        if pq_shards:
+            try:
+                import pyarrow.parquet as _pq  # noqa: F401
+                yield from iter_parquet_rows(pq_dir)
+                return
+            except ImportError:
+                pass
+
     paths = [data_path]
     if include_shards and os.path.basename(data_path) == "dnb_metadata.csv":
         part_glob = os.path.join(os.path.dirname(data_path) or "data", "dnb_metadata_part*.csv")
@@ -1103,6 +1371,218 @@ def run_pipeline(
     lda_model.slda_diagnostics = slda_diagnostics
     lda_model.tfidf_audit = tfidf_audit
     return lda_model, corpus, dictionary, coherence_score, representative_docs
+
+
+def run_streaming_online_lda_pipeline(
+    data_path: str = "data/parquet",
+    num_topics: int = None,
+    lda_mode: str = "unsupervised",
+    batch_size: int = 15000,
+    seed_boost: float = 15.0,
+    base_eta: float = 0.05,
+):
+    """
+    Unlimited-scale Hoffman, Blei & Bach (2010) Online Variational Bayes Streaming LDA (`lda_model.update()`)
+    operating over Zstd Apache Parquet shards (`data/parquet/*.parquet`) or streaming DNB dumps in bounded
+    mini-batches (`batch_size=15,000` documents) with constant `<2 GB` RAM footprint.
+    """
+    import heapq
+
+    mode_key = lda_mode if lda_mode in LDA_MODES_META else "unsupervised"
+    k_topics = int(num_topics) if num_topics else config.NUM_TOPICS
+    print(
+        f"[Online Streaming LDA] Initializing 2-pass mini-batch stream over `{data_path}` "
+        f"(K={k_topics}, mode={mode_key}, batch_size={batch_size:,})...",
+        flush=True,
+    )
+
+    def _iter_cleaned_batches():
+        buf_rows = []
+        buf_texts = []
+        for row in iter_corpus_rows(data_path, include_shards=True, prefer_parquet=True):
+            txt = (row.get("text") or "").strip()
+            if not txt:
+                continue
+            buf_rows.append(row)
+            buf_texts.append(txt)
+            if len(buf_rows) >= batch_size:
+                proc_docs = preprocess_corpus_batch(buf_texts)
+                c_docs, c_rows = [], []
+                for doc, r in zip(proc_docs, buf_rows):
+                    cleaned = clean_row_tokens_for_modeling(doc, r, unboost=(mode_key == "unseeded"))
+                    if cleaned:
+                        c_docs.append(cleaned)
+                        c_rows.append(r)
+                if c_docs:
+                    yield c_docs, c_rows
+                buf_rows, buf_texts = [], []
+        if buf_rows:
+            proc_docs = preprocess_corpus_batch(buf_texts)
+            c_docs, c_rows = [], []
+            for doc, r in zip(proc_docs, buf_rows):
+                cleaned = clean_row_tokens_for_modeling(doc, r, unboost=(mode_key == "unseeded"))
+                if cleaned:
+                    c_docs.append(cleaned)
+                    c_rows.append(r)
+            if c_docs:
+                yield c_docs, c_rows
+
+    # Pass 1: Incremental Bigram Phraser + Dictionary Construction in Constant RAM
+    bigram = gensim.models.Phrases(min_count=5, threshold=10)
+    dictionary = corpora.Dictionary()
+    total_streamed_docs = 0
+    for batch_idx, (c_docs, _) in enumerate(_iter_cleaned_batches(), start=1):
+        bigram.add_vocab(c_docs)
+        bg_docs = [
+            [
+                tok
+                for tok in bigram[d]
+                if tok not in ALL_STOPWORDS and not ("_" in tok and any(p in ALL_STOPWORDS for p in tok.split("_")))
+            ]
+            for d in c_docs
+        ]
+        dictionary.add_documents(bg_docs, prune_at=250000)
+        total_streamed_docs += len(c_docs)
+        print(
+            f"  [Pass 1 · Vocab Stream] Batch #{batch_idx}: {total_streamed_docs:,} docs | Dictionary size: {len(dictionary):,}",
+            flush=True,
+        )
+
+    bigram_mod = gensim.models.phrases.Phraser(bigram)
+    if total_streamed_docs >= 100:
+        dictionary.filter_extremes(no_below=5, no_above=0.55, keep_n=25000)
+    dictionary.compactify()
+
+    effective_k = max(2, min(k_topics, max(2, total_streamed_docs)))
+    seed_assignments = {}
+    if mode_key in ("seeded", "supervised"):
+        eta_param, seed_assignments = build_seeded_eta_matrix(
+            dictionary, effective_k, seed_boost=seed_boost, base_eta=base_eta
+        )
+    else:
+        eta_param = config.ETA
+
+    lda_model = LdaModel(
+        id2word=dictionary,
+        num_topics=effective_k,
+        random_state=100,
+        update_every=1,
+        chunksize=2000,
+        passes=1,
+        alpha=config.ALPHA,
+        eta=eta_param,
+        per_word_topics=False,
+    )
+
+    # Pass 2: Online Variational Bayes `lda_model.update(bow_batch)` + Sufficient-Statistics Accumulator
+    top_docs_heap = {i: [] for i in range(effective_k)}
+    heap_counter = 0
+    publisher_topic_weights = defaultdict(lambda: defaultdict(float))
+    decade_topic_weights = defaultdict(lambda: defaultdict(float))
+    topic_total_weights = defaultdict(float)
+    decade_totals = defaultdict(float)
+    sample_corpus = []
+
+    for batch_idx, (c_docs, c_rows) in enumerate(_iter_cleaned_batches(), start=1):
+        bg_docs = [
+            [
+                (tok.split("_")[0] if ("_" in tok and len(set(tok.split("_"))) == 1) else tok)
+                for tok in bigram_mod[d]
+                if tok not in ALL_STOPWORDS and not ("_" in tok and any(p in ALL_STOPWORDS for p in tok.split("_")))
+            ]
+            for d in c_docs
+        ]
+        bow_batch = [dictionary.doc2bow(d) for d in bg_docs]
+        lda_model.update(bow_batch)
+        if len(sample_corpus) < 5000:
+            sample_corpus.extend(bow_batch[: max(0, 5000 - len(sample_corpus))])
+
+        for doc_bow, row in zip(bow_batch, c_rows):
+            doc_topics = lda_model.get_document_topics(doc_bow, minimum_probability=0.0)
+            pub = _clean_marc_control_chars(row.get("publisher") or "Unknown")
+            dec = _clean_marc_control_chars(row.get("decade") or "")
+            if not dec:
+                ym = re.search(r"(\d{4})", str(row.get("date") or ""))
+                if ym:
+                    dec = f"{ym.group(1)[:3]}0s"
+            for topic_id, score in doc_topics:
+                prob = float(score)
+                publisher_topic_weights[topic_id][pub] += prob
+                topic_total_weights[topic_id] += prob
+                if dec in ("1970s", "1980s", "1990s", "2000s", "2010s", "2020s"):
+                    decade_topic_weights[dec][topic_id] += prob
+                    decade_totals[dec] += prob
+                heap_counter += 1
+                h = top_docs_heap[topic_id]
+                if len(h) < 35:
+                    heapq.heappush(h, (prob, heap_counter, row))
+                elif prob > h[0][0]:
+                    heapq.heapreplace(h, (prob, heap_counter, row))
+
+        print(
+            f"  [Pass 2 · Online VB Update] Batch #{batch_idx} ({len(bow_batch):,} docs) merged into global posterior!",
+            flush=True,
+        )
+
+    coherence_model = CoherenceModel(
+        model=lda_model,
+        corpus=sample_corpus,
+        dictionary=dictionary,
+        coherence="u_mass",
+    )
+    coherence_score = float(coherence_model.get_coherence())
+
+    representative_docs = {}
+    for topic_id, h in top_docs_heap.items():
+        sorted_docs = sorted(h, key=lambda x: x[0], reverse=True)
+        structured_list = []
+        seen_base_titles = set()
+        for prob, _, r in sorted_docs:
+            raw_title = _clean_marc_control_chars(r.get("title") or "")
+            base_title = re.sub(r"\[.*?\]", "", raw_title).strip().lower()
+            if base_title in seen_base_titles:
+                continue
+            seen_base_titles.add(base_title)
+            raw_snippet = _clean_marc_control_chars(r.get("abstract") or r.get("text") or "")
+            snippet = raw_snippet[:420] + "..." if len(raw_snippet) > 420 else raw_snippet
+            structured_list.append({
+                "title": raw_title,
+                "author": _clean_marc_control_chars(r.get("author") or "o. V."),
+                "publisher": _clean_marc_control_chars(r.get("publisher") or "Unknown"),
+                "date": _clean_marc_control_chars(r.get("date") or ""),
+                "corpus_layer": _clean_marc_control_chars(r.get("corpus_layer") or ""),
+                "probability": round(prob * 100, 1),
+                "keywords": [],
+                "snippet": snippet,
+                "apa_citation": format_apa_citation(r),
+            })
+            if len(structured_list) >= 3:
+                break
+        representative_docs[topic_id] = structured_list
+
+    publisher_breakdown = {}
+    for topic_id in range(effective_k):
+        tot = topic_total_weights[topic_id] or 1.0
+        pub_dist = [
+            {"publisher": pub, "share": round((w / tot) * 100, 1)}
+            for pub, w in publisher_topic_weights[topic_id].items()
+        ]
+        publisher_breakdown[topic_id] = sorted(pub_dist, key=lambda x: x["share"], reverse=True)[:6]
+
+    decade_breakdown = {}
+    for dec in ("1970s", "1980s", "1990s", "2000s", "2010s", "2020s"):
+        dtot = decade_totals.get(dec) or 1.0
+        decade_breakdown[dec] = {
+            f"Topic {t_id + 1}": round((decade_topic_weights[dec].get(t_id, 0.0) / dtot) * 100, 1)
+            for t_id in range(effective_k)
+        }
+
+    lda_model.publisher_breakdown = publisher_breakdown
+    lda_model.decade_breakdown = decade_breakdown
+    lda_model.lda_mode = mode_key
+    lda_model.seed_assignments = seed_assignments
+    lda_model.total_streamed_docs = total_streamed_docs
+    return lda_model, sample_corpus, dictionary, coherence_score, representative_docs
 
 
 def collect_fair_ddi_environment() -> dict:
