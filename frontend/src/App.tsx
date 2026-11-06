@@ -36,7 +36,7 @@ import {
   Activity,
 } from 'lucide-react';
 import { useLDA, type LDAMode } from './hooks/useLDA';
-import { TrendsGraph } from './components/TrendsGraph';
+import { TrendsGraph, COMPREHENSIVE_FALLBACK_PUBLISHERS } from './components/TrendsGraph';
 import { TopicModelViz, getArchetypeTheme, type Topic, type RepresentativeDoc, type Keyword } from './components/TopicModelViz';
 import { PipelineExplainer } from './components/PipelineExplainer';
 import { ConceptualDriftExplorer } from './components/ConceptualDriftExplorer';
@@ -102,6 +102,7 @@ function App() {
   const [selectedYear, setSelectedYear] = useState<number | null>(null);
   const [selectedDecade, setSelectedDecade] = useState<number | null>(null);
   const [selectedPublishers, setSelectedPublishers] = useState<string[]>([]);
+  const [sidebarPubSearch, setSidebarPubSearch] = useState<string>('');
   const [selectedTopicIndex, setSelectedTopicIndex] = useState<number>(0);
   const [ideologicalFilter, setIdeologicalFilter] = useState<string | null>(null);
   const [inspectorSearch, setInspectorSearch] = useState<string>('');
@@ -120,37 +121,24 @@ function App() {
   const activeTopic: Topic | undefined = typedTopics[safeTopicIndex];
   const activeTopicTheme = getArchetypeTheme(activeTopic?.archetype?.label);
 
-  const publishersList: string[] = summary?.publishers || [
-    'Verlag Herder',
-    'Suhrkamp / Insel',
-    'C.H. Beck',
-    'Kösel-Verlag',
-    'Gräfe und Unzer (GU)',
-    'SCM R. Brockhaus',
-    'St. Benno Verlag',
-    'J. Kamphausen',
-  ];
+  const publishersList: string[] =
+    summary?.publishers && summary.publishers.length > 0
+      ? summary.publishers
+      : COMPREHENSIVE_FALLBACK_PUBLISHERS.map((p) => p.publisher);
 
-  // Full list of major imprints in the 1,863-passage corpus for single/multi-publisher slicing
+  // Full comprehensive list of canonical imprints across the 461,785-passage corpus for single/multi-publisher slicing
   const sliceablePublishers: string[] = Array.from(
     new Set([
       ...publishersList,
+      ...Object.keys(summary?.publisher_counts || {}),
       ...publisherArchetypes.map((p) => p.publisher),
-      'Herder',
-      'Suhrkamp',
-      'C.H. Beck',
-      'Kösel',
-      'GU',
-      'Rowohlt',
-      'Fischer',
-      'Patmos',
-      'Kohlhammer',
-      'Vandenhoeck & Ruprecht',
-      'Mohr Siebeck',
-      'Kreuz',
-      'Gütersloher Verlagshaus',
+      ...COMPREHENSIVE_FALLBACK_PUBLISHERS.map((p) => p.publisher),
     ])
-  ).slice(0, 14);
+  ).filter((p) => p && p !== '_total');
+
+  const filteredSidebarPublishers = sliceablePublishers.filter((p) =>
+    !sidebarPubSearch.trim() ? true : p.toLowerCase().includes(sidebarPubSearch.toLowerCase())
+  );
 
   const handleIdeologicalFilterSelect = (regime: 'Traditional' | 'Neoliberal' | 'Critical') => {
     const nextFilter = ideologicalFilter === regime ? null : regime;
@@ -903,36 +891,52 @@ function App() {
                     </select>
                   </div>
 
-                  {/* B. Single or Multi-Publisher Selector Chips */}
+                  {/* B. Single or Multi-Publisher Selector Chips (Comprehensive Directory) */}
                   <div className="pt-2 border-t border-white/[0.06]">
                     <div className="flex items-center justify-between mb-1.5">
                       <span className="font-mono text-[9px] text-parchment-300 uppercase">
-                        2. Isolate 1 or Multiple Publishers
+                        2. Isolate 1 or Multiple Publishers ({sliceablePublishers.length})
                       </span>
                       {selectedPublishers.length > 0 && (
                         <button
                           onClick={handleClearPublishers}
                           className="font-mono text-[9px] text-traditional hover:underline cursor-pointer"
                         >
-                          All Imprints ({selectedPublishers.length} active)
+                          Reset ({selectedPublishers.length} active)
                         </button>
                       )}
                     </div>
-                    <div className="flex flex-wrap gap-1 max-h-[135px] overflow-y-auto pr-1 custom-scrollbar">
-                      {sliceablePublishers.map((pub) => {
+                    <div className="relative mb-1.5">
+                      <Search className="w-3 h-3 text-parchment-300 absolute left-2 top-1/2 -translate-y-1/2" />
+                      <input
+                        type="text"
+                        value={sidebarPubSearch}
+                        onChange={(e) => setSidebarPubSearch(e.target.value)}
+                        placeholder={`Filter ${sliceablePublishers.length} publishers (Herder, Suhrkamp, Kösel, Mohr)...`}
+                        className="w-full bg-obsidian-900 border border-white/10 rounded-md pl-6 pr-2 py-1 text-[9px] font-mono text-parchment-100 placeholder:text-parchment-300/50 focus:outline-none focus:border-neoliberal"
+                      />
+                    </div>
+                    <div className="flex flex-wrap gap-1 max-h-[165px] overflow-y-auto pr-1 custom-scrollbar">
+                      {filteredSidebarPublishers.map((pub) => {
                         const isPubSelected = selectedPublishers.includes(pub);
+                        const cnt = summary?.publisher_counts?.[pub];
                         return (
                           <button
                             key={pub}
                             onClick={() => handleTogglePublisher(pub, true)}
                             className={clsx(
-                              'px-2 py-0.5 rounded border font-mono text-[9px] transition-all cursor-pointer truncate max-w-full',
+                              'px-2 py-0.5 rounded border font-mono text-[9px] transition-all cursor-pointer truncate max-w-full inline-flex items-center gap-1',
                               isPubSelected
                                 ? 'bg-traditional/20 border-traditional text-traditional font-bold shadow-glow-gold'
                                 : 'bg-obsidian-900/80 border-white/[0.06] text-parchment-300 hover:border-white/20 hover:text-parchment-100'
                             )}
                           >
-                            {isPubSelected ? `✓ ${pub}` : pub}
+                            <span className="truncate">{isPubSelected ? `✓ ${pub}` : pub}</span>
+                            {cnt !== undefined && (
+                              <span className="text-[8px] text-parchment-300/70 tabular-nums shrink-0">
+                                ({cnt >= 1000 ? `${(cnt / 1000).toFixed(1)}k` : cnt})
+                              </span>
+                            )}
                           </button>
                         );
                       })}
@@ -1531,6 +1535,11 @@ function App() {
                   <TrendsGraph
                     data={trendsData}
                     publishers={publishersList}
+                    publisherCounts={summary?.publisher_counts}
+                    publisherWorksCounts={summary?.publisher_works_counts}
+                    publisherDirectory={summary?.publisher_directory}
+                    selectedPublishers={selectedPublishers}
+                    onTogglePublisher={(pub) => handleTogglePublisher(pub, true)}
                     decadeBreakdown={decadeBreakdown}
                     onYearClick={handleYearClick}
                     selectedYear={selectedYear}
@@ -2022,6 +2031,11 @@ function App() {
               <TrendsGraph
                 data={trendsData}
                 publishers={publishersList}
+                publisherCounts={summary?.publisher_counts}
+                publisherWorksCounts={summary?.publisher_works_counts}
+                publisherDirectory={summary?.publisher_directory}
+                selectedPublishers={selectedPublishers}
+                onTogglePublisher={(pub) => handleTogglePublisher(pub, true)}
                 decadeBreakdown={decadeBreakdown}
                 onYearClick={handleYearClick}
                 selectedYear={selectedYear}
