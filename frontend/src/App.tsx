@@ -1242,7 +1242,7 @@ function App() {
                 <Database className="w-3.5 h-3.5 text-traditional" />
               </div>
               <div className="font-serif text-xl font-bold text-parchment-50 tabular-nums">
-                {(summary?.total_records || corpusDocuments || 461785).toLocaleString()}{' '}
+                {(summary?.total_records || corpusDocuments || 489860).toLocaleString()}{' '}
                 <span className="text-xs font-sans font-normal text-parchment-300">Passages</span>
               </div>
               <p className="font-mono text-[9px] text-emerald-300 truncate mt-0.5">
@@ -1250,7 +1250,7 @@ function App() {
                   ? `Active Slice: ${selectedYear}`
                   : selectedDecade
                   ? `Active Cohort: ${selectedDecade}s`
-                  : `${(summary?.master_manifest?.total_unique_works_1970_2025 || summary?.unique_books || 82283).toLocaleString()} Works · ${(summary?.master_manifest?.total_complete_fulltext_books || 12739).toLocaleString()} Full Books · ${((summary?.total_words || 385115918) / 1_000_000).toFixed(1)}M Words`}
+                  : `${(summary?.master_manifest?.total_unique_works_1970_2025 || summary?.unique_books || 94178).toLocaleString()} Works · ${(summary?.master_manifest?.total_complete_fulltext_books || 13792).toLocaleString()} Full Books · ${((summary?.total_words || 401327320) / 1_000_000).toFixed(1)}M Words`}
               </p>
             </div>
 
@@ -1333,13 +1333,13 @@ function App() {
                   <div className="flex flex-wrap items-center justify-between gap-2 pb-2.5 mb-3 border-b border-white/[0.07]">
                     <div className="flex flex-wrap items-center gap-2">
                       <span className="px-2 py-0.5 rounded bg-emerald-500/15 border border-emerald-500/30 font-mono text-[10px] uppercase tracking-widest text-emerald-300 font-bold">
-                        Wave-11 Corpus Distribution (1970–2025)
+                        Wave-12 All-Sachgruppen Corpus (1970–2025)
                       </span>
                       <span className="font-serif text-sm sm:text-base font-bold text-parchment-50">
-                        {(summary?.master_manifest?.total_unique_works_1970_2025 || summary?.unique_books || 82283).toLocaleString()} Unique Works ·{' '}
-                        {(summary?.total_records || 461785).toLocaleString()} Analytical Passages ·{' '}
-                        {((summary?.total_words || 385115918) / 1_000_000).toFixed(2)}M German Words ·{' '}
-                        {(summary?.all_publishers_count || 4235).toLocaleString()} Imprints
+                        {(summary?.master_manifest?.total_unique_works_1970_2025 || summary?.unique_books || 94178).toLocaleString()} Unique Works ·{' '}
+                        {(summary?.total_records || 489860).toLocaleString()} Analytical Passages ·{' '}
+                        {((summary?.total_words || 401327320) / 1_000_000).toFixed(2)}M German Words ·{' '}
+                        102 DNB Sachgruppen · {(summary?.all_publishers_count || 4235).toLocaleString()} Imprints
                       </span>
                     </div>
                     <div className="flex items-center gap-2">
@@ -1367,31 +1367,31 @@ function App() {
                             Tier 1 · Complete Full-Text Books
                           </span>
                           <span className="px-1.5 py-0.5 rounded bg-emerald-500/15 font-mono text-[9px] text-emerald-300 font-bold">
-                            78.87% of Passages
+                            77.09% of Passages
                           </span>
                         </div>
                         <div className="font-serif text-lg font-bold text-parchment-50 tabular-nums">
-                          {(summary?.master_manifest?.total_complete_fulltext_books || 12739).toLocaleString()} Books{' '}
+                          {(summary?.master_manifest?.total_complete_fulltext_books || 13792).toLocaleString()} Books{' '}
                           <span className="text-xs font-mono font-normal text-parchment-300">
-                            · 364,202 Passages · 360.49M Words
+                            · 377,647 Passages · 373.48M Words
                           </span>
                         </div>
                         <p className="text-[11px] text-parchment-300 mt-1 leading-relaxed">
-                          Segmented into non-overlapping 1,000-word windows (Mean: 989.8w · Median: 1,000w):
+                          Segmented into non-overlapping 1,000-word windows (Mean: 989.0w · Median: 1,000w):
                         </p>
                       </div>
                       <div className="mt-2 pt-2 border-t border-white/[0.06] space-y-1 font-mono text-[10px]">
                         <div className="flex justify-between text-parchment-200">
                           <span>• DNB /34 & MARC 856 OA Books:</span>
-                          <span className="text-emerald-300 font-bold">8,553 books (115,002 ch.)</span>
+                          <span className="text-emerald-300 font-bold">9,507 books (124,121 ch.)</span>
                         </div>
                         <div className="flex justify-between text-parchment-200">
                           <span>• HathiTrust HTRC Print Books:</span>
-                          <span className="text-sky-300 font-bold">3,950 books (243,751 ch.)</span>
+                          <span className="text-sky-300 font-bold">4,050 books (247,994 ch.)</span>
                         </div>
                         <div className="flex justify-between text-parchment-200">
                           <span>• Direct Cloud / GBV / IA OA Books:</span>
-                          <span className="text-traditional font-bold">236 books (5,449 ch.)</span>
+                          <span className="text-traditional font-bold">235 books (5,532 ch.)</span>
                         </div>
                       </div>
                     </div>
@@ -1404,13 +1404,13 @@ function App() {
                             Tier 2 · Digitized TOC & Sample PDFs
                           </span>
                           <span className="px-1.5 py-0.5 rounded bg-traditional/15 font-mono text-[9px] text-traditional font-bold">
-                            10.01% of Passages
+                            10.30% of Passages
                           </span>
                         </div>
                         <div className="font-serif text-lg font-bold text-parchment-50 tabular-nums">
-                          45,184 Works{' '}
+                          49,388 Works{' '}
                           <span className="text-xs font-mono font-normal text-parchment-300">
-                            · 46,220 PDFs · 17.98M Words
+                            · 50,447 PDFs · 19.86M Words
                           </span>
                         </div>
                         <p className="text-[11px] text-parchment-300 mt-1 leading-relaxed">
@@ -1420,7 +1420,7 @@ function App() {
                       <div className="mt-2 pt-2 border-t border-white/[0.06] space-y-1 font-mono text-[10px]">
                         <div className="flex justify-between text-parchment-200">
                           <span>• DNB /04 Inhaltsverzeichnis PDFs:</span>
-                          <span className="text-traditional font-bold">32,010 works (32,021 PDFs)</span>
+                          <span className="text-traditional font-bold">36,214 works (36,248 PDFs)</span>
                         </div>
                         <div className="flex justify-between text-parchment-200">
                           <span>• GBV / K10plus Consortial TOC PDFs:</span>
@@ -1428,7 +1428,7 @@ function App() {
                         </div>
                         <div className="flex justify-between text-parchment-300">
                           <span>• Length (DNB /04 · GBV):</span>
-                          <span>Mean 454.6w · 241.2w</span>
+                          <span>Mean 453.4w · 241.2w</span>
                         </div>
                       </div>
                     </div>
@@ -1441,13 +1441,13 @@ function App() {
                             Tier 3A · DNB Deposit Inhaltstexte
                           </span>
                           <span className="px-1.5 py-0.5 rounded bg-neoliberal/15 font-mono text-[9px] text-neoliberal font-bold">
-                            10.20% of Passages
+                            11.75% of Passages
                           </span>
                         </div>
                         <div className="font-serif text-lg font-bold text-parchment-50 tabular-nums">
-                          47,065 Works{' '}
+                          57,551 Works{' '}
                           <span className="text-xs font-mono font-normal text-parchment-300">
-                            · 47,083 Records · 6.27M Words
+                            · 57,569 Records · 7.63M Words
                           </span>
                         </div>
                         <p className="text-[11px] text-parchment-300 mt-1 leading-relaxed">
@@ -1457,15 +1457,15 @@ function App() {
                       <div className="mt-2 pt-2 border-t border-white/[0.06] space-y-1 font-mono text-[10px]">
                         <div className="flex justify-between text-parchment-200">
                           <span>• Primary Tier-3A Works:</span>
-                          <span className="text-neoliberal font-bold">23,370 unique works</span>
+                          <span className="text-neoliberal font-bold">30,212 unique works</span>
                         </div>
                         <div className="flex justify-between text-parchment-200">
                           <span>• Co-Indexed with TOC / Full Book:</span>
-                          <span className="text-parchment-100 font-bold">23,695 works</span>
+                          <span className="text-parchment-100 font-bold">27,339 works</span>
                         </div>
                         <div className="flex justify-between text-parchment-300">
                           <span>• Document Length:</span>
-                          <span>Mean 133.1w (Median 127w · IQR 117w)</span>
+                          <span>Mean 132.5w (Median 126w · IQR 119w)</span>
                         </div>
                       </div>
                     </div>

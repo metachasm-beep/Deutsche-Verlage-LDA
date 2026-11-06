@@ -233,11 +233,102 @@ def map_dnb_imprint_to_canonical(raw_pub: str, fallback: str = None) -> str:
         ("gruyter", "De Gruyter / Transcript"),
         ("springer", "Springer Nature (Holtzbrinck)"),
         ("lit", "LIT Verlag"),
+        ("reclam", "Reclam"),
+        ("dtv", "dtv Verlagsgesellschaft"),
+        ("deutscher taschenbuch", "dtv Verlagsgesellschaft"),
+        ("hanser", "Carl Hanser Verlag"),
+        ("piper", "Piper Verlag"),
+        ("ullstein", "Ullstein Verlag"),
+        ("aufbau", "Aufbau Verlag"),
+        ("luchterhand", "Luchterhand"),
+        ("beltz", "Beltz / Juventa"),
+        ("juventa", "Beltz / Juventa"),
+        ("hogrefe", "Hogrefe Verlag"),
+        ("duncker", "Duncker & Humblot"),
+        ("narr", "Narr Francke Attempto"),
+        ("francke", "Narr Francke Attempto"),
+        ("matthes", "Matthes & Seitz"),
+        ("merve", "Merve Verlag"),
+        ("junius", "Junius Verlag"),
+        ("felix meiner", "Meiner"),
+        ("klostermann", "Vittorio Klostermann"),
+        ("metzler", "Springer Nature (Holtzbrinck)"),
+        ("vs verlag", "Springer Nature (Holtzbrinck)"),
+        ("gabler", "Springer Nature (Holtzbrinck)"),
+        ("vieweg", "Springer Nature (Holtzbrinck)"),
+        ("teubner", "Springer Nature (Holtzbrinck)"),
+        ("palgrave", "Springer Nature (Holtzbrinck)"),
+        ("oldenbourg", "De Gruyter / Transcript"),
+        ("akademie verlag", "De Gruyter / Transcript"),
+        ("niemeyer", "De Gruyter / Transcript"),
+        ("saur", "De Gruyter / Transcript"),
+        ("birkhäuser", "De Gruyter / Transcript"),
+        ("peter lang", "Peter Lang"),
+        ("lang,", "Peter Lang"),
+        ("ergon", "Nomos / Alber"),
+        ("tectum", "Nomos / Alber"),
+        ("rombach", "Nomos / Alber"),
+        ("utb", "UTB (Uni-Taschenbücher)"),
+        ("steiner", "Franz Steiner Verlag"),
+        ("harrassowitz", "Harrassowitz Verlag"),
+        ("olms", "Georg Olms Verlag"),
+        ("winter", "Universitätsverlag Winter"),
+        ("königshausen", "Königshausen & Neumann"),
+        ("passagen", "Passagen Verlag"),
+        ("turia", "Turia + Kant"),
+        ("diaphanes", "diaphanes"),
+        ("konstanz university", "Konstanz University Press"),
+        ("velbrück", "Velbrück Wissenschaft"),
+        ("waxmann", "Waxmann Verlag"),
+        ("budrich", "Verlag Barbara Budrich"),
+        ("transcript", "De Gruyter / Transcript"),
+        ("logos", "Logos Verlag Berlin"),
+        ("shaker", "Shaker Verlag"),
+        ("cuvillier", "Cuvillier Verlag"),
+        ("utz", "Herbert Utz Verlag"),
+        ("kovac", "Verlag Dr. Kovač"),
+        ("grin", "GRIN Verlag"),
+        ("bod", "Books on Demand (BoD)"),
+        ("books on demand", "Books on Demand (BoD)"),
+        ("tredition", "tredition"),
+        ("epubli", "epubli"),
     ]
     for needle, canon in mapping:
         if needle in p:
             return canon
     return normalize_german_text(raw_pub) if raw_pub else "DNB Monograph (DE)"
+
+
+# Complete 102 Official DNB DDC & Literary Sachgruppen (`hsg=000..990`, `B`, `K`, `S`)
+ALL_DNB_SACHGRUPPEN_102 = [
+    # 000 Allgemeines, Informatik, Informationswissenschaft
+    "000", "004", "010", "020", "030", "050", "060", "070", "080", "090",
+    # 100 Philosophie, Parapsychologie, Psychologie
+    "100", "130", "150",
+    # 200 Religion, Bibel, Theologie, Andere Religionen
+    "200", "220", "230", "290",
+    # 300 Sozialwissenschaften, Politik, Wirtschaft, Recht, Pädagogik
+    "300", "310", "320", "330", "333.7", "340", "350", "355", "360", "370", "380", "390",
+    # 400 Sprache, Linguistik, Einzelne Philologien
+    "400", "420", "430", "439", "440", "450", "460", "470", "480", "490", "491.8",
+    # 500 Naturwissenschaften und Mathematik
+    "500", "510", "520", "530", "540", "550", "560", "570", "580", "590",
+    # 600 Technik, Medizin, angewandte Wissenschaften, Management
+    "600", "610", "620", "624", "630", "640", "650", "660", "670", "690",
+    # 700 Künste, Architektur, Musik, Film, Theater, Sport
+    "700", "710", "720", "730", "740", "741.5", "750", "760", "770", "780", "790", "791", "792", "793", "796",
+    # 800 Literatur, Rhetorik, Literaturwissenschaft
+    "800", "810", "820", "830", "839", "840", "850", "860", "870", "880", "890", "891.8",
+    # 900 Geschichte und Geografie
+    "900", "910", "914.3", "920", "930", "940", "943", "950", "960", "970", "980", "990",
+    # DNB Literarische & Pädagogische Sondersachgruppen (Belletristik, Kinder-/Jugendliteratur, Schulbücher)
+    "B", "K", "S",
+]
+
+WAVE11_HARVESTED_HSG_14 = {
+    "000", "100", "150", "200", "220", "230", "290",
+    "300", "400", "500", "600", "700", "800", "900",
+}
 
 
 def fetch_dnb_blurb(blurb_url: str) -> str:
@@ -715,6 +806,45 @@ def harvest_dnb(
     return df
 
 
+def _round_robin_stratify(records: list, max_items: int) -> list:
+    """
+    Stratifies candidate DNB records across `(hsg_bucket, decade)` in round-robin order
+    (prioritizing canonical publishers within each bucket) so that all 102 DNB Sachgruppen
+    (`000-990`, `B`, `K`, `S`) and all decades (`1970s-2020s`) receive balanced coverage.
+    """
+    from collections import defaultdict, deque
+
+    buckets = defaultdict(list)
+    for r in records:
+        ddc_val = str(r.get("ddc") or r.get("query_hsg") or "GEN").split(";")[0].strip() or "GEN"
+        dec_val = str(r.get("decade") or "2000s")
+        buckets[(ddc_val, dec_val)].append(r)
+
+    for k in buckets:
+        buckets[k].sort(
+            key=lambda x: (
+                0 if x.get("is_priority_publisher") else 1,
+                0 if x.get("publisher") != "DNB Monograph (DE)" else 1,
+                str(x.get("date") or "2000"),
+            )
+        )
+        buckets[k] = deque(buckets[k])
+
+    sorted_keys = sorted(buckets.keys())
+    out = []
+    while len(out) < max_items and sorted_keys:
+        next_keys = []
+        for k in sorted_keys:
+            if buckets[k]:
+                out.append(buckets[k].popleft())
+                if len(out) >= max_items:
+                    break
+            if buckets[k]:
+                next_keys.append(k)
+        sorted_keys = next_keys
+    return out
+
+
 def harvest_dnb_wave7_exhaustive(
     already_seen_htids: set,
     already_matched_isbns: set,
@@ -725,22 +855,25 @@ def harvest_dnb_wave7_exhaustive(
     workers: int = 48,
     chunk_words: int = 1000,
     max_chunks_per_book: int = 55,
-    max_toc_pdfs: int = 50000,
-    max_oa_books: int = 100000,
+    max_toc_pdfs: int = 6500,
+    max_oa_books: int = 1800,
+    max_blurbs: int = 15000,
+    full_rescan: bool = False,
 ):
     """
-    Wave-11 Uncapped Exhaustive DNB `location=onlinefree` + `MARC 856` Multi-URL Full-Text Harvester (1970–2025):
-      1. Dynamically paginates DNB SRU (`https://services.dnb.de/sru/dnb`) up to `max_cap=10,000` across:
-         - Group 1: All 38 Target Publishers (`vlg=`) with `location=onlinefree and spr=ger` (1970–2025)
-         - Group 2A: Year-by-Year (`jhr=1970..2025`) across `hsg=200`, `hsg=220`, `hsg=230`, `hsg=290`,
-           `hsg=100`, `hsg=150`, `hsg=300`, and `hsg=000/700/800/900` with `location=onlinefree and spr=ger`
-         - Group 2B: All 57 `DNB_THEMATIC_QUERIES` (`sw=` & `dcs=220*..290*`) with `location=onlinefree and spr=ger` (1970–2025)
-         - Group 3: Deep `hsg=200/220/230/290` print + online pages across all 38 Target Publishers
-           for multi-ISBN (`MARC 020 $a/$z/$9`) HTRC resolution, `/04` TOC PDFs, and `Inhaltstexte`
+    Wave-12 Unfiltered All-Sachgruppen DNB Full-Text Harvester (1970–2025):
+      1. Dynamically queries all 102 official DNB DDC & Literary Sachgruppen (`000–990`, `B`, `K`, `S`):
+         - Group 1 (All-Sachgruppen Open-Access Sweep): All 88 newly added DNB Sachgruppen (`004..990`, `B`, `K`, `S`;
+           or all 102 when `full_rescan=True`) across 6 decade slices (`1970–1979` .. `2020–2025`) with `location=onlinefree and spr=ger`
+         - Group 2 (All-Sachgruppen Print + `/04` TOC + `Inhaltstext` Catalog Sweep): All 88 newly added DNB Sachgruppen
+           across 6 decade slices (`1970–2025`) with `spr=ger`
+         - Group 3 (Unfiltered Pre-2004 Open-Access Sweep): Year-by-year (`1970–2003`) `location=onlinefree and spr=ger and jhr={yr}`
+           with zero `hsg` restriction (capturing all pre-2004 DNB Sachgruppen `01–65` and unindexed works)
+         - Group 4 (Decade-Partitioned 38 Target Publishers): `vlg="{vlg_term}" and spr=ger` partitioned across 6 decades (`1970–2025`)
       2. Stream A (Multi-ISBN `MARC 020 $a/$z/$9` DNB -> HathiTrust HTRC Full Books)
-      3. Stream B (ALL Unharvested `location=onlinefree` DNB `/34` + `MARC 856 $u` / `URN` / `DOI` Open-Access Full-Text PDFs & EPUBs)
-      4. Stream C (All Remaining Unharvested DNB Digitized `/04` `Inhaltsverzeichnis` & Excerpt PDFs + HTML TOCs)
-      5. Stream D (All Remaining Unharvested DNB `deposit.dnb.de` `Inhaltstexte`, `MARC 520` Abstracts & `MARC 650` Keywords)
+      3. Stream B (Stratified All-Sachgruppen `location=onlinefree` DNB `/34` + `MARC 856 $u` Open-Access Full-Text PDFs & EPUBs)
+      4. Stream C (Stratified All-Sachgruppen DNB Digitized `/04` `Inhaltsverzeichnis` & Excerpt PDFs + HTML TOCs)
+      5. Stream D (Stratified All-Sachgruppen DNB `deposit.dnb.de` `Inhaltstexte`, `MARC 520` Abstracts & `MARC 650` Keywords)
     """
     if already_seen_oa_urls is None:
         already_seen_oa_urls = already_seen_urls
@@ -749,52 +882,50 @@ def harvest_dnb_wave7_exhaustive(
 
     base_url = "https://services.dnb.de/sru/dnb"
 
-    # Phase 1: Seed Queries (startRecord=1) with uncapped SRU pagination limit (max_cap=10000)
-    # Comprehensive German-language (`spr=ger`, 1970-2025) scope across all DDC Hauptsachgruppen (000-900)
-    # and all 38 target German publishing houses (unrestricted by religious subject pre-filters).
-    # Tuple: (canon_pub, cql_query, start_rec, is_deep_page, force_onlinefree, max_rec_cap)
+    # Tuple: (canon_pub, cql_query, start_rec, is_deep_page, force_onlinefree, max_rec_cap, query_hsg)
     phase1_queries = []
-
-    # Group 1: All 38 Target Publishers with location=onlinefree and spr=ger (1970-2025), unrestricted by subject
-    for canon_pub, vlg_term, _, _ in DNB_TARGET_PUBLISHERS:
-        q_pub_oa = f'vlg="{vlg_term}" and location=onlinefree and spr=ger and jhr>=1970 and jhr<=2025'
-        phase1_queries.append((canon_pub, q_pub_oa, 1, True, True, 10000))
-
-    # Group 2A: Year-by-Year (1970-2025) across ALL DDC Hauptsachgruppen (000-900) with location=onlinefree and spr=ger
-    hsg_oa_templates = [
-        ("hsg=000", 10000),
-        ("hsg=100", 10000),
-        ("hsg=150", 10000),
-        ("hsg=200", 10000),
-        ("hsg=220", 10000),
-        ("hsg=230", 10000),
-        ("hsg=290", 10000),
-        ("hsg=300", 10000),
-        ("hsg=400", 10000),
-        ("hsg=500", 10000),
-        ("hsg=600", 10000),
-        ("hsg=700", 10000),
-        ("hsg=800", 10000),
-        ("hsg=900", 10000),
+    decade_slices = [
+        (1970, 1979),
+        (1980, 1989),
+        (1990, 1999),
+        (2000, 2009),
+        (2010, 2019),
+        (2020, 2025),
     ]
-    for yr in range(2025, 1969, -1):
-        for hsg_expr, cap in hsg_oa_templates:
-            q_yr = f"({hsg_expr}) and location=onlinefree and spr=ger and jhr={yr}"
-            phase1_queries.append((None, q_yr, 1, True, True, cap))
 
-    # Group 2B: All DNB_THEMATIC_QUERIES with location=onlinefree and spr=ger (1970-2025), uncapped (10,000)
-    for cql_theme, _, _, _ in DNB_THEMATIC_QUERIES:
-        q_theme_oa = f"({cql_theme}) and location=onlinefree and spr=ger and jhr>=1970 and jhr<=2025"
-        phase1_queries.append((None, q_theme_oa, 1, True, True, 10000))
+    target_sachgruppen = (
+        ALL_DNB_SACHGRUPPEN_102
+        if full_rescan
+        else [h for h in ALL_DNB_SACHGRUPPEN_102 if h not in WAVE11_HARVESTED_HSG_14]
+    )
 
-    # Group 3: Comprehensive German-language (spr=ger) catalog across All 38 Target Publishers (all subjects, print + online)
-    for canon_pub, vlg_term, _, wave8_end_pages in DNB_TARGET_PUBLISHERS:
-        q_all_pub = f'vlg="{vlg_term}" and spr=ger and jhr>=1970 and jhr<=2025'
-        phase1_queries.append((canon_pub, q_all_pub, 1, True, False, min(3000, wave8_end_pages * 100)))
+    # Group 1: All-Sachgruppen (`004..990`, `B`, `K`, `S`) Open-Access Sweep across 6 decades (1970-2025)
+    for hsg_code in target_sachgruppen:
+        for d_start, d_end in decade_slices:
+            q_hsg_oa = f"hsg={hsg_code} and location=onlinefree and spr=ger and jhr>={d_start} and jhr<={d_end}"
+            phase1_queries.append((None, q_hsg_oa, 1, True, True, 200, hsg_code))
+
+    # Group 2: All-Sachgruppen (`004..990`, `B`, `K`, `S`) Print + `/04` TOC + `Inhaltstext` Sweep across 6 decades (1970-2025)
+    for hsg_code in target_sachgruppen:
+        for d_start, d_end in decade_slices:
+            q_hsg_cat = f"hsg={hsg_code} and spr=ger and jhr>={d_start} and jhr<={d_end}"
+            phase1_queries.append((None, q_hsg_cat, 1, True, False, 100, hsg_code))
+
+    # Group 3: Unfiltered Year-by-Year (1970-2003) Open-Access Sweep (`location=onlinefree and spr=ger`, no `hsg` restriction)
+    for yr in range(2003, 1969, -1):
+        q_unfiltered_yr = f"location=onlinefree and spr=ger and jhr={yr}"
+        phase1_queries.append((None, q_unfiltered_yr, 1, True, True, 300, f"UNFILTERED_{yr}"))
+
+    # Group 4: Decade-Partitioned 38 Target Publishers (1970-2025) so large houses are never truncated by a single 3,000 cap
+    for canon_pub, vlg_term, _, _ in DNB_TARGET_PUBLISHERS:
+        for d_start, d_end in decade_slices:
+            q_pub_dec = f'vlg="{vlg_term}" and spr=ger and jhr>={d_start} and jhr<={d_end}'
+            phase1_queries.append((canon_pub, q_pub_dec, 1, True, False, 200, f"PUB_{canon_pub}"))
 
     print(
-        f"Comprehensive German-Language (`spr=ger`, All Subjects 000-900) DNB Harvester: Probing {len(phase1_queries):,} "
-        f"year-by-year, thematic & publisher SRU queries (1970-2025)...",
+        f"Wave-12 Unfiltered All-Sachgruppen (`000-990`, `B`, `K`, `S` | `spr=ger`, 1970-2025) DNB Harvester:\n"
+        f"  -> Probing {len(phase1_queries):,} SRU queries across {len(target_sachgruppen)} active Sachgruppen, "
+        f"34 unfiltered pre-DDC years (1970-2003), and 38 decade-sliced publishers...",
         flush=True,
     )
 
@@ -823,9 +954,11 @@ def harvest_dnb_wave7_exhaustive(
                 existing["publisher"] = r["publisher"]
             if r.get("is_deep_page"):
                 existing["is_deep_page"] = True
+            if r.get("query_hsg") and not existing.get("query_hsg"):
+                existing["query_hsg"] = r["query_hsg"]
 
     def _fetch_dnb_sru_page(task):
-        canon_pub, cql_query, start_rec, is_deep_page, force_oa, max_cap = task
+        canon_pub, cql_query, start_rec, is_deep_page, force_oa, max_cap, query_hsg = task
         parsed_list = []
         total_avail = 0
         for attempt in range(3):
@@ -863,27 +996,38 @@ def harvest_dnb_wave7_exhaustive(
                     )
                     if rec["title"] and rec["date"]:
                         rec["is_deep_page"] = is_deep_page
+                        rec["query_hsg"] = query_hsg
+                        if not rec.get("ddc") and query_hsg and not str(query_hsg).startswith(("UNFILTERED", "PUB_")):
+                            rec["ddc"] = str(query_hsg)
                         parsed_list.append(rec)
                 break
             except Exception:
                 time.sleep(0.5 * (attempt + 1))
         return parsed_list, total_avail
 
-    sru_workers = min(18, workers)
+    sru_workers = min(24, workers)
+    done_p1 = 0
     with ThreadPoolExecutor(max_workers=sru_workers) as ex:
         futs = {ex.submit(_fetch_dnb_sru_page, t): t for t in phase1_queries}
         for fut in as_completed(futs):
+            done_p1 += 1
             t = futs[fut]
-            canon_pub, cql_query, start_rec, is_deep_page, force_oa, max_cap = t
+            canon_pub, cql_query, start_rec, is_deep_page, force_oa, max_cap, query_hsg = t
             res, total_avail = fut.result()
             if res:
                 with lock:
                     for r in res:
                         _merge_rec_into_unique(r)
-            if total_avail > 100:
+            if total_avail > 100 and max_cap > 100:
                 upper = min(total_avail, max_cap)
                 for next_start in range(101, upper + 1, 100):
-                    continuation_tasks.append((canon_pub, cql_query, next_start, is_deep_page, force_oa, max_cap))
+                    continuation_tasks.append((canon_pub, cql_query, next_start, is_deep_page, force_oa, max_cap, query_hsg))
+            if done_p1 % 250 == 0:
+                print(
+                    f"    ... [Phase 1 SRU Progress] {done_p1:,}/{len(phase1_queries):,} queries | "
+                    f"{len(unique_records):,} unique DNB records discovered...",
+                    flush=True,
+                )
 
     if continuation_tasks:
         print(
@@ -902,13 +1046,13 @@ def harvest_dnb_wave7_exhaustive(
     all_dnb_records = list(unique_records.values())
     deep_records = [r for r in all_dnb_records if r.get("is_deep_page")]
     print(
-        f"  -> Retrieved {len(all_dnb_records):,} unique DNB MARC21 records "
+        f"  -> Retrieved {len(all_dnb_records):,} unique DNB MARC21 records across all Sachgruppen "
         f"({sum(1 for r in all_dnb_records if r.get('oa_candidate_urls')):,} with `location=onlinefree` `/34` & `MARC 856` Full-Text streams)!",
         flush=True,
     )
 
     # =========================================================================
-    # STREAM A: Wave-11 Multi-ISBN (`MARC 020 $a/$z/$9`) DNB -> HathiTrust Full Books
+    # STREAM A: Wave-12 Multi-ISBN (`MARC 020 $a/$z/$9`) DNB -> HathiTrust Full Books
     # =========================================================================
     dnb_isbn_candidates = []
     seen_isbns_local = set(already_matched_isbns)
@@ -930,11 +1074,13 @@ def harvest_dnb_wave7_exhaustive(
                 "decade": r["decade"],
                 "isbn": raw_isbn,
                 "ppn": r["idn"],
-                "bkl_codes": "DNB-Wave11-MultiISBN",
+                "bkl_codes": f"DNB-Wave12-{r.get('query_hsg') or 'AllHSG'}",
             })
 
+    # Cap HTRC ISBN resolution batch to top 8,000 priority ISBNs so Stream A finishes in ~45 seconds
+    dnb_isbn_candidates = dnb_isbn_candidates[:8000]
     print(
-        f"\n[Stream A] Wave-11 DNB Multi-ISBN ($a/$z/$9) -> HathiTrust Cross-Walk: Queued {len(dnb_isbn_candidates):,} unharvested DNB ISBNs...",
+        f"\n[Stream A] Wave-12 DNB Multi-ISBN ($a/$z/$9) -> HathiTrust Cross-Walk: Queued {len(dnb_isbn_candidates):,} unharvested DNB ISBNs...",
         flush=True,
     )
     htrc_passages = []
@@ -949,7 +1095,7 @@ def harvest_dnb_wave7_exhaustive(
         )
         if matched_ht_books:
             print(
-                f"Streaming full-book page-by-page tokens from HTRC EF-API for {len(matched_ht_books)} Wave-11 DNB-matched books...",
+                f"Streaming full-book page-by-page tokens from HTRC EF-API for {len(matched_ht_books)} Wave-12 DNB-matched books...",
                 flush=True,
             )
             with ThreadPoolExecutor(max_workers=workers) as ex:
@@ -963,16 +1109,16 @@ def harvest_dnb_wave7_exhaustive(
                         htrc_passages.extend(p_list)
                         htrc_summaries.append(summ)
                         print(
-                            f"  + [WAVE-11 DNB->HTRC BOOK #{len(htrc_summaries)}] ({summ['date']} | {summ['publisher'][:28]}) "
+                            f"  + [WAVE-12 DNB->HTRC BOOK #{len(htrc_summaries)}] ({summ['date']} | {summ['publisher'][:28]}) "
                             f"{summ['title'][:45]}... [{summ['htid']}] -> {summ['pages']} pages | "
                             f"{summ['extracted_words']:,} words ({summ['passages']} passages)",
                             flush=True,
                         )
 
     # =========================================================================
-    # STREAM B: ALL Unharvested `location=onlinefree` DNB `/34` + `MARC 856 $u` Open-Access Full-Text Books (PDF + EPUB)
+    # STREAM B: Stratified All-Sachgruppen `location=onlinefree` DNB `/34` + `MARC 856 $u` Open-Access Full-Text Books
     # =========================================================================
-    ckpt_jsonl = "data/primary_texts/dnb_wave11_oa_checkpoint.jsonl"
+    ckpt_jsonl = "data/primary_texts/dnb_wave12_oa_checkpoint.jsonl"
     os.makedirs(os.path.dirname(ckpt_jsonl), exist_ok=True)
     dnb_oa_passages = []
     oa_books_ok = 0
@@ -995,7 +1141,7 @@ def harvest_dnb_wave7_exhaustive(
                     pass
         if dnb_oa_passages:
             print(
-                f"  -> Resumed {oa_books_ok:,} checkpointed Wave-11 DNB OA books ({len(dnb_oa_passages):,} passages) from `{ckpt_jsonl}`!",
+                f"  -> Resumed {oa_books_ok:,} checkpointed Wave-12 DNB OA books ({len(dnb_oa_passages):,} passages) from `{ckpt_jsonl}`!",
                 flush=True,
             )
 
@@ -1005,17 +1151,10 @@ def harvest_dnb_wave7_exhaustive(
         and not any(u in already_seen_oa_urls for u in r["oa_candidate_urls"])
         and f"{r['title']} [dnb-oa-vollbuch-abschnitt 1/".lower() not in already_seen_oa_titles
     ]
-    oa_candidates.sort(
-        key=lambda x: (
-            0 if x.get("is_priority_publisher") else 1,
-            0 if x.get("publisher") != "DNB Monograph (DE)" else 1,
-            str(x.get("date") or "2000"),
-        )
-    )
-    selected_oa = oa_candidates[:max_oa_books]
+    selected_oa = _round_robin_stratify(oa_candidates, max_oa_books)
     print(
-        f"\n[Stream B] Uncapped DNB `location=onlinefree` Open-Access Full-Text PDFs & EPUBs (`/34` + `MARC 856 $u` + `URN/DOI`): "
-        f"Discovered {len(oa_candidates):,} unharvested OA works -> Streaming {len(selected_oa):,} works with 48 threads!",
+        f"\n[Stream B] Stratified All-Sachgruppen DNB `location=onlinefree` Open-Access Full-Text PDFs & EPUBs (`/34` + `MARC 856 $u`): "
+        f"Discovered {len(oa_candidates):,} unharvested OA works -> Streaming {len(selected_oa):,} stratified works across all Sachgruppen with 48 threads!",
         flush=True,
     )
     oa_done_count = 0
@@ -1076,9 +1215,9 @@ def harvest_dnb_wave7_exhaustive(
                         if oa_books_ok % 25 == 0:
                             ckpt_out.flush()
                         w_sum = sum(x["word_count"] for x in res)
-                        if oa_books_ok <= 30 or oa_books_ok % 100 == 0:
+                        if oa_books_ok <= 25 or oa_books_ok % 75 == 0:
                             print(
-                                f"  + [DNB OA BOOK #{oa_books_ok:,} | scanned {oa_done_count:,}/{len(selected_oa):,}] "
+                                f"  + [DNB OA BOOK #{oa_books_ok:,} | scanned {oa_done_count:,}/{len(selected_oa):,} | HSG={r.get('query_hsg')}] "
                                 f"({r['date']} | {r['publisher'][:26]}) {r['title'][:42]}... -> "
                                 f"{w_sum:,} words ({len(res)} passages | total OA passages: {len(dnb_oa_passages):,})",
                                 flush=True,
@@ -1090,7 +1229,7 @@ def harvest_dnb_wave7_exhaustive(
     )
 
     # =========================================================================
-    # STREAM C: ALL Remaining Unharvested DNB Digitized `/04` `Inhaltsverzeichnis` & Reading-Sample PDFs + HTML TOCs
+    # STREAM C: Stratified All-Sachgruppen DNB Digitized `/04` `Inhaltsverzeichnis` & Reading-Sample PDFs + HTML TOCs
     # =========================================================================
     toc_candidates = [
         r for r in all_dnb_records
@@ -1098,9 +1237,10 @@ def harvest_dnb_wave7_exhaustive(
         and (r["toc_pdf_url"] or r["toc_htm_url"]) not in already_seen_urls
         and f"{r['title']} [dnb-inhaltsverzeichnis & leseprobe]".lower() not in already_seen_titles
     ]
+    selected_tocs = _round_robin_stratify(toc_candidates, max_toc_pdfs)
     print(
-        f"\n[Stream C] DNB Digitized `/04` `Inhaltsverzeichnis` & Excerpt PDFs/HTMLs: "
-        f"Streaming ALL {min(len(toc_candidates), max_toc_pdfs):,} unharvested `/04` TOCs...",
+        f"\n[Stream C] Stratified All-Sachgruppen DNB Digitized `/04` `Inhaltsverzeichnis` & Excerpt PDFs/HTMLs: "
+        f"Discovered {len(toc_candidates):,} unharvested `/04` TOCs -> Streaming {len(selected_tocs):,} stratified `/04` TOCs...",
         flush=True,
     )
     dnb_toc_passages = []
@@ -1144,14 +1284,14 @@ def harvest_dnb_wave7_exhaustive(
             "text": full_txt,
         }
 
-    if toc_candidates:
+    if selected_tocs:
         with ThreadPoolExecutor(max_workers=48) as ex:
-            futs = [ex.submit(_stream_dnb_toc, r) for r in toc_candidates[:max_toc_pdfs]]
+            futs = [ex.submit(_stream_dnb_toc, r) for r in selected_tocs]
             for fut in as_completed(futs):
                 res = fut.result()
                 if res:
                     dnb_toc_passages.append(res)
-                    if len(dnb_toc_passages) % 1000 == 0:
+                    if len(dnb_toc_passages) % 500 == 0:
                         print(
                             f"    ... [Stream C Progress] Extracted {len(dnb_toc_passages):,} DNB `/04` TOC PDFs so far...",
                             flush=True,
@@ -1163,7 +1303,7 @@ def harvest_dnb_wave7_exhaustive(
     )
 
     # =========================================================================
-    # STREAM D: All Remaining Unharvested DNB `deposit.dnb.de` & `/blurb/` Inhaltstexte, Abstracts & Keywords
+    # STREAM D: Stratified All-Sachgruppen DNB `deposit.dnb.de` & `/blurb/` Inhaltstexte, Abstracts & Keywords
     # =========================================================================
     blurb_candidates = [
         r for r in all_dnb_records
@@ -1171,9 +1311,10 @@ def harvest_dnb_wave7_exhaustive(
         and r["title"].lower().strip() not in already_seen_titles
         and (not r["blurb_url"] or r["blurb_url"] not in already_seen_urls)
     ]
+    selected_blurbs = _round_robin_stratify(blurb_candidates, max_blurbs)
     print(
-        f"\n[Stream D] Wave-11 DNB `deposit.dnb.de` & `/blurb/` Inhaltstexte, Abstracts & Keywords: "
-        f"Fetching {len(blurb_candidates):,} NEW DNB deposit & catalog texts...",
+        f"\n[Stream D] Wave-12 All-Sachgruppen DNB `deposit.dnb.de` & `/blurb/` Inhaltstexte, Abstracts & Keywords: "
+        f"Discovered {len(blurb_candidates):,} candidates -> Fetching {len(selected_blurbs):,} stratified DNB deposit & catalog texts...",
         flush=True,
     )
 
@@ -1206,7 +1347,7 @@ def harvest_dnb_wave7_exhaustive(
         }
 
     with ThreadPoolExecutor(max_workers=48) as ex:
-        futs = [ex.submit(_enrich_dnb_deposit, r) for r in blurb_candidates]
+        futs = [ex.submit(_enrich_dnb_deposit, r) for r in selected_blurbs]
         for fut in as_completed(futs):
             res = fut.result()
             if res:
@@ -1383,13 +1524,15 @@ def build_exhaustive_dnb_master_manifest(
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Wave-11 Uncapped Exhaustive Deutsche Nationalbibliothek (DNB) Full-Text Harvester (1970-2025)"
+        description="Wave-12 Unfiltered All-Sachgruppen (000-990, B, K, S) Deutsche Nationalbibliothek (DNB) Full-Text Harvester (1970-2025)"
     )
     parser.add_argument("--workers", type=int, default=48)
     parser.add_argument("--chunk-words", type=int, default=1000)
     parser.add_argument("--max-chunks-per-book", type=int, default=55)
-    parser.add_argument("--max-toc-pdfs", type=int, default=50000)
-    parser.add_argument("--max-oa-books", type=int, default=100000)
+    parser.add_argument("--max-toc-pdfs", type=int, default=6500)
+    parser.add_argument("--max-oa-books", type=int, default=1800)
+    parser.add_argument("--max-blurbs", type=int, default=15000)
+    parser.add_argument("--full-rescan", action="store_true")
     parser.add_argument("--no-merge", action="store_true")
     parser.add_argument("--manifest-only", action="store_true")
     args = parser.parse_args()
@@ -1401,7 +1544,7 @@ def main():
         build_exhaustive_dnb_master_manifest(dnb_prev)
         return
 
-    ckpt_jsonl = "data/primary_texts/dnb_wave11_oa_checkpoint.jsonl"
+    ckpt_jsonl = "data/primary_texts/dnb_wave12_oa_checkpoint.jsonl"
     if os.path.exists(ckpt_jsonl):
         try:
             os.remove(ckpt_jsonl)
@@ -1440,7 +1583,7 @@ def main():
             already_seen_oa_urls.add(str(u).strip())
 
     print(
-        f"Starting Wave-11 Uncapped Exhaustive DNB `location=onlinefree` + `MARC 856` Full-Text Harvest (1970-2025)\n"
+        f"Starting Wave-12 Unfiltered All-Sachgruppen (`000-990`, `B`, `K`, `S`) DNB Full-Text Harvest (1970-2025)\n"
         f"  (Existing Corpus: {len(dnb_prev):,} documents | {len(already_seen_oa_titles):,} DNB OA books | {len(already_seen_htids):,} HTRC books)...",
         flush=True,
     )
@@ -1457,6 +1600,8 @@ def main():
         max_chunks_per_book=args.max_chunks_per_book,
         max_toc_pdfs=args.max_toc_pdfs,
         max_oa_books=args.max_oa_books,
+        max_blurbs=args.max_blurbs,
+        full_rescan=args.full_rescan,
     )
 
     if not new_passages:
@@ -1477,12 +1622,12 @@ def main():
     elapsed = time.time() - start_t
 
     print("\n======================================================================", flush=True)
-    print(f"WAVE-11 UNCAPPED EXHAUSTIVE DNB FULL-TEXT HARVEST FINISHED in {elapsed:.1f}s!", flush=True)
+    print(f"WAVE-12 UNFILTERED ALL-SACHGRUPPEN DNB HARVEST FINISHED in {elapsed:.1f}s!", flush=True)
     print(f"  - Stream A (Multi-ISBN $a/$z/$9 DNB -> HTRC Full Books): {len(new_ht_summaries)} books ({sum(1 for p in new_passages if p['corpus_layer']=='hathitrust_ef_fullbook_print'):,} passages)", flush=True)
     print(f"  - Stream B (`location=onlinefree` DNB `/34` & `MARC 856` OA PDFs & EPUBs): {sum(1 for p in new_passages if p['corpus_layer']=='dnb_oa_fullbook'):,} passages", flush=True)
-    print(f"  - Stream C (Remaining DNB Digitized `/04` `Inhaltsverzeichnis` & Excerpt PDFs/HTMLs): {sum(1 for p in new_passages if p['corpus_layer']=='dnb_toc_pdf_fulltext'):,} documents", flush=True)
-    print(f"  - Stream D (Remaining DNB `Inhaltstexte`, Abstracts & Keywords): {sum(1 for p in new_passages if p['corpus_layer']=='dnb_deposit_inhaltstext'):,} documents", flush=True)
-    print(f"  - TOTAL NEW UNIQUE DNB DOCUMENTS ADDED IN WAVE 11: {len(new_df):,} ({int(total_new_words):,} German words!)", flush=True)
+    print(f"  - Stream C (Stratified DNB Digitized `/04` `Inhaltsverzeichnis` & Excerpt PDFs/HTMLs): {sum(1 for p in new_passages if p['corpus_layer']=='dnb_toc_pdf_fulltext'):,} documents", flush=True)
+    print(f"  - Stream D (Stratified DNB `Inhaltstexte`, Abstracts & Keywords): {sum(1 for p in new_passages if p['corpus_layer']=='dnb_deposit_inhaltstext'):,} documents", flush=True)
+    print(f"  - TOTAL NEW UNIQUE DNB DOCUMENTS ADDED IN WAVE 12: {len(new_df):,} ({int(total_new_words):,} German words!)", flush=True)
     print("======================================================================", flush=True)
 
     if not args.no_merge:

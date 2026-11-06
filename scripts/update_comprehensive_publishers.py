@@ -94,13 +94,29 @@ def canonicalize_publisher(raw_pub: str):
     return cleaned, "Academic & Philosophical"
 
 def main():
+    import numpy as np
+
     pub_passage_counts = Counter()
     pub_work_sets = defaultdict(set)
     pub_categories = {}
     year_pub_counts = defaultdict(lambda: defaultdict(int))
     year_totals = defaultdict(int)
+    layer_counts = Counter()
+    layer_words = defaultdict(list)
+    total_docs = 0
+    total_words_sum = 0
 
     for row in lda_pipeline.iter_corpus_rows("data/dnb_metadata.csv", include_shards=True):
+        total_docs += 1
+        layer = str(row.get("corpus_layer") or "dnb_deposit_inhaltstext").strip()
+        layer_counts[layer] += 1
+        try:
+            wc = int(float(row.get("word_count") or 250))
+        except Exception:
+            wc = 250
+        total_words_sum += wc
+        layer_words[layer].append(wc)
+
         raw_pub = row.get("publisher") or ""
         canon_pub, cat = canonicalize_publisher(raw_pub)
         if not canon_pub:
@@ -190,8 +206,41 @@ def main():
     with open("app/data_summary.json", "r", encoding="utf-8") as f:
         sdata = json.load(f)
 
+    def _calc_stats(arr_list):
+        if not arr_list:
+            return {"count": 0, "total_words": 0, "mean": 0.0, "sd": 0.0, "median": 0.0, "iqr": 0.0, "min": 0, "max": 0}
+        arr = np.array(arr_list, dtype=np.float64)
+        q25, q50, q75 = np.percentile(arr, [25, 50, 75])
+        return {
+            "count": int(len(arr)),
+            "total_words": int(np.sum(arr)),
+            "mean": round(float(np.mean(arr)), 1),
+            "sd": round(float(np.std(arr)), 1),
+            "median": round(float(q50), 1),
+            "iqr": round(float(q75 - q25), 1),
+            "min": int(np.min(arr)),
+            "max": int(np.max(arr)),
+        }
+
+    all_wc = [w for w_list in layer_words.values() for w in w_list]
+    doc_len_dist = {
+        "overall": _calc_stats(all_wc),
+        "by_layer": {lyr: _calc_stats(w_list) for lyr, w_list in sorted(layer_words.items(), key=lambda x: -len(x[1]))},
+    }
+
+    manifest_summary = {}
+    if os.path.exists("app/dnb_master_manifest_summary.json"):
+        with open("app/dnb_master_manifest_summary.json", "r", encoding="utf-8") as mf:
+            manifest_summary = json.load(mf)
+
     # Remove stale nested "summary" duplicate so top-level and any consumer always see the exact same fields
     sdata.pop("summary", None)
+    sdata["total_documents"] = int(total_docs)
+    sdata["total_words"] = int(total_words_sum)
+    sdata["corpus_layers"] = {k: int(v) for k, v in layer_counts.most_common()}
+    sdata["document_length_distribution"] = doc_len_dist
+    if manifest_summary:
+        sdata["master_manifest"] = manifest_summary
     sdata["publishers"] = top_pubs
     sdata["publisher_counts"] = publisher_counts_dict
     sdata["publisher_works_counts"] = publisher_works_dict
@@ -201,7 +250,10 @@ def main():
     with open("app/data_summary.json", "w", encoding="utf-8") as f:
         json.dump(sdata, f, indent=2, ensure_ascii=False)
 
-    print(f"Successfully updated app/data_summary.json with {len(top_pubs)} comprehensive canonical publishers and 1970-2025 annual trends.")
+    print(
+        f"Successfully updated app/data_summary.json: {total_docs:,} passages | {total_words_sum:,} words | "
+        f"{len(top_pubs)} canonical publishers."
+    )
     for item in publisher_meta_list[:40]:
         safe_cat = item["category"].encode("ascii", "replace").decode("ascii")
         safe_pub = item["publisher"].encode("ascii", "replace").decode("ascii")
