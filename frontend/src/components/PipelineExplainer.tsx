@@ -73,13 +73,13 @@ const PIPELINE_STAGES = [
     accent: 'text-traditional',
     borderAccent: 'border-traditional/40',
     bgAccent: 'bg-traditional/10',
-    formula: 'D = 589,615 Passages · 190,120 Works · 13,983 Full Books · 407.60M Words · Zstd-19 Parquet',
+    formula: 'D = 10,454,038 Passages · 10,054,543 Works · 13,983 Full Books · 683.28M Words · 125 Zstd-19 Parquet Shards',
     summary:
-      'Harvests and fuses bibliographic metadata, publisher blurbs (Inhaltstexte), digitized TOC PDFs (/04), and complete open-access & HathiTrust full-text books across all 102 DNB Sachgruppen (000–990, B, K, S; 1970–2025) into Zstd-19 Apache Parquet shards.',
+      'Ingests 100% of the official DNB OpenData MARC21-XML Bulk Dump (Packages 1–5, 40.10M total records scanned) fused with publisher blurbs (Inhaltstexte), digitized TOC PDFs (/04), and complete open-access & HathiTrust full-text books across all 102 DNB Sachgruppen (000–990, B, K, S; 1970–2025).',
     details: [
-      'Combines MARC21 Tag 245$a/$b (Title/Subtitle), Tag 264$b/$c (Imprint/Year across 4,235 publishers), Tag 520$a (Abstract), Tags 650/689$a (GND Subject Headings), and Tag 856$u (/04 TOCs, /34 OA Books, deposit.dnb.de Inhaltstexte) across all 102 DNB Sachgruppen.',
-      'Stratified across 190,120 unique works (DNB_FULLTEXT_MASTER_MANIFEST.csv): 13,983 complete full-text books (380,525 passages), 49,737 works with digitized TOC PDFs (50,796 PDFs), and 154,079 works with deposit Inhaltstexte & MARC21 records.',
-      'Stored in 7 Zstd-19 Apache Parquet shards (data/parquet/ · 374.32 MB vs 1,638.49 MB CSV = 4.38× compression) backed by GitHub Release v12.0-dnb-parquet-shards and Online Streaming LDA (Hoffman et al., 2010).',
+      'Combines MARC21 Tag 245$a/$b (Title/Subtitle), Tag 264$b/$c (Imprint/Year across 713,838 raw imprint strings / 109 canonical publishers), Tag 520$a (Abstract), Tags 650/689$a (GND Subject Headings), and Tag 856$u (/04 TOCs, /34 OA Books, deposit.dnb.de Inhaltstexte) across all 102 DNB Sachgruppen.',
+      'Stratified across 10,054,543 unique German works (1970–2025): 13,983 complete full-text books (380,525 passages), 49,737 works with digitized TOC PDFs (50,796 PDFs), and 10,018,520 DNB OpenData MARC21-XML & deposit Inhaltstext records.',
+      'Stored in 125 Zstd-19 Apache Parquet shards (data/parquet/ · 862.99 MB compressed) backed by GitHub Release v12.0-dnb-parquet-shards and Online Streaming LDA (Hoffman et al., 2010).',
     ],
   },
   {

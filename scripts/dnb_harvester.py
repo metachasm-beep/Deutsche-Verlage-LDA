@@ -1576,11 +1576,11 @@ def build_exhaustive_dnb_master_manifest(
 def append_rows_to_zstd_parquet(
     rows: list[dict],
     parquet_dir: str = "data/parquet",
-    compression_level: int = 9,
+    compression_level: int = 19,
 ) -> str:
     """
-    Writes a streaming batch of DNB corpus rows to a new Zstd-9 Apache Parquet shard
-    in `parquet_dir` (`dnb_corpus_partNNN.parquet`).
+    Writes a streaming batch of DNB corpus rows to a new Zstd-19 Apache Parquet shard
+    in `parquet_dir` (`dnb_corpus_partNNN.parquet`) and updates `parquet_manifest.json`.
     """
     import glob
     import pyarrow as pa
@@ -1589,7 +1589,7 @@ def append_rows_to_zstd_parquet(
     if not rows:
         return ""
     os.makedirs(parquet_dir, exist_ok=True)
-    existing = glob.glob(os.path.join(parquet_dir, "dnb_corpus_part*.parquet"))
+    existing = sorted(glob.glob(os.path.join(parquet_dir, "dnb_corpus_part*.parquet")))
     max_idx = 0
     for p in existing:
         m = re.search(r"part(\d+)", os.path.basename(p))
@@ -1598,6 +1598,15 @@ def append_rows_to_zstd_parquet(
     next_idx = max_idx + 1
     shard_name = f"dnb_corpus_part{next_idx:03d}.parquet"
     shard_path = os.path.join(parquet_dir, shard_name)
+
+    rows_sorted = sorted(
+        rows,
+        key=lambda r: (
+            str(r.get("corpus_layer") or ""),
+            str(r.get("publisher") or ""),
+            str(r.get("author") or ""),
+        ),
+    )
 
     schema_fields = [
         ("title", pa.string()),
@@ -1618,14 +1627,14 @@ def append_rows_to_zstd_parquet(
     for col_name, col_type in schema_fields:
         if pa.types.is_integer(col_type):
             vals = []
-            for r in rows:
+            for r in rows_sorted:
                 try:
                     vals.append(int(float(r.get(col_name) or 1)))
                 except Exception:
                     vals.append(1)
             arrays[col_name] = pa.array(vals, type=col_type)
         else:
-            arrays[col_name] = pa.array([str(r.get(col_name) or "") for r in rows], type=col_type)
+            arrays[col_name] = pa.array([str(r.get(col_name) or "") for r in rows_sorted], type=col_type)
 
     table = pa.Table.from_pydict(arrays, schema=pa_schema)
     pq.write_table(
@@ -1637,95 +1646,242 @@ def append_rows_to_zstd_parquet(
         write_statistics=True,
     )
     sz_mb = os.path.getsize(shard_path) / (1024 * 1024)
-    print(f"  -> [Zstd-9 Parquet Stream] Wrote `{shard_path}` ({len(rows):,} rows | {sz_mb:.2f} MB)", flush=True)
+    print(f"  -> [Zstd-{compression_level} Parquet Stream] Wrote `{shard_path}` ({len(rows_sorted):,} rows | {sz_mb:.2f} MB)", flush=True)
+
+    # Update parquet_manifest.json incrementally so live readers see the new shard immediately
+    manifest_path = os.path.join(parquet_dir, "parquet_manifest.json")
+    try:
+        mdata = {}
+        if os.path.exists(manifest_path):
+            with open(manifest_path, "r", encoding="utf-8") as mf:
+                mdata = json.load(mf)
+        shards_list = mdata.get("shards", [])
+        shards_list.append({
+            "file": shard_name,
+            "rows": len(rows_sorted),
+            "bytes": os.path.getsize(shard_path),
+            "size_mb": round(sz_mb, 2),
+        })
+        total_r = sum(int(s.get("rows", 0)) for s in shards_list)
+        total_b = sum(int(s.get("bytes", 0)) for s in shards_list)
+        mdata["format"] = "Apache Parquet (Zstandard level 19)"
+        mdata["total_rows"] = total_r
+        mdata["total_shards"] = len(shards_list)
+        mdata["parquet_total_mb"] = round(total_b / (1024 * 1024), 2)
+        mdata["shards"] = shards_list
+        with open(manifest_path, "w", encoding="utf-8") as mf:
+            json.dump(mdata, mf, indent=2, ensure_ascii=False)
+    except Exception:
+        pass
+
     return shard_path
+
+
+DNB_OPENDATA_ALL_URLS = [
+    "https://data.dnb.de/DNB/dnb_all_dnbmarc.1.mrc.xml.gz",
+    "https://data.dnb.de/DNB/dnb_all_dnbmarc.2.mrc.xml.gz",
+    "https://data.dnb.de/DNB/dnb_all_dnbmarc.3.mrc.xml.gz",
+    "https://data.dnb.de/DNB/dnb_all_dnbmarc.4.mrc.xml.gz",
+    "https://data.dnb.de/DNB/dnb_all_dnbmarc.5.mrc.xml.gz",
+]
 
 
 def stream_dnb_opendata_marc_dump(
     dump_path_or_url: str,
     parquet_dir: str = "data/parquet",
-    batch_size: int = 25000,
+    batch_size: int = 85000,
     fetch_remote_blurbs: bool = False,
+    upload_incremental: bool = True,
+    release_tag: str = "v12.0-dnb-parquet-shards",
+    skip_records: int = 0,
 ) -> int:
     """
-    Streams an official DNB Open-Data MARC21-XML bulk dump (`.mrc.xml.gz`, `.xml.gz`, or `.xml` from
-    `https://data.dnb.de/opendata/`) in constant `<500 MB` RAM using `gzip` + `ET.iterparse`,
-    filtering to German-language (`spr=ger`) records published 1970–2025 across all 102 DNB Sachgruppen
-    without any SRU 10,000-record pagination ceiling, and writing Zstd-9 Parquet shards (`data/parquet/`).
+    Streams official DNB Open-Data MARC21-XML bulk dumps (`.mrc.xml.gz` from `https://data.dnb.de/DNB/`)
+    in constant `<500 MB` RAM using `gzip` + `ET.iterparse`, filtering to German-language (`spr=ger`)
+    records published 1970–2025 across all 102 DNB Sachgruppen without any SRU pagination ceiling,
+    and writing Zstd-19 Parquet shards (`data/parquet/`).
+    Pass `dump_path_or_url="all"` to stream all 5 official DNB OpenData packages (`40.1M` total records).
     """
+    import glob
     import gzip
+    import pyarrow.parquet as pq
 
-    print(
-        f"[DNB OpenData Bulk MARC21-XML Streamer] Streaming `{dump_path_or_url}` -> `{parquet_dir}` (batch_size={batch_size:,})...",
-        flush=True,
-    )
-    if dump_path_or_url.startswith(("http://", "https://")):
-        resp = requests.get(dump_path_or_url, headers=HEADERS, stream=True, timeout=60, verify=False)
-        resp.raise_for_status()
-        raw_stream = resp.raw
-        xml_stream = gzip.GzipFile(fileobj=raw_stream) if dump_path_or_url.endswith(".gz") else raw_stream
+    if dump_path_or_url.strip().lower() == "all":
+        urls_to_stream = DNB_OPENDATA_ALL_URLS
     else:
-        xml_stream = (
-            gzip.open(dump_path_or_url, "rb")
-            if dump_path_or_url.endswith(".gz")
-            else open(dump_path_or_url, "rb")
-        )
+        urls_to_stream = [u.strip() for u in dump_path_or_url.split(",") if u.strip()]
+
+    # Pre-load existing IDNs and titles from current Parquet shards using C++ columnar projection
+    seen_idns = set()
+    seen_titles = set()
+    existing_total_rows = 0
+    print(f"[DNB OpenData Bulk Streamer] Indexing existing corpus in `{parquet_dir}` for fast deduplication...", flush=True)
+    for p in sorted(glob.glob(os.path.join(parquet_dir, "dnb_corpus_part*.parquet"))):
+        tbl = pq.read_table(p, columns=["source_file", "title"])
+        existing_total_rows += tbl.num_rows
+        for sf in tbl.column("source_file").to_pylist():
+            if sf and "d-nb.info/" in sf:
+                idn_part = sf.split("d-nb.info/")[-1].split("/")[0].strip()
+                if idn_part:
+                    seen_idns.add(idn_part)
+        for t in tbl.column("title").to_pylist():
+            if t:
+                seen_titles.add(t.lower().strip())
+    print(f"  -> Indexed {existing_total_rows:,} existing rows ({len(seen_idns):,} DNB IDNs | {len(seen_titles):,} unique titles).", flush=True)
 
     batch_rows = []
+    created_shards = []
+    total_scanned = 0
     total_ingested = 0
-    context = ET.iterparse(xml_stream, events=("end",))
-    for _, elem in context:
-        tag_local = elem.tag.split("}")[-1] if "}" in elem.tag else elem.tag
-        if tag_local != "record":
-            continue
+
+    for pkg_idx, target_url in enumerate(urls_to_stream, 1):
+        print(
+            f"\n[DNB OpenData Package {pkg_idx}/{len(urls_to_stream)}] Streaming `{target_url}` -> `{parquet_dir}` (batch_size={batch_size:,}, skip_records={skip_records:,})...",
+            flush=True,
+        )
         try:
-            rec = parse_marc_record(elem, fetch_blurbs=fetch_remote_blurbs)
-            yr_str = str(rec.get("date") or "")
-            if len(yr_str) == 4 and yr_str.isdigit() and 1970 <= int(yr_str) <= 2025 and rec.get("title"):
-                txt_body = rec.get("text") or rec.get("title")
-                wc = len(txt_body.split())
-                if wc >= 8:
-                    layer = (
-                        "dnb_oa_fullbook"
-                        if rec.get("oa_pdf_url")
-                        else ("dnb_toc_pdf_fulltext" if rec.get("toc_pdf_url") else "dnb_deposit_inhaltstext")
-                    )
-                    src = (
-                        rec.get("oa_pdf_url")
-                        or rec.get("toc_pdf_url")
-                        or rec.get("blurb_url")
-                        or f"https://d-nb.info/{rec.get('idn') or ''}"
-                    )
-                    batch_rows.append({
-                        "title": rec["title"],
-                        "author": rec["author"],
-                        "date": rec["date"],
-                        "decade": rec["decade"],
-                        "publisher": rec["publisher"],
-                        "corpus_layer": layer,
-                        "source_file": src,
-                        "chunk_index": 1,
-                        "total_chunks": 1,
-                        "word_count": wc,
-                        "abstract": (rec.get("abstract_note") or txt_body)[:240],
-                        "text": f"{rec['title']}. {rec['author']}. {rec['publisher']}. {txt_body}",
-                    })
-                    total_ingested += 1
-                    if len(batch_rows) >= batch_size:
-                        append_rows_to_zstd_parquet(batch_rows, parquet_dir=parquet_dir)
-                        batch_rows = []
-        except Exception:
-            pass
-        finally:
-            elem.clear()
+            if target_url.startswith(("http://", "https://")):
+                resp = None
+                for attempt in range(4):
+                    try:
+                        resp = requests.get(target_url, headers=HEADERS, stream=True, timeout=(60, 600), verify=False)
+                        resp.raise_for_status()
+                        break
+                    except Exception as conn_err:
+                        if attempt == 3:
+                            raise conn_err
+                        print(f"  [!] Retry {attempt+1}/3 connecting to `{target_url}`...", flush=True)
+                        time.sleep(5 * (attempt + 1))
+                raw_stream = resp.raw
+                xml_stream = gzip.GzipFile(fileobj=raw_stream) if target_url.endswith(".gz") else raw_stream
+            else:
+                xml_stream = (
+                    gzip.open(target_url, "rb")
+                    if target_url.endswith(".gz")
+                    else open(target_url, "rb")
+                )
+
+            context = iter(ET.iterparse(xml_stream, events=("start", "end")))
+            _, root = next(context)
+            for event, elem in context:
+                if event != "end":
+                    continue
+                tag_local = elem.tag.split("}")[-1] if "}" in elem.tag else elem.tag
+                if tag_local != "record":
+                    continue
+                total_scanned += 1
+                if skip_records and total_scanned <= skip_records:
+                    if total_scanned % 250000 == 0:
+                        print(f"  ... [Fast-Forwarding Pkg {pkg_idx}] Skipped {total_scanned:,}/{skip_records:,} already-scanned records...", flush=True)
+                    elem.clear()
+                    root.clear()
+                    continue
+                try:
+                    # Fast check on 001 (IDN), 008 (Year & Language), and 041 (Language)
+                    f001 = elem.find("marc:controlfield[@tag='001']", NS)
+                    idn_val = f001.text.strip() if (f001 is not None and f001.text) else ""
+                    if idn_val and idn_val in seen_idns:
+                        continue
+
+                    f008 = elem.find("marc:controlfield[@tag='008']", NS)
+                    c008 = f008.text if (f008 is not None and f008.text) else ""
+                    lang_008 = c008[35:38].lower() if len(c008) >= 38 else ""
+                    yr_008 = c008[7:11] if len(c008) >= 11 else ""
+
+                    is_ger = lang_008 in ("ger", "deu")
+                    if not is_ger:
+                        for f041 in elem.findall("marc:datafield[@tag='041']/marc:subfield[@code='a']", NS):
+                            if f041.text and f041.text.strip().lower() in ("ger", "deu"):
+                                is_ger = True
+                                break
+                    if not is_ger:
+                        continue
+
+                    rec = parse_marc_record(elem, fetch_blurbs=fetch_remote_blurbs)
+                    yr_str = str(rec.get("date") or "")
+                    if not (len(yr_str) == 4 and yr_str.isdigit()) and len(yr_008) == 4 and yr_008.isdigit():
+                        yr_str = yr_008
+                        rec["date"] = yr_str
+                        rec["decade"] = f"{yr_str[:3]}0s"
+
+                    if len(yr_str) == 4 and yr_str.isdigit() and 1970 <= int(yr_str) <= 2025 and rec.get("title"):
+                        tl = rec["title"].lower().strip()
+                        if tl in seen_titles:
+                            continue
+                        ddc_val = rec.get("ddc") or "000"
+                        abs_txt = rec.get("abstract_note") or ""
+                        kw_txt = rec.get("keywords") or ""
+                        body_parts = [p for p in [abs_txt, kw_txt, f"DNB Sachgruppe {ddc_val}"] if p and p.strip()]
+                        body_str = " ".join(body_parts).strip()
+                        full_txt = f"{rec['title']}. {rec['author']}. {rec['publisher']}. {body_str}".strip()
+                        wc = len(full_txt.split())
+                        if wc >= 4:
+                            src = (
+                                rec.get("oa_pdf_url")
+                                or rec.get("toc_pdf_url")
+                                or rec.get("blurb_url")
+                                or (f"https://d-nb.info/{idn_val}" if idn_val else "https://portal.dnb.de")
+                            )
+                            batch_rows.append({
+                                "title": rec["title"],
+                                "author": rec["author"],
+                                "date": yr_str,
+                                "decade": rec["decade"],
+                                "publisher": rec["publisher"],
+                                "corpus_layer": "dnb_deposit_inhaltstext",
+                                "source_file": src,
+                                "chunk_index": 1,
+                                "total_chunks": 1,
+                                "word_count": wc,
+                                "abstract": (abs_txt or kw_txt or rec["title"])[:240],
+                                "text": body_str,
+                            })
+                            if idn_val:
+                                seen_idns.add(idn_val)
+                            seen_titles.add(tl)
+                            total_ingested += 1
+                            if len(batch_rows) >= batch_size:
+                                new_shard = append_rows_to_zstd_parquet(batch_rows, parquet_dir=parquet_dir, compression_level=19)
+                                batch_rows = []
+                                if new_shard:
+                                    created_shards.append(os.path.basename(new_shard))
+
+                    if total_scanned % 50000 == 0:
+                        print(
+                            f"  ... [OpenData Stream Pkg {pkg_idx}] Scanned {total_scanned:,} MARC21 records | "
+                            f"Ingested {total_ingested:,} new 1970-2025 German works (Total Corpus: {existing_total_rows + total_ingested:,})...",
+                            flush=True,
+                        )
+                except Exception:
+                    pass
+                finally:
+                    elem.clear()
+                    root.clear()
+
+            try:
+                xml_stream.close()
+            except Exception:
+                pass
+        except Exception as e:
+            print(f"  [!] Stream warning on `{target_url}` after {total_scanned:,} scanned records: {e}", flush=True)
 
     if batch_rows:
-        append_rows_to_zstd_parquet(batch_rows, parquet_dir=parquet_dir)
-    try:
-        xml_stream.close()
-    except Exception:
-        pass
-    print(f"[DNB OpenData Bulk Streamer] Completed: {total_ingested:,} records written to `{parquet_dir}`!", flush=True)
+        last_shard = append_rows_to_zstd_parquet(batch_rows, parquet_dir=parquet_dir, compression_level=19)
+        if last_shard:
+            created_shards.append(os.path.basename(last_shard))
+
+    if upload_incremental and created_shards:
+        upload_parquet_shards_to_github_release(
+            parquet_dir,
+            release_tag=release_tag,
+            only_files=created_shards + ["parquet_manifest.json"],
+        )
+
+    print(
+        f"[DNB OpenData Bulk Streamer] Completed: Scanned {total_scanned:,} MARC21 records -> "
+        f"Ingested {total_ingested:,} new 1970-2025 German works to `{parquet_dir}`!",
+        flush=True,
+    )
     return total_ingested
 
 
@@ -1863,9 +2019,10 @@ def upload_parquet_shards_to_github_release(
     parquet_dir: str = "data/parquet",
     release_tag: str = "v12.0-dnb-parquet-shards",
     repo: str = "metachasm-beep/Deutsche-Verlage-LDA",
+    only_files: list[str] = None,
 ) -> bool:
     """
-    Uploads Zstd-9 Apache Parquet shards (`data/parquet/dnb_corpus_part*.parquet` and `parquet_manifest.json`,
+    Uploads Zstd-19 Apache Parquet shards (`data/parquet/dnb_corpus_part*.parquet` and `parquet_manifest.json`,
     up to 2.0 GB per asset file) to GitHub Release Assets via `gh release upload` or the GitHub Releases REST API
     (`https://uploads.github.com/repos/{repo}/releases/{id}/assets`) using `git credential fill` or `GITHUB_TOKEN`.
     """
@@ -1877,6 +2034,9 @@ def upload_parquet_shards_to_github_release(
     manifest_file = os.path.join(parquet_dir, "parquet_manifest.json")
     if os.path.exists(manifest_file):
         shard_files.append(manifest_file)
+    if only_files:
+        only_set = set(only_files)
+        shard_files = [f for f in shard_files if os.path.basename(f) in only_set]
     if not shard_files:
         print(f"No Parquet shards found in `{parquet_dir}` to upload.", flush=True)
         return False
@@ -2005,6 +2165,7 @@ def main():
     parser.add_argument("--export-parquet", action="store_true", help="Compress master corpus into Zstd-19 Apache Parquet shards in data/parquet/")
     parser.add_argument("--parquet-dir", type=str, default="data/parquet", help="Target directory for Zstd-19 Parquet shards")
     parser.add_argument("--opendata-dump", type=str, default=None, help="Path or URL to DNB data.dnb.de/opendata/ MARC21-XML dump (.mrc.xml.gz)")
+    parser.add_argument("--skip-records", type=int, default=0, help="Skip first N XML records when resuming a bulk dump")
     parser.add_argument("--uncapped-year-sachgruppe", action="store_true", help="Run uncapped Year x Sachgruppe (5,712 cells) SRU streamer into data/parquet/")
     parser.add_argument("--upload-github-release", action="store_true", help="Upload Zstd Parquet shards to GitHub Release Assets after harvest/export")
     parser.add_argument("--upload-only", action="store_true", help="Upload existing Zstd Parquet shards to GitHub Release Assets and exit")
@@ -2015,9 +2176,16 @@ def main():
     start_t = time.time()
 
     if args.opendata_dump:
-        stream_dnb_opendata_marc_dump(args.opendata_dump, parquet_dir=args.parquet_dir)
-        if args.upload_github_release:
-            upload_parquet_shards_to_github_release(args.parquet_dir, release_tag=args.release_tag)
+        stream_dnb_opendata_marc_dump(
+            args.opendata_dump,
+            parquet_dir=args.parquet_dir,
+            upload_incremental=args.upload_github_release,
+            release_tag=args.release_tag,
+            skip_records=args.skip_records,
+        )
+        if args.online_lda:
+            import lda_pipeline
+            lda_pipeline.run_streaming_online_lda_pipeline(args.parquet_dir, num_topics=20)
         return
 
     if args.uncapped_year_sachgruppe:

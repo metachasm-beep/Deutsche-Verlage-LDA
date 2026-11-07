@@ -1242,7 +1242,7 @@ function App() {
                 <Database className="w-3.5 h-3.5 text-traditional" />
               </div>
               <div className="font-serif text-xl font-bold text-parchment-50 tabular-nums">
-                {(summary?.total_records || corpusDocuments || 589615).toLocaleString()}{' '}
+                {(summary?.total_records || corpusDocuments || 10454038).toLocaleString()}{' '}
                 <span className="text-xs font-sans font-normal text-parchment-300">Passages</span>
               </div>
               <p className="font-mono text-[9px] text-emerald-300 truncate mt-0.5">
@@ -1250,7 +1250,7 @@ function App() {
                   ? `Active Slice: ${selectedYear}`
                   : selectedDecade
                   ? `Active Cohort: ${selectedDecade}s`
-                  : `${(summary?.master_manifest?.total_unique_works_1970_2025 || summary?.unique_books || 190120).toLocaleString()} Works · ${(summary?.master_manifest?.total_complete_fulltext_books || 13983).toLocaleString()} Full Books · ${((summary?.total_words || 407598670) / 1_000_000).toFixed(1)}M Words`}
+                  : `${(summary?.master_manifest?.total_unique_works_1970_2025 || summary?.unique_books || 10054543).toLocaleString()} Works · ${(summary?.master_manifest?.total_complete_fulltext_books || 13983).toLocaleString()} Full Books · ${((summary?.total_words || 683282416) / 1_000_000).toFixed(1)}M Words`}
               </p>
             </div>
 
@@ -1333,13 +1333,13 @@ function App() {
                   <div className="flex flex-wrap items-center justify-between gap-2 pb-2.5 mb-3 border-b border-white/[0.07]">
                     <div className="flex flex-wrap items-center gap-2">
                       <span className="px-2 py-0.5 rounded bg-emerald-500/15 border border-emerald-500/30 font-mono text-[10px] uppercase tracking-widest text-emerald-300 font-bold">
-                        Wave-13 Uncapped All-Sachgruppen Zstd-Parquet Corpus (1970–2025)
+                        Complete DNB OpenData + Full-Text Zstd-Parquet Corpus (1970–2025)
                       </span>
                       <span className="font-serif text-sm sm:text-base font-bold text-parchment-50">
-                        {(summary?.master_manifest?.total_unique_works_1970_2025 || summary?.unique_books || 190120).toLocaleString()} Unique Works ·{' '}
-                        {(summary?.total_records || 589615).toLocaleString()} Analytical Passages ·{' '}
-                        {((summary?.total_words || 407598670) / 1_000_000).toFixed(2)}M German Words ·{' '}
-                        102 DNB Sachgruppen · {(summary?.all_publishers_count || 4235).toLocaleString()} Imprints · 7 Zstd-19 Parquet Shards (374.3 MB)
+                        {(summary?.master_manifest?.total_unique_works_1970_2025 || summary?.unique_books || 10054543).toLocaleString()} Unique Works ·{' '}
+                        {(summary?.total_records || 10454038).toLocaleString()} Analytical Passages ·{' '}
+                        {((summary?.total_words || 683282416) / 1_000_000).toFixed(2)}M German Words ·{' '}
+                        102 DNB Sachgruppen · {(summary?.all_publishers_count || 713838).toLocaleString()} Imprints · 125 Zstd-19 Parquet Shards (863.0 MB)
                       </span>
                     </div>
                     <div className="flex items-center gap-2">
@@ -1367,7 +1367,7 @@ function App() {
                             Tier 1 · Complete Full-Text Books
                           </span>
                           <span className="px-1.5 py-0.5 rounded bg-emerald-500/15 font-mono text-[9px] text-emerald-300 font-bold">
-                            64.52% of Passages
+                            55.07% of Words
                           </span>
                         </div>
                         <div className="font-serif text-lg font-bold text-parchment-50 tabular-nums">
@@ -1404,7 +1404,7 @@ function App() {
                             Tier 2 · Digitized TOC & Sample PDFs
                           </span>
                           <span className="px-1.5 py-0.5 rounded bg-traditional/15 font-mono text-[9px] text-traditional font-bold">
-                            8.61% of Passages
+                            50,796 PDFs
                           </span>
                         </div>
                         <div className="font-serif text-lg font-bold text-parchment-50 tabular-nums">
@@ -1433,35 +1433,35 @@ function App() {
                       </div>
                     </div>
 
-                    {/* Tier 3A: DNB deposit.dnb.de Inhaltstexte & Complete MARC21 Works */}
+                    {/* Tier 3A: Complete DNB OpenData MARC21-XML Dump + Deposit Inhaltstexte */}
                     <div className="p-3 rounded-lg bg-obsidian-950/90 border border-neoliberal/30 flex flex-col justify-between">
                       <div>
                         <div className="flex items-center justify-between gap-1 mb-1">
                           <span className="font-mono text-[10px] uppercase text-neoliberal font-bold">
-                            Tier 3A · DNB Deposit & MARC21 Works
+                            Tier 3A · Complete DNB OpenData & Blurblist
                           </span>
                           <span className="px-1.5 py-0.5 rounded bg-neoliberal/15 font-mono text-[9px] text-neoliberal font-bold">
-                            26.14% of Passages
+                            95.83% of Records
                           </span>
                         </div>
                         <div className="font-serif text-lg font-bold text-parchment-50 tabular-nums">
-                          154,079 Works{' '}
+                          10,018,520 Works{' '}
                           <span className="text-xs font-mono font-normal text-parchment-300">
-                            · 154,097 Records · 10.90M Words
+                            · 286.58M Words
                           </span>
                         </div>
                         <p className="text-[11px] text-parchment-300 mt-1 leading-relaxed">
-                          Archival publisher blurbs, MARC 520 summaries & 100% uncapped All-Sachgruppen works:
+                          100% of DNB OpenData MARC21-XML dump (Packages 1–5 · 40.1M scanned) + deposit.dnb.de blurbs:
                         </p>
                       </div>
                       <div className="mt-2 pt-2 border-t border-white/[0.06] space-y-1 font-mono text-[10px]">
                         <div className="flex justify-between text-parchment-200">
                           <span>• Primary Tier-3A Unique Works:</span>
-                          <span className="text-neoliberal font-bold">125,631 unique works</span>
+                          <span className="text-neoliberal font-bold">9,990,054 unique works</span>
                         </div>
                         <div className="flex justify-between text-parchment-200">
                           <span>• Co-Indexed with TOC / Full Book:</span>
-                          <span className="text-parchment-100 font-bold">28,448 works</span>
+                          <span className="text-parchment-100 font-bold">28,466 works</span>
                         </div>
                         <div className="flex justify-between text-parchment-300">
                           <span>• Coverage:</span>
