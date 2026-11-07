@@ -1242,7 +1242,7 @@ function App() {
                 <Database className="w-3.5 h-3.5 text-traditional" />
               </div>
               <div className="font-serif text-xl font-bold text-parchment-50 tabular-nums">
-                {(summary?.total_records || corpusDocuments || 10454038).toLocaleString()}{' '}
+                {(summary?.total_records || corpusDocuments || 10504591).toLocaleString()}{' '}
                 <span className="text-xs font-sans font-normal text-parchment-300">Passages</span>
               </div>
               <p className="font-mono text-[9px] text-emerald-300 truncate mt-0.5">
@@ -1250,7 +1250,7 @@ function App() {
                   ? `Active Slice: ${selectedYear}`
                   : selectedDecade
                   ? `Active Cohort: ${selectedDecade}s`
-                  : `${(summary?.master_manifest?.total_unique_works_1970_2025 || summary?.unique_books || 10054543).toLocaleString()} Works · ${(summary?.master_manifest?.total_complete_fulltext_books || 13983).toLocaleString()} Full Books · ${((summary?.total_words || 683282416) / 1_000_000).toFixed(1)}M Words`}
+                  : `${(summary?.master_manifest?.total_unique_works_1970_2025 || summary?.unique_books || 10054543).toLocaleString()} Works · ${(summary?.master_manifest?.total_complete_fulltext_books || 16804).toLocaleString()} Full Books · ${((summary?.total_words || 737754887) / 1_000_000).toFixed(1)}M Words`}
               </p>
             </div>
 
@@ -1337,9 +1337,9 @@ function App() {
                       </span>
                       <span className="font-serif text-sm sm:text-base font-bold text-parchment-50">
                         {(summary?.master_manifest?.total_unique_works_1970_2025 || summary?.unique_books || 10054543).toLocaleString()} Unique Works ·{' '}
-                        {(summary?.total_records || 10454038).toLocaleString()} Analytical Passages ·{' '}
-                        {((summary?.total_words || 683282416) / 1_000_000).toFixed(2)}M German Words ·{' '}
-                        102 DNB Sachgruppen · {(summary?.all_publishers_count || 713838).toLocaleString()} Imprints · 125 Zstd-19 Parquet Shards (863.0 MB)
+                        {(summary?.total_records || 10504591).toLocaleString()} Analytical Passages ·{' '}
+                        {((summary?.total_words || 737754887) / 1_000_000).toFixed(2)}M German Words ·{' '}
+                        102 DNB Sachgruppen · {(summary?.all_publishers_count || 572662).toLocaleString()} Imprints · 126 Zstd-19 Parquet Shards (1,352.1 MB)
                       </span>
                     </div>
                     <div className="flex items-center gap-2">
@@ -1367,23 +1367,23 @@ function App() {
                             Tier 1 · Complete Full-Text Books
                           </span>
                           <span className="px-1.5 py-0.5 rounded bg-emerald-500/15 font-mono text-[9px] text-emerald-300 font-bold">
-                            55.07% of Words
+                            58.24% of Words
                           </span>
                         </div>
                         <div className="font-serif text-lg font-bold text-parchment-50 tabular-nums">
-                          {(summary?.master_manifest?.total_complete_fulltext_books || 13983).toLocaleString()} Books{' '}
+                          {(summary?.master_manifest?.total_complete_fulltext_books || 16804).toLocaleString()} Books{' '}
                           <span className="text-xs font-mono font-normal text-parchment-300">
-                            · 380,525 Passages · 376.29M Words
+                            · 433,818 Passages · 429.66M Words
                           </span>
                         </div>
                         <p className="text-[11px] text-parchment-300 mt-1 leading-relaxed">
-                          Segmented into non-overlapping 1,000-word windows (Mean: 988.9w · Median: 1,000w):
+                          Segmented into non-overlapping 1,000-word windows (Mean: 990.4w · Median: 1,000w):
                         </p>
                       </div>
                       <div className="mt-2 pt-2 border-t border-white/[0.06] space-y-1 font-mono text-[10px]">
                         <div className="flex justify-between text-parchment-200">
-                          <span>• DNB /34 & MARC 856 OA Books:</span>
-                          <span className="text-emerald-300 font-bold">9,692 books (126,691 ch.)</span>
+                          <span>• DNBLab /34 & MARC 856 OA Books:</span>
+                          <span className="text-emerald-300 font-bold">12,513 books (179,984 ch.)</span>
                         </div>
                         <div className="flex justify-between text-parchment-200">
                           <span>• HathiTrust HTRC Print Books:</span>
@@ -1404,23 +1404,23 @@ function App() {
                             Tier 2 · Digitized TOC & Sample PDFs
                           </span>
                           <span className="px-1.5 py-0.5 rounded bg-traditional/15 font-mono text-[9px] text-traditional font-bold">
-                            50,796 PDFs
+                            55,545 PDFs/OCRs
                           </span>
                         </div>
                         <div className="font-serif text-lg font-bold text-parchment-50 tabular-nums">
-                          49,737 Works{' '}
+                          55,545 Works{' '}
                           <span className="text-xs font-mono font-normal text-parchment-300">
-                            · 50,796 PDFs · 20.05M Words
+                            · 55,545 PDFs/OCRs · 21.84M Words
                           </span>
                         </div>
                         <p className="text-[11px] text-parchment-300 mt-1 leading-relaxed">
-                          Full chapter hierarchies, section headings & reading samples extracted from PDFs:
+                          Full chapter hierarchies, section headings & reading samples via DNBLab /04/text & PDFs:
                         </p>
                       </div>
                       <div className="mt-2 pt-2 border-t border-white/[0.06] space-y-1 font-mono text-[10px]">
                         <div className="flex justify-between text-parchment-200">
-                          <span>• DNB /04 Inhaltsverzeichnis PDFs:</span>
-                          <span className="text-traditional font-bold">36,563 works (36,597 PDFs)</span>
+                          <span>• DNBLab /04 & /04/text TOCs:</span>
+                          <span className="text-traditional font-bold">41,346 works (41,346 TOCs)</span>
                         </div>
                         <div className="flex justify-between text-parchment-200">
                           <span>• GBV / K10plus Consortial TOC PDFs:</span>

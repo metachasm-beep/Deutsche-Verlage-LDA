@@ -334,12 +334,14 @@ WAVE11_HARVESTED_HSG_14 = {
 def fetch_dnb_blurb(blurb_url: str) -> str:
     """
     Fetches and strips HTML from a DNB Inhaltstext (Tag 856) publisher blurb URL
-    (deposit.dnb.de/cgi-bin/dokserv or services.dnb.de/plus/idn/.../blurb/).
+    (deposit.dnb.de/cgi-bin/dokserv or services.dnb.de/plus/idn/.../blurb/)
+    using thread-local keep-alive connection pooling.
     """
     if not blurb_url:
         return ""
     try:
-        resp = requests.get(blurb_url, headers=HEADERS, timeout=10, verify=False)
+        sess = _get_thread_session()
+        resp = sess.get(blurb_url, headers=HEADERS, timeout=(4, 8), verify=False)
         if resp.status_code == 200:
             raw_html = resp.text
             p_matches = re.findall(r"<p[^>]*>(.*?)</p>", raw_html, flags=re.DOTALL | re.IGNORECASE)
@@ -2149,6 +2151,430 @@ def upload_parquet_shards_to_github_release(
     return True
 
 
+def fetch_dnblab_04_toc_text_or_pdf(url: str, max_pages: int = 12) -> tuple[str, int]:
+    """
+    Fetches a Digitized Table of Contents (`d-nb.info/{idn}/04`) using the official DNBLab
+    plain-text OCR endpoint (`https://d-nb.info/{idn}/04/text`, ~25ms UTF-8 text without PDF parsing),
+    falling back to `stream_dnb_34_pdf_or_epub_in_ram(url)` only if `/04/text` is unavailable.
+    """
+    if not url:
+        return "", 0
+    if url.endswith("/04") and "d-nb.info" in url:
+        txt_url = url + "/text"
+        try:
+            sess = _get_thread_session()
+            r = sess.get(txt_url, headers=HEADERS, timeout=(3, 7), verify=False)
+            if r.status_code == 200 and r.content:
+                raw_txt = r.content.decode("utf-8-sig", errors="ignore")
+                clean_txt = normalize_german_text(raw_txt)
+                wc = len(clean_txt.split())
+                if wc >= 25:
+                    est_pages = max(1, min(max_pages, round(wc / 180)))
+                    return clean_txt, est_pages
+        except Exception:
+            pass
+    return stream_dnb_34_pdf_or_epub_in_ram(url, max_pages=max_pages)
+
+
+def load_or_fetch_dnblab_free_idns(cache_path: str = "data/primary_texts/dnblab_free_idns.json") -> set[str]:
+    """
+    Streams the official DNBLab Free Digital Object MARC21-XML dumps on `https://data.dnb.de/`
+    (`FreieOnlineHochschulschriften` 000..900 & `FreieOnlineMonografien`) to collect DNB IDNs (`001`)
+    that are guaranteed `onlinefree` (`200 OK` full-text PDF/EPUB at `https://d-nb.info/{idn}/34`).
+    """
+    if os.path.exists(cache_path):
+        try:
+            with open(cache_path, "r", encoding="utf-8") as cf:
+                data = json.load(cf)
+                if len(data) >= 10000:
+                    return set(data)
+        except Exception:
+            pass
+
+    dnblab_urls = [
+        "https://data.dnb.de/FreieOnlineHochschulschriften/dnb-all_online_hochschulschriften_frei_000_dnbmarc.mrc.xml.gz",
+        "https://data.dnb.de/FreieOnlineHochschulschriften/dnb-all_online_hochschulschriften_frei_100_dnbmarc.mrc.xml.gz",
+        "https://data.dnb.de/FreieOnlineHochschulschriften/dnb-all_online_hochschulschriften_frei_200_dnbmarc.mrc.xml.gz",
+        "https://data.dnb.de/FreieOnlineHochschulschriften/dnb-all_online_hochschulschriften_frei_300_dnbmarc.mrc.xml.gz",
+        "https://data.dnb.de/FreieOnlineHochschulschriften/dnb-all_online_hochschulschriften_frei_400_dnbmarc.mrc.xml.gz",
+        "https://data.dnb.de/FreieOnlineHochschulschriften/dnb-all_online_hochschulschriften_frei_700_dnbmarc.mrc.xml.gz",
+        "https://data.dnb.de/FreieOnlineHochschulschriften/dnb-all_online_hochschulschriften_frei_800_dnbmarc.mrc.xml.gz",
+        "https://data.dnb.de/FreieOnlineHochschulschriften/dnb-all_online_hochschulschriften_frei_900_dnbmarc.mrc.xml.gz",
+    ]
+    import zlib
+    free_idns = set()
+    print("  [DNBLab] Indexing guaranteed-free (`onlinefree`) DNB `/34` IDNs from `data.dnb.de/FreieOnlineHochschulschriften/`...", flush=True)
+    idn_rx = re.compile(rb'<controlfield tag="001">([^<]+)</controlfield>')
+    for u in dnblab_urls:
+        try:
+            with requests.get(u, stream=True, timeout=(15, 60), verify=False) as resp:
+                if resp.status_code != 200:
+                    continue
+                dobj = zlib.decompressobj(16 + zlib.MAX_WBITS)
+                tail = b""
+                for raw_chunk in resp.iter_content(chunk_size=512 * 1024):
+                    if not raw_chunk:
+                        break
+                    data = tail + dobj.decompress(raw_chunk)
+                    for m in idn_rx.finditer(data):
+                        free_idns.add(m.group(1).decode("ascii", errors="ignore").strip())
+                    tail = data[-128:] if len(data) > 128 else data
+        except Exception as e:
+            print(f"    [WARN] DNBLab index stream `{u}`: {e}", flush=True)
+    os.makedirs(os.path.dirname(cache_path), exist_ok=True)
+    try:
+        with open(cache_path, "w", encoding="utf-8") as cf:
+            json.dump(sorted(free_idns), cf)
+    except Exception:
+        pass
+    print(f"  [DNBLab] Indexed {len(free_idns):,} guaranteed-free (`onlinefree`) DNB `/34` full-text IDNs!", flush=True)
+    return free_idns
+
+
+def hydrate_parquet_shards_with_remote_fulltext_and_blurbs(
+    parquet_dir: str = "data/parquet",
+    start_shard: int = 8,
+    end_shard: int = 125,
+    workers: int = 64,
+    max_oa_per_shard: int = 45,
+    max_toc_per_shard: int = 55,
+    max_blurbs_per_shard: int = 140,
+    chunk_words: int = 1000,
+    max_chunks_per_book: int = 35,
+    upload_updated: bool = False,
+    release_tag: str = "v12.0-dnb-parquet-shards",
+) -> dict:
+    """
+    Targeted multi-threaded background hydration pass over OpenData MARC21 Parquet shards
+    (`dnb_corpus_part008.parquet` .. `dnb_corpus_part125.parquet`) powered by DNBLab:
+      1. Indexes guaranteed-free (`onlinefree`) `/34` IDNs from `data.dnb.de/FreieOnlineHochschulschriften/`
+         and hydrates `d-nb.info/{idn}/34` & external repository Open-Access full-text PDFs/EPUBs via `stream_dnb_oa_multi_url_in_ram`
+         (upgrading `corpus_layer` to `dnb_oa_fullbook` and slicing multi-chunk books into 1,000-word passages).
+      2. Hydrates `d-nb.info/{idn}/04` digitized Table-of-Contents via DNBLab's fast plain-text OCR endpoint
+         `https://d-nb.info/{idn}/04/text` (`fetch_dnblab_04_toc_text_or_pdf`, upgrading `corpus_layer` to `dnb_toc_pdf_fulltext`).
+      3. Hydrates `services.dnb.de/plus/idn/{idn}/blurb/` & `deposit.dnb.de/cgi-bin/dokserv` publisher blurbs via `fetch_dnb_blurb`.
+    Rewrites updated Zstd-19 Parquet shards, appends overflow multi-chunk OA passages, and synchronizes `parquet_manifest.json`.
+    """
+    import glob
+    import hashlib
+    import pyarrow as pa
+    import pyarrow.parquet as pq
+
+    dnblab_free_idns = load_or_fetch_dnblab_free_idns()
+
+    shard_paths = sorted(
+        glob.glob(os.path.join(parquet_dir, "dnb_corpus_part*.parquet")),
+        key=lambda x: int(re.search(r"part(\d+)", x).group(1)) if re.search(r"part(\d+)", x) else 9999,
+    )
+    target_paths = []
+    for sp in shard_paths:
+        m = re.search(r"part(\d+)", os.path.basename(sp))
+        if m:
+            s_num = int(m.group(1))
+            if start_shard <= s_num <= end_shard:
+                target_paths.append((s_num, sp))
+
+    print(
+        f"\n[DNBLab Parquet Hydration Pass] Scanning {len(target_paths)} Zstd-19 Parquet shards "
+        f"(part{start_shard:03d}..part{end_shard:03d}, workers={workers}, "
+        f"targets/shard: OA={max_oa_per_shard}, TOC={max_toc_per_shard}, Blurbs={max_blurbs_per_shard})...",
+        flush=True,
+    )
+
+    total_hydrated_oa_books = 0
+    total_hydrated_oa_chunks = 0
+    total_hydrated_tocs = 0
+    total_hydrated_blurbs = 0
+    total_added_words = 0
+    modified_shard_names = []
+    overflow_oa_chunks = []
+
+    def _hydrate_item(task_tuple):
+        row_idx, kind, url, title_val = task_tuple
+        if kind in ("ext_oa", "oa_34"):
+            txt, pages, _ = stream_dnb_oa_multi_url_in_ram([url], max_pages=65)
+            if txt and len(txt.split()) >= 90:
+                return row_idx, kind, txt, pages
+        elif kind == "toc_04":
+            txt, pages = fetch_dnblab_04_toc_text_or_pdf(url, max_pages=12)
+            if txt and len(txt.split()) >= 25:
+                return row_idx, kind, txt, pages
+        elif kind == "blurb":
+            txt = fetch_dnb_blurb(url)
+            if txt and len(txt.split()) >= 15:
+                return row_idx, kind, txt, 1
+        return row_idx, kind, "", 0
+
+    for s_num, sp in target_paths:
+        sname = os.path.basename(sp)
+        t0 = time.time()
+        table = pq.read_table(sp)
+        cols = {c: table[c].to_pylist() for c in table.column_names}
+        n_rows = table.num_rows
+
+        ext_oa_candidates = []
+        oa_34_candidates = []
+        toc_04_candidates = []
+        blurb_candidates = []
+
+        srcs = cols["source_file"]
+        wcs = cols["word_count"]
+        titles = cols["title"]
+        pubs = cols["publisher"]
+
+        # Prioritize DNBLab guaranteed-free (`dnblab_free_idns`) & canonical publishers first
+        for idx in range(n_rows):
+            wc = wcs[idx] or 0
+            if wc >= 75:
+                continue
+            u = srcs[idx] or ""
+            if not u:
+                continue
+            is_canon = 0 if (pubs[idx] and pubs[idx] != "Sonstige / Weitere Verlage") else 1
+            if "deposit.dnb.de" in u or "/blurb/" in u:
+                blurb_candidates.append((is_canon, idx, "blurb", u, titles[idx]))
+            elif u.endswith("/04") and "d-nb.info" in u:
+                toc_04_candidates.append((is_canon, idx, "toc_04", u, titles[idx]))
+            elif u.endswith("/34") and "d-nb.info" in u:
+                idn_part = u.split("/")[-2] if u.count("/") >= 4 else ""
+                if idn_part in dnblab_free_idns:
+                    oa_34_candidates.append((-1, idx, "oa_34", u, titles[idx]))
+                elif idn_part.startswith(("9", "10", "11", "12")):
+                    oa_34_candidates.append((is_canon, idx, "oa_34", u, titles[idx]))
+            elif not u.startswith("https://d-nb.info/") and "portal.dnb.de" not in u:
+                ext_oa_candidates.append((is_canon, idx, "ext_oa", u, titles[idx]))
+
+        ext_oa_candidates.sort(key=lambda x: x[0])
+        oa_34_candidates.sort(key=lambda x: x[0])
+        toc_04_candidates.sort(key=lambda x: x[0])
+        blurb_candidates.sort(key=lambda x: x[0])
+
+        selected_tasks = []
+        # Combine DNBLab guaranteed-free /34 links first, then external OA links, then remaining /34 links
+        dnblab_guaranteed = [c for c in oa_34_candidates if c[0] == -1]
+        other_oa_34 = [c for c in oa_34_candidates if c[0] != -1]
+        oa_pool = (dnblab_guaranteed + ext_oa_candidates + other_oa_34)[:max_oa_per_shard]
+        for _, idx, kind, u, tl in oa_pool:
+            selected_tasks.append((idx, kind, u, tl))
+        for _, idx, kind, u, tl in toc_04_candidates[:max_toc_per_shard]:
+            selected_tasks.append((idx, kind, u, tl))
+        for _, idx, kind, u, tl in blurb_candidates[:max_blurbs_per_shard]:
+            selected_tasks.append((idx, kind, u, tl))
+
+        if not selected_tasks:
+            continue
+
+        shard_oa = 0
+        shard_toc = 0
+        shard_blurb = 0
+        shard_words_added = 0
+
+        with ThreadPoolExecutor(max_workers=workers) as ex:
+            for r_idx, kind, hydrated_txt, pages in ex.map(_hydrate_item, selected_tasks):
+                if not hydrated_txt:
+                    continue
+                old_txt = str(cols["text"][r_idx] or "")
+                old_wc = int(cols["word_count"][r_idx] or 0)
+                base_title = str(cols["title"][r_idx] or "")
+                author_str = str(cols["author"][r_idx] or "")
+                pub_str = str(cols["publisher"][r_idx] or "")
+                date_str = str(cols["date"][r_idx] or "")
+                dec_str = str(cols["decade"][r_idx] or "")
+                src_url = str(cols["source_file"][r_idx] or "")
+
+                if kind in ("ext_oa", "oa_34"):
+                    words_list = hydrated_txt.split()
+                    chunks = []
+                    for i in range(0, len(words_list), chunk_words):
+                        ch_w = words_list[i : i + chunk_words]
+                        if len(ch_w) >= 90 or (not chunks and len(ch_w) >= 50):
+                            chunks.append(" ".join(ch_w))
+                        if len(chunks) >= max_chunks_per_book:
+                            break
+                    if not chunks:
+                        continue
+                    n_ch = len(chunks)
+                    first_body = f"{ chunks[0] } { old_txt }".strip()
+                    new_wc = len(f"{base_title}. {author_str}. {pub_str}. {first_body}".split())
+                    if n_ch > 1:
+                        cols["title"][r_idx] = f"{base_title} [DNB-OA-Vollbuch-Abschnitt 1/{n_ch}]"
+                    cols["corpus_layer"][r_idx] = "dnb_oa_fullbook"
+                    cols["chunk_index"][r_idx] = 1
+                    cols["total_chunks"][r_idx] = n_ch
+                    cols["text"][r_idx] = first_body
+                    cols["abstract"][r_idx] = chunks[0][:240]
+                    cols["word_count"][r_idx] = new_wc
+                    shard_oa += 1
+                    total_hydrated_oa_books += 1
+                    total_hydrated_oa_chunks += n_ch
+                    shard_words_added += max(0, new_wc - old_wc)
+
+                    for c_i in range(2, n_ch + 1):
+                        ch_txt = chunks[c_i - 1]
+                        c_wc = len(ch_txt.split())
+                        shard_words_added += c_wc
+                        overflow_oa_chunks.append({
+                            "title": f"{base_title} [DNB-OA-Vollbuch-Abschnitt {c_i}/{n_ch}]",
+                            "author": author_str,
+                            "date": date_str,
+                            "decade": dec_str,
+                            "publisher": pub_str,
+                            "corpus_layer": "dnb_oa_fullbook",
+                            "source_file": src_url,
+                            "chunk_index": c_i,
+                            "total_chunks": n_ch,
+                            "word_count": c_wc,
+                            "abstract": ch_txt[:240],
+                            "text": ch_txt,
+                        })
+                elif kind == "toc_04":
+                    combined_body = f"[DNB-Inhaltsverzeichnis {pages} S.] {hydrated_txt} {old_txt}".strip()
+                    new_wc = len(f"{base_title}. {author_str}. {pub_str}. {combined_body}".split())
+                    cols["corpus_layer"][r_idx] = "dnb_toc_pdf_fulltext"
+                    cols["text"][r_idx] = combined_body
+                    cols["abstract"][r_idx] = hydrated_txt[:240]
+                    cols["word_count"][r_idx] = new_wc
+                    shard_toc += 1
+                    total_hydrated_tocs += 1
+                    shard_words_added += max(0, new_wc - old_wc)
+                elif kind == "blurb":
+                    combined_body = f"{hydrated_txt}. {old_txt}".strip()
+                    new_wc = len(f"{base_title}. {author_str}. {pub_str}. {combined_body}".split())
+                    cols["text"][r_idx] = combined_body
+                    cols["abstract"][r_idx] = hydrated_txt[:240]
+                    cols["word_count"][r_idx] = new_wc
+                    shard_blurb += 1
+                    total_hydrated_blurbs += 1
+                    shard_words_added += max(0, new_wc - old_wc)
+
+        if shard_oa + shard_toc + shard_blurb > 0:
+            new_table = pa.Table.from_pydict(cols, schema=table.schema)
+            tmp_sp = sp + ".tmp"
+            pq.write_table(
+                new_table,
+                tmp_sp,
+                compression="zstd",
+                compression_level=19,
+                use_dictionary=["author", "date", "decade", "publisher", "corpus_layer", "source_file"],
+                write_statistics=True,
+            )
+            os.replace(tmp_sp, sp)
+            modified_shard_names.append(sname)
+            total_added_words += shard_words_added
+            el = time.time() - t0
+            print(
+                f"  -> Hydrated `{sname}` in {el:.1f}s: +{shard_oa} OA books, +{shard_toc} TOC PDFs, "
+                f"+{shard_blurb} blurbs (+{shard_words_added:,} German words)",
+                flush=True,
+            )
+
+    if overflow_oa_chunks:
+        print(f"\n  -> Appending {len(overflow_oa_chunks):,} continuation OA book chunks to Zstd-19 Parquet shards...", flush=True)
+        for i in range(0, len(overflow_oa_chunks), 85000):
+            new_s = append_rows_to_zstd_parquet(
+                overflow_oa_chunks[i : i + 85000],
+                parquet_dir=parquet_dir,
+                compression_level=19,
+            )
+            if new_s:
+                modified_shard_names.append(os.path.basename(new_s))
+
+    # Rebuild parquet_manifest.json accurately across all shards
+    all_shards = sorted(
+        glob.glob(os.path.join(parquet_dir, "dnb_corpus_part*.parquet")),
+        key=lambda x: int(re.search(r"part(\d+)", x).group(1)) if re.search(r"part(\d+)", x) else 9999,
+    )
+    manifest_path = os.path.join(parquet_dir, "parquet_manifest.json")
+    old_manifest = {}
+    if os.path.exists(manifest_path):
+        try:
+            with open(manifest_path, "r", encoding="utf-8") as mf:
+                old_manifest = json.load(mf)
+        except Exception:
+            pass
+    old_by_name = {(s.get("shard") or s.get("file")): s for s in old_manifest.get("shards", []) if (s.get("shard") or s.get("file"))}
+    mod_set = set(modified_shard_names)
+
+    new_shard_summaries = []
+    tot_rows = 0
+    tot_words = 0
+    tot_bytes = 0
+    for sp in all_shards:
+        sn = os.path.basename(sp)
+        sz_b = os.path.getsize(sp)
+        tot_bytes += sz_b
+        old_sz = old_by_name.get(sn, {}).get("size_bytes") or old_by_name.get(sn, {}).get("bytes")
+        if sn not in mod_set and sn in old_by_name and sz_b == old_sz and old_by_name[sn].get("sha256"):
+            entry = old_by_name[sn]
+            entry["shard"] = sn
+            entry["file"] = sn
+            tot_rows += int(entry.get("rows", 0))
+            new_shard_summaries.append(entry)
+        else:
+            if sn not in mod_set:
+                modified_shard_names.append(sn)
+                mod_set.add(sn)
+            pf = pq.ParquetFile(sp)
+            r_cnt = pf.metadata.num_rows
+            tot_rows += r_cnt
+            h = hashlib.sha256()
+            with open(sp, "rb") as bf:
+                for chunk in iter(lambda: bf.read(1024 * 1024), b""):
+                    h.update(chunk)
+            entry = {
+                "shard": sn,
+                "file": sn,
+                "path": sp.replace("\\", "/"),
+                "rows": r_cnt,
+                "bytes": sz_b,
+                "size_bytes": sz_b,
+                "size_mb": round(sz_b / (1024 * 1024), 2),
+                "sha256": h.hexdigest(),
+            }
+            new_shard_summaries.append(entry)
+
+    # Compute exact total_words across all shards via fast PyArrow column sum
+    import pyarrow.compute as pc
+    for sp in all_shards:
+        t_wc = pq.read_table(sp, columns=["word_count"])
+        tot_words += int(pc.sum(t_wc["word_count"]).as_py() or 0)
+
+    old_manifest["total_rows"] = tot_rows
+    old_manifest["total_words"] = tot_words
+    old_manifest["total_shards"] = len(new_shard_summaries)
+    old_manifest["total_parquet_bytes"] = tot_bytes
+    old_manifest["total_parquet_mb"] = round(tot_bytes / (1024 * 1024), 2)
+    old_manifest["shards"] = new_shard_summaries
+    with open(manifest_path, "w", encoding="utf-8") as mf:
+        json.dump(old_manifest, mf, indent=2, ensure_ascii=False)
+
+    print(
+        f"\n[Parquet Hydration Complete] Hydrated {total_hydrated_oa_books:,} OA full-text books "
+        f"({total_hydrated_oa_chunks:,} passages), {total_hydrated_tocs:,} digitized TOC PDFs, "
+        f"and {total_hydrated_blurbs:,} publisher blurbs (+{total_added_words:,} new German words)!\n"
+        f"  -> Master Parquet Corpus: {tot_rows:,} passages | {tot_words:,} words across {len(new_shard_summaries)} shards ({old_manifest['total_parquet_mb']:.2f} MB).",
+        flush=True,
+    )
+
+    if upload_updated and modified_shard_names:
+        upload_parquet_shards_to_github_release(
+            parquet_dir=parquet_dir,
+            release_tag=release_tag,
+            only_files=list(dict.fromkeys(modified_shard_names + ["parquet_manifest.json"])),
+        )
+
+    return {
+        "hydrated_oa_books": total_hydrated_oa_books,
+        "hydrated_oa_chunks": total_hydrated_oa_chunks,
+        "hydrated_tocs": total_hydrated_tocs,
+        "hydrated_blurbs": total_hydrated_blurbs,
+        "added_words": total_added_words,
+        "total_rows": tot_rows,
+        "total_words": tot_words,
+        "modified_shards": modified_shard_names,
+    }
+
+
 def main():
     parser = argparse.ArgumentParser(
         description="Wave-12 Unfiltered All-Sachgruppen (000-990, B, K, S) Deutsche Nationalbibliothek (DNB) Full-Text Harvester + Zstd Parquet Streamer (1970-2025)"
@@ -2171,9 +2597,31 @@ def main():
     parser.add_argument("--upload-only", action="store_true", help="Upload existing Zstd Parquet shards to GitHub Release Assets and exit")
     parser.add_argument("--release-tag", type=str, default="v12.0-dnb-parquet-shards", help="GitHub Release tag for Zstd Parquet shards")
     parser.add_argument("--online-lda", action="store_true", help="Run Hoffman et al. (2010) Online Streaming LDA over data/parquet/")
+    parser.add_argument("--hydrate-parquet-shards", action="store_true", help="Hydrate OpenData Parquet shards with remote d-nb.info/{idn}/34 OA PDFs, /04 TOC PDFs, and deposit.dnb.de blurbs")
+    parser.add_argument("--hydrate-start-shard", type=int, default=8)
+    parser.add_argument("--hydrate-end-shard", type=int, default=125)
+    parser.add_argument("--hydrate-oa-per-shard", type=int, default=35)
+    parser.add_argument("--hydrate-toc-per-shard", type=int, default=45)
+    parser.add_argument("--hydrate-blurbs-per-shard", type=int, default=120)
     args = parser.parse_args()
 
     start_t = time.time()
+
+    if args.hydrate_parquet_shards:
+        hydrate_parquet_shards_with_remote_fulltext_and_blurbs(
+            parquet_dir=args.parquet_dir,
+            start_shard=args.hydrate_start_shard,
+            end_shard=args.hydrate_end_shard,
+            workers=args.workers,
+            max_oa_per_shard=args.hydrate_oa_per_shard,
+            max_toc_per_shard=args.hydrate_toc_per_shard,
+            max_blurbs_per_shard=args.hydrate_blurbs_per_shard,
+            chunk_words=args.chunk_words,
+            max_chunks_per_book=args.max_chunks_per_book,
+            upload_updated=args.upload_github_release,
+            release_tag=args.release_tag,
+        )
+        return
 
     if args.opendata_dump:
         stream_dnb_opendata_marc_dump(
