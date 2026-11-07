@@ -793,6 +793,10 @@ def iter_parquet_rows(parquet_dir: str = "data/parquet", batch_size: int = 8192)
             n_rows = record_batch.num_rows
             for idx in range(n_rows):
                 row = {name: (cols[name][idx] if cols[name][idx] is not None else "") for name in col_names}
+                t_val = str(row.get("text") or "")
+                title_val = str(row.get("title") or "")
+                if title_val and title_val[:40] not in t_val:
+                    row["text"] = f"{title_val}. {t_val}".strip() if t_val else title_val
                 if not row.get("abstract") and row.get("text"):
                     row["abstract"] = str(row["text"])[:240]
                 yield row
