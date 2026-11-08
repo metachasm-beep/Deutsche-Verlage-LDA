@@ -1591,13 +1591,37 @@ def append_rows_to_zstd_parquet(
     if not rows:
         return ""
     os.makedirs(parquet_dir, exist_ok=True)
-    existing = sorted(glob.glob(os.path.join(parquet_dir, "dnb_corpus_part*.parquet")))
+    existing = sorted(
+        glob.glob(os.path.join(parquet_dir, "dnb_corpus_part*.parquet")),
+        key=lambda x: int(re.search(r"part(\d+)", x).group(1)) if re.search(r"part(\d+)", x) else 0,
+    )
     max_idx = 0
+    last_path = ""
     for p in existing:
         m = re.search(r"part(\d+)", os.path.basename(p))
         if m:
-            max_idx = max(max_idx, int(m.group(1)))
-    next_idx = max_idx + 1
+            idx_num = int(m.group(1))
+            if idx_num >= max_idx:
+                max_idx = idx_num
+                last_path = p
+
+    # If the trailing continuation shard (>= 126) has < 75,000 rows, merge into it instead of creating tiny shards
+    if max_idx >= 126 and last_path and os.path.exists(last_path):
+        try:
+            old_tbl = pq.read_table(last_path, memory_map=False)
+            if old_tbl.num_rows + len(rows) <= 95000:
+                old_rows = old_tbl.to_pylist()
+                del old_tbl
+                rows = old_rows + list(rows)
+                next_idx = max_idx
+            else:
+                del old_tbl
+                next_idx = max_idx + 1
+        except Exception:
+            next_idx = max_idx + 1
+    else:
+        next_idx = max_idx + 1
+
     shard_name = f"dnb_corpus_part{next_idx:03d}.parquet"
     shard_path = os.path.join(parquet_dir, shard_name)
 
@@ -1639,14 +1663,24 @@ def append_rows_to_zstd_parquet(
             arrays[col_name] = pa.array([str(r.get(col_name) or "") for r in rows_sorted], type=col_type)
 
     table = pa.Table.from_pydict(arrays, schema=pa_schema)
+    tmp_path = shard_path + ".tmp"
     pq.write_table(
         table,
-        shard_path,
+        tmp_path,
         compression="zstd",
         compression_level=compression_level,
-        use_dictionary=["author", "date", "decade", "publisher", "corpus_layer"],
+        use_dictionary=["author", "date", "decade", "publisher", "corpus_layer", "source_file"],
         write_statistics=True,
     )
+    import gc
+    gc.collect()
+    for _att in range(5):
+        try:
+            os.replace(tmp_path, shard_path)
+            break
+        except PermissionError:
+            gc.collect()
+            time.sleep(0.25)
     sz_mb = os.path.getsize(shard_path) / (1024 * 1024)
     print(f"  -> [Zstd-{compression_level} Parquet Stream] Wrote `{shard_path}` ({len(rows_sorted):,} rows | {sz_mb:.2f} MB)", flush=True)
 
@@ -1657,11 +1691,13 @@ def append_rows_to_zstd_parquet(
         if os.path.exists(manifest_path):
             with open(manifest_path, "r", encoding="utf-8") as mf:
                 mdata = json.load(mf)
-        shards_list = mdata.get("shards", [])
+        shards_list = [s for s in mdata.get("shards", []) if (s.get("shard") or s.get("file")) != shard_name]
         shards_list.append({
+            "shard": shard_name,
             "file": shard_name,
             "rows": len(rows_sorted),
             "bytes": os.path.getsize(shard_path),
+            "size_bytes": os.path.getsize(shard_path),
             "size_mb": round(sz_mb, 2),
         })
         total_r = sum(int(s.get("rows", 0)) for s in shards_list)
@@ -2182,12 +2218,14 @@ def load_or_fetch_dnblab_free_idns(cache_path: str = "data/primary_texts/dnblab_
     (`FreieOnlineHochschulschriften` 000..900 & `FreieOnlineMonografien`) to collect DNB IDNs (`001`)
     that are guaranteed `onlinefree` (`200 OK` full-text PDF/EPUB at `https://d-nb.info/{idn}/34`).
     """
+    existing_idns = set()
     if os.path.exists(cache_path):
         try:
             with open(cache_path, "r", encoding="utf-8") as cf:
                 data = json.load(cf)
-                if len(data) >= 10000:
-                    return set(data)
+                existing_idns = set(data)
+                if len(existing_idns) >= 120000:
+                    return existing_idns
         except Exception:
             pass
 
@@ -2197,13 +2235,26 @@ def load_or_fetch_dnblab_free_idns(cache_path: str = "data/primary_texts/dnblab_
         "https://data.dnb.de/FreieOnlineHochschulschriften/dnb-all_online_hochschulschriften_frei_200_dnbmarc.mrc.xml.gz",
         "https://data.dnb.de/FreieOnlineHochschulschriften/dnb-all_online_hochschulschriften_frei_300_dnbmarc.mrc.xml.gz",
         "https://data.dnb.de/FreieOnlineHochschulschriften/dnb-all_online_hochschulschriften_frei_400_dnbmarc.mrc.xml.gz",
+        "https://data.dnb.de/FreieOnlineHochschulschriften/dnb-all_online_hochschulschriften_frei_500_dnbmarc.mrc.xml.gz",
+        "https://data.dnb.de/FreieOnlineHochschulschriften/dnb-all_online_hochschulschriften_frei_600_dnbmarc.mrc.xml.gz",
         "https://data.dnb.de/FreieOnlineHochschulschriften/dnb-all_online_hochschulschriften_frei_700_dnbmarc.mrc.xml.gz",
         "https://data.dnb.de/FreieOnlineHochschulschriften/dnb-all_online_hochschulschriften_frei_800_dnbmarc.mrc.xml.gz",
         "https://data.dnb.de/FreieOnlineHochschulschriften/dnb-all_online_hochschulschriften_frei_900_dnbmarc.mrc.xml.gz",
+        "https://data.dnb.de/FreieOnlineMonografien/dnb-all_online_monografien_frei_dnbmarc.mrc.xml.gz",
     ]
+    # If we already have the first 8 slices (~75k IDNs), only stream the missing 500, 600, and Monografien dumps
+    if len(existing_idns) >= 70000:
+        dnblab_urls = [
+            "https://data.dnb.de/FreieOnlineHochschulschriften/dnb-all_online_hochschulschriften_frei_500_dnbmarc.mrc.xml.gz",
+            "https://data.dnb.de/FreieOnlineHochschulschriften/dnb-all_online_hochschulschriften_frei_600_dnbmarc.mrc.xml.gz",
+            "https://data.dnb.de/FreieOnlineMonografien/dnb-all_online_monografien_frei_dnbmarc.mrc.xml.gz",
+        ]
     import zlib
-    free_idns = set()
-    print("  [DNBLab] Indexing guaranteed-free (`onlinefree`) DNB `/34` IDNs from `data.dnb.de/FreieOnlineHochschulschriften/`...", flush=True)
+    free_idns = set(existing_idns)
+    print(
+        f"  [DNBLab] Indexing guaranteed-free (`onlinefree`) DNB `/34` IDNs from {len(dnblab_urls)} DNBLab dumps (starting with {len(free_idns):,})...",
+        flush=True,
+    )
     idn_rx = re.compile(rb'<controlfield tag="001">([^<]+)</controlfield>')
     for u in dnblab_urls:
         try:
@@ -2231,30 +2282,134 @@ def load_or_fetch_dnblab_free_idns(cache_path: str = "data/primary_texts/dnblab_
     return free_idns
 
 
+async def _async_hydrate_shard_blurbs_and_tocs(
+    blurb_tasks: list[tuple[int, str]],
+    toc_tasks: list[tuple[int, str]],
+    host_concurrency: int = 72,
+) -> list[tuple[int, str, str, int]]:
+    """
+    High-throughput asynchronous `aiohttp` hydration engine with independent per-host semaphores:
+      - `sem_blurb` (`Semaphore(72)`): `services.dnb.de/plus/idn/{idn}/blurb/` & `deposit.dnb.de/cgi-bin/dokserv`
+      - `sem_toc` (`Semaphore(72)`): `https://d-nb.info/{idn}/04/text` plain-text TOC OCRs
+    Sustains ~110+ requests/sec with automatic 429/503 retry backoff and zero MuPDF lock contention.
+    """
+    import asyncio
+    import aiohttp
+
+    if not blurb_tasks and not toc_tasks:
+        return []
+
+    sem_blurb = asyncio.Semaphore(host_concurrency)
+    sem_toc = asyncio.Semaphore(host_concurrency)
+    p_rx = re.compile(r"<p[^>]*>(.*?)</p>", flags=re.DOTALL | re.IGNORECASE)
+    tag_rx = re.compile(r"<[^>]+>")
+
+    connector = aiohttp.TCPConnector(
+        limit=host_concurrency * 2 + 32,
+        limit_per_host=host_concurrency,
+        ssl=False,
+        ttl_dns_cache=600,
+    )
+    timeout = aiohttp.ClientTimeout(total=10, connect=4)
+
+    async with aiohttp.ClientSession(connector=connector, headers=HEADERS, timeout=timeout) as session:
+
+        async def _fetch_blurb_async(r_idx: int, url: str) -> tuple[int, str, str, int]:
+            async with sem_blurb:
+                for attempt in range(2):
+                    try:
+                        async with session.get(url) as resp:
+                            if resp.status == 200:
+                                raw_bytes = await resp.read()
+                                if not raw_bytes:
+                                    return r_idx, "blurb", "", 0
+                                raw_html = raw_bytes.decode("utf-8", errors="ignore")
+                                p_matches = p_rx.findall(raw_html)
+                                content = " ".join(p_matches) if p_matches else raw_html
+                                clean = tag_rx.sub(" ", content)
+                                clean = (
+                                    clean.replace("&#xa0;", " ")
+                                    .replace("&nbsp;", " ")
+                                    .replace("&quot;", '"')
+                                    .replace("&amp;", "&")
+                                )
+                                norm = normalize_german_text(clean)
+                                if len(norm.split()) >= 12:
+                                    return r_idx, "blurb", norm, 1
+                                return r_idx, "blurb", "", 0
+                            elif resp.status in (429, 503) and attempt == 0:
+                                await asyncio.sleep(0.45)
+                                continue
+                            else:
+                                return r_idx, "blurb", "", 0
+                    except Exception:
+                        if attempt == 0:
+                            await asyncio.sleep(0.25)
+                            continue
+                        return r_idx, "blurb", "", 0
+            return r_idx, "blurb", "", 0
+
+        async def _fetch_toc_async(r_idx: int, url: str) -> tuple[int, str, str, int]:
+            txt_url = (url + "/text") if (url.endswith("/04") and "d-nb.info" in url) else url
+            async with sem_toc:
+                for attempt in range(2):
+                    try:
+                        async with session.get(txt_url) as resp:
+                            if resp.status == 200:
+                                raw_bytes = await resp.read()
+                                if not raw_bytes:
+                                    return r_idx, "toc_04", "", 0
+                                raw_txt = raw_bytes.decode("utf-8-sig", errors="ignore")
+                                norm = normalize_german_text(raw_txt)
+                                wc = len(norm.split())
+                                if wc >= 20:
+                                    est_pages = max(1, min(12, round(wc / 180)))
+                                    return r_idx, "toc_04", norm, est_pages
+                                return r_idx, "toc_04", "", 0
+                            elif resp.status in (429, 503) and attempt == 0:
+                                await asyncio.sleep(0.45)
+                                continue
+                            else:
+                                return r_idx, "toc_04", "", 0
+                    except Exception:
+                        if attempt == 0:
+                            await asyncio.sleep(0.25)
+                            continue
+                        return r_idx, "toc_04", "", 0
+            return r_idx, "toc_04", "", 0
+
+        coros = [_fetch_blurb_async(idx, u) for idx, u in blurb_tasks] + [
+            _fetch_toc_async(idx, u) for idx, u in toc_tasks
+        ]
+        results = await asyncio.gather(*coros, return_exceptions=False)
+        return [r for r in results if r and r[2]]
+
+
 def hydrate_parquet_shards_with_remote_fulltext_and_blurbs(
     parquet_dir: str = "data/parquet",
     start_shard: int = 8,
     end_shard: int = 125,
     workers: int = 64,
-    max_oa_per_shard: int = 45,
-    max_toc_per_shard: int = 55,
-    max_blurbs_per_shard: int = 140,
+    max_oa_per_shard: int = 60,
+    max_toc_per_shard: int = 600,
+    max_blurbs_per_shard: int = 600,
     chunk_words: int = 1000,
     max_chunks_per_book: int = 35,
     upload_updated: bool = False,
     release_tag: str = "v12.0-dnb-parquet-shards",
 ) -> dict:
     """
-    Targeted multi-threaded background hydration pass over OpenData MARC21 Parquet shards
+    High-throughput hybrid `aiohttp` + `ThreadPoolExecutor` hydration pass over OpenData MARC21 Parquet shards
     (`dnb_corpus_part008.parquet` .. `dnb_corpus_part125.parquet`) powered by DNBLab:
-      1. Indexes guaranteed-free (`onlinefree`) `/34` IDNs from `data.dnb.de/FreieOnlineHochschulschriften/`
-         and hydrates `d-nb.info/{idn}/34` & external repository Open-Access full-text PDFs/EPUBs via `stream_dnb_oa_multi_url_in_ram`
-         (upgrading `corpus_layer` to `dnb_oa_fullbook` and slicing multi-chunk books into 1,000-word passages).
-      2. Hydrates `d-nb.info/{idn}/04` digitized Table-of-Contents via DNBLab's fast plain-text OCR endpoint
-         `https://d-nb.info/{idn}/04/text` (`fetch_dnblab_04_toc_text_or_pdf`, upgrading `corpus_layer` to `dnb_toc_pdf_fulltext`).
-      3. Hydrates `services.dnb.de/plus/idn/{idn}/blurb/` & `deposit.dnb.de/cgi-bin/dokserv` publisher blurbs via `fetch_dnb_blurb`.
-    Rewrites updated Zstd-19 Parquet shards, appends overflow multi-chunk OA passages, and synchronizes `parquet_manifest.json`.
+      1. Indexes all guaranteed-free (`onlinefree`) `/34` IDNs from `data.dnb.de/FreieOnlineHochschulschriften/` (000..900)
+         and `data.dnb.de/FreieOnlineMonografien/`, hydrating `d-nb.info/{idn}/34` & external repository Open-Access
+         full-text PDFs/EPUBs via `stream_dnb_oa_multi_url_in_ram` (`dnb_oa_fullbook`, 1,000-word passages).
+      2. Asynchronously hydrates `d-nb.info/{idn}/04/text` plain-text TOC OCRs and `services.dnb.de/plus/idn/{idn}/blurb/`
+         publisher blurbs via `_async_hydrate_shard_blurbs_and_tocs` (`aiohttp` dual-semaphore engine at ~110+ req/s).
+    Rewrites updated Zstd-19 Parquet shards atomically, appends overflow multi-chunk OA passages incrementally,
+    and synchronizes `parquet_manifest.json`.
     """
+    import asyncio
     import glob
     import hashlib
     import pyarrow as pa
@@ -2275,7 +2430,7 @@ def hydrate_parquet_shards_with_remote_fulltext_and_blurbs(
                 target_paths.append((s_num, sp))
 
     print(
-        f"\n[DNBLab Parquet Hydration Pass] Scanning {len(target_paths)} Zstd-19 Parquet shards "
+        f"\n[DNBLab Hybrid aiohttp + ThreadPool Parquet Hydration] Scanning {len(target_paths)} Zstd-19 Parquet shards "
         f"(part{start_shard:03d}..part{end_shard:03d}, workers={workers}, "
         f"targets/shard: OA={max_oa_per_shard}, TOC={max_toc_per_shard}, Blurbs={max_blurbs_per_shard})...",
         flush=True,
@@ -2289,28 +2444,21 @@ def hydrate_parquet_shards_with_remote_fulltext_and_blurbs(
     modified_shard_names = []
     overflow_oa_chunks = []
 
-    def _hydrate_item(task_tuple):
-        row_idx, kind, url, title_val = task_tuple
-        if kind in ("ext_oa", "oa_34"):
-            txt, pages, _ = stream_dnb_oa_multi_url_in_ram([url], max_pages=65)
-            if txt and len(txt.split()) >= 90:
-                return row_idx, kind, txt, pages
-        elif kind == "toc_04":
-            txt, pages = fetch_dnblab_04_toc_text_or_pdf(url, max_pages=12)
-            if txt and len(txt.split()) >= 25:
-                return row_idx, kind, txt, pages
-        elif kind == "blurb":
-            txt = fetch_dnb_blurb(url)
-            if txt and len(txt.split()) >= 15:
-                return row_idx, kind, txt, 1
+    def _hydrate_oa_item(task_tuple):
+        row_idx, kind, url = task_tuple
+        txt, pages, _ = stream_dnb_oa_multi_url_in_ram([url], max_pages=65)
+        if txt and len(txt.split()) >= 90:
+            return row_idx, kind, txt, pages
         return row_idx, kind, "", 0
 
     for s_num, sp in target_paths:
         sname = os.path.basename(sp)
         t0 = time.time()
-        table = pq.read_table(sp)
+        table = pq.read_table(sp, memory_map=False)
+        table_schema = table.schema
         cols = {c: table[c].to_pylist() for c in table.column_names}
         n_rows = table.num_rows
+        del table
 
         ext_oa_candidates = []
         oa_34_candidates = []
@@ -2319,7 +2467,6 @@ def hydrate_parquet_shards_with_remote_fulltext_and_blurbs(
 
         srcs = cols["source_file"]
         wcs = cols["word_count"]
-        titles = cols["title"]
         pubs = cols["publisher"]
 
         # Prioritize DNBLab guaranteed-free (`dnblab_free_idns`) & canonical publishers first
@@ -2332,36 +2479,35 @@ def hydrate_parquet_shards_with_remote_fulltext_and_blurbs(
                 continue
             is_canon = 0 if (pubs[idx] and pubs[idx] != "Sonstige / Weitere Verlage") else 1
             if "deposit.dnb.de" in u or "/blurb/" in u:
-                blurb_candidates.append((is_canon, idx, "blurb", u, titles[idx]))
+                live_blurb = 0 if ("deposit.dnb.de" in u or "/idn/1" in u or "/idn/97" in u or "/idn/98" in u or "/idn/99" in u or "/idn/96" in u) else 1
+                blurb_candidates.append(((live_blurb, is_canon), idx, u))
             elif u.endswith("/04") and "d-nb.info" in u:
-                toc_04_candidates.append((is_canon, idx, "toc_04", u, titles[idx]))
+                live_toc = 0 if ("/1" in u or "/96" in u or "/97" in u or "/98" in u or "/99" in u or "/95" in u) else 1
+                toc_04_candidates.append(((live_toc, is_canon), idx, u))
             elif u.endswith("/34") and "d-nb.info" in u:
                 idn_part = u.split("/")[-2] if u.count("/") >= 4 else ""
                 if idn_part in dnblab_free_idns:
-                    oa_34_candidates.append((-1, idx, "oa_34", u, titles[idx]))
+                    oa_34_candidates.append((-1, idx, "oa_34", u))
                 elif idn_part.startswith(("9", "10", "11", "12")):
-                    oa_34_candidates.append((is_canon, idx, "oa_34", u, titles[idx]))
+                    oa_34_candidates.append((is_canon, idx, "oa_34", u))
             elif not u.startswith("https://d-nb.info/") and "portal.dnb.de" not in u:
-                ext_oa_candidates.append((is_canon, idx, "ext_oa", u, titles[idx]))
+                ext_oa_candidates.append((is_canon, idx, "ext_oa", u))
 
         ext_oa_candidates.sort(key=lambda x: x[0])
         oa_34_candidates.sort(key=lambda x: x[0])
         toc_04_candidates.sort(key=lambda x: x[0])
         blurb_candidates.sort(key=lambda x: x[0])
 
-        selected_tasks = []
-        # Combine DNBLab guaranteed-free /34 links first, then external OA links, then remaining /34 links
+        # Select OA tasks (guaranteed-free DNBLab /34 links + external repository OA links first)
         dnblab_guaranteed = [c for c in oa_34_candidates if c[0] == -1]
         other_oa_34 = [c for c in oa_34_candidates if c[0] != -1]
-        oa_pool = (dnblab_guaranteed + ext_oa_candidates + other_oa_34)[:max_oa_per_shard]
-        for _, idx, kind, u, tl in oa_pool:
-            selected_tasks.append((idx, kind, u, tl))
-        for _, idx, kind, u, tl in toc_04_candidates[:max_toc_per_shard]:
-            selected_tasks.append((idx, kind, u, tl))
-        for _, idx, kind, u, tl in blurb_candidates[:max_blurbs_per_shard]:
-            selected_tasks.append((idx, kind, u, tl))
+        oa_pool = (dnblab_guaranteed + ext_oa_candidates + other_oa_34)[:max_oa_per_shard] if max_oa_per_shard > 0 else []
+        oa_tasks = [(idx, kind, u) for _, idx, kind, u in oa_pool]
 
-        if not selected_tasks:
+        toc_tasks = [(idx, u) for _, idx, u in (toc_04_candidates[:max_toc_per_shard] if max_toc_per_shard > 0 else [])]
+        blurb_tasks = [(idx, u) for _, idx, u in (blurb_candidates[:max_blurbs_per_shard] if max_blurbs_per_shard > 0 else [])]
+
+        if not oa_tasks and not toc_tasks and not blurb_tasks:
             continue
 
         shard_oa = 0
@@ -2369,86 +2515,108 @@ def hydrate_parquet_shards_with_remote_fulltext_and_blurbs(
         shard_blurb = 0
         shard_words_added = 0
 
-        with ThreadPoolExecutor(max_workers=workers) as ex:
-            for r_idx, kind, hydrated_txt, pages in ex.map(_hydrate_item, selected_tasks):
-                if not hydrated_txt:
+        # Launch OA PDF/EPUB threads in background while running high-speed aiohttp blurb + TOC hydration
+        hydrated_results = []
+        if oa_tasks:
+            with ThreadPoolExecutor(max_workers=min(workers, max(4, len(oa_tasks)))) as ex:
+                oa_futures = [ex.submit(_hydrate_oa_item, t) for t in oa_tasks]
+                if blurb_tasks or toc_tasks:
+                    async_res = asyncio.run(
+                        _async_hydrate_shard_blurbs_and_tocs(blurb_tasks, toc_tasks, host_concurrency=72)
+                    )
+                    hydrated_results.extend(async_res)
+                for fut in oa_futures:
+                    try:
+                        res = fut.result()
+                        if res and res[2]:
+                            hydrated_results.append(res)
+                    except Exception:
+                        pass
+        elif blurb_tasks or toc_tasks:
+            async_res = asyncio.run(
+                _async_hydrate_shard_blurbs_and_tocs(blurb_tasks, toc_tasks, host_concurrency=72)
+            )
+            hydrated_results.extend(async_res)
+
+        for r_idx, kind, hydrated_txt, pages in hydrated_results:
+            if not hydrated_txt:
+                continue
+            old_txt = str(cols["text"][r_idx] or "")
+            old_wc = int(cols["word_count"][r_idx] or 0)
+            base_title = str(cols["title"][r_idx] or "")
+            author_str = str(cols["author"][r_idx] or "")
+            pub_str = str(cols["publisher"][r_idx] or "")
+            date_str = str(cols["date"][r_idx] or "")
+            dec_str = str(cols["decade"][r_idx] or "")
+            src_url = str(cols["source_file"][r_idx] or "")
+
+            if kind in ("ext_oa", "oa_34"):
+                words_list = hydrated_txt.split()
+                chunks = []
+                for i in range(0, len(words_list), chunk_words):
+                    ch_w = words_list[i : i + chunk_words]
+                    if len(ch_w) >= 90 or (not chunks and len(ch_w) >= 50):
+                        chunks.append(" ".join(ch_w))
+                    if len(chunks) >= max_chunks_per_book:
+                        break
+                if not chunks:
                     continue
-                old_txt = str(cols["text"][r_idx] or "")
-                old_wc = int(cols["word_count"][r_idx] or 0)
-                base_title = str(cols["title"][r_idx] or "")
-                author_str = str(cols["author"][r_idx] or "")
-                pub_str = str(cols["publisher"][r_idx] or "")
-                date_str = str(cols["date"][r_idx] or "")
-                dec_str = str(cols["decade"][r_idx] or "")
-                src_url = str(cols["source_file"][r_idx] or "")
+                n_ch = len(chunks)
+                first_body = f"{chunks[0]} {old_txt}".strip()
+                new_wc = len(f"{base_title}. {author_str}. {pub_str}. {first_body}".split())
+                if n_ch > 1:
+                    cols["title"][r_idx] = f"{base_title} [DNB-OA-Vollbuch-Abschnitt 1/{n_ch}]"
+                cols["corpus_layer"][r_idx] = "dnb_oa_fullbook"
+                cols["chunk_index"][r_idx] = 1
+                cols["total_chunks"][r_idx] = n_ch
+                cols["text"][r_idx] = first_body
+                cols["abstract"][r_idx] = chunks[0][:240]
+                cols["word_count"][r_idx] = new_wc
+                shard_oa += 1
+                total_hydrated_oa_books += 1
+                total_hydrated_oa_chunks += n_ch
+                shard_words_added += max(0, new_wc - old_wc)
 
-                if kind in ("ext_oa", "oa_34"):
-                    words_list = hydrated_txt.split()
-                    chunks = []
-                    for i in range(0, len(words_list), chunk_words):
-                        ch_w = words_list[i : i + chunk_words]
-                        if len(ch_w) >= 90 or (not chunks and len(ch_w) >= 50):
-                            chunks.append(" ".join(ch_w))
-                        if len(chunks) >= max_chunks_per_book:
-                            break
-                    if not chunks:
-                        continue
-                    n_ch = len(chunks)
-                    first_body = f"{ chunks[0] } { old_txt }".strip()
-                    new_wc = len(f"{base_title}. {author_str}. {pub_str}. {first_body}".split())
-                    if n_ch > 1:
-                        cols["title"][r_idx] = f"{base_title} [DNB-OA-Vollbuch-Abschnitt 1/{n_ch}]"
-                    cols["corpus_layer"][r_idx] = "dnb_oa_fullbook"
-                    cols["chunk_index"][r_idx] = 1
-                    cols["total_chunks"][r_idx] = n_ch
-                    cols["text"][r_idx] = first_body
-                    cols["abstract"][r_idx] = chunks[0][:240]
-                    cols["word_count"][r_idx] = new_wc
-                    shard_oa += 1
-                    total_hydrated_oa_books += 1
-                    total_hydrated_oa_chunks += n_ch
-                    shard_words_added += max(0, new_wc - old_wc)
-
-                    for c_i in range(2, n_ch + 1):
-                        ch_txt = chunks[c_i - 1]
-                        c_wc = len(ch_txt.split())
-                        shard_words_added += c_wc
-                        overflow_oa_chunks.append({
-                            "title": f"{base_title} [DNB-OA-Vollbuch-Abschnitt {c_i}/{n_ch}]",
-                            "author": author_str,
-                            "date": date_str,
-                            "decade": dec_str,
-                            "publisher": pub_str,
-                            "corpus_layer": "dnb_oa_fullbook",
-                            "source_file": src_url,
-                            "chunk_index": c_i,
-                            "total_chunks": n_ch,
-                            "word_count": c_wc,
-                            "abstract": ch_txt[:240],
-                            "text": ch_txt,
-                        })
-                elif kind == "toc_04":
-                    combined_body = f"[DNB-Inhaltsverzeichnis {pages} S.] {hydrated_txt} {old_txt}".strip()
-                    new_wc = len(f"{base_title}. {author_str}. {pub_str}. {combined_body}".split())
-                    cols["corpus_layer"][r_idx] = "dnb_toc_pdf_fulltext"
-                    cols["text"][r_idx] = combined_body
-                    cols["abstract"][r_idx] = hydrated_txt[:240]
-                    cols["word_count"][r_idx] = new_wc
-                    shard_toc += 1
-                    total_hydrated_tocs += 1
-                    shard_words_added += max(0, new_wc - old_wc)
-                elif kind == "blurb":
-                    combined_body = f"{hydrated_txt}. {old_txt}".strip()
-                    new_wc = len(f"{base_title}. {author_str}. {pub_str}. {combined_body}".split())
-                    cols["text"][r_idx] = combined_body
-                    cols["abstract"][r_idx] = hydrated_txt[:240]
-                    cols["word_count"][r_idx] = new_wc
-                    shard_blurb += 1
-                    total_hydrated_blurbs += 1
-                    shard_words_added += max(0, new_wc - old_wc)
+                for c_i in range(2, n_ch + 1):
+                    ch_txt = chunks[c_i - 1]
+                    c_wc = len(ch_txt.split())
+                    shard_words_added += c_wc
+                    overflow_oa_chunks.append({
+                        "title": f"{base_title} [DNB-OA-Vollbuch-Abschnitt {c_i}/{n_ch}]",
+                        "author": author_str,
+                        "date": date_str,
+                        "decade": dec_str,
+                        "publisher": pub_str,
+                        "corpus_layer": "dnb_oa_fullbook",
+                        "source_file": src_url,
+                        "chunk_index": c_i,
+                        "total_chunks": n_ch,
+                        "word_count": c_wc,
+                        "abstract": ch_txt[:240],
+                        "text": ch_txt,
+                    })
+            elif kind == "toc_04":
+                combined_body = f"[DNB-Inhaltsverzeichnis {pages} S.] {hydrated_txt} {old_txt}".strip()
+                new_wc = len(f"{base_title}. {author_str}. {pub_str}. {combined_body}".split())
+                cols["corpus_layer"][r_idx] = "dnb_toc_pdf_fulltext"
+                cols["text"][r_idx] = combined_body
+                cols["abstract"][r_idx] = hydrated_txt[:240]
+                cols["word_count"][r_idx] = new_wc
+                shard_toc += 1
+                total_hydrated_tocs += 1
+                shard_words_added += max(0, new_wc - old_wc)
+            elif kind == "blurb":
+                combined_body = f"{hydrated_txt}. {old_txt}".strip()
+                new_wc = len(f"{base_title}. {author_str}. {pub_str}. {combined_body}".split())
+                cols["text"][r_idx] = combined_body
+                cols["abstract"][r_idx] = hydrated_txt[:240]
+                cols["word_count"][r_idx] = new_wc
+                shard_blurb += 1
+                total_hydrated_blurbs += 1
+                shard_words_added += max(0, new_wc - old_wc)
 
         if shard_oa + shard_toc + shard_blurb > 0:
-            new_table = pa.Table.from_pydict(cols, schema=table.schema)
+            new_table = pa.Table.from_pydict(cols, schema=table_schema)
             tmp_sp = sp + ".tmp"
             pq.write_table(
                 new_table,
@@ -2458,15 +2626,36 @@ def hydrate_parquet_shards_with_remote_fulltext_and_blurbs(
                 use_dictionary=["author", "date", "decade", "publisher", "corpus_layer", "source_file"],
                 write_statistics=True,
             )
-            os.replace(tmp_sp, sp)
+            del new_table
+            import gc
+            gc.collect()
+            for _att in range(5):
+                try:
+                    os.replace(tmp_sp, sp)
+                    break
+                except PermissionError:
+                    gc.collect()
+                    time.sleep(0.25)
             modified_shard_names.append(sname)
             total_added_words += shard_words_added
             el = time.time() - t0
             print(
-                f"  -> Hydrated `{sname}` in {el:.1f}s: +{shard_oa} OA books, +{shard_toc} TOC PDFs, "
-                f"+{shard_blurb} blurbs (+{shard_words_added:,} German words)",
+                f"  -> Hydrated `{sname}` in {el:.1f}s: +{shard_oa} OA books, +{shard_toc} TOC OCRs, "
+                f"+{shard_blurb} blurbs (+{shard_words_added:,} German words | cum: +{total_added_words:,} words)",
                 flush=True,
             )
+
+        # Incrementally flush overflow OA chunks whenever buffer reaches 85,000 passages
+        while len(overflow_oa_chunks) >= 85000:
+            batch_ch = overflow_oa_chunks[:85000]
+            overflow_oa_chunks = overflow_oa_chunks[85000:]
+            new_s = append_rows_to_zstd_parquet(
+                batch_ch,
+                parquet_dir=parquet_dir,
+                compression_level=19,
+            )
+            if new_s:
+                modified_shard_names.append(os.path.basename(new_s))
 
     if overflow_oa_chunks:
         print(f"\n  -> Appending {len(overflow_oa_chunks):,} continuation OA book chunks to Zstd-19 Parquet shards...", flush=True)
@@ -2499,6 +2688,7 @@ def hydrate_parquet_shards_with_remote_fulltext_and_blurbs(
     tot_rows = 0
     tot_words = 0
     tot_bytes = 0
+    import pyarrow.compute as pc
     for sp in all_shards:
         sn = os.path.basename(sp)
         sz_b = os.path.getsize(sp)
@@ -2509,14 +2699,21 @@ def hydrate_parquet_shards_with_remote_fulltext_and_blurbs(
             entry["shard"] = sn
             entry["file"] = sn
             tot_rows += int(entry.get("rows", 0))
+            if not entry.get("words"):
+                t_wc = pq.read_table(sp, columns=["word_count"], memory_map=False)
+                entry["words"] = int(pc.sum(t_wc["word_count"]).as_py() or 0)
+            tot_words += int(entry.get("words", 0))
             new_shard_summaries.append(entry)
         else:
             if sn not in mod_set:
                 modified_shard_names.append(sn)
                 mod_set.add(sn)
-            pf = pq.ParquetFile(sp)
-            r_cnt = pf.metadata.num_rows
+            t_wc = pq.read_table(sp, columns=["word_count"], memory_map=False)
+            r_cnt = t_wc.num_rows
+            w_cnt = int(pc.sum(t_wc["word_count"]).as_py() or 0)
+            del t_wc
             tot_rows += r_cnt
+            tot_words += w_cnt
             h = hashlib.sha256()
             with open(sp, "rb") as bf:
                 for chunk in iter(lambda: bf.read(1024 * 1024), b""):
@@ -2526,18 +2723,13 @@ def hydrate_parquet_shards_with_remote_fulltext_and_blurbs(
                 "file": sn,
                 "path": sp.replace("\\", "/"),
                 "rows": r_cnt,
+                "words": w_cnt,
                 "bytes": sz_b,
                 "size_bytes": sz_b,
                 "size_mb": round(sz_b / (1024 * 1024), 2),
                 "sha256": h.hexdigest(),
             }
             new_shard_summaries.append(entry)
-
-    # Compute exact total_words across all shards via fast PyArrow column sum
-    import pyarrow.compute as pc
-    for sp in all_shards:
-        t_wc = pq.read_table(sp, columns=["word_count"])
-        tot_words += int(pc.sum(t_wc["word_count"]).as_py() or 0)
 
     old_manifest["total_rows"] = tot_rows
     old_manifest["total_words"] = tot_words

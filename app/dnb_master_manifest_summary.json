@@ -1,27 +1,27 @@
 {
-  "total_unique_works_1970_2025": 10054543,
-  "total_complete_fulltext_books": 16804,
-  "total_dnb_oa_fulltext_books": 12513,
+  "total_unique_works_1970_2025": 10041481,
+  "total_complete_fulltext_books": 18064,
+  "total_dnb_oa_fulltext_books": 13773,
   "total_hathitrust_fulltext_books": 4056,
-  "total_passages_in_corpus": 10504591,
-  "total_words_in_corpus": 737754887,
+  "total_passages_in_corpus": 10519923,
+  "total_words_in_corpus": 778024103,
   "works_by_highest_tier": {
-    "Tier 3: DNB Deposit.dnb.de Inhaltstext, MARC 520 Abstract & Indexing": 10011031,
-    "Tier 2: DNB Digitized /04 Inhaltsverzeichnis & Reading-Sample PDF": 41346,
+    "Tier 3: DNB Deposit.dnb.de Inhaltstext, MARC 520 Abstract & Indexing": 9946165,
+    "Tier 2: DNB Digitized /04 Inhaltsverzeichnis & Reading-Sample PDF": 104952,
     "Tier 2: DNB/GBV Digitized /04 Inhaltsverzeichnis & Reading-Sample PDF": 14199,
-    "Tier 1A: DNB Open-Access Full-Text Monograph/Dissertation (/34 & MARC 856)": 12513,
+    "Tier 1A: DNB Open-Access Full-Text Monograph/Dissertation (/34 & MARC 856)": 13773,
     "Tier 1B: DNB/GBV Multi-ISBN Matched HathiTrust Full-Book Stream": 4056,
     "Tier 3B: Extended Paratext & Abstract (drm_fallback_multi_api_enriched)": 2848,
     "Tier 3B: Extended Paratext & Abstract (primary_cloud_oa_abstract)": 567,
     "Tier 1C: Direct Publisher / Repository Open-Access Full-Text Monograph": 235,
-    "Tier 1: Complete Full-Text Book (Archive.org / HTRC / GBV / DNB OA /34)": 16804,
-    "Tier 2: Digitized Table-of-Contents & Excerpt PDF (d-nb.info /04)": 55545
+    "Tier 1: Complete Full-Text Book (Archive.org / HTRC / GBV / DNB OA /34)": 18064,
+    "Tier 2: Digitized Table-of-Contents & Excerpt PDF (d-nb.info /04)": 104952
   },
   "works_by_primary_layer": {
-    "dnb_deposit_inhaltstext": 10011031,
-    "dnb_toc_pdf_fulltext": 41346,
+    "dnb_deposit_inhaltstext": 9946165,
+    "dnb_toc_pdf_fulltext": 104952,
     "gbv_direct_fulltext_pdf": 14199,
-    "dnb_oa_fullbook": 179984,
+    "dnb_oa_fullbook": 196576,
     "hathitrust_ef_fullbook_print": 4056,
     "drm_fallback_multi_api_enriched": 2848,
     "primary_cloud_oa_abstract": 567,
@@ -35,8 +35,8 @@
     "1970s": 794,
     "1980s": 1385,
     "1990s": 1800,
-    "2000s": 3943,
-    "2010s": 2503,
-    "2020s": 3558
+    "2000s": 4215,
+    "2010s": 4658,
+    "2020s": 5212
   }
 }

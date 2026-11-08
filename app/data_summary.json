@@ -1,9 +1,9 @@
 {
   "source": "DNB SRU v1.1 + GBV/K10plus + HathiTrust HTRC + OpenAlex Unfiltered All-Sachgruppen German Corpus (spr=ger, All 102 DNB Sachgruppen 000–990 + B/K/S, 1970–2025)",
-  "count": 10504591,
-  "total_records": 10504591,
-  "unique_books": 10054543,
-  "total_words": 737754887,
+  "count": 10519923,
+  "total_records": 10519923,
+  "unique_books": 10041481,
+  "total_words": 778024103,
   "vocabulary_size": 25000,
   "coherence_score": -2.476,
   "publishers": [
@@ -127,10 +127,10 @@
     "LIT Verlag": 84440,
     "dtv / Hanser / Piper / Ullstein": 54732,
     "Sony Classical": 51061,
-    "Peter Lang": 51011,
+    "Peter Lang": 51028,
     "Fischer": 50905,
     "Nomos / Alber": 46873,
-    "C.H. Beck": 44720,
+    "C.H. Beck": 44856,
     "Random House / Goldmann / Arkana / Knaur": 43249,
     "Hansebooks GmbH": 40552,
     "Vandenhoeck & Ruprecht": 39529,
@@ -154,7 +154,7 @@
     "BookRix": 23069,
     "Campus": 22657,
     "neobooks": 21989,
-    "Beltz / Juventa": 20502,
+    "Beltz / Juventa": 20548,
     "Wilhelm Fink": 20164,
     "Heyne": 19598,
     "SCHOTT MUSIC GmbH & Co KG, Mainz": 18258,
@@ -227,13 +227,13 @@
     "J. Kamphausen": 811,
     "Ergon Verlag": 291,
     "Tectum Verlag": 167,
-    "University Presses & OA Repositories (DE)": 3390137
+    "University Presses & OA Repositories (DE)": 3396915
   },
   "corpus_layers": {
-    "dnb_deposit_inhaltstext": 10011031,
+    "dnb_deposit_inhaltstext": 9946165,
     "hathitrust_ef_fullbook_print": 248302,
-    "dnb_oa_fullbook": 179984,
-    "dnb_toc_pdf_fulltext": 41346,
+    "dnb_oa_fullbook": 196576,
+    "dnb_toc_pdf_fulltext": 104952,
     "gbv_direct_fulltext_pdf": 14199,
     "entire_fulltext_book_cloud": 4072,
     "drm_fallback_multi_api_enriched": 3561,
@@ -248,27 +248,27 @@
   "decade_counts": {
     "1970s": 916875,
     "1980s": 1188379,
-    "1990s": 1435956,
-    "2000s": 2055557,
-    "2010s": 2932601,
-    "2020s": 1974012
+    "1990s": 1437519,
+    "2000s": 2058269,
+    "2010s": 2938713,
+    "2020s": 1978957
   },
   "year_range": "1970–2025",
   "document_length_distribution": {
     "overall": {
-      "count": 10504591,
-      "total_words": 737754887,
-      "mean": 70.2,
-      "sd": 461.3,
+      "count": 10519923,
+      "total_words": 778024103,
+      "mean": 74.0,
+      "sd": 464.0,
       "median": 1000.0,
-      "iqr": 961.0,
+      "iqr": 939.0,
       "min": 1,
-      "max": 15375
+      "max": 19325
     },
     "by_layer": {
       "dnb_deposit_inhaltstext": {
-        "count": 10011031,
-        "total_words": 499201823,
+        "count": 9946165,
+        "total_words": 495953463,
         "mean": 49.9,
         "sd": 69.0,
         "median": 21.0,
@@ -287,24 +287,24 @@
         "max": 1079
       },
       "dnb_oa_fullbook": {
-        "count": 179984,
-        "total_words": 175412855,
-        "mean": 974.6,
-        "sd": 122.6,
+        "count": 196576,
+        "total_words": 191528707,
+        "mean": 974.3,
+        "sd": 123.6,
         "median": 1000.0,
         "iqr": 0.0,
         "min": 81,
         "max": 1196
       },
       "dnb_toc_pdf_fulltext": {
-        "count": 41346,
-        "total_words": 18012251,
-        "mean": 435.6,
-        "sd": 446.6,
-        "median": 290.0,
-        "iqr": 366.0,
-        "min": 38,
-        "max": 15375
+        "count": 104952,
+        "total_words": 39136921,
+        "mean": 372.9,
+        "sd": 438.2,
+        "median": 242.0,
+        "iqr": 304.0,
+        "min": 30,
+        "max": 19325
       },
       "gbv_direct_fulltext_pdf": {
         "count": 14199,
@@ -2750,7 +2750,7 @@
     {
       "year": 1990,
       "year_clean": "1990",
-      "_total": 133827,
+      "_total": 133836,
       "Springer Nature / Metzler": 3127,
       "Books on Demand (BoD)": 84,
       "De Gruyter / Transcript": 1295,
@@ -3206,7 +3206,7 @@
     {
       "year": 1994,
       "year_clean": "1994",
-      "_total": 145915,
+      "_total": 145917,
       "Springer Nature / Metzler": 3865,
       "Books on Demand (BoD)": 105,
       "De Gruyter / Transcript": 1207,
@@ -3434,7 +3434,7 @@
     {
       "year": 1996,
       "year_clean": "1996",
-      "_total": 144309,
+      "_total": 144310,
       "Springer Nature / Metzler": 3329,
       "Books on Demand (BoD)": 89,
       "De Gruyter / Transcript": 1139,
@@ -3470,7 +3470,7 @@
       "BookRix": 0,
       "Campus": 701,
       "neobooks": 0,
-      "Beltz / Juventa": 359,
+      "Beltz / Juventa": 360,
       "Wilhelm Fink": 311,
       "Heyne": 526,
       "SCHOTT MUSIC GmbH & Co KG, Mainz": 50,
@@ -3548,7 +3548,7 @@
     {
       "year": 1997,
       "year_clean": "1997",
-      "_total": 149689,
+      "_total": 149801,
       "Springer Nature / Metzler": 3704,
       "Books on Demand (BoD)": 85,
       "De Gruyter / Transcript": 995,
@@ -3657,12 +3657,12 @@
       "J. Kamphausen": 0,
       "Ergon Verlag": 0,
       "Tectum Verlag": 0,
-      "University Presses & OA Repositories (DE)": 25454
+      "University Presses & OA Repositories (DE)": 25566
     },
     {
       "year": 1998,
       "year_clean": "1998",
-      "_total": 149485,
+      "_total": 150376,
       "Springer Nature / Metzler": 3678,
       "Books on Demand (BoD)": 79,
       "De Gruyter / Transcript": 1271,
@@ -3771,12 +3771,12 @@
       "J. Kamphausen": 8,
       "Ergon Verlag": 75,
       "Tectum Verlag": 0,
-      "University Presses & OA Repositories (DE)": 26349
+      "University Presses & OA Repositories (DE)": 27240
     },
     {
       "year": 1999,
       "year_clean": "1999",
-      "_total": 157200,
+      "_total": 157748,
       "Springer Nature / Metzler": 3380,
       "Books on Demand (BoD)": 87,
       "De Gruyter / Transcript": 1347,
@@ -3885,12 +3885,12 @@
       "J. Kamphausen": 8,
       "Ergon Verlag": 0,
       "Tectum Verlag": 0,
-      "University Presses & OA Repositories (DE)": 30091
+      "University Presses & OA Repositories (DE)": 30639
     },
     {
       "year": 2000,
       "year_clean": "2000",
-      "_total": 157055,
+      "_total": 157300,
       "Springer Nature / Metzler": 3512,
       "Books on Demand (BoD)": 154,
       "De Gruyter / Transcript": 1463,
@@ -3999,12 +3999,12 @@
       "J. Kamphausen": 8,
       "Ergon Verlag": 0,
       "Tectum Verlag": 0,
-      "University Presses & OA Repositories (DE)": 35560
+      "University Presses & OA Repositories (DE)": 35796
     },
     {
       "year": 2001,
       "year_clean": "2001",
-      "_total": 175783,
+      "_total": 176130,
       "Springer Nature / Metzler": 3036,
       "Books on Demand (BoD)": 144,
       "De Gruyter / Transcript": 1117,
@@ -4113,12 +4113,12 @@
       "J. Kamphausen": 10,
       "Ergon Verlag": 0,
       "Tectum Verlag": 0,
-      "University Presses & OA Repositories (DE)": 41992
+      "University Presses & OA Repositories (DE)": 42275
     },
     {
       "year": 2002,
       "year_clean": "2002",
-      "_total": 167922,
+      "_total": 168147,
       "Springer Nature / Metzler": 3415,
       "Books on Demand (BoD)": 188,
       "De Gruyter / Transcript": 1164,
@@ -4227,12 +4227,12 @@
       "J. Kamphausen": 7,
       "Ergon Verlag": 0,
       "Tectum Verlag": 0,
-      "University Presses & OA Repositories (DE)": 44055
+      "University Presses & OA Repositories (DE)": 44237
     },
     {
       "year": 2003,
       "year_clean": "2003",
-      "_total": 175061,
+      "_total": 175268,
       "Springer Nature / Metzler": 3317,
       "Books on Demand (BoD)": 536,
       "De Gruyter / Transcript": 1322,
@@ -4341,12 +4341,12 @@
       "J. Kamphausen": 8,
       "Ergon Verlag": 26,
       "Tectum Verlag": 2,
-      "University Presses & OA Repositories (DE)": 46969
+      "University Presses & OA Repositories (DE)": 47046
     },
     {
       "year": 2004,
       "year_clean": "2004",
-      "_total": 186828,
+      "_total": 187020,
       "Springer Nature / Metzler": 3329,
       "Books on Demand (BoD)": 1498,
       "De Gruyter / Transcript": 1127,
@@ -4460,7 +4460,7 @@
     {
       "year": 2005,
       "year_clean": "2005",
-      "_total": 188411,
+      "_total": 188662,
       "Springer Nature / Metzler": 2038,
       "Books on Demand (BoD)": 1913,
       "De Gruyter / Transcript": 976,
@@ -4574,7 +4574,7 @@
     {
       "year": 2006,
       "year_clean": "2006",
-      "_total": 193113,
+      "_total": 193435,
       "Springer Nature / Metzler": 1658,
       "Books on Demand (BoD)": 2263,
       "De Gruyter / Transcript": 980,
@@ -4683,12 +4683,12 @@
       "J. Kamphausen": 17,
       "Ergon Verlag": 1,
       "Tectum Verlag": 0,
-      "University Presses & OA Repositories (DE)": 59822
+      "University Presses & OA Repositories (DE)": 59837
     },
     {
       "year": 2007,
       "year_clean": "2007",
-      "_total": 207851,
+      "_total": 208075,
       "Springer Nature / Metzler": 1391,
       "Books on Demand (BoD)": 2971,
       "De Gruyter / Transcript": 1147,
@@ -4797,12 +4797,12 @@
       "J. Kamphausen": 15,
       "Ergon Verlag": 0,
       "Tectum Verlag": 1,
-      "University Presses & OA Repositories (DE)": 71776
+      "University Presses & OA Repositories (DE)": 71779
     },
     {
       "year": 2008,
       "year_clean": "2008",
-      "_total": 263647,
+      "_total": 263947,
       "Springer Nature / Metzler": 1892,
       "Books on Demand (BoD)": 4343,
       "De Gruyter / Transcript": 1209,
@@ -4916,7 +4916,7 @@
     {
       "year": 2009,
       "year_clean": "2009",
-      "_total": 339886,
+      "_total": 340285,
       "Springer Nature / Metzler": 2650,
       "Books on Demand (BoD)": 6339,
       "De Gruyter / Transcript": 1829,
@@ -5025,12 +5025,12 @@
       "J. Kamphausen": 17,
       "Ergon Verlag": 0,
       "Tectum Verlag": 6,
-      "University Presses & OA Repositories (DE)": 186278
+      "University Presses & OA Repositories (DE)": 186371
     },
     {
       "year": 2010,
       "year_clean": "2010",
-      "_total": 233898,
+      "_total": 234437,
       "Springer Nature / Metzler": 4735,
       "Books on Demand (BoD)": 5941,
       "De Gruyter / Transcript": 1097,
@@ -5139,12 +5139,12 @@
       "J. Kamphausen": 16,
       "Ergon Verlag": 4,
       "Tectum Verlag": 1,
-      "University Presses & OA Repositories (DE)": 77757
+      "University Presses & OA Repositories (DE)": 78128
     },
     {
       "year": 2011,
       "year_clean": "2011",
-      "_total": 244601,
+      "_total": 244946,
       "Springer Nature / Metzler": 6145,
       "Books on Demand (BoD)": 6369,
       "De Gruyter / Transcript": 1271,
@@ -5253,12 +5253,12 @@
       "J. Kamphausen": 24,
       "Ergon Verlag": 32,
       "Tectum Verlag": 3,
-      "University Presses & OA Repositories (DE)": 83947
+      "University Presses & OA Repositories (DE)": 83973
     },
     {
       "year": 2012,
       "year_clean": "2012",
-      "_total": 253508,
+      "_total": 254068,
       "Springer Nature / Metzler": 6522,
       "Books on Demand (BoD)": 5329,
       "De Gruyter / Transcript": 1405,
@@ -5367,12 +5367,12 @@
       "J. Kamphausen": 27,
       "Ergon Verlag": 3,
       "Tectum Verlag": 1,
-      "University Presses & OA Repositories (DE)": 76516
+      "University Presses & OA Repositories (DE)": 76540
     },
     {
       "year": 2013,
       "year_clean": "2013",
-      "_total": 281849,
+      "_total": 282435,
       "Springer Nature / Metzler": 7760,
       "Books on Demand (BoD)": 5075,
       "De Gruyter / Transcript": 1203,
@@ -5384,7 +5384,7 @@
       "Peter Lang": 1077,
       "Fischer": 1031,
       "Nomos / Alber": 1209,
-      "C.H. Beck": 888,
+      "C.H. Beck": 942,
       "Random House / Goldmann / Arkana / Knaur": 1782,
       "Hansebooks GmbH": 0,
       "Vandenhoeck & Ruprecht": 726,
@@ -5481,12 +5481,12 @@
       "J. Kamphausen": 56,
       "Ergon Verlag": 2,
       "Tectum Verlag": 2,
-      "University Presses & OA Repositories (DE)": 105679
+      "University Presses & OA Repositories (DE)": 105760
     },
     {
       "year": 2014,
       "year_clean": "2014",
-      "_total": 287414,
+      "_total": 287815,
       "Springer Nature / Metzler": 8194,
       "Books on Demand (BoD)": 7116,
       "De Gruyter / Transcript": 1730,
@@ -5595,12 +5595,12 @@
       "J. Kamphausen": 70,
       "Ergon Verlag": 0,
       "Tectum Verlag": 7,
-      "University Presses & OA Repositories (DE)": 110707
+      "University Presses & OA Repositories (DE)": 110733
     },
     {
       "year": 2015,
       "year_clean": "2015",
-      "_total": 279980,
+      "_total": 280521,
       "Springer Nature / Metzler": 8404,
       "Books on Demand (BoD)": 8767,
       "De Gruyter / Transcript": 1666,
@@ -5709,12 +5709,12 @@
       "J. Kamphausen": 85,
       "Ergon Verlag": 2,
       "Tectum Verlag": 7,
-      "University Presses & OA Repositories (DE)": 103432
+      "University Presses & OA Repositories (DE)": 103571
     },
     {
       "year": 2016,
       "year_clean": "2016",
-      "_total": 327206,
+      "_total": 327999,
       "Springer Nature / Metzler": 10237,
       "Books on Demand (BoD)": 9344,
       "De Gruyter / Transcript": 2153,
@@ -5823,12 +5823,12 @@
       "J. Kamphausen": 94,
       "Ergon Verlag": 5,
       "Tectum Verlag": 1,
-      "University Presses & OA Repositories (DE)": 131066
+      "University Presses & OA Repositories (DE)": 131347
     },
     {
       "year": 2017,
       "year_clean": "2017",
-      "_total": 346292,
+      "_total": 346918,
       "Springer Nature / Metzler": 11645,
       "Books on Demand (BoD)": 10050,
       "De Gruyter / Transcript": 2631,
@@ -5937,12 +5937,12 @@
       "J. Kamphausen": 98,
       "Ergon Verlag": 4,
       "Tectum Verlag": 9,
-      "University Presses & OA Repositories (DE)": 136569
+      "University Presses & OA Repositories (DE)": 136748
     },
     {
       "year": 2018,
       "year_clean": "2018",
-      "_total": 344926,
+      "_total": 345925,
       "Springer Nature / Metzler": 6524,
       "Books on Demand (BoD)": 9445,
       "De Gruyter / Transcript": 3871,
@@ -6051,12 +6051,12 @@
       "J. Kamphausen": 36,
       "Ergon Verlag": 6,
       "Tectum Verlag": 21,
-      "University Presses & OA Repositories (DE)": 148941
+      "University Presses & OA Repositories (DE)": 149342
     },
     {
       "year": 2019,
       "year_clean": "2019",
-      "_total": 332927,
+      "_total": 333649,
       "Springer Nature / Metzler": 3568,
       "Books on Demand (BoD)": 10636,
       "De Gruyter / Transcript": 7084,
@@ -6165,12 +6165,12 @@
       "J. Kamphausen": 42,
       "Ergon Verlag": 12,
       "Tectum Verlag": 13,
-      "University Presses & OA Repositories (DE)": 136292
+      "University Presses & OA Repositories (DE)": 136519
     },
     {
       "year": 2020,
       "year_clean": "2020",
-      "_total": 312003,
+      "_total": 312357,
       "Springer Nature / Metzler": 3138,
       "Books on Demand (BoD)": 12002,
       "De Gruyter / Transcript": 7215,
@@ -6279,12 +6279,12 @@
       "J. Kamphausen": 14,
       "Ergon Verlag": 6,
       "Tectum Verlag": 9,
-      "University Presses & OA Repositories (DE)": 123507
+      "University Presses & OA Repositories (DE)": 123559
     },
     {
       "year": 2021,
       "year_clean": "2021",
-      "_total": 358516,
+      "_total": 358986,
       "Springer Nature / Metzler": 2895,
       "Books on Demand (BoD)": 12883,
       "De Gruyter / Transcript": 9588,
@@ -6393,12 +6393,12 @@
       "J. Kamphausen": 14,
       "Ergon Verlag": 0,
       "Tectum Verlag": 12,
-      "University Presses & OA Repositories (DE)": 148825
+      "University Presses & OA Repositories (DE)": 149067
     },
     {
       "year": 2022,
       "year_clean": "2022",
-      "_total": 369304,
+      "_total": 370075,
       "Springer Nature / Metzler": 3016,
       "Books on Demand (BoD)": 11085,
       "De Gruyter / Transcript": 8384,
@@ -6507,12 +6507,12 @@
       "J. Kamphausen": 13,
       "Ergon Verlag": 7,
       "Tectum Verlag": 6,
-      "University Presses & OA Repositories (DE)": 179082
+      "University Presses & OA Repositories (DE)": 179497
     },
     {
       "year": 2023,
       "year_clean": "2023",
-      "_total": 318583,
+      "_total": 319567,
       "Springer Nature / Metzler": 2973,
       "Books on Demand (BoD)": 9727,
       "De Gruyter / Transcript": 5529,
@@ -6621,12 +6621,12 @@
       "J. Kamphausen": 30,
       "Ergon Verlag": 5,
       "Tectum Verlag": 59,
-      "University Presses & OA Repositories (DE)": 134569
+      "University Presses & OA Repositories (DE)": 134843
     },
     {
       "year": 2024,
       "year_clean": "2024",
-      "_total": 309081,
+      "_total": 310051,
       "Springer Nature / Metzler": 2597,
       "Books on Demand (BoD)": 9297,
       "De Gruyter / Transcript": 5838,
@@ -6635,7 +6635,7 @@
       "LIT Verlag": 1910,
       "dtv / Hanser / Piper / Ullstein": 1790,
       "Sony Classical": 2443,
-      "Peter Lang": 331,
+      "Peter Lang": 348,
       "Fischer": 1031,
       "Nomos / Alber": 1201,
       "C.H. Beck": 1075,
@@ -6662,7 +6662,7 @@
       "BookRix": 78,
       "Campus": 738,
       "neobooks": 1598,
-      "Beltz / Juventa": 655,
+      "Beltz / Juventa": 678,
       "Wilhelm Fink": 158,
       "Heyne": 62,
       "SCHOTT MUSIC GmbH & Co KG, Mainz": 196,
@@ -6735,12 +6735,12 @@
       "J. Kamphausen": 6,
       "Ergon Verlag": 9,
       "Tectum Verlag": 4,
-      "University Presses & OA Repositories (DE)": 128319
+      "University Presses & OA Repositories (DE)": 128816
     },
     {
       "year": 2025,
       "year_clean": "2025",
-      "_total": 306525,
+      "_total": 307921,
       "Springer Nature / Metzler": 2814,
       "Books on Demand (BoD)": 12672,
       "De Gruyter / Transcript": 5136,
@@ -6752,7 +6752,7 @@
       "Peter Lang": 201,
       "Fischer": 1090,
       "Nomos / Alber": 1255,
-      "C.H. Beck": 1215,
+      "C.H. Beck": 1297,
       "Random House / Goldmann / Arkana / Knaur": 1032,
       "Hansebooks GmbH": 16,
       "Vandenhoeck & Ruprecht": 812,
@@ -6776,7 +6776,7 @@
       "BookRix": 3,
       "Campus": 1105,
       "neobooks": 2512,
-      "Beltz / Juventa": 869,
+      "Beltz / Juventa": 891,
       "Wilhelm Fink": 178,
       "Heyne": 57,
       "SCHOTT MUSIC GmbH & Co KG, Mainz": 179,
@@ -6849,7 +6849,7 @@
       "J. Kamphausen": 1,
       "Ergon Verlag": 3,
       "Tectum Verlag": 3,
-      "University Presses & OA Repositories (DE)": 126751
+      "University Presses & OA Repositories (DE)": 127854
     }
   ],
   "coherence_grid": [
@@ -6916,35 +6916,35 @@
     "dnb_38_target_publishers_all_languages_1970_2025": 544425,
     "dnb_38_target_publishers_german_spr_ger_all_subjects_1970_2025": 461491,
     "dnb_38_target_publishers_german_spr_ger_onlinefree_oa_1970_2025": 12251,
-    "incorporated_total_corpus_documents": 10504591,
-    "incorporated_unique_books": 10054543,
-    "incorporated_direct_dnb_sru_documents": 10232361,
+    "incorporated_total_corpus_documents": 10519923,
+    "incorporated_unique_books": 10041481,
+    "incorporated_direct_dnb_sru_documents": 10247693,
     "incorporated_unique_dnb_oa_books": 9692
   },
   "master_manifest": {
-    "total_unique_works_1970_2025": 10054543,
-    "total_complete_fulltext_books": 16804,
-    "total_dnb_oa_fulltext_books": 12513,
+    "total_unique_works_1970_2025": 10041481,
+    "total_complete_fulltext_books": 18064,
+    "total_dnb_oa_fulltext_books": 13773,
     "total_hathitrust_fulltext_books": 4056,
-    "total_passages_in_corpus": 10504591,
-    "total_words_in_corpus": 737754887,
+    "total_passages_in_corpus": 10519923,
+    "total_words_in_corpus": 778024103,
     "works_by_highest_tier": {
-      "Tier 3: DNB Deposit.dnb.de Inhaltstext, MARC 520 Abstract & Indexing": 10011031,
-      "Tier 2: DNB Digitized /04 Inhaltsverzeichnis & Reading-Sample PDF": 41346,
+      "Tier 3: DNB Deposit.dnb.de Inhaltstext, MARC 520 Abstract & Indexing": 9946165,
+      "Tier 2: DNB Digitized /04 Inhaltsverzeichnis & Reading-Sample PDF": 104952,
       "Tier 2: DNB/GBV Digitized /04 Inhaltsverzeichnis & Reading-Sample PDF": 14199,
-      "Tier 1A: DNB Open-Access Full-Text Monograph/Dissertation (/34 & MARC 856)": 12513,
+      "Tier 1A: DNB Open-Access Full-Text Monograph/Dissertation (/34 & MARC 856)": 13773,
       "Tier 1B: DNB/GBV Multi-ISBN Matched HathiTrust Full-Book Stream": 4056,
       "Tier 3B: Extended Paratext & Abstract (drm_fallback_multi_api_enriched)": 2848,
       "Tier 3B: Extended Paratext & Abstract (primary_cloud_oa_abstract)": 567,
       "Tier 1C: Direct Publisher / Repository Open-Access Full-Text Monograph": 235,
-      "Tier 1: Complete Full-Text Book (Archive.org / HTRC / GBV / DNB OA /34)": 16804,
-      "Tier 2: Digitized Table-of-Contents & Excerpt PDF (d-nb.info /04)": 55545
+      "Tier 1: Complete Full-Text Book (Archive.org / HTRC / GBV / DNB OA /34)": 18064,
+      "Tier 2: Digitized Table-of-Contents & Excerpt PDF (d-nb.info /04)": 104952
     },
     "works_by_primary_layer": {
-      "dnb_deposit_inhaltstext": 10011031,
-      "dnb_toc_pdf_fulltext": 41346,
+      "dnb_deposit_inhaltstext": 9946165,
+      "dnb_toc_pdf_fulltext": 104952,
       "gbv_direct_fulltext_pdf": 14199,
-      "dnb_oa_fullbook": 179984,
+      "dnb_oa_fullbook": 196576,
       "hathitrust_ef_fullbook_print": 4056,
       "drm_fallback_multi_api_enriched": 2848,
       "primary_cloud_oa_abstract": 567,
@@ -6958,9 +6958,9 @@
       "1970s": 794,
       "1980s": 1385,
       "1990s": 1800,
-      "2000s": 3943,
-      "2010s": 2503,
-      "2020s": 3558
+      "2000s": 4215,
+      "2010s": 4658,
+      "2020s": 5212
     }
   },
   "publisher_works_counts": {
@@ -7125,7 +7125,7 @@
     },
     {
       "publisher": "Peter Lang",
-      "passages": 51011,
+      "passages": 51028,
       "works": 49360,
       "category": "Academic & Philosophical"
     },
@@ -7143,7 +7143,7 @@
     },
     {
       "publisher": "C.H. Beck",
-      "passages": 44720,
+      "passages": 44856,
       "works": 36081,
       "category": "RQ₃ · Critical & Secular-Humanist"
     },
@@ -7287,7 +7287,7 @@
     },
     {
       "publisher": "Beltz / Juventa",
-      "passages": 20502,
+      "passages": 20548,
       "works": 20277,
       "category": "RQ₂ · Self-Help, Psychology & Hybrid"
     },
@@ -7725,12 +7725,12 @@
     },
     {
       "publisher": "University Presses & OA Repositories (DE)",
-      "passages": 3390137,
+      "passages": 3396915,
       "works": 3281597,
       "category": "Academic & Philosophical"
     }
   ],
-  "total_documents": 10504591,
+  "total_documents": 10519923,
   "publisher_annual_curves": {
     "Springer Nature / Metzler": {
       "1970": 1183,
@@ -8251,7 +8251,7 @@
       "2021": 655,
       "2022": 566,
       "2023": 388,
-      "2024": 331,
+      "2024": 348,
       "2025": 201
     },
     "Fischer": {
@@ -8414,7 +8414,7 @@
       "2010": 975,
       "2011": 1047,
       "2012": 940,
-      "2013": 888,
+      "2013": 942,
       "2014": 1028,
       "2015": 801,
       "2016": 1025,
@@ -8426,7 +8426,7 @@
       "2022": 1332,
       "2023": 1192,
       "2024": 1075,
-      "2025": 1215
+      "2025": 1297
     },
     "Random House / Goldmann / Arkana / Knaur": {
       "1970": 326,
@@ -9789,7 +9789,7 @@
       "1993": 312,
       "1994": 380,
       "1995": 364,
-      "1996": 359,
+      "1996": 360,
       "1997": 350,
       "1998": 294,
       "1999": 325,
@@ -9817,8 +9817,8 @@
       "2021": 749,
       "2022": 655,
       "2023": 675,
-      "2024": 655,
-      "2025": 869
+      "2024": 678,
+      "2025": 891
     },
     "Wilhelm Fink": {
       "1970": 140,
@@ -14024,35 +14024,35 @@
       "1994": 25840,
       "1995": 25003,
       "1996": 24162,
-      "1997": 25454,
-      "1998": 26349,
-      "1999": 30091,
-      "2000": 35560,
-      "2001": 41992,
-      "2002": 44055,
-      "2003": 46969,
+      "1997": 25566,
+      "1998": 27240,
+      "1999": 30639,
+      "2000": 35796,
+      "2001": 42275,
+      "2002": 44237,
+      "2003": 47046,
       "2004": 53553,
       "2005": 57566,
-      "2006": 59822,
-      "2007": 71776,
+      "2006": 59837,
+      "2007": 71779,
       "2008": 113804,
-      "2009": 186278,
-      "2010": 77757,
-      "2011": 83947,
-      "2012": 76516,
-      "2013": 105679,
-      "2014": 110707,
-      "2015": 103432,
-      "2016": 131066,
-      "2017": 136569,
-      "2018": 148941,
-      "2019": 136292,
-      "2020": 123507,
-      "2021": 148825,
-      "2022": 179082,
-      "2023": 134569,
-      "2024": 128319,
-      "2025": 126751
+      "2009": 186371,
+      "2010": 78128,
+      "2011": 83973,
+      "2012": 76540,
+      "2013": 105760,
+      "2014": 110733,
+      "2015": 103571,
+      "2016": 131347,
+      "2017": 136748,
+      "2018": 149342,
+      "2019": 136519,
+      "2020": 123559,
+      "2021": 149067,
+      "2022": 179497,
+      "2023": 134843,
+      "2024": 128816,
+      "2025": 127854
     }
   }
 }

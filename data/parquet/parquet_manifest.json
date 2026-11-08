@@ -1,10 +1,10 @@
 {
   "format": "Apache Parquet (Zstandard level 19)",
-  "total_rows": 10504591,
-  "total_words": 737754887,
+  "total_rows": 10519923,
+  "total_words": 778024103,
   "total_shards": 126,
-  "total_parquet_bytes": 1417809510,
-  "total_parquet_mb": 1352.13,
+  "total_parquet_bytes": 1520021511,
+  "total_parquet_mb": 1449.61,
   "raw_csv_bytes": 1718078774,
   "raw_csv_mb": 1638.49,
   "compression_ratio_vs_csv": "4.38x",
@@ -16,7 +16,8 @@
       "size_bytes": 71587716,
       "size_mb": 68.27,
       "sha256": "fc89af62aa5474dc4c6afdaab8a3e8f5a74751fc5dec0541308fd231b697858a",
-      "file": "dnb_corpus_part001.parquet"
+      "file": "dnb_corpus_part001.parquet",
+      "words": 84163728
     },
     {
       "shard": "dnb_corpus_part002.parquet",
@@ -25,7 +26,8 @@
       "size_bytes": 62173501,
       "size_mb": 59.29,
       "sha256": "119be45e258075eb391b9c8b4e0da6dfa2bc3021efd2df5968b2c0474c535cc0",
-      "file": "dnb_corpus_part002.parquet"
+      "file": "dnb_corpus_part002.parquet",
+      "words": 68138946
     },
     {
       "shard": "dnb_corpus_part003.parquet",
@@ -34,7 +36,8 @@
       "size_bytes": 65887013,
       "size_mb": 62.83,
       "sha256": "818d85c00a9b56d42d663f3afdbe6ec3dc2c29ead9fe8eb8dbc6ff5f71a7f8c1",
-      "file": "dnb_corpus_part003.parquet"
+      "file": "dnb_corpus_part003.parquet",
+      "words": 72849313
     },
     {
       "shard": "dnb_corpus_part004.parquet",
@@ -43,7 +46,8 @@
       "size_bytes": 57959468,
       "size_mb": 55.27,
       "sha256": "54bf8000efe3c38cd9b73d864d501e35950e8ecd60f3cb4546b95e4097e92a59",
-      "file": "dnb_corpus_part004.parquet"
+      "file": "dnb_corpus_part004.parquet",
+      "words": 46822680
     },
     {
       "shard": "dnb_corpus_part005.parquet",
@@ -52,7 +56,8 @@
       "size_bytes": 71451882,
       "size_mb": 68.14,
       "sha256": "54db5b0a6d0419bb1d9813e9024a182e37930a8fd00b72ac10b961cb6d2445db",
-      "file": "dnb_corpus_part005.parquet"
+      "file": "dnb_corpus_part005.parquet",
+      "words": 77938974
     },
     {
       "shard": "dnb_corpus_part006.parquet",
@@ -61,7 +66,8 @@
       "size_bytes": 57546048,
       "size_mb": 54.88,
       "sha256": "fcb54459b7352e227f5427d15eb30da6dae9a69837a3e9ed8163e9ceb9140a3e",
-      "file": "dnb_corpus_part006.parquet"
+      "file": "dnb_corpus_part006.parquet",
+      "words": 55346370
     },
     {
       "shard": "dnb_corpus_part007.parquet",
@@ -70,1198 +76,1318 @@
       "size_bytes": 5895349,
       "size_mb": 5.62,
       "sha256": "2bc0377dc80b2b539f686c1ac39c264088a70815d31b33245e2888e4e92ef4af",
-      "file": "dnb_corpus_part007.parquet"
+      "file": "dnb_corpus_part007.parquet",
+      "words": 2338659
     },
     {
       "shard": "dnb_corpus_part008.parquet",
       "file": "dnb_corpus_part008.parquet",
       "path": "data/parquet/dnb_corpus_part008.parquet",
       "rows": 85000,
-      "bytes": 4600838,
-      "size_bytes": 4600838,
+      "bytes": 4600935,
+      "size_bytes": 4600935,
       "size_mb": 4.39,
-      "sha256": "1b7e09dc1480ed2fbc25d647da69e775034dac14a15e6e4737ac81a44734abf1"
+      "sha256": "5ede2ff9268b9197025ba9dcd8f8cc4c120c2d20944c5e258bd73710e5f3ca4a",
+      "words": 1386143
     },
     {
       "shard": "dnb_corpus_part009.parquet",
       "file": "dnb_corpus_part009.parquet",
       "path": "data/parquet/dnb_corpus_part009.parquet",
       "rows": 85000,
-      "bytes": 4926494,
-      "size_bytes": 4926494,
-      "size_mb": 4.7,
-      "sha256": "24b609678fb1d1ca429c6be75ddb6b69ee40fac774ab274bc856443c42ac6577"
+      "bytes": 5411641,
+      "size_bytes": 5411641,
+      "size_mb": 5.16,
+      "sha256": "7c4a5f347d1c04c26d275404f5870d83fdc08ad3fe48bcbc353038193ac5169c",
+      "words": 1573836
     },
     {
       "shard": "dnb_corpus_part010.parquet",
       "file": "dnb_corpus_part010.parquet",
       "path": "data/parquet/dnb_corpus_part010.parquet",
       "rows": 85000,
-      "bytes": 5642747,
-      "size_bytes": 5642747,
-      "size_mb": 5.38,
-      "sha256": "657e568cbc58d22f1edd4a86bf5292b29d8856920f40482129042b9d6a20e06f"
+      "words": 1769898,
+      "bytes": 6069087,
+      "size_bytes": 6069087,
+      "size_mb": 5.79,
+      "sha256": "23be75cb022736b9776da71105f445183c4d1f25c1e06b0a9445c6fccb11beb5"
     },
     {
       "shard": "dnb_corpus_part011.parquet",
       "file": "dnb_corpus_part011.parquet",
       "path": "data/parquet/dnb_corpus_part011.parquet",
       "rows": 85000,
-      "bytes": 3276434,
-      "size_bytes": 3276434,
-      "size_mb": 3.12,
-      "sha256": "2b076e713ae7eba01753fd849da8dda5a615449a9fb0765cb637c502c7a26d14"
+      "words": 1186672,
+      "bytes": 3350207,
+      "size_bytes": 3350207,
+      "size_mb": 3.2,
+      "sha256": "5494d0f728b613b215b043c4316090dd12a020ccc9f4cf886077f5139c57f750"
     },
     {
       "shard": "dnb_corpus_part012.parquet",
       "file": "dnb_corpus_part012.parquet",
       "path": "data/parquet/dnb_corpus_part012.parquet",
       "rows": 85000,
-      "bytes": 2997712,
-      "size_bytes": 2997712,
+      "words": 1016604,
+      "bytes": 2998450,
+      "size_bytes": 2998450,
       "size_mb": 2.86,
-      "sha256": "9257591d5b447901ae0e2d7e01213634079a2cc82f15bde3457db264a2515cfe"
+      "sha256": "36362fc72f1192886967b1f910d4fcdb8d72ea5c1b270690a0fc1c3ca7adb1c2"
     },
     {
       "shard": "dnb_corpus_part013.parquet",
       "file": "dnb_corpus_part013.parquet",
       "path": "data/parquet/dnb_corpus_part013.parquet",
       "rows": 85000,
-      "bytes": 3243782,
-      "size_bytes": 3243782,
-      "size_mb": 3.09,
-      "sha256": "b56622c4f4038a8892e109e99ec68bf9d0618c7054647487f30a7f42e074a701"
+      "words": 1097963,
+      "bytes": 3280271,
+      "size_bytes": 3280271,
+      "size_mb": 3.13,
+      "sha256": "49f80cb72a914f7f43d415d2f0174cf74e63d9d66475ea48dd56147caaef0aea"
     },
     {
       "shard": "dnb_corpus_part014.parquet",
       "file": "dnb_corpus_part014.parquet",
       "path": "data/parquet/dnb_corpus_part014.parquet",
       "rows": 85000,
-      "bytes": 3385790,
-      "size_bytes": 3385790,
-      "size_mb": 3.23,
-      "sha256": "18103a2a1a4a2cb521d2586a4bbf5d85aab96638b5f80a626e590f7010cd9177"
+      "words": 1171622,
+      "bytes": 3457435,
+      "size_bytes": 3457435,
+      "size_mb": 3.3,
+      "sha256": "970abecd9d885dee3a04d7e345e72ea1b981855bf38ad261e1d0f27d7cf389fd"
     },
     {
       "shard": "dnb_corpus_part015.parquet",
       "file": "dnb_corpus_part015.parquet",
       "path": "data/parquet/dnb_corpus_part015.parquet",
       "rows": 85000,
-      "bytes": 4392674,
-      "size_bytes": 4392674,
-      "size_mb": 4.19,
-      "sha256": "a52b3c17f8fd57c0becbf2208f39d909176bb03fef8b5013ed9f3290a55b6587"
+      "words": 1541024,
+      "bytes": 5186420,
+      "size_bytes": 5186420,
+      "size_mb": 4.95,
+      "sha256": "0456e4d0e81addb5ed1f9ec3ae76a5312f84fed62004a0dfe59dc551531bb6cd"
     },
     {
       "shard": "dnb_corpus_part016.parquet",
       "file": "dnb_corpus_part016.parquet",
       "path": "data/parquet/dnb_corpus_part016.parquet",
       "rows": 85000,
-      "bytes": 5618522,
-      "size_bytes": 5618522,
-      "size_mb": 5.36,
-      "sha256": "94a5049b20732ee486340e1d77e1cfd7ff96cb121881af23f79e67287c6d9d0b"
+      "words": 1629148,
+      "bytes": 6247766,
+      "size_bytes": 6247766,
+      "size_mb": 5.96,
+      "sha256": "5efd04819cf6dfe4d42765f6c6e8f54840b1d26018fd67b65ce0fb5f3a2db83e"
     },
     {
       "shard": "dnb_corpus_part017.parquet",
       "file": "dnb_corpus_part017.parquet",
       "path": "data/parquet/dnb_corpus_part017.parquet",
       "rows": 85000,
-      "bytes": 5959666,
-      "size_bytes": 5959666,
-      "size_mb": 5.68,
-      "sha256": "a129f1f23cd9ce899712a464962f76c25026c0da44ab07d4f3ed0dab575ed488"
+      "words": 1703911,
+      "bytes": 6520552,
+      "size_bytes": 6520552,
+      "size_mb": 6.22,
+      "sha256": "5af6967b06009c590612400793699549f7ab563de8f8a3565248fcadcfcca8bf"
     },
     {
       "shard": "dnb_corpus_part018.parquet",
       "file": "dnb_corpus_part018.parquet",
       "path": "data/parquet/dnb_corpus_part018.parquet",
       "rows": 85000,
-      "bytes": 5506653,
-      "size_bytes": 5506653,
-      "size_mb": 5.25,
-      "sha256": "8d589611763e966cc16fa0e61614b21ee30ddfd4c65cb845b0be67eb1c36dd0c"
+      "words": 1703057,
+      "bytes": 5920097,
+      "size_bytes": 5920097,
+      "size_mb": 5.65,
+      "sha256": "153de002dafe49191b5c49c9c82fd3113993c8b61216b6a6c98437c008f64da5"
     },
     {
       "shard": "dnb_corpus_part019.parquet",
       "file": "dnb_corpus_part019.parquet",
       "path": "data/parquet/dnb_corpus_part019.parquet",
       "rows": 85000,
-      "bytes": 6047868,
-      "size_bytes": 6047868,
-      "size_mb": 5.77,
-      "sha256": "a20efffefe55b81ebd71552feba4ca4cdf754210663ad8603008f76984ca3506"
+      "words": 1790555,
+      "bytes": 6442412,
+      "size_bytes": 6442412,
+      "size_mb": 6.14,
+      "sha256": "ec8ed9f3efd083f300280e7ecc7bae09d5398bcf3a07862784f077108bc1ca3d"
     },
     {
       "shard": "dnb_corpus_part020.parquet",
       "file": "dnb_corpus_part020.parquet",
       "path": "data/parquet/dnb_corpus_part020.parquet",
       "rows": 85000,
-      "bytes": 6164076,
-      "size_bytes": 6164076,
-      "size_mb": 5.88,
-      "sha256": "59764d7271084b66a027ead1e4132a51827e66fd2eaa223af63f4e4e7d507146"
+      "words": 1845400,
+      "bytes": 6657784,
+      "size_bytes": 6657784,
+      "size_mb": 6.35,
+      "sha256": "28182cff53f30f1f597f15e811ba4c17e1a54be358f96b0660b72f791c0cdb7d"
     },
     {
       "shard": "dnb_corpus_part021.parquet",
       "file": "dnb_corpus_part021.parquet",
       "path": "data/parquet/dnb_corpus_part021.parquet",
       "rows": 85000,
-      "bytes": 6486866,
-      "size_bytes": 6486866,
-      "size_mb": 6.19,
-      "sha256": "ce8cfcc2618855ad93da8ee065138318b362556a243aa8ab746a9801416b3530"
+      "words": 1904239,
+      "bytes": 7082578,
+      "size_bytes": 7082578,
+      "size_mb": 6.75,
+      "sha256": "74c0c638f9ff8e6ca0b9b2d5ac04aa22701c7cebb4b1ba560ff78efbdc9e5a24"
     },
     {
       "shard": "dnb_corpus_part022.parquet",
       "file": "dnb_corpus_part022.parquet",
       "path": "data/parquet/dnb_corpus_part022.parquet",
       "rows": 85000,
-      "bytes": 6457933,
-      "size_bytes": 6457933,
-      "size_mb": 6.16,
-      "sha256": "8b1a856c59a837a1b88f2fa151b5f905115a210f57ede2a118724f5ff6f94350"
+      "words": 1840730,
+      "bytes": 6912928,
+      "size_bytes": 6912928,
+      "size_mb": 6.59,
+      "sha256": "3529ce8b6f9bba6d4fe46e79927dfb0869cec5db423788b4c2dc642c6adf7f61"
     },
     {
       "shard": "dnb_corpus_part023.parquet",
       "file": "dnb_corpus_part023.parquet",
       "path": "data/parquet/dnb_corpus_part023.parquet",
       "rows": 85000,
-      "bytes": 6468509,
-      "size_bytes": 6468509,
-      "size_mb": 6.17,
-      "sha256": "6df071a479587961db29bbaf83131cd75d1cc3c3b920c67bd6347d9d0c1fc2e5"
+      "words": 1950412,
+      "bytes": 7034027,
+      "size_bytes": 7034027,
+      "size_mb": 6.71,
+      "sha256": "7b6c39b5b3f35051219da78fc2e58a766e9c3bc3c1f8efeb87cfb14b8c94abc5"
     },
     {
       "shard": "dnb_corpus_part024.parquet",
       "file": "dnb_corpus_part024.parquet",
       "path": "data/parquet/dnb_corpus_part024.parquet",
       "rows": 85000,
-      "bytes": 6352067,
-      "size_bytes": 6352067,
-      "size_mb": 6.06,
-      "sha256": "00754e6ad00d5bb3ba1b9715aacd0ab059021674ee5d3e668121a353fde3dc19"
+      "words": 1938435,
+      "bytes": 6851493,
+      "size_bytes": 6851493,
+      "size_mb": 6.53,
+      "sha256": "db79ccb841dd198b92be0f914dbd6adca5953cb6cd3179ab622e9397ac3d42b2"
     },
     {
       "shard": "dnb_corpus_part025.parquet",
       "file": "dnb_corpus_part025.parquet",
       "path": "data/parquet/dnb_corpus_part025.parquet",
       "rows": 85000,
-      "bytes": 6568657,
-      "size_bytes": 6568657,
-      "size_mb": 6.26,
-      "sha256": "4f7bd5eed865ad052fc55039631e6907f308c9ea1a1e6ba062fbc5b85ff35f47"
+      "words": 1973117,
+      "bytes": 7094428,
+      "size_bytes": 7094428,
+      "size_mb": 6.77,
+      "sha256": "e06e61719e7d1a75719643aac8a895489e799c81c2cbab3fe08af87e533f4746"
     },
     {
       "shard": "dnb_corpus_part026.parquet",
       "file": "dnb_corpus_part026.parquet",
       "path": "data/parquet/dnb_corpus_part026.parquet",
       "rows": 85000,
-      "bytes": 6690682,
-      "size_bytes": 6690682,
-      "size_mb": 6.38,
-      "sha256": "9bd49d76dad70d7853b5d9f7c18fdadafb2a238b72a8029fa303249dc34a39b8"
+      "words": 1927391,
+      "bytes": 7208973,
+      "size_bytes": 7208973,
+      "size_mb": 6.88,
+      "sha256": "80fb3e9dc6573bb20ecd35641afaa8ddd217ee8213ae7fd9f9cbf0e2b9beedea"
     },
     {
       "shard": "dnb_corpus_part027.parquet",
       "file": "dnb_corpus_part027.parquet",
       "path": "data/parquet/dnb_corpus_part027.parquet",
       "rows": 85000,
-      "bytes": 6606125,
-      "size_bytes": 6606125,
-      "size_mb": 6.3,
-      "sha256": "66de5cda4fc76ba8f772fa285c4bc41e03dc791e747a6e6e7dd81200741783af"
+      "words": 1883554,
+      "bytes": 7102165,
+      "size_bytes": 7102165,
+      "size_mb": 6.77,
+      "sha256": "a8cc9a244e598f3120bbd90c0518d796ccf8e47a67ad36466ff093db0b903975"
     },
     {
       "shard": "dnb_corpus_part028.parquet",
       "file": "dnb_corpus_part028.parquet",
       "path": "data/parquet/dnb_corpus_part028.parquet",
       "rows": 85000,
-      "bytes": 6673041,
-      "size_bytes": 6673041,
-      "size_mb": 6.36,
-      "sha256": "ac540389085947c790a65c8d5bb74723f80b5bcf025025587f4f26d2b7c32dcc"
+      "words": 1852209,
+      "bytes": 7109705,
+      "size_bytes": 7109705,
+      "size_mb": 6.78,
+      "sha256": "c3bc779364cd33e912d25283956588805b5f033dd62d62f2b0fad548ad83dc77"
     },
     {
       "shard": "dnb_corpus_part029.parquet",
       "file": "dnb_corpus_part029.parquet",
       "path": "data/parquet/dnb_corpus_part029.parquet",
       "rows": 85000,
-      "bytes": 6706646,
-      "size_bytes": 6706646,
-      "size_mb": 6.4,
-      "sha256": "fde1ab3aa3605a82cd5df9d65d4eac995c85dedccfeb132fb599713c99b35851"
+      "words": 1869526,
+      "bytes": 7244231,
+      "size_bytes": 7244231,
+      "size_mb": 6.91,
+      "sha256": "e0fd54005abc910a7a91c4b43c50a50a9d37d35cc51b0484d8382d9cbd736f27"
     },
     {
       "shard": "dnb_corpus_part030.parquet",
       "file": "dnb_corpus_part030.parquet",
       "path": "data/parquet/dnb_corpus_part030.parquet",
       "rows": 85000,
-      "bytes": 6675157,
-      "size_bytes": 6675157,
-      "size_mb": 6.37,
-      "sha256": "c3b281867ff952cbc4c17930142db7233112d49ac9c35b3099aba5cffbe0a430"
+      "words": 1849332,
+      "bytes": 7172096,
+      "size_bytes": 7172096,
+      "size_mb": 6.84,
+      "sha256": "f0f8492b05ab1c025d38a695ce3844a03cd7f73a84d7d9abdf7f19c797cd6176"
     },
     {
       "shard": "dnb_corpus_part031.parquet",
       "file": "dnb_corpus_part031.parquet",
       "path": "data/parquet/dnb_corpus_part031.parquet",
       "rows": 85000,
-      "bytes": 6511855,
-      "size_bytes": 6511855,
-      "size_mb": 6.21,
-      "sha256": "04537b0f720b5ced2e4f5a420519eb9a4aa66651f07d1741c24bc8790a2edb80"
+      "words": 1855421,
+      "bytes": 7102974,
+      "size_bytes": 7102974,
+      "size_mb": 6.77,
+      "sha256": "eef74e00a68ed74c18e39531ddf4585398ea5a4066ed67fbf4a6998e0aed0634"
     },
     {
       "shard": "dnb_corpus_part032.parquet",
       "file": "dnb_corpus_part032.parquet",
       "path": "data/parquet/dnb_corpus_part032.parquet",
       "rows": 85000,
-      "bytes": 6591381,
-      "size_bytes": 6591381,
-      "size_mb": 6.29,
-      "sha256": "54110d12c304d5f75c3366447dabb14557665181b16f1d79d7c0b21eb5df92f7"
+      "words": 1839248,
+      "bytes": 7110408,
+      "size_bytes": 7110408,
+      "size_mb": 6.78,
+      "sha256": "4e16e38922f772522a01a55cd9e01ce48979c3ae3b185e0fa60bcfd0ba2ea94d"
     },
     {
       "shard": "dnb_corpus_part033.parquet",
       "file": "dnb_corpus_part033.parquet",
       "path": "data/parquet/dnb_corpus_part033.parquet",
       "rows": 85000,
-      "bytes": 6766189,
-      "size_bytes": 6766189,
-      "size_mb": 6.45,
-      "sha256": "b71795a3a2f402a6c54ba312f63fd1fb082e8334b2a7512f66f76efee640d69c"
+      "words": 1901627,
+      "bytes": 7321306,
+      "size_bytes": 7321306,
+      "size_mb": 6.98,
+      "sha256": "d890775fe98311ffe49ae53835ee9b0c866bcb452a40e2822d3a6fb7f2f30c66"
     },
     {
       "shard": "dnb_corpus_part034.parquet",
       "file": "dnb_corpus_part034.parquet",
       "path": "data/parquet/dnb_corpus_part034.parquet",
       "rows": 85000,
-      "bytes": 6824936,
-      "size_bytes": 6824936,
-      "size_mb": 6.51,
-      "sha256": "4e1407497ea8999bccb7ec1eb69538dc7cbb0c4e8fb5f9d8d2169102805a64b5"
+      "words": 1907635,
+      "bytes": 7337852,
+      "size_bytes": 7337852,
+      "size_mb": 7.0,
+      "sha256": "3be8fa554daa6e335f26bed5dba9a29b453b90112f9b40855dc796e3755466ef"
     },
     {
       "shard": "dnb_corpus_part035.parquet",
       "file": "dnb_corpus_part035.parquet",
       "path": "data/parquet/dnb_corpus_part035.parquet",
       "rows": 85000,
-      "bytes": 6902363,
-      "size_bytes": 6902363,
-      "size_mb": 6.58,
-      "sha256": "0b94a9f4fde13522570395afdb83bd01bab4b29b27c6f31803cbfd1aeea20dd0"
+      "words": 1908184,
+      "bytes": 7462484,
+      "size_bytes": 7462484,
+      "size_mb": 7.12,
+      "sha256": "f7ff9f7598fcd2f4bd85944db09b4937dfda257037aba39c72b80a891e3eb0e9"
     },
     {
       "shard": "dnb_corpus_part036.parquet",
       "file": "dnb_corpus_part036.parquet",
       "path": "data/parquet/dnb_corpus_part036.parquet",
       "rows": 85000,
-      "bytes": 6900025,
-      "size_bytes": 6900025,
-      "size_mb": 6.58,
-      "sha256": "89b3cde1c3a90de4772982b030dc7fee3ad847d46ab5dbafcd21f6e4c34ecb9e"
+      "words": 1916115,
+      "bytes": 7435152,
+      "size_bytes": 7435152,
+      "size_mb": 7.09,
+      "sha256": "4ffa44df600190636852600e93e2493898e7ffadebfc5bcb6097b2fc48c9ea0b"
     },
     {
       "shard": "dnb_corpus_part037.parquet",
       "file": "dnb_corpus_part037.parquet",
       "path": "data/parquet/dnb_corpus_part037.parquet",
       "rows": 85000,
-      "bytes": 6923515,
-      "size_bytes": 6923515,
-      "size_mb": 6.6,
-      "sha256": "ba29c57dee4a564eb1977997a7325071331c1e0d35389d9d75e0dbd132174229"
+      "words": 1934936,
+      "bytes": 7485213,
+      "size_bytes": 7485213,
+      "size_mb": 7.14,
+      "sha256": "1b0fe2970ca848d7f3d240517f953b1d7c4d738b6496e06ec6d5bd82d748692a"
     },
     {
       "shard": "dnb_corpus_part038.parquet",
       "file": "dnb_corpus_part038.parquet",
       "path": "data/parquet/dnb_corpus_part038.parquet",
       "rows": 85000,
-      "bytes": 6953035,
-      "size_bytes": 6953035,
-      "size_mb": 6.63,
-      "sha256": "48baa72e91635b2f3351733b37e191d07764f72afa88afd5aa17f1690f3093f2"
+      "words": 1946398,
+      "bytes": 7512020,
+      "size_bytes": 7512020,
+      "size_mb": 7.16,
+      "sha256": "db09f3768454f5e5e74d31dc614c2d29230d9442a7f7c635925b58f0ef5aeb4d"
     },
     {
       "shard": "dnb_corpus_part039.parquet",
       "file": "dnb_corpus_part039.parquet",
       "path": "data/parquet/dnb_corpus_part039.parquet",
       "rows": 85000,
-      "bytes": 7018475,
-      "size_bytes": 7018475,
-      "size_mb": 6.69,
-      "sha256": "5bc465478777618dbed7a0d9b21c1485469bdf8670529e237a72eb65038965d4"
+      "words": 2007692,
+      "bytes": 7654787,
+      "size_bytes": 7654787,
+      "size_mb": 7.3,
+      "sha256": "9f255588810a2bb284ea9090910604b93b4c277d056c457e6e7903c17afba9e5"
     },
     {
       "shard": "dnb_corpus_part040.parquet",
       "file": "dnb_corpus_part040.parquet",
       "path": "data/parquet/dnb_corpus_part040.parquet",
       "rows": 85000,
-      "bytes": 7093085,
-      "size_bytes": 7093085,
-      "size_mb": 6.76,
-      "sha256": "e725885641025e50283b421d6b931087c8fb3920bb511d2aa0a3b6c35d040cb4"
+      "words": 2234400,
+      "bytes": 8248583,
+      "size_bytes": 8248583,
+      "size_mb": 7.87,
+      "sha256": "3a0ea9c67e5ebddd8826edaca21814412cc3af3e8f5b0fe75dbf85038444246e"
     },
     {
       "shard": "dnb_corpus_part041.parquet",
       "file": "dnb_corpus_part041.parquet",
       "path": "data/parquet/dnb_corpus_part041.parquet",
       "rows": 85000,
-      "bytes": 7112792,
-      "size_bytes": 7112792,
-      "size_mb": 6.78,
-      "sha256": "af8b377be71d9aa7d31d7ba825341e0897b650470500743d0181e4815d9f8183"
+      "words": 2254745,
+      "bytes": 8277838,
+      "size_bytes": 8277838,
+      "size_mb": 7.89,
+      "sha256": "ac2cadcc59fddfd4066aeb0cedadf02c271c79799f0f934890e838c1f11d1be2"
     },
     {
       "shard": "dnb_corpus_part042.parquet",
       "file": "dnb_corpus_part042.parquet",
       "path": "data/parquet/dnb_corpus_part042.parquet",
       "rows": 85000,
-      "bytes": 9106930,
-      "size_bytes": 9106930,
-      "size_mb": 8.69,
-      "sha256": "3b97fe95efefb0734165bbb924188d6e81fdb4fe006a1f7cc7bcef039cdc9e87"
+      "words": 2968172,
+      "bytes": 9764276,
+      "size_bytes": 9764276,
+      "size_mb": 9.31,
+      "sha256": "1011c5168e2ad0cbb81e17c84addc4d97b596619a4057a3954cab1a9a259d11f"
     },
     {
       "shard": "dnb_corpus_part043.parquet",
       "file": "dnb_corpus_part043.parquet",
       "path": "data/parquet/dnb_corpus_part043.parquet",
       "rows": 85000,
-      "bytes": 9785115,
-      "size_bytes": 9785115,
-      "size_mb": 9.33,
-      "sha256": "7cf11b8a1733499b6ae269ed6002e9afb86d1d6c78207480d985341a6ec77b8e"
+      "words": 3174724,
+      "bytes": 10442809,
+      "size_bytes": 10442809,
+      "size_mb": 9.96,
+      "sha256": "eb77f08166501bb5a86ab759aff129b08bc9bdcdeaecc6b6b329b40b228165db"
     },
     {
       "shard": "dnb_corpus_part044.parquet",
       "file": "dnb_corpus_part044.parquet",
       "path": "data/parquet/dnb_corpus_part044.parquet",
       "rows": 85000,
-      "bytes": 9724383,
-      "size_bytes": 9724383,
-      "size_mb": 9.27,
-      "sha256": "f081a6770d2457e0f5cc1418738d636139d7aa040b9a056a2fab6e5011d86b41"
+      "words": 3293147,
+      "bytes": 10414231,
+      "size_bytes": 10414231,
+      "size_mb": 9.93,
+      "sha256": "88a8d34d6808f5aec27ebc836b3a3304ed3c3f7c732f186c50837ffcbc0b5754"
     },
     {
       "shard": "dnb_corpus_part045.parquet",
       "file": "dnb_corpus_part045.parquet",
       "path": "data/parquet/dnb_corpus_part045.parquet",
       "rows": 85000,
-      "bytes": 9634467,
-      "size_bytes": 9634467,
-      "size_mb": 9.19,
-      "sha256": "338d1a9445404d8b13e1ce5a12203039b63a46b8e9dc4dedc54f9b70c389cd37"
+      "words": 3214771,
+      "bytes": 10355501,
+      "size_bytes": 10355501,
+      "size_mb": 9.88,
+      "sha256": "f3f93e50465589da32353710a42737d11d54a866e37fc0a80d044ddc6816f4c7"
     },
     {
       "shard": "dnb_corpus_part046.parquet",
       "file": "dnb_corpus_part046.parquet",
       "path": "data/parquet/dnb_corpus_part046.parquet",
       "rows": 85000,
-      "bytes": 9345530,
-      "size_bytes": 9345530,
-      "size_mb": 8.91,
-      "sha256": "6b476d59d038e9de039bd50be50515fefa3a1d9b0b251b0c14a406b92b7caf6c"
+      "words": 3066548,
+      "bytes": 10016188,
+      "size_bytes": 10016188,
+      "size_mb": 9.55,
+      "sha256": "083786f69e4e1abbeaadaf106a2f2af55f7b979110788f6bd9318b4225cd791d"
     },
     {
       "shard": "dnb_corpus_part047.parquet",
       "file": "dnb_corpus_part047.parquet",
       "path": "data/parquet/dnb_corpus_part047.parquet",
       "rows": 85000,
-      "bytes": 8017058,
-      "size_bytes": 8017058,
-      "size_mb": 7.65,
-      "sha256": "080b6df4513dc3522c44c1874618a6b8c2661581c385de71cea642bc2f146f79"
+      "words": 2658130,
+      "bytes": 8703124,
+      "size_bytes": 8703124,
+      "size_mb": 8.3,
+      "sha256": "bad8a8b96104964cd119f9264d6a59b7cebf60de871fc2eedb19abd5f212aaba"
     },
     {
       "shard": "dnb_corpus_part048.parquet",
       "file": "dnb_corpus_part048.parquet",
       "path": "data/parquet/dnb_corpus_part048.parquet",
       "rows": 85000,
-      "bytes": 7507709,
-      "size_bytes": 7507709,
-      "size_mb": 7.16,
-      "sha256": "bd918da6d253c057b4f1c08ccdfa5f0828a6aeb6297daf82e8223ca93fb445fe"
+      "words": 2382342,
+      "bytes": 8191857,
+      "size_bytes": 8191857,
+      "size_mb": 7.81,
+      "sha256": "e0aad8b8a3e209568b13c48425bf3e1e1a9bf2e3383678b5b65a460d4a46375a"
     },
     {
       "shard": "dnb_corpus_part049.parquet",
       "file": "dnb_corpus_part049.parquet",
       "path": "data/parquet/dnb_corpus_part049.parquet",
       "rows": 85000,
-      "bytes": 8073007,
-      "size_bytes": 8073007,
-      "size_mb": 7.7,
-      "sha256": "15d20895b1e38690ad5577ab2e7755b90b52e56713a0cacd7b5846f8a599cbcb"
+      "words": 2574614,
+      "bytes": 8760073,
+      "size_bytes": 8760073,
+      "size_mb": 8.35,
+      "sha256": "1a72a54867595fd93caae691edd5f08adbaf338b1624cb75405947332e7ab757"
     },
     {
       "shard": "dnb_corpus_part050.parquet",
       "file": "dnb_corpus_part050.parquet",
       "path": "data/parquet/dnb_corpus_part050.parquet",
       "rows": 85000,
-      "bytes": 6953508,
-      "size_bytes": 6953508,
-      "size_mb": 6.63,
-      "sha256": "66b2d63c0e39e2324c0ca5668b48844690afa15dadfc7be8b74ef621918d4763"
+      "words": 2446817,
+      "bytes": 7658026,
+      "size_bytes": 7658026,
+      "size_mb": 7.3,
+      "sha256": "a2240be50e216d4f8ae560553625425132e18f40af29bdf9f54927f6aec1021d"
     },
     {
       "shard": "dnb_corpus_part051.parquet",
       "file": "dnb_corpus_part051.parquet",
       "path": "data/parquet/dnb_corpus_part051.parquet",
       "rows": 85000,
-      "bytes": 7361070,
-      "size_bytes": 7361070,
-      "size_mb": 7.02,
-      "sha256": "bdff6ee76a02d5a16a701d5c71007256a6cfbb8b33900a0536db61be67531323"
+      "words": 2629412,
+      "bytes": 8190208,
+      "size_bytes": 8190208,
+      "size_mb": 7.81,
+      "sha256": "46e43bf17f46ceb21c3f8f1f19522e790b3e8c6019cb2e2ec17ec822a518f1cd"
     },
     {
       "shard": "dnb_corpus_part052.parquet",
       "file": "dnb_corpus_part052.parquet",
       "path": "data/parquet/dnb_corpus_part052.parquet",
       "rows": 85000,
-      "bytes": 8839169,
-      "size_bytes": 8839169,
-      "size_mb": 8.43,
-      "sha256": "dd4a1d9426f28ba825579d0b99c68ea7045e180ae0f7809a0ee226d39efdcf92"
+      "words": 2725541,
+      "bytes": 9575045,
+      "size_bytes": 9575045,
+      "size_mb": 9.13,
+      "sha256": "b4e6252083fa5169f4d73e8a360c3679cf475c9a9bb3b87ceb084dd9c73df22c"
     },
     {
       "shard": "dnb_corpus_part053.parquet",
       "file": "dnb_corpus_part053.parquet",
       "path": "data/parquet/dnb_corpus_part053.parquet",
       "rows": 85000,
-      "bytes": 8889241,
-      "size_bytes": 8889241,
-      "size_mb": 8.48,
-      "sha256": "069f832b98a7f282ba35861a2f3654a50d93c2c9ffd0dce401716e9c6096f612"
+      "words": 2720565,
+      "bytes": 9569835,
+      "size_bytes": 9569835,
+      "size_mb": 9.13,
+      "sha256": "5be15bf961e35ddb2beb0ec854dcf818b43fe9534fb2ee926927eaf5b42a19ee"
     },
     {
       "shard": "dnb_corpus_part054.parquet",
       "file": "dnb_corpus_part054.parquet",
       "path": "data/parquet/dnb_corpus_part054.parquet",
       "rows": 85000,
-      "bytes": 9849151,
-      "size_bytes": 9849151,
-      "size_mb": 9.39,
-      "sha256": "c1b7607f5fd38a696ecd047c463b0b921ed09ea0f7b50df445996581738d9ca6"
+      "words": 3234616,
+      "bytes": 10538996,
+      "size_bytes": 10538996,
+      "size_mb": 10.05,
+      "sha256": "6c0fae1b88662fed3167afd74d035968adf4b41fb7b846ac40d305abb1c394bd"
     },
     {
       "shard": "dnb_corpus_part055.parquet",
       "file": "dnb_corpus_part055.parquet",
       "path": "data/parquet/dnb_corpus_part055.parquet",
       "rows": 85000,
-      "bytes": 11841695,
-      "size_bytes": 11841695,
-      "size_mb": 11.29,
-      "sha256": "517af32e336f16fefbcaeadf833219cf1e8f6dee6857da680482c3b39c43c591"
+      "words": 3903202,
+      "bytes": 12531808,
+      "size_bytes": 12531808,
+      "size_mb": 11.95,
+      "sha256": "ecb76f34379e0a908acb8f1746d919e3ba8fb119042884c768cd2f4b186c3733"
     },
     {
       "shard": "dnb_corpus_part056.parquet",
       "file": "dnb_corpus_part056.parquet",
       "path": "data/parquet/dnb_corpus_part056.parquet",
       "rows": 85000,
-      "bytes": 7645792,
-      "size_bytes": 7645792,
-      "size_mb": 7.29,
-      "sha256": "29627fd3e5e268dcf52b584f4e4de98c514df13546a752773df3e288ead43102"
+      "words": 2703216,
+      "bytes": 8351787,
+      "size_bytes": 8351787,
+      "size_mb": 7.96,
+      "sha256": "40b663685dd61a6df24bb2d0e0d7a079c7704e9ddcd1f83a08e9f54f7ff3bf59"
     },
     {
       "shard": "dnb_corpus_part057.parquet",
       "file": "dnb_corpus_part057.parquet",
       "path": "data/parquet/dnb_corpus_part057.parquet",
       "rows": 85000,
-      "bytes": 8479847,
-      "size_bytes": 8479847,
-      "size_mb": 8.09,
-      "sha256": "d1e9c627913febc70d154d59243167de113404b8542a1f94fd85f5c188291261"
+      "words": 2818775,
+      "bytes": 9077040,
+      "size_bytes": 9077040,
+      "size_mb": 8.66,
+      "sha256": "ec3a527e6bb0f43379b817769192d42d667364213781a3070a96ed482354c42f"
     },
     {
       "shard": "dnb_corpus_part058.parquet",
       "file": "dnb_corpus_part058.parquet",
       "path": "data/parquet/dnb_corpus_part058.parquet",
       "rows": 85000,
-      "bytes": 8399682,
-      "size_bytes": 8399682,
-      "size_mb": 8.01,
-      "sha256": "c8497f67c1add732f339beea4c1c142cbb05d7f53ab933d6a8bb90ef3a03da21"
+      "words": 2845924,
+      "bytes": 9151467,
+      "size_bytes": 9151467,
+      "size_mb": 8.73,
+      "sha256": "d6ff0066da8abf5876a7edff75acad99723d00661635e90fca2d5ff83565ca33"
     },
     {
       "shard": "dnb_corpus_part059.parquet",
       "file": "dnb_corpus_part059.parquet",
       "path": "data/parquet/dnb_corpus_part059.parquet",
       "rows": 85000,
-      "bytes": 9054564,
-      "size_bytes": 9054564,
-      "size_mb": 8.64,
-      "sha256": "11710e046e481df61585c0ae83416be388ad52d37eb503605a7dafae9349b4e2"
+      "words": 3051774,
+      "bytes": 9744406,
+      "size_bytes": 9744406,
+      "size_mb": 9.29,
+      "sha256": "95b78f8c6054632b9295957c85bed985058d6435208576c9ff06248f35d537f1"
     },
     {
       "shard": "dnb_corpus_part060.parquet",
       "file": "dnb_corpus_part060.parquet",
       "path": "data/parquet/dnb_corpus_part060.parquet",
       "rows": 85000,
-      "bytes": 8768817,
-      "size_bytes": 8768817,
-      "size_mb": 8.36,
-      "sha256": "f47596216baab4869ce5b0b0f777082db10d90e997269fad737dd0ec82523303"
+      "words": 2984815,
+      "bytes": 9504450,
+      "size_bytes": 9504450,
+      "size_mb": 9.06,
+      "sha256": "536f51e4aa4b2543b2a769fc02cd37c32fb018f0825148e45d267466a213f294"
     },
     {
       "shard": "dnb_corpus_part061.parquet",
       "file": "dnb_corpus_part061.parquet",
       "path": "data/parquet/dnb_corpus_part061.parquet",
       "rows": 85000,
-      "bytes": 9135744,
-      "size_bytes": 9135744,
-      "size_mb": 8.71,
-      "sha256": "3e6e8b749c451ddb7e8f13b5df540a0c62d1389e7204330373498474f5814be2"
+      "words": 3049021,
+      "bytes": 9768761,
+      "size_bytes": 9768761,
+      "size_mb": 9.32,
+      "sha256": "9baa60f869a21ad21b3d931c79f1635c38fa76e5efd3661c352e07fd549792ad"
     },
     {
       "shard": "dnb_corpus_part062.parquet",
       "file": "dnb_corpus_part062.parquet",
       "path": "data/parquet/dnb_corpus_part062.parquet",
       "rows": 85000,
-      "bytes": 7733029,
-      "size_bytes": 7733029,
-      "size_mb": 7.37,
-      "sha256": "9c20a7479266ad56e982b8ef9674e158c3582809e5525a0e0a176bce4d21fb8e"
+      "words": 2563764,
+      "bytes": 8378632,
+      "size_bytes": 8378632,
+      "size_mb": 7.99,
+      "sha256": "94d0a42678ee4a05aefe3b87d4b091bc92fac7f02c0cad22955df099f29e44a9"
     },
     {
       "shard": "dnb_corpus_part063.parquet",
       "file": "dnb_corpus_part063.parquet",
       "path": "data/parquet/dnb_corpus_part063.parquet",
       "rows": 85000,
-      "bytes": 9150464,
-      "size_bytes": 9150464,
-      "size_mb": 8.73,
-      "sha256": "f0604550dbc416260d22663fc600e5f56e113a2348083ccc87557556ccbd87de"
+      "words": 3060739,
+      "bytes": 9882698,
+      "size_bytes": 9882698,
+      "size_mb": 9.42,
+      "sha256": "a002f6c63dbc2263a8cc7d24dfa30dccec4b21ee284cca70b8056d491f2632c1"
     },
     {
       "shard": "dnb_corpus_part064.parquet",
       "file": "dnb_corpus_part064.parquet",
       "path": "data/parquet/dnb_corpus_part064.parquet",
       "rows": 85000,
-      "bytes": 8992563,
-      "size_bytes": 8992563,
-      "size_mb": 8.58,
-      "sha256": "1c75424ad642eb599157efa626fa86309cc7da7ab15da8a3d4e8967310d65306"
+      "words": 2941112,
+      "bytes": 9677008,
+      "size_bytes": 9677008,
+      "size_mb": 9.23,
+      "sha256": "84843fab589022cf55141a9d18d0633c63b75f6187718a25fffc03230d81197b"
     },
     {
       "shard": "dnb_corpus_part065.parquet",
       "file": "dnb_corpus_part065.parquet",
       "path": "data/parquet/dnb_corpus_part065.parquet",
       "rows": 85000,
-      "bytes": 9583479,
-      "size_bytes": 9583479,
-      "size_mb": 9.14,
-      "sha256": "d45abffddaf3da61e853ded9cbe2a916054596e827f52b29406f2799ad495fe8"
+      "words": 3156840,
+      "bytes": 10286846,
+      "size_bytes": 10286846,
+      "size_mb": 9.81,
+      "sha256": "425fbe60dcd77f6d2f5b5271f15fb271887a777100a9b6e8fcb8a1c951699f9f"
     },
     {
       "shard": "dnb_corpus_part066.parquet",
       "file": "dnb_corpus_part066.parquet",
       "path": "data/parquet/dnb_corpus_part066.parquet",
       "rows": 85000,
-      "bytes": 10320189,
-      "size_bytes": 10320189,
-      "size_mb": 9.84,
-      "sha256": "f172491a46f27bbc5d168e6f7ecdf02ca8a34b569871b1e18ac4844ed3d5217d"
+      "words": 3292513,
+      "bytes": 10984167,
+      "size_bytes": 10984167,
+      "size_mb": 10.48,
+      "sha256": "02fb091eb16909f4d4b6d6514fe4d1cb5e760f4e88b572eb3db1033f75d31a0a"
     },
     {
       "shard": "dnb_corpus_part067.parquet",
       "file": "dnb_corpus_part067.parquet",
       "path": "data/parquet/dnb_corpus_part067.parquet",
       "rows": 85000,
-      "bytes": 10849275,
-      "size_bytes": 10849275,
-      "size_mb": 10.35,
-      "sha256": "99477479f2987548bad9099086173bd78c0a0cd37d8ce96536f623dbc1461092"
+      "words": 3669576,
+      "bytes": 11541091,
+      "size_bytes": 11541091,
+      "size_mb": 11.01,
+      "sha256": "ad98e731af1c9b2ae4b81273e75370eafb65f0f95a99810fd94a20418fbce562"
     },
     {
       "shard": "dnb_corpus_part068.parquet",
       "file": "dnb_corpus_part068.parquet",
       "path": "data/parquet/dnb_corpus_part068.parquet",
       "rows": 85000,
-      "bytes": 10640280,
-      "size_bytes": 10640280,
-      "size_mb": 10.15,
-      "sha256": "b51b310533f19ca6700471ee6fbe8e53d593cfd01e9dee66afe203b04720e7eb"
+      "words": 3666696,
+      "bytes": 11357657,
+      "size_bytes": 11357657,
+      "size_mb": 10.83,
+      "sha256": "65c24f16b58f786d3c23d2157a0919ec00dabc6e9f1a2460ad1eefc4ed9463b9"
     },
     {
       "shard": "dnb_corpus_part069.parquet",
       "file": "dnb_corpus_part069.parquet",
       "path": "data/parquet/dnb_corpus_part069.parquet",
       "rows": 85000,
-      "bytes": 10600929,
-      "size_bytes": 10600929,
-      "size_mb": 10.11,
-      "sha256": "5a38e5a62b7ef500780ce44b039183f0186668350cc409b455a0e15caa307e42"
+      "words": 3855150,
+      "bytes": 11255140,
+      "size_bytes": 11255140,
+      "size_mb": 10.73,
+      "sha256": "8b262e03823b2c5973a9a83efd244bebb1f3b3173627bbc9049258420730227d"
     },
     {
       "shard": "dnb_corpus_part070.parquet",
       "file": "dnb_corpus_part070.parquet",
       "path": "data/parquet/dnb_corpus_part070.parquet",
       "rows": 85000,
-      "bytes": 13292844,
-      "size_bytes": 13292844,
-      "size_mb": 12.68,
-      "sha256": "13155dfc8e7d386ddb31eb9e679474efaf2f803dd2c280411fe4f1ff6c63de92"
+      "words": 4601315,
+      "bytes": 13945527,
+      "size_bytes": 13945527,
+      "size_mb": 13.3,
+      "sha256": "d16a6665e8a1d848686361499f6dc6543129faeb81e01fd06259907b3a21c0b4"
     },
     {
       "shard": "dnb_corpus_part071.parquet",
       "file": "dnb_corpus_part071.parquet",
       "path": "data/parquet/dnb_corpus_part071.parquet",
       "rows": 85000,
-      "bytes": 11832230,
-      "size_bytes": 11832230,
-      "size_mb": 11.28,
-      "sha256": "d8953073cc2b9dc5b4d9764f71283ea1da5d969a994ebc9da79d82e1001e0fdc"
+      "words": 4452920,
+      "bytes": 12500241,
+      "size_bytes": 12500241,
+      "size_mb": 11.92,
+      "sha256": "ab765dcb7ca9b3cc1735252feef9fe2ea683de33bca9be4e3965aea77073fdbd"
     },
     {
       "shard": "dnb_corpus_part072.parquet",
       "file": "dnb_corpus_part072.parquet",
       "path": "data/parquet/dnb_corpus_part072.parquet",
       "rows": 85000,
-      "bytes": 11157397,
-      "size_bytes": 11157397,
-      "size_mb": 10.64,
-      "sha256": "d82fa3dc5957cbd39df4e3c118a55957bfe716f51c035af7b3c577322443874e"
+      "words": 4129045,
+      "bytes": 11830591,
+      "size_bytes": 11830591,
+      "size_mb": 11.28,
+      "sha256": "41e8e5f437f78222db5a77cce9dc67ebe21b857c55044bfc9d2862d961c32653"
     },
     {
       "shard": "dnb_corpus_part073.parquet",
       "file": "dnb_corpus_part073.parquet",
       "path": "data/parquet/dnb_corpus_part073.parquet",
       "rows": 85000,
-      "bytes": 15611198,
-      "size_bytes": 15611198,
-      "size_mb": 14.89,
-      "sha256": "581e197d8d96f4e126fb7b81b8987e9dc30d96d7783df899acdce01701bb6536"
+      "words": 6241455,
+      "bytes": 16406346,
+      "size_bytes": 16406346,
+      "size_mb": 15.65,
+      "sha256": "3ad4ebbef289bb8f227eb440760aa08ab43595fb33ca4013072b93fc1dc8c161"
     },
     {
       "shard": "dnb_corpus_part074.parquet",
       "file": "dnb_corpus_part074.parquet",
       "path": "data/parquet/dnb_corpus_part074.parquet",
       "rows": 85000,
-      "bytes": 12630497,
-      "size_bytes": 12630497,
-      "size_mb": 12.05,
-      "sha256": "78d95d3f9b512765a4fbaed0f645ac588a755288a4770605d1dd6b707df80e2b"
+      "words": 4579123,
+      "bytes": 13372776,
+      "size_bytes": 13372776,
+      "size_mb": 12.75,
+      "sha256": "39bdcff15cd2c1d4bf1a9c71ba1312283584960a0ea411c6a0898fdd0a881b72"
     },
     {
       "shard": "dnb_corpus_part075.parquet",
       "file": "dnb_corpus_part075.parquet",
       "path": "data/parquet/dnb_corpus_part075.parquet",
       "rows": 85000,
-      "bytes": 11326528,
-      "size_bytes": 11326528,
-      "size_mb": 10.8,
-      "sha256": "a8e6cb2d542769d254f70b8279b538a00264bcefdf068b105234b2224fc62ebb"
+      "words": 4116754,
+      "bytes": 12020077,
+      "size_bytes": 12020077,
+      "size_mb": 11.46,
+      "sha256": "4a1b12a8cd6d14c74419c998c54d270ca4ed1ef357b09ef2ec15ef73df3f6e45"
     },
     {
       "shard": "dnb_corpus_part076.parquet",
       "file": "dnb_corpus_part076.parquet",
       "path": "data/parquet/dnb_corpus_part076.parquet",
       "rows": 85000,
-      "bytes": 10399400,
-      "size_bytes": 10399400,
-      "size_mb": 9.92,
-      "sha256": "a78cacf58585de0c5e2dc0ed4895dccd6f3e0ac1b9d998188e386eb21eb368fd"
+      "words": 4042133,
+      "bytes": 11089001,
+      "size_bytes": 11089001,
+      "size_mb": 10.58,
+      "sha256": "50dcc1fc79f11bbbd3645b1001037e31b5e3bb3f60d1c336b77faad5ae1e803a"
     },
     {
       "shard": "dnb_corpus_part077.parquet",
       "file": "dnb_corpus_part077.parquet",
       "path": "data/parquet/dnb_corpus_part077.parquet",
       "rows": 85000,
-      "bytes": 11439750,
-      "size_bytes": 11439750,
-      "size_mb": 10.91,
-      "sha256": "f6c9d32528cae30df1ec3ab400e42814fb13c08b974419df644db9af5a6fef6a"
+      "words": 4105221,
+      "bytes": 12086130,
+      "size_bytes": 12086130,
+      "size_mb": 11.53,
+      "sha256": "89da8324a9145e82eae3063a6010a5c3046bf76a57cb782e339a5f82488c672f"
     },
     {
       "shard": "dnb_corpus_part078.parquet",
       "file": "dnb_corpus_part078.parquet",
       "path": "data/parquet/dnb_corpus_part078.parquet",
       "rows": 85000,
-      "bytes": 9551859,
-      "size_bytes": 9551859,
-      "size_mb": 9.11,
-      "sha256": "3252970babf6af104bb7c6945513eabf2d98463561732a9776ec9236ae957f3a"
+      "words": 3359938,
+      "bytes": 10220043,
+      "size_bytes": 10220043,
+      "size_mb": 9.75,
+      "sha256": "12dc07b4b948ac3569c37aafb685af1136df8d94ac5fa98fc4d4171cf3d1ffb5"
     },
     {
       "shard": "dnb_corpus_part079.parquet",
       "file": "dnb_corpus_part079.parquet",
       "path": "data/parquet/dnb_corpus_part079.parquet",
       "rows": 85000,
-      "bytes": 10345118,
-      "size_bytes": 10345118,
-      "size_mb": 9.87,
-      "sha256": "06ec2dd5639737065e31f285a446ca722c64a432b437879f7aec87fb196ceba7"
+      "words": 3730764,
+      "bytes": 11041256,
+      "size_bytes": 11041256,
+      "size_mb": 10.53,
+      "sha256": "6afefe47b81d1973c61585dec17c3a20140b6f07de7aac3a28b824f4f33ec7d3"
     },
     {
       "shard": "dnb_corpus_part080.parquet",
       "file": "dnb_corpus_part080.parquet",
       "path": "data/parquet/dnb_corpus_part080.parquet",
       "rows": 85000,
-      "bytes": 10621867,
-      "size_bytes": 10621867,
-      "size_mb": 10.13,
-      "sha256": "eebe5634f4f657ee60937f48e8362dc1b2849f570879aa7038ec090a148485c9"
+      "words": 3699098,
+      "bytes": 11269416,
+      "size_bytes": 11269416,
+      "size_mb": 10.75,
+      "sha256": "61817633a5441b36215c24f81b044f2f37c63c6361ec71788f3ea929e971ca89"
     },
     {
       "shard": "dnb_corpus_part081.parquet",
       "file": "dnb_corpus_part081.parquet",
       "path": "data/parquet/dnb_corpus_part081.parquet",
       "rows": 85000,
-      "bytes": 9064031,
-      "size_bytes": 9064031,
-      "size_mb": 8.64,
-      "sha256": "fcafcddb679c58e815fed1e44ac0b231f5fa4378fc63781355f6717f1ebf9024"
+      "words": 3496369,
+      "bytes": 9786084,
+      "size_bytes": 9786084,
+      "size_mb": 9.33,
+      "sha256": "4ce7000b5cc95aafecbb81c36b261d8ba656d3878244b1700aa928d6e4a9b5ac"
     },
     {
       "shard": "dnb_corpus_part082.parquet",
       "file": "dnb_corpus_part082.parquet",
       "path": "data/parquet/dnb_corpus_part082.parquet",
       "rows": 85000,
-      "bytes": 6869064,
-      "size_bytes": 6869064,
-      "size_mb": 6.55,
-      "sha256": "24092b29469acbf6ab57a2496281633f38e5077b38a8c080b60ff1246f1c69a2"
+      "words": 2812214,
+      "bytes": 7542288,
+      "size_bytes": 7542288,
+      "size_mb": 7.19,
+      "sha256": "2f235e6a85401ff21cdf42f29e9866c97697f1bc5871feaa0ffec432d9a5341e"
     },
     {
       "shard": "dnb_corpus_part083.parquet",
       "file": "dnb_corpus_part083.parquet",
       "path": "data/parquet/dnb_corpus_part083.parquet",
       "rows": 85000,
-      "bytes": 11027765,
-      "size_bytes": 11027765,
-      "size_mb": 10.52,
-      "sha256": "8326bc1b20935dc00665de8db6ac1a4ee97415406a76c78fe16a7db3abd87567"
+      "words": 4273126,
+      "bytes": 11662632,
+      "size_bytes": 11662632,
+      "size_mb": 11.12,
+      "sha256": "15258ca92a3ac6985d3344f973324c75049c23fa157e12e9b51bef870429bdec"
     },
     {
       "shard": "dnb_corpus_part084.parquet",
       "file": "dnb_corpus_part084.parquet",
       "path": "data/parquet/dnb_corpus_part084.parquet",
       "rows": 85000,
-      "bytes": 10052735,
-      "size_bytes": 10052735,
-      "size_mb": 9.59,
-      "sha256": "0f3a9391273f10a68a080302d5a022b5ea13dc9b26c65fe289e0101a0cba888f"
+      "words": 3573837,
+      "bytes": 10754985,
+      "size_bytes": 10754985,
+      "size_mb": 10.26,
+      "sha256": "2108e694ed22633a5366da7a9c85c2dd876968d15e25da1bb72882aeebc4b8d4"
     },
     {
       "shard": "dnb_corpus_part085.parquet",
       "file": "dnb_corpus_part085.parquet",
       "path": "data/parquet/dnb_corpus_part085.parquet",
       "rows": 85000,
-      "bytes": 11345189,
-      "size_bytes": 11345189,
-      "size_mb": 10.82,
-      "sha256": "b4db602b9662bb0ab11e1f5277d3b1188fae38094d9ebb90035c6f22434ef3ce"
+      "words": 4118010,
+      "bytes": 12034091,
+      "size_bytes": 12034091,
+      "size_mb": 11.48,
+      "sha256": "3a473c305e7502fd50a89aa89648bc13c624904ca6edee0be56333bfdebc8592"
     },
     {
       "shard": "dnb_corpus_part086.parquet",
       "file": "dnb_corpus_part086.parquet",
       "path": "data/parquet/dnb_corpus_part086.parquet",
       "rows": 85000,
-      "bytes": 9528972,
-      "size_bytes": 9528972,
-      "size_mb": 9.09,
-      "sha256": "ebcb583b65275e3d287b877be9e9dc6437ece8e2bdeab1ef4d3b247f9a9cf632"
+      "words": 3668605,
+      "bytes": 10213827,
+      "size_bytes": 10213827,
+      "size_mb": 9.74,
+      "sha256": "547d737143411d1abf9d0cdbfcaa02062b6f4fbdc5d077642c1338648098b56b"
     },
     {
       "shard": "dnb_corpus_part087.parquet",
       "file": "dnb_corpus_part087.parquet",
       "path": "data/parquet/dnb_corpus_part087.parquet",
       "rows": 85000,
-      "bytes": 7024243,
-      "size_bytes": 7024243,
-      "size_mb": 6.7,
-      "sha256": "616e341855fdb909a73d439c2e07cea5cdf90b3aaa1a367c784ec458298d3cbd"
+      "words": 2779449,
+      "bytes": 7606966,
+      "size_bytes": 7606966,
+      "size_mb": 7.25,
+      "sha256": "eb520385dfe3a882ab384e7d9b03a0f27944ac8cb774f43ee77a92584aac9098"
     },
     {
       "shard": "dnb_corpus_part088.parquet",
       "file": "dnb_corpus_part088.parquet",
       "path": "data/parquet/dnb_corpus_part088.parquet",
       "rows": 85000,
-      "bytes": 6958094,
-      "size_bytes": 6958094,
-      "size_mb": 6.64,
-      "sha256": "abb56a9c9585609c720c4eb67f119063cda75aba52550167cf6e417c58ef6de9"
+      "words": 3228184,
+      "bytes": 7441585,
+      "size_bytes": 7441585,
+      "size_mb": 7.1,
+      "sha256": "7eff21288ab7502e5dda56fa69de92bf2c10c9c71eda8b31af2c4bb5703b8364"
     },
     {
       "shard": "dnb_corpus_part089.parquet",
       "file": "dnb_corpus_part089.parquet",
       "path": "data/parquet/dnb_corpus_part089.parquet",
       "rows": 85000,
-      "bytes": 2153303,
-      "size_bytes": 2153303,
-      "size_mb": 2.05,
-      "sha256": "9344cb26191c3e69a82484ba2ca9f9347ab7c912d1c39b9437d4adfe4634db3a"
+      "words": 1700772,
+      "bytes": 2296948,
+      "size_bytes": 2296948,
+      "size_mb": 2.19,
+      "sha256": "d0e3c274ba9af5224cc26842000ca8d3581ff60084ab015f1ef454dd0bab6632"
     },
     {
       "shard": "dnb_corpus_part090.parquet",
       "file": "dnb_corpus_part090.parquet",
       "path": "data/parquet/dnb_corpus_part090.parquet",
       "rows": 85000,
-      "bytes": 3656773,
-      "size_bytes": 3656773,
-      "size_mb": 3.49,
-      "sha256": "7f88381d8f9a4cd74114be900595b34020c4768922af2fe4f698b1ed33cdfd01"
+      "words": 1898244,
+      "bytes": 3792294,
+      "size_bytes": 3792294,
+      "size_mb": 3.62,
+      "sha256": "d1388d55ea9209b2ff397d13d2eee468051d2b2ab55c1355ab659393ca2f7485"
     },
     {
       "shard": "dnb_corpus_part091.parquet",
       "file": "dnb_corpus_part091.parquet",
       "path": "data/parquet/dnb_corpus_part091.parquet",
       "rows": 85000,
-      "bytes": 3833718,
-      "size_bytes": 3833718,
-      "size_mb": 3.66,
-      "sha256": "5b49b53acabff85651805783bfa73a2881fc47af5c3bf87e8a34ddc63bc482bb"
+      "words": 1666817,
+      "bytes": 3891580,
+      "size_bytes": 3891580,
+      "size_mb": 3.71,
+      "sha256": "8775ecfd97b4964a904e0073b51e6661d95438db7fe9136b6fd70d90fcc83378"
     },
     {
       "shard": "dnb_corpus_part092.parquet",
       "file": "dnb_corpus_part092.parquet",
       "path": "data/parquet/dnb_corpus_part092.parquet",
       "rows": 85000,
-      "bytes": 4251991,
-      "size_bytes": 4251991,
-      "size_mb": 4.06,
-      "sha256": "f04ba635ea0a647087b67035358f649389f013ac23b04e039a3074f6fa9787f1"
+      "words": 2111186,
+      "bytes": 4416060,
+      "size_bytes": 4416060,
+      "size_mb": 4.21,
+      "sha256": "b7ce278046c246cc55f94f66393da646652843b442ac86747b4f5cebb89a183c"
     },
     {
       "shard": "dnb_corpus_part093.parquet",
       "file": "dnb_corpus_part093.parquet",
       "path": "data/parquet/dnb_corpus_part093.parquet",
       "rows": 19586,
-      "bytes": 1425415,
-      "size_bytes": 1425415,
-      "size_mb": 1.36,
-      "sha256": "96a9796f550ba3e3ad37c37f7dfbf0dca3ce0d07274f971ba41032c64a7efae1"
+      "words": 572414,
+      "bytes": 1453757,
+      "size_bytes": 1453757,
+      "size_mb": 1.39,
+      "sha256": "6950f408afcd227075b1c576be8b88339e1ea8bd1ce97543397069a840c857b2"
     },
     {
       "shard": "dnb_corpus_part094.parquet",
       "file": "dnb_corpus_part094.parquet",
       "path": "data/parquet/dnb_corpus_part094.parquet",
       "rows": 85000,
-      "bytes": 7112189,
-      "size_bytes": 7112189,
-      "size_mb": 6.78,
-      "sha256": "1af812036e37daef12ecc3d192f3c352d58dca1279684c5150ce33f26153a830"
+      "words": 2088244,
+      "bytes": 7885204,
+      "size_bytes": 7885204,
+      "size_mb": 7.52,
+      "sha256": "c44b21a62e4a325cffb8de0cef4a1ec629419d95b46612193b27d794e511a474"
     },
     {
       "shard": "dnb_corpus_part095.parquet",
       "file": "dnb_corpus_part095.parquet",
       "path": "data/parquet/dnb_corpus_part095.parquet",
       "rows": 85000,
-      "bytes": 7032946,
-      "size_bytes": 7032946,
-      "size_mb": 6.71,
-      "sha256": "6e6d8d00d529d0154157cef1eaaad4dc8ca49ffdc1965361154cc75436aa5687"
+      "words": 2097501,
+      "bytes": 7795381,
+      "size_bytes": 7795381,
+      "size_mb": 7.43,
+      "sha256": "1bcc9ab36626e7388a6319054f77dfa1101ee3a2d93c48a02c6a361a0a91a805"
     },
     {
       "shard": "dnb_corpus_part096.parquet",
       "file": "dnb_corpus_part096.parquet",
       "path": "data/parquet/dnb_corpus_part096.parquet",
       "rows": 85000,
-      "bytes": 7063148,
-      "size_bytes": 7063148,
-      "size_mb": 6.74,
-      "sha256": "487d37d0273bff2da7bf728be5fda2151efb1b5af2562007c22ec871d22f4a2f"
+      "words": 2104911,
+      "bytes": 7831601,
+      "size_bytes": 7831601,
+      "size_mb": 7.47,
+      "sha256": "7f39bcd2e0366ed7e3e77f433ad6fe519ca80134a324c19ed618831662ec96c5"
     },
     {
       "shard": "dnb_corpus_part097.parquet",
       "file": "dnb_corpus_part097.parquet",
       "path": "data/parquet/dnb_corpus_part097.parquet",
       "rows": 85000,
-      "bytes": 7804849,
-      "size_bytes": 7804849,
-      "size_mb": 7.44,
-      "sha256": "5aaed4762560ee374c30832ccd75310915fe6141626a5a11bdd3c2d516929859"
+      "words": 2353689,
+      "bytes": 8346076,
+      "size_bytes": 8346076,
+      "size_mb": 7.96,
+      "sha256": "9bd35a790586438a1a1bac5269e8d832237b4e29a7d0f5e8f5db5c9c1745bda0"
     },
     {
       "shard": "dnb_corpus_part098.parquet",
       "file": "dnb_corpus_part098.parquet",
       "path": "data/parquet/dnb_corpus_part098.parquet",
       "rows": 85000,
-      "bytes": 10551299,
-      "size_bytes": 10551299,
-      "size_mb": 10.06,
-      "sha256": "3ab864dd795cfbd2f560fd5ffdec629472b12279d3bb9a7a6af625b55f849296"
+      "words": 3246928,
+      "bytes": 11169089,
+      "size_bytes": 11169089,
+      "size_mb": 10.65,
+      "sha256": "e25099f26a5f26bf1eddfbfcb01c217db97e342a45761a4c11e9367c4290224f"
     },
     {
       "shard": "dnb_corpus_part099.parquet",
       "file": "dnb_corpus_part099.parquet",
       "path": "data/parquet/dnb_corpus_part099.parquet",
       "rows": 85000,
-      "bytes": 11870256,
-      "size_bytes": 11870256,
-      "size_mb": 11.32,
-      "sha256": "d35268c24e125ad0c33eefbb9d293945ae7c4094cdba3daad0574ec2c1767498"
+      "words": 3845839,
+      "bytes": 12514307,
+      "size_bytes": 12514307,
+      "size_mb": 11.93,
+      "sha256": "9194ae8b73c01c0036b0c980fbf49e648821e16991eed66ccced5f8b700cf671"
     },
     {
       "shard": "dnb_corpus_part100.parquet",
       "file": "dnb_corpus_part100.parquet",
       "path": "data/parquet/dnb_corpus_part100.parquet",
       "rows": 85000,
-      "bytes": 8874900,
-      "size_bytes": 8874900,
-      "size_mb": 8.46,
-      "sha256": "014b8c895ce36b6af3cf0019d50f57fae150e6c8f4f7f962227de73813c4c5be"
+      "words": 2847282,
+      "bytes": 9624130,
+      "size_bytes": 9624130,
+      "size_mb": 9.18,
+      "sha256": "1d0e192dc17449503c0206b08b897cd861f949c4f688626a20338d8d4fc0f84d"
     },
     {
       "shard": "dnb_corpus_part101.parquet",
       "file": "dnb_corpus_part101.parquet",
       "path": "data/parquet/dnb_corpus_part101.parquet",
       "rows": 85000,
-      "bytes": 7709064,
-      "size_bytes": 7709064,
-      "size_mb": 7.35,
-      "sha256": "a8fa3f9c343c6fbadd9bc267d8a929da86590eba49346b9b41d3fe57cb4f3fd7"
+      "words": 2595531,
+      "bytes": 8511308,
+      "size_bytes": 8511308,
+      "size_mb": 8.12,
+      "sha256": "fd94ae596cab38a2d6cb7345f94ec3fee26751f229bd029342d16f531a4eccd6"
     },
     {
       "shard": "dnb_corpus_part102.parquet",
       "file": "dnb_corpus_part102.parquet",
       "path": "data/parquet/dnb_corpus_part102.parquet",
       "rows": 85000,
-      "bytes": 7996980,
-      "size_bytes": 7996980,
-      "size_mb": 7.63,
-      "sha256": "b0341d69e77e9bc73bad3866957c628a445f6c11d9d4e3f6dba1d5384e824eb6"
+      "words": 2490694,
+      "bytes": 8704030,
+      "size_bytes": 8704030,
+      "size_mb": 8.3,
+      "sha256": "02a370153a6bbf8bfe421f908419faccc7feea61f2b2362dfedb5a7f94dee13f"
     },
     {
       "shard": "dnb_corpus_part103.parquet",
       "file": "dnb_corpus_part103.parquet",
       "path": "data/parquet/dnb_corpus_part103.parquet",
       "rows": 85000,
-      "bytes": 8107163,
-      "size_bytes": 8107163,
-      "size_mb": 7.73,
-      "sha256": "ded68c403945d202d3f6a7b8bdc04621542028f8483e6ebd0f41635fe9ea9c74"
+      "words": 2532073,
+      "bytes": 8994229,
+      "size_bytes": 8994229,
+      "size_mb": 8.58,
+      "sha256": "528a27a138cacb05c48960119bfa0baee530d82874c9482e255643c355b8726f"
     },
     {
       "shard": "dnb_corpus_part104.parquet",
       "file": "dnb_corpus_part104.parquet",
       "path": "data/parquet/dnb_corpus_part104.parquet",
       "rows": 85000,
-      "bytes": 7939598,
-      "size_bytes": 7939598,
-      "size_mb": 7.57,
-      "sha256": "8a235acf333b3f3efde661651893e0e40bce9e6f3a62be28c07c114b1b0871a9"
+      "words": 2425757,
+      "bytes": 8824969,
+      "size_bytes": 8824969,
+      "size_mb": 8.42,
+      "sha256": "549be2d4f4ef14e1091071fd746ddc781a48393a40c9c2afeec349a1132ce607"
     },
     {
       "shard": "dnb_corpus_part105.parquet",
       "file": "dnb_corpus_part105.parquet",
       "path": "data/parquet/dnb_corpus_part105.parquet",
       "rows": 85000,
-      "bytes": 7778148,
-      "size_bytes": 7778148,
-      "size_mb": 7.42,
-      "sha256": "6a41f9c6a1561c3729b0e10ceedb438af9e2e8c2d6075c7c544791f5ca68ef26"
+      "words": 2337763,
+      "bytes": 8604546,
+      "size_bytes": 8604546,
+      "size_mb": 8.21,
+      "sha256": "6d67e9535a1cf015f899510d23c4b2b9dc6f953f1c288f73a4824d845c0668bf"
     },
     {
       "shard": "dnb_corpus_part106.parquet",
       "file": "dnb_corpus_part106.parquet",
       "path": "data/parquet/dnb_corpus_part106.parquet",
       "rows": 85000,
-      "bytes": 7864366,
-      "size_bytes": 7864366,
-      "size_mb": 7.5,
-      "sha256": "9e0654855abadbd41b54ee03070aee2137a82f1166d272bf8aba4b23aa73be75"
+      "words": 2432913,
+      "bytes": 8815618,
+      "size_bytes": 8815618,
+      "size_mb": 8.41,
+      "sha256": "0d71195610059300de16babe799eb5530a420a4106c8098b729353c32212da30"
     },
     {
       "shard": "dnb_corpus_part107.parquet",
       "file": "dnb_corpus_part107.parquet",
       "path": "data/parquet/dnb_corpus_part107.parquet",
       "rows": 85000,
-      "bytes": 5939028,
-      "size_bytes": 5939028,
-      "size_mb": 5.66,
-      "sha256": "17a9df81851bdc319a3fae3057d6e107d8adf65eaa0d42a3b785683bb50ce93c"
+      "words": 1911374,
+      "bytes": 6756188,
+      "size_bytes": 6756188,
+      "size_mb": 6.44,
+      "sha256": "4c58de1a3eec9563a21822d0b062333f5d7c1b6af42e675fca4296fb329876f5"
     },
     {
       "shard": "dnb_corpus_part108.parquet",
       "file": "dnb_corpus_part108.parquet",
       "path": "data/parquet/dnb_corpus_part108.parquet",
       "rows": 85000,
-      "bytes": 6049451,
-      "size_bytes": 6049451,
-      "size_mb": 5.77,
-      "sha256": "da92cf36716c6216e6c89d7de73045ea60888de96080eafa704cbdc48ec8c244"
+      "words": 1891199,
+      "bytes": 6756322,
+      "size_bytes": 6756322,
+      "size_mb": 6.44,
+      "sha256": "ac1be6fa552760e7549802b3598a4d5f713082f341452aa0568628056ca12df4"
     },
     {
       "shard": "dnb_corpus_part109.parquet",
       "file": "dnb_corpus_part109.parquet",
       "path": "data/parquet/dnb_corpus_part109.parquet",
       "rows": 85000,
-      "bytes": 7305501,
-      "size_bytes": 7305501,
-      "size_mb": 6.97,
-      "sha256": "9b8d5dd261ebe8d827b0bc31fde935c25f01edb204ced83695518046670e29d0"
+      "words": 2126836,
+      "bytes": 8092722,
+      "size_bytes": 8092722,
+      "size_mb": 7.72,
+      "sha256": "8d8e8108f0cc9d3c378e83fdd4178426ae362381ba240dc247938782fdbc6118"
     },
     {
       "shard": "dnb_corpus_part110.parquet",
       "file": "dnb_corpus_part110.parquet",
       "path": "data/parquet/dnb_corpus_part110.parquet",
       "rows": 85000,
-      "bytes": 8673563,
-      "size_bytes": 8673563,
-      "size_mb": 8.27,
-      "sha256": "bef157990414d3a969177384562a46e0feebf57c4d70365a29be34d60bd420cb"
+      "words": 2423791,
+      "bytes": 9415043,
+      "size_bytes": 9415043,
+      "size_mb": 8.98,
+      "sha256": "a00cf537ff98e296fc8d3c6911fbd14bf3d8bb51066e928585e32f8f325e320e"
     },
     {
       "shard": "dnb_corpus_part111.parquet",
       "file": "dnb_corpus_part111.parquet",
       "path": "data/parquet/dnb_corpus_part111.parquet",
       "rows": 85000,
-      "bytes": 7594813,
-      "size_bytes": 7594813,
-      "size_mb": 7.24,
-      "sha256": "fd91fc7dc4d89a7bf78b83d2d77daf6ab7a253b61ec8582e946bd03b9c5860f6"
+      "words": 2358455,
+      "bytes": 8345391,
+      "size_bytes": 8345391,
+      "size_mb": 7.96,
+      "sha256": "ae38b1d7a3439c8b17eb0bd2ac10bad2165f052660e646b8cbb892c1f516f171"
     },
     {
       "shard": "dnb_corpus_part112.parquet",
       "file": "dnb_corpus_part112.parquet",
       "path": "data/parquet/dnb_corpus_part112.parquet",
       "rows": 85000,
-      "bytes": 7962950,
-      "size_bytes": 7962950,
-      "size_mb": 7.59,
-      "sha256": "9911b8de2ac359cb72c0b4ae4eb59a31a8b9cfcad828bd9e99688e9038d6acaa"
+      "words": 2371974,
+      "bytes": 8677307,
+      "size_bytes": 8677307,
+      "size_mb": 8.28,
+      "sha256": "0ece81bd0cc4a610121416edad126142840659cb8e1f4ab70344d42b71d73c5c"
     },
     {
       "shard": "dnb_corpus_part113.parquet",
       "file": "dnb_corpus_part113.parquet",
       "path": "data/parquet/dnb_corpus_part113.parquet",
       "rows": 85000,
-      "bytes": 8649395,
-      "size_bytes": 8649395,
-      "size_mb": 8.25,
-      "sha256": "d666f0484dac2b47fe408585e0b0fdba73e3937e67136bf79b700e06bc8a13ea"
+      "words": 2508088,
+      "bytes": 9362270,
+      "size_bytes": 9362270,
+      "size_mb": 8.93,
+      "sha256": "80bf55114c982a43b05fa2788e481b83b16541f6f644efaef9090a20cef88c78"
     },
     {
       "shard": "dnb_corpus_part114.parquet",
       "file": "dnb_corpus_part114.parquet",
       "path": "data/parquet/dnb_corpus_part114.parquet",
       "rows": 85000,
-      "bytes": 7997136,
-      "size_bytes": 7997136,
-      "size_mb": 7.63,
-      "sha256": "6038517517ee186ec9d0b3cb79781c13e7af64173bfef728182a3b424b22e259"
+      "words": 2414776,
+      "bytes": 8641164,
+      "size_bytes": 8641164,
+      "size_mb": 8.24,
+      "sha256": "800ec34ac01b3a9b7fca07a60659ef5a322c3ffafdb646982162c3d4953f7d9c"
     },
     {
       "shard": "dnb_corpus_part115.parquet",
       "file": "dnb_corpus_part115.parquet",
       "path": "data/parquet/dnb_corpus_part115.parquet",
       "rows": 7115,
-      "bytes": 844899,
-      "size_bytes": 844899,
-      "size_mb": 0.81,
-      "sha256": "3289f43ed4462ec60b4adc3ad75672fbc7343cf2230e0ce585256033b629e83f"
+      "words": 499512,
+      "bytes": 1668068,
+      "size_bytes": 1668068,
+      "size_mb": 1.59,
+      "sha256": "1e23cdb1c4b70ca79bd75e07b19f741a1b30dcec1952a833c24d79105122c8ed"
     },
     {
       "shard": "dnb_corpus_part116.parquet",
       "file": "dnb_corpus_part116.parquet",
       "path": "data/parquet/dnb_corpus_part116.parquet",
       "rows": 85000,
-      "bytes": 7990135,
-      "size_bytes": 7990135,
-      "size_mb": 7.62,
-      "sha256": "22f73536eea8f3865275248037f9993616e3a9efdf78dbff3c18179c64850c7d"
+      "words": 2579922,
+      "bytes": 8710796,
+      "size_bytes": 8710796,
+      "size_mb": 8.31,
+      "sha256": "ef2dd33e421e84e400efb132ac15e3ca42b1fe670e5912bb08136a31d1674ea4"
     },
     {
       "shard": "dnb_corpus_part117.parquet",
       "file": "dnb_corpus_part117.parquet",
       "path": "data/parquet/dnb_corpus_part117.parquet",
       "rows": 85000,
-      "bytes": 8456661,
-      "size_bytes": 8456661,
-      "size_mb": 8.06,
-      "sha256": "5997acf4fdaf58eb3eadcfc5aa35ffcee1b649830d26a326b956d64df9e14f74"
+      "words": 2546648,
+      "bytes": 9193769,
+      "size_bytes": 9193769,
+      "size_mb": 8.77,
+      "sha256": "692565eefa7e4504f0095559b2068c0ac8dd33092a466576b47ba58f4d70998b"
     },
     {
       "shard": "dnb_corpus_part118.parquet",
       "file": "dnb_corpus_part118.parquet",
       "path": "data/parquet/dnb_corpus_part118.parquet",
       "rows": 85000,
-      "bytes": 8463171,
-      "size_bytes": 8463171,
-      "size_mb": 8.07,
-      "sha256": "bfc9bcfe791c4d19fb7d826f3885ea63d5d802814d59ff38bc75c475c30bd138"
+      "words": 2492334,
+      "bytes": 9160586,
+      "size_bytes": 9160586,
+      "size_mb": 8.74,
+      "sha256": "dce65cd5080053fd9ec919774ef8e9028fbf8b83a45dac5b698fd550537fca9a"
     },
     {
       "shard": "dnb_corpus_part119.parquet",
       "file": "dnb_corpus_part119.parquet",
       "path": "data/parquet/dnb_corpus_part119.parquet",
       "rows": 85000,
-      "bytes": 8748374,
-      "size_bytes": 8748374,
-      "size_mb": 8.34,
-      "sha256": "aad30a8c22428194e4720369df0964e179dcd4537128eeb21c0540eff874fa3c"
+      "words": 2591751,
+      "bytes": 9453592,
+      "size_bytes": 9453592,
+      "size_mb": 9.02,
+      "sha256": "26f9cc4baf948ca8d4e1e16b4d93e2ddc781fc886590f53884a2227953f266bc"
     },
     {
       "shard": "dnb_corpus_part120.parquet",
       "file": "dnb_corpus_part120.parquet",
       "path": "data/parquet/dnb_corpus_part120.parquet",
       "rows": 85000,
-      "bytes": 8902034,
-      "size_bytes": 8902034,
-      "size_mb": 8.49,
-      "sha256": "3090f392da497817a6b9b9ff70af814067af9238ab0327cc32601899046cd449"
+      "words": 2495621,
+      "bytes": 9565223,
+      "size_bytes": 9565223,
+      "size_mb": 9.12,
+      "sha256": "2c5a399e59284547b88d4778aa62707b6d7bd5dd1619a75a18c1f95d506c70b5"
     },
     {
       "shard": "dnb_corpus_part121.parquet",
       "file": "dnb_corpus_part121.parquet",
       "path": "data/parquet/dnb_corpus_part121.parquet",
       "rows": 85000,
-      "bytes": 9075015,
-      "size_bytes": 9075015,
-      "size_mb": 8.65,
-      "sha256": "bb456f056138a5ff70a33d09e03dbff108ff832c9c5dec4a9f32013bc54c6c73"
+      "words": 2641370,
+      "bytes": 9730398,
+      "size_bytes": 9730398,
+      "size_mb": 9.28,
+      "sha256": "81a58efe2869256d9ef2ea56a28c1eb9b809a6f7a61f5e6c5ab51ed2cdb561df"
     },
     {
       "shard": "dnb_corpus_part122.parquet",
       "file": "dnb_corpus_part122.parquet",
       "path": "data/parquet/dnb_corpus_part122.parquet",
       "rows": 85000,
-      "bytes": 9648950,
-      "size_bytes": 9648950,
-      "size_mb": 9.2,
-      "sha256": "d64d247eb6dec46a145b32f35da8a0d0e91d658cc79b31704afb9267a5dc2a60"
+      "words": 3062758,
+      "bytes": 10312573,
+      "size_bytes": 10312573,
+      "size_mb": 9.83,
+      "sha256": "3263b0e547e5d72c2a9fd88f9d86604744d81e177e7d1a58579af10f507dbc81"
     },
     {
       "shard": "dnb_corpus_part123.parquet",
       "file": "dnb_corpus_part123.parquet",
       "path": "data/parquet/dnb_corpus_part123.parquet",
       "rows": 85000,
-      "bytes": 8389107,
-      "size_bytes": 8389107,
-      "size_mb": 8.0,
-      "sha256": "15e7e40e3e52ed3f5c5a774f9c48d4121515bb8c742cfe1294592d74e05e2136"
+      "words": 2793068,
+      "bytes": 9080705,
+      "size_bytes": 9080705,
+      "size_mb": 8.66,
+      "sha256": "c7ffee910655c91989797058e33aef7204d69c1c13be47e2749a2936e1100af2"
     },
     {
       "shard": "dnb_corpus_part124.parquet",
       "file": "dnb_corpus_part124.parquet",
       "path": "data/parquet/dnb_corpus_part124.parquet",
       "rows": 85000,
-      "bytes": 7537609,
-      "size_bytes": 7537609,
-      "size_mb": 7.19,
-      "sha256": "a940702ad13bc79b9ca473c6f994a70118f85a446b7f63fc464cf4369a6c1e06"
+      "words": 2919503,
+      "bytes": 8195599,
+      "size_bytes": 8195599,
+      "size_mb": 7.82,
+      "sha256": "81251f4e5f488626a91d6edaad676bc5cf16e0949939850bc3b2b1e80750ada0"
     },
     {
       "shard": "dnb_corpus_part125.parquet",
       "file": "dnb_corpus_part125.parquet",
       "path": "data/parquet/dnb_corpus_part125.parquet",
       "rows": 62722,
-      "bytes": 6745244,
-      "size_bytes": 6745244,
-      "size_mb": 6.43,
-      "sha256": "1a10bb0633bdc4296c669def8b5b7874bd612d8d1cbe0be7248e1814012a1630"
+      "words": 2351118,
+      "bytes": 7352706,
+      "size_bytes": 7352706,
+      "size_mb": 7.01,
+      "sha256": "dccc50fd649a765eac3e7cfd1dfc05a32744cfd3bd72cac9953da186998f8350"
     },
     {
       "shard": "dnb_corpus_part126.parquet",
       "file": "dnb_corpus_part126.parquet",
       "path": "data/parquet/dnb_corpus_part126.parquet",
-      "rows": 50553,
-      "bytes": 99901333,
-      "size_bytes": 99901333,
-      "size_mb": 95.27,
-      "sha256": "3f3e0354bccc7beee6be5b776311f7bb28a4183ace38bee47027b53195ed7410"
+      "rows": 65885,
+      "words": 64325522,
+      "bytes": 129177698,
+      "size_bytes": 129177698,
+      "size_mb": 123.19,
+      "sha256": "ef2feb8d6a3373953e5d4cd7c4e9ec594b25fab3653732a20dfb98959aedf2e0"
     }
   ],
-  "parquet_total_mb": 958.26
+  "parquet_total_mb": 1007.48
 }
