@@ -133,7 +133,10 @@ FRAKTUR_AND_META_NOISE = {
     "rrb", "lrb", "lcub", "rcub", "lsb", "rsb", "sachgruppe", "sachgruppen",
     "vii", "viii", "xii", "xiii", "xiv", "xvi", "xvii", "xviii", "xix",
     "science", "culture", "christianity", "judaism", "bible", "history", "philosophy", "society",
-    "sociology", "knowledge", "self", "law", "john", "europe", "contribution", "american", "germany"
+    "sociology", "knowledge", "self", "law", "john", "europe", "contribution", "american", "germany",
+    "ssoar", "veröffentlichungsversion_version", "ssoar_nutzungsbedingung", "nutzungsbedingung",
+    "veröffentlichungsversion", "citation", "dat", "text_deposit", "persönlich_kommerziell",
+    "übertragbar_persönlich", "gebrauch_kopie", "dokument", "sektion", "media"
 }
 
 # Canonical sacred/theological terms preserved during entity filtering
@@ -1420,7 +1423,14 @@ def run_streaming_online_lda_pipeline(
     valid_rows = []
     texts = []
     total_streamed_docs = 0
-    hydrated_layers = {"dnb_oa_fulltext_pdf_epub", "dnb_toc_ocr_04", "dnb_publisher_blurb", "dnb_oa_fullbook"}
+    hydrated_layers = {
+        "dnb_oa_fulltext_pdf_epub",
+        "dnb_toc_ocr_04",
+        "dnb_publisher_blurb",
+        "dnb_oa_fullbook",
+        "dnb_toc_pdf_fulltext",
+        "dnblab_dtf_incopyright",
+    }
     domain_lex = RELIGIOUS_KEYWORDS_SET | CANONICAL_THEO_PHIL_WHITELIST
     hydrated_added = 0
 

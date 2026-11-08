@@ -73,13 +73,13 @@ const PIPELINE_STAGES = [
     accent: 'text-traditional',
     borderAccent: 'border-traditional/40',
     bgAccent: 'bg-traditional/10',
-    formula: 'D = 10,519,923 Passages · 10,041,481 Works · 18,064 Full Books · 778.02M Words · 126 Zstd-19 Parquet Shards',
+    formula: 'D = 10,528,704 Passages · 10,041,481 Works · 18,714 Full Books · 801.39M Words · 126 Zstd-19 Parquet Shards',
     summary:
-      'Ingests 100% of the official DNB OpenData MARC21-XML Bulk Dump (Packages 1–5, 40.10M total records scanned) hydrated via DNBLab (1,295,009 indexed onlinefree /34 OA IDNs, /04/text plain-text TOC OCRs, and services.dnb.de/deposit.dnb.de Inhaltstexte) and HathiTrust full-text books across all 102 DNB Sachgruppen (000–990, B, K, S; 1970–2025).',
+      'Ingests 100% of the official DNB OpenData MARC21-XML Bulk Dump (Packages 1–5, 40.10M total records scanned) hydrated via DNBLab (1,295,009 indexed onlinefree /34 OA IDNs, /04/text plain-text TOC OCRs, services.dnb.de/deposit.dnb.de Inhaltstexte, and § 60d UrhG Derived Text Formats) and HathiTrust full-text books across all 102 DNB Sachgruppen (000–990, B, K, S; 1970–2025).',
     details: [
       'Combines MARC21 Tag 245$a/$b (Title/Subtitle), Tag 264$b/$c (Imprint/Year across 713,838 raw imprint strings / 109 canonical publishers), Tag 520$a (Abstract), Tags 650/689$a (GND Subject Headings), and Tag 856$u (/04/text TOCs, /34 OA Books, services.dnb.de/deposit.dnb.de Inhaltstexte) across all 102 DNB Sachgruppen.',
-      'Stratified across 10,041,481 unique German works (1970–2025): 18,064 complete full-text books (450,410 passages), 119,151 works with digitized TOC PDFs/OCRs, and 9,946,165 DNB OpenData MARC21-XML & deposit/services.dnb.de Inhaltstext records.',
-      'Stored in 126 Zstd-19 Apache Parquet shards (data/parquet/ · 1,449.61 MB compressed) backed by GitHub Release v12.0-dnb-parquet-shards and Online Streaming LDA (Hoffman et al., 2010).',
+      'Stratified across 10,041,481 unique German works (1970–2025): 18,714 complete full-text books (459,841 passages), 150,976 works with digitized TOC PDFs/OCRs, and 9,913,690 DNB OpenData MARC21-XML & deposit/services.dnb.de Inhaltstext records.',
+      'Stored in 126 Zstd-19 Apache Parquet shards (data/parquet/ · 1,507.58 MB compressed) backed by GitHub Release v12.0-dnb-parquet-shards and Online Streaming LDA (Hoffman et al., 2010).',
     ],
   },
   {

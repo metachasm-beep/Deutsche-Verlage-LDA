@@ -2468,8 +2468,24 @@ def hydrate_parquet_shards_with_remote_fulltext_and_blurbs(
         srcs = cols["source_file"]
         wcs = cols["word_count"]
         pubs = cols["publisher"]
+        titles_col = cols["title"]
+        texts_col = cols["text"]
 
-        # Prioritize DNBLab guaranteed-free (`dnblab_free_idns`) & canonical publishers first
+        domain_re = re.compile(
+            r"(glaube|gott|kirche|theolog|religi|christ|bibel|islam|jüd|philosoph|ethik|moral|säkular|"
+            r"achtsam|meditation|selbsthilfe|lebenshilfe|resilienz|spiritual|seelsorge|liturg|predigt|"
+            r"gemeinde|aufklärung|ideolog|gesellschaft|demokrat|psycholog|soziolog|mystik|konzil|papst|"
+            r"bischof|pfarrer|buddhis|hinduis|sinn|glück|burnout|coaching|heilung|diskurs|moderne|vernunft)",
+            re.IGNORECASE,
+        )
+        comm_pub_re = re.compile(
+            r"(herder|suhrkamp|beck|fischer|rowohlt|kösel|gräfe|unzer|vandenhoeck|mohr|kohlhammer|campus|"
+            r"transcript|gruyter|patmos|kreuz|goldmann|knaur|schöningh|böhlau|evangelisch|gütersloher|"
+            r"aschendorff|klett|springer|pustet|benno|echter|schwabenverlag|alibri|wagenbach|kiepenheuer|meiner|metzler)",
+            re.IGNORECASE,
+        )
+
+        # Prioritize DNBLab guaranteed-free (`dnblab_free_idns`), RQ1-RQ3 domain works, & commercial publishers first
         for idx in range(n_rows):
             wc = wcs[idx] or 0
             if wc >= 75:
@@ -2477,30 +2493,36 @@ def hydrate_parquet_shards_with_remote_fulltext_and_blurbs(
             u = srcs[idx] or ""
             if not u:
                 continue
-            is_canon = 0 if (pubs[idx] and pubs[idx] != "Sonstige / Weitere Verlage") else 1
+            pub_val = str(pubs[idx] or "")
+            tl_val = str(titles_col[idx] or "")
+            tx_val = str(texts_col[idx] or "")[:300]
+            is_comm_pub = 0 if comm_pub_re.search(pub_val) else (1 if (pub_val and pub_val != "Sonstige / Weitere Verlage") else 2)
+            has_domain = 0 if (domain_re.search(tl_val) or domain_re.search(tx_val)) else 1
+            prio_tuple = (has_domain, is_comm_pub)
+
             if "deposit.dnb.de" in u or "/blurb/" in u:
                 live_blurb = 0 if ("deposit.dnb.de" in u or "/idn/1" in u or "/idn/97" in u or "/idn/98" in u or "/idn/99" in u or "/idn/96" in u) else 1
-                blurb_candidates.append(((live_blurb, is_canon), idx, u))
+                blurb_candidates.append(((live_blurb, has_domain, is_comm_pub), idx, u))
             elif u.endswith("/04") and "d-nb.info" in u:
                 live_toc = 0 if ("/1" in u or "/96" in u or "/97" in u or "/98" in u or "/99" in u or "/95" in u) else 1
-                toc_04_candidates.append(((live_toc, is_canon), idx, u))
+                toc_04_candidates.append(((live_toc, has_domain, is_comm_pub), idx, u))
             elif u.endswith("/34") and "d-nb.info" in u:
                 idn_part = u.split("/")[-2] if u.count("/") >= 4 else ""
                 if idn_part in dnblab_free_idns:
-                    oa_34_candidates.append((-1, idx, "oa_34", u))
-                elif idn_part.startswith(("9", "10", "11", "12")):
-                    oa_34_candidates.append((is_canon, idx, "oa_34", u))
+                    oa_34_candidates.append(((-2 if has_domain == 0 else -1, is_comm_pub), idx, "oa_34", u))
+                elif idn_part.startswith(("9", "10", "11", "12")) and has_domain == 0:
+                    oa_34_candidates.append(((0, is_comm_pub), idx, "oa_34", u))
             elif not u.startswith("https://d-nb.info/") and "portal.dnb.de" not in u:
-                ext_oa_candidates.append((is_canon, idx, "ext_oa", u))
+                ext_oa_candidates.append((prio_tuple, idx, "ext_oa", u))
 
         ext_oa_candidates.sort(key=lambda x: x[0])
         oa_34_candidates.sort(key=lambda x: x[0])
         toc_04_candidates.sort(key=lambda x: x[0])
         blurb_candidates.sort(key=lambda x: x[0])
 
-        # Select OA tasks (guaranteed-free DNBLab /34 links + external repository OA links first)
-        dnblab_guaranteed = [c for c in oa_34_candidates if c[0] == -1]
-        other_oa_34 = [c for c in oa_34_candidates if c[0] != -1]
+        # Select OA tasks (domain-relevant guaranteed-free DNBLab /34 links + external repository OA links first)
+        dnblab_guaranteed = [c for c in oa_34_candidates if c[0][0] < 0]
+        other_oa_34 = [c for c in oa_34_candidates if c[0][0] >= 0]
         oa_pool = (dnblab_guaranteed + ext_oa_candidates + other_oa_34)[:max_oa_per_shard] if max_oa_per_shard > 0 else []
         oa_tasks = [(idx, kind, u) for _, idx, kind, u in oa_pool]
 
@@ -2767,6 +2789,105 @@ def hydrate_parquet_shards_with_remote_fulltext_and_blurbs(
     }
 
 
+def export_dnblab_restricted_to_dtf_parquet_shard(
+    local_object_dir: str,
+    parquet_dir: str = "data/parquet",
+    chunk_words: int = 1000,
+    max_chunks_per_book: int = 45,
+) -> dict:
+    """
+    § 60d UrhG (German Copyright Act) & NFDI Text+ Derived Text Format (DTF) exporter for
+    In-Copyright Commercial Print Scans & E-Books (`access_restricted` `/34` objects) inside a DNBLab workstation:
+      1. Streams restricted PDF, EPUB, or TXT digital objects from `local_object_dir` in volatile RAM.
+      2. Lemmatizes and POS-filters (`NOUN`, `PROPN`, `ADJ`) each 1,000-word passage via `lda_pipeline.preprocess_text`,
+         destroying original sentence order by sorting/bagging lemmatized tokens into a non-reconstructible
+         Derived Text Format (DTF) token stream (`corpus_layer = "dnblab_dtf_incopyright"`).
+      3. Immediately discards raw copyrighted prose from RAM and appends the DTF rows directly into our
+         Zstd-19 Apache Parquet corpus (`data/parquet/dnb_corpus_part*.parquet`), which can be legally
+         exported from DNBLab and modeled by `run_streaming_online_lda_pipeline`.
+    """
+    import fitz
+    import lda_pipeline
+
+    if not os.path.exists(local_object_dir):
+        print(f"[DNBLab § 60d UrhG DTF Exporter] Directory `{local_object_dir}` not found.", flush=True)
+        return {"books_converted": 0, "dtf_passages_added": 0, "dtf_words_added": 0}
+
+    dtf_rows = []
+    books_converted = 0
+    total_dtf_words = 0
+
+    for root, _, files in os.walk(local_object_dir):
+        for fname in sorted(files):
+            if not fname.lower().endswith((".pdf", ".epub", ".txt")):
+                continue
+            fpath = os.path.join(root, fname)
+            try:
+                if fname.lower().endswith(".txt"):
+                    with open(fpath, "r", encoding="utf-8", errors="ignore") as tf:
+                        raw_text = tf.read()
+                else:
+                    with fitz.open(fpath) as doc:
+                        raw_text = " ".join(page.get_text("text") for page in doc)
+                words = raw_text.split()
+                del raw_text  # Immediately discard copyrighted prose from RAM (§ 60d UrhG)
+                if len(words) < 100:
+                    continue
+
+                base_id = os.path.splitext(fname)[0]
+                raw_chunks = []
+                for idx in range(0, len(words), chunk_words):
+                    ch_w = words[idx : idx + chunk_words]
+                    if len(ch_w) >= 80:
+                        raw_chunks.append(" ".join(ch_w))
+                    if len(raw_chunks) >= max_chunks_per_book:
+                        break
+                del words
+                if not raw_chunks:
+                    continue
+
+                books_converted += 1
+                n_ch = len(raw_chunks)
+                for c_idx, ch_str in enumerate(raw_chunks, start=1):
+                    lemmas = lda_pipeline.preprocess_text(ch_str)
+                    cleaned = lda_pipeline.clean_row_tokens_for_modeling(lemmas, {"title": base_id})
+                    if not cleaned:
+                        continue
+                    # Destroy syntactic word order by sorting lemmas alphabetically (Derived Text Format / DTF)
+                    dtf_token_bag_str = " ".join(sorted(cleaned))
+                    wc = len(cleaned)
+                    total_dtf_words += wc
+                    dtf_rows.append({
+                        "title": f"{base_id} [DNBLab-DTF-Abschnitt {c_idx}/{n_ch}]",
+                        "author": "DNBLab Restricted Deposit (§ 60d UrhG)",
+                        "date": "2020",
+                        "decade": "2020s",
+                        "publisher": "DNBLab In-Copyright Commercial Imprint (§ 60d UrhG DTF)",
+                        "corpus_layer": "dnblab_dtf_incopyright",
+                        "source_file": f"https://d-nb.info/{base_id}/34",
+                        "chunk_index": c_idx,
+                        "total_chunks": n_ch,
+                        "word_count": wc,
+                        "abstract": f"[§ 60d UrhG Non-Reconstructible Derived Text Format (DTF) Bag-of-Lemmas: {wc} tokens]",
+                        "text": dtf_token_bag_str,
+                    })
+            except Exception:
+                continue
+
+    if dtf_rows:
+        append_rows_to_zstd_parquet(dtf_rows, parquet_dir=parquet_dir, compression_level=19)
+        print(
+            f"[DNBLab § 60d UrhG DTF Export Complete] Converted {books_converted:,} restricted commercial works "
+            f"into {len(dtf_rows):,} non-reconstructible DTF passages ({total_dtf_words:,} lemmatized tokens) in `{parquet_dir}`!",
+            flush=True,
+        )
+    return {
+        "books_converted": books_converted,
+        "dtf_passages_added": len(dtf_rows),
+        "dtf_words_added": total_dtf_words,
+    }
+
+
 def main():
     parser = argparse.ArgumentParser(
         description="Wave-12 Unfiltered All-Sachgruppen (000-990, B, K, S) Deutsche Nationalbibliothek (DNB) Full-Text Harvester + Zstd Parquet Streamer (1970-2025)"
@@ -2795,9 +2916,22 @@ def main():
     parser.add_argument("--hydrate-oa-per-shard", type=int, default=35)
     parser.add_argument("--hydrate-toc-per-shard", type=int, default=45)
     parser.add_argument("--hydrate-blurbs-per-shard", type=int, default=120)
+    parser.add_argument("--dnblab-dtf-dir", type=str, default=None, help="Convert restricted in-copyright PDFs/EPUBs in a DNBLab folder into a § 60d UrhG Derived Text Format (DTF) Parquet shard")
     args = parser.parse_args()
 
     start_t = time.time()
+
+    if args.dnblab_dtf_dir:
+        export_dnblab_restricted_to_dtf_parquet_shard(
+            local_object_dir=args.dnblab_dtf_dir,
+            parquet_dir=args.parquet_dir,
+            chunk_words=args.chunk_words,
+            max_chunks_per_book=args.max_chunks_per_book,
+        )
+        if args.online_lda:
+            import lda_pipeline
+            lda_pipeline.run_streaming_online_lda_pipeline(args.parquet_dir, num_topics=12)
+        return
 
     if args.hydrate_parquet_shards:
         hydrate_parquet_shards_with_remote_fulltext_and_blurbs(
