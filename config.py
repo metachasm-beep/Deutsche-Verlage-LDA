@@ -55,7 +55,8 @@ ARCHETYPE_LEXICONS = {
         "selbstoptimierung", "erfolg", "achtsamkeit", "markt", "selbsthilfe", "lebenshilfe",
         "glück", "resilienz", "gesundheit", "führung", "management", "selbst", "gelingen",
         "heilung", "spiritualität", "potenzial", "erfüllung", "spirituell", "alltag",
-        "lebensführung", "coaching", "wohlbefinden", "krise", "sinn"
+        "lebensführung", "coaching", "wohlbefinden", "krise", "sinn", "person", "gruppe",
+        "entwicklung", "bildung", "familie", "beziehung"
     },
     "Critical / Secular-Humanist": {
         "atheismus", "aufklärung", "machtkritik", "säkularismus", "humanismus",

@@ -2825,7 +2825,7 @@ def main():
         )
         if args.online_lda:
             import lda_pipeline
-            lda_pipeline.run_streaming_online_lda_pipeline(args.parquet_dir, num_topics=20)
+            lda_pipeline.run_streaming_online_lda_pipeline(args.parquet_dir, num_topics=12)
         return
 
     if args.uncapped_year_sachgruppe:
@@ -2845,7 +2845,7 @@ def main():
         if args.upload_github_release:
             upload_parquet_shards_to_github_release(args.parquet_dir, release_tag=args.release_tag)
         if args.online_lda:
-            lda_pipeline.run_streaming_online_lda_pipeline(args.parquet_dir, num_topics=20)
+            lda_pipeline.run_streaming_online_lda_pipeline(args.parquet_dir, num_topics=12)
         return
 
     if args.upload_only:
@@ -2854,7 +2854,7 @@ def main():
 
     if args.online_lda:
         import lda_pipeline
-        lda_pipeline.run_streaming_online_lda_pipeline(args.parquet_dir, num_topics=20)
+        lda_pipeline.run_streaming_online_lda_pipeline(args.parquet_dir, num_topics=12)
         return
 
     dnb_prev = load_all_dnb_shards("data/dnb_metadata.csv")
