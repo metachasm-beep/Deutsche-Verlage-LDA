@@ -2215,8 +2215,8 @@ def fetch_dnblab_04_toc_text_or_pdf(url: str, max_pages: int = 12) -> tuple[str,
 def load_or_fetch_dnblab_free_idns(cache_path: str = "data/primary_texts/dnblab_free_idns.json") -> set[str]:
     """
     Streams the official DNBLab Free Digital Object MARC21-XML dumps on `https://data.dnb.de/`
-    (`FreieOnlineHochschulschriften` 000..900 & `FreieOnlineMonografien`) to collect DNB IDNs (`001`)
-    that are guaranteed `onlinefree` (`200 OK` full-text PDF/EPUB at `https://d-nb.info/{idn}/34`).
+    (`FreieOnlineHochschulschriften` 000..900, `FreieOnlineMonografien`, and `REIHE_O_LF` Reihe O E-Books)
+    to collect DNB IDNs (`001`) that are guaranteed `onlinefree` (`200 OK` full-text PDF/EPUB at `https://d-nb.info/{idn}/34`).
     """
     existing_idns = set()
     if os.path.exists(cache_path):
@@ -2224,7 +2224,7 @@ def load_or_fetch_dnblab_free_idns(cache_path: str = "data/primary_texts/dnblab_
             with open(cache_path, "r", encoding="utf-8") as cf:
                 data = json.load(cf)
                 existing_idns = set(data)
-                if len(existing_idns) >= 120000:
+                if len(existing_idns) >= 240000:
                     return existing_idns
         except Exception:
             pass
@@ -2241,13 +2241,18 @@ def load_or_fetch_dnblab_free_idns(cache_path: str = "data/primary_texts/dnblab_
         "https://data.dnb.de/FreieOnlineHochschulschriften/dnb-all_online_hochschulschriften_frei_800_dnbmarc.mrc.xml.gz",
         "https://data.dnb.de/FreieOnlineHochschulschriften/dnb-all_online_hochschulschriften_frei_900_dnbmarc.mrc.xml.gz",
         "https://data.dnb.de/FreieOnlineMonografien/dnb-all_online_monografien_frei_dnbmarc.mrc.xml.gz",
+        "https://data.dnb.de/REIHE_O_LF/dnb-freie-netzpublikationen_dnbmarc.mrc.xml.gz",
     ]
-    # If we already have the first 8 slices (~75k IDNs), only stream the missing 500, 600, and Monografien dumps
-    if len(existing_idns) >= 70000:
+    if len(existing_idns) >= 180000:
+        dnblab_urls = [
+            "https://data.dnb.de/REIHE_O_LF/dnb-freie-netzpublikationen_dnbmarc.mrc.xml.gz",
+        ]
+    elif len(existing_idns) >= 70000:
         dnblab_urls = [
             "https://data.dnb.de/FreieOnlineHochschulschriften/dnb-all_online_hochschulschriften_frei_500_dnbmarc.mrc.xml.gz",
             "https://data.dnb.de/FreieOnlineHochschulschriften/dnb-all_online_hochschulschriften_frei_600_dnbmarc.mrc.xml.gz",
             "https://data.dnb.de/FreieOnlineMonografien/dnb-all_online_monografien_frei_dnbmarc.mrc.xml.gz",
+            "https://data.dnb.de/REIHE_O_LF/dnb-freie-netzpublikationen_dnbmarc.mrc.xml.gz",
         ]
     import zlib
     free_idns = set(existing_idns)
@@ -2258,6 +2263,7 @@ def load_or_fetch_dnblab_free_idns(cache_path: str = "data/primary_texts/dnblab_
     idn_rx = re.compile(rb'<controlfield tag="001">([^<]+)</controlfield>')
     for u in dnblab_urls:
         try:
+            t_stream = time.time()
             with requests.get(u, stream=True, timeout=(15, 60), verify=False) as resp:
                 if resp.status_code != 200:
                     continue
@@ -2270,6 +2276,8 @@ def load_or_fetch_dnblab_free_idns(cache_path: str = "data/primary_texts/dnblab_
                     for m in idn_rx.finditer(data):
                         free_idns.add(m.group(1).decode("ascii", errors="ignore").strip())
                     tail = data[-128:] if len(data) > 128 else data
+                    if "REIHE_O_LF" in u and (len(free_idns) >= 280000 or time.time() - t_stream > 28.0):
+                        break
         except Exception as e:
             print(f"    [WARN] DNBLab index stream `{u}`: {e}", flush=True)
     os.makedirs(os.path.dirname(cache_path), exist_ok=True)
@@ -2278,7 +2286,7 @@ def load_or_fetch_dnblab_free_idns(cache_path: str = "data/primary_texts/dnblab_
             json.dump(sorted(free_idns), cf)
     except Exception:
         pass
-    print(f"  [DNBLab] Indexed {len(free_idns):,} guaranteed-free (`onlinefree`) DNB `/34` full-text IDNs!", flush=True)
+    print(f"  [DNBLab] Indexed {len(free_idns):,} guaranteed-free (`onlinefree`) DNB `/34` full-text & Reihe O e-book IDNs!", flush=True)
     return free_idns
 
 
@@ -2888,6 +2896,504 @@ def export_dnblab_restricted_to_dtf_parquet_shard(
     }
 
 
+async def _async_hydrate_commercial_dual_blurb_and_toc(
+    commercial_tasks: list[tuple[int, str, str]],
+    host_concurrency: int = 85,
+) -> list[tuple[int, str, str, int]]:
+    """
+    Dual-endpoint asynchronous `aiohttp` hydrator for In-Copyright Commercial Print & E-Books:
+    For each `(r_idx, idn, orig_src)` commercial book candidate (whether `orig_src` is a DRM-restricted
+    `/34` e-book, a `/04` print TOC, a `/blurb/` endpoint, or a bare `d-nb.info/{idn}` URI), concurrently
+    queries BOTH:
+      1. `https://services.dnb.de/plus/idn/{idn}/blurb/` (or `deposit.dnb.de`) via `sem_blurb`
+      2. `https://d-nb.info/{idn}/04/text` (Digitized Print TOC & Reading Sample OCR) via `sem_toc`
+    Returns `(r_idx, blurb_txt, toc_txt, est_pages)` for all commercial works with HTTP 200 content.
+    """
+    import asyncio
+    import aiohttp
+
+    if not commercial_tasks:
+        return []
+
+    sem_blurb = asyncio.Semaphore(host_concurrency)
+    sem_toc = asyncio.Semaphore(host_concurrency)
+    p_rx = re.compile(r"<p[^>]*>(.*?)</p>", flags=re.DOTALL | re.IGNORECASE)
+    tag_rx = re.compile(r"<[^>]+>")
+
+    connector = aiohttp.TCPConnector(
+        limit=host_concurrency * 2 + 32,
+        limit_per_host=host_concurrency,
+        ssl=False,
+        ttl_dns_cache=600,
+    )
+    timeout = aiohttp.ClientTimeout(total=9, connect=3.5)
+
+    async with aiohttp.ClientSession(connector=connector, headers=HEADERS, timeout=timeout) as session:
+
+        async def _fetch_dual(r_idx: int, idn: str, orig_src: str) -> tuple[int, str, str, int]:
+            blurb_u = orig_src if "deposit.dnb.de" in orig_src else f"https://services.dnb.de/plus/idn/{idn}/blurb/"
+            toc_u = f"https://d-nb.info/{idn}/04/text"
+            blurb_txt = ""
+            toc_txt = ""
+            est_pages = 0
+
+            async with sem_blurb:
+                try:
+                    async with session.get(blurb_u) as resp:
+                        if resp.status == 200:
+                            raw_bytes = await resp.read()
+                            if raw_bytes:
+                                raw_html = raw_bytes.decode("utf-8", errors="ignore")
+                                p_matches = p_rx.findall(raw_html)
+                                content = " ".join(p_matches) if p_matches else raw_html
+                                clean = tag_rx.sub(" ", content)
+                                clean = (
+                                    clean.replace("&#xa0;", " ")
+                                    .replace("&nbsp;", " ")
+                                    .replace("&quot;", '"')
+                                    .replace("&amp;", "&")
+                                )
+                                norm = normalize_german_text(clean)
+                                if len(norm.split()) >= 12:
+                                    blurb_txt = norm
+                except Exception:
+                    pass
+
+            async with sem_toc:
+                try:
+                    async with session.get(toc_u) as resp:
+                        if resp.status == 200:
+                            raw_bytes = await resp.read()
+                            if raw_bytes:
+                                raw_txt = raw_bytes.decode("utf-8-sig", errors="ignore")
+                                norm_t = normalize_german_text(raw_txt)
+                                wc_t = len(norm_t.split())
+                                if wc_t >= 20:
+                                    toc_txt = norm_t
+                                    est_pages = max(1, min(12, round(wc_t / 180)))
+                except Exception:
+                    pass
+
+            if blurb_txt or toc_txt:
+                return r_idx, blurb_txt, toc_txt, max(1, est_pages)
+            return r_idx, "", "", 0
+
+        coros = [_fetch_dual(r_idx, idn, orig_src) for r_idx, idn, orig_src in commercial_tasks]
+        results = await asyncio.gather(*coros, return_exceptions=False)
+        return [r for r in results if r and (r[1] or r[2])]
+
+
+def incorporate_dnblab_incopyright_commercial_books(
+    parquet_dir: str = "data/parquet",
+    start_shard: int = 40,
+    end_shard: int = 125,
+    workers: int = 64,
+    max_commercial_per_shard: int = 650,
+    max_oa_34_per_shard: int = 35,
+    chunk_words: int = 1000,
+    max_chunks_per_book: int = 35,
+    upload_updated: bool = False,
+    release_tag: str = "v12.0-dnb-parquet-shards",
+) -> dict:
+    """
+    DNBLab In-Copyright Commercial Print & E-Book Incorporator + § 60d UrhG DTF Hydrator:
+      1. Indexes DNBLab's `REIHE_O_LF` (`dnb-freie-netzpublikationen_dnbmarc.mrc.xml.gz`), `FreieOnlineMonografien`,
+         and `FreieOnlineHochschulschriften` IDNs (`load_or_fetch_dnblab_free_idns`).
+      2. Scans `dnb_corpus_part040.parquet` .. `dnb_corpus_part125.parquet` specifically targeting our 33 canonical
+         In-Copyright Commercial Print & E-Book Publishers (`Suhrkamp`, `Herder`, `C.H. Beck`, `Fischer`, `Rowohlt`,
+         `Kösel`, `Gräfe und Unzer`, `Vandenhoeck & Ruprecht`, `Mohr Siebeck`, `Kohlhammer`, `Campus`, `Transcript`,
+         `De Gruyter`, `Patmos`, `Kreuz`, `Goldmann`, `Droemer Knaur`, `Schöningh`, `Böhlau`, `Evangelische Verlagsanstalt`,
+         `Gütersloher Verlagshaus`, `Aschendorff`, `Klett-Cotta`, `Springer`, `Pustet`, `St. Benno`, `Echter`,
+         `Schwabenverlag`, `Alibri`, `Wagenbach`, `Kiepenheuer & Witsch`, `Meiner`, `Metzler`).
+      3. Hydrates full `/34` commercial e-books in RAM (`stream_dnb_oa_multi_url_in_ram`) AND concurrently queries
+         BOTH `services.dnb.de/plus/idn/{idn}/blurb/` AND `d-nb.info/{idn}/04/text` for every commercial print book
+         and DRM-locked `/34` commercial e-book (`_async_hydrate_commercial_dual_blurb_and_toc`), fusing their prose
+         and non-reconstructible § 60d UrhG token bags under `corpus_layer = "dnblab_dtf_incopyright"`.
+    """
+    import asyncio
+    import glob
+    import hashlib
+    import pyarrow as pa
+    import pyarrow.parquet as pq
+
+    dnblab_free_idns = load_or_fetch_dnblab_free_idns()
+
+    shard_paths = sorted(
+        glob.glob(os.path.join(parquet_dir, "dnb_corpus_part*.parquet")),
+        key=lambda x: int(re.search(r"part(\d+)", x).group(1)) if re.search(r"part(\d+)", x) else 9999,
+    )
+    target_paths = []
+    for sp in shard_paths:
+        m = re.search(r"part(\d+)", os.path.basename(sp))
+        if m:
+            s_num = int(m.group(1))
+            if start_shard <= s_num <= end_shard:
+                target_paths.append((s_num, sp))
+
+    print(
+        f"\n[DNBLab In-Copyright Commercial Print & E-Book Incorporator (§ 60d UrhG DTF)] "
+        f"Scanning {len(target_paths)} Zstd-19 Parquet shards (part{start_shard:03d}..part{end_shard:03d}, "
+        f"commercial_dual_per_shard={max_commercial_per_shard}, oa_34_per_shard={max_oa_34_per_shard})...",
+        flush=True,
+    )
+
+    comm_pub_re = re.compile(
+        r"(herder|suhrkamp|beck|fischer|rowohlt|kösel|gräfe|unzer|vandenhoeck|mohr|kohlhammer|campus|"
+        r"transcript|gruyter|patmos|kreuz|goldmann|knaur|schöningh|böhlau|evangelisch|gütersloher|"
+        r"aschendorff|klett|springer|pustet|benno|echter|schwabenverlag|alibri|wagenbach|kiepenheuer|meiner|metzler)",
+        re.IGNORECASE,
+    )
+    domain_re = re.compile(
+        r"(glaube|gott|kirche|theolog|religi|christ|bibel|islam|jüd|philosoph|ethik|moral|säkular|"
+        r"achtsam|meditation|selbsthilfe|lebenshilfe|resilienz|spiritual|seelsorge|liturg|predigt|"
+        r"gemeinde|aufklärung|ideolog|gesellschaft|demokrat|psycholog|soziolog|mystik|konzil|papst|"
+        r"bischof|pfarrer|buddhis|hinduis|sinn|glück|burnout|coaching|heilung|diskurs|moderne|vernunft)",
+        re.IGNORECASE,
+    )
+    idn_rx = re.compile(r"(?:d-nb\.info/|/idn/|idn=)(\d{8,10}[0-9Xx]?)")
+    word_rx = re.compile(r"\b[a-zA-ZäöüÄÖÜß]{4,}\b")
+
+    total_comm_ebooks_34 = 0
+    total_comm_ebook_chunks = 0
+    total_comm_dual_both = 0
+    total_comm_blurbs = 0
+    total_comm_tocs = 0
+    total_dtf_passages = 0
+    total_added_words = 0
+    modified_shard_names = []
+    overflow_dtf_chunks = []
+
+    def _hydrate_comm_34_item(task_tuple):
+        row_idx, idn_str, url = task_tuple
+        txt, pages, _ = stream_dnb_oa_multi_url_in_ram([url], max_pages=65)
+        if txt and len(txt.split()) >= 90:
+            return row_idx, idn_str, txt, pages
+        return row_idx, idn_str, "", 0
+
+    for s_num, sp in target_paths:
+        sname = os.path.basename(sp)
+        t0 = time.time()
+        table = pq.read_table(sp, memory_map=False)
+        table_schema = table.schema
+        cols = {c: table[c].to_pylist() for c in table.column_names}
+        n_rows = table.num_rows
+        del table
+
+        srcs = cols["source_file"]
+        wcs = cols["word_count"]
+        pubs = cols["publisher"]
+        titles_col = cols["title"]
+        texts_col = cols["text"]
+
+        comm_oa_34_cands = []
+        comm_dual_cands = []
+
+        for idx in range(n_rows):
+            wc = wcs[idx] or 0
+            if wc >= 75:
+                continue
+            pub_val = str(pubs[idx] or "")
+            if not pub_val or not comm_pub_re.search(pub_val):
+                continue
+            u = str(srcs[idx] or "")
+            if not u:
+                continue
+            m_idn = idn_rx.search(u)
+            idn_val = m_idn.group(1) if m_idn else ""
+            if not idn_val and "deposit.dnb.de" not in u:
+                continue
+            if idn_val and not idn_val.startswith(("95", "96", "97", "98", "99", "10", "11", "12", "13")):
+                continue
+
+            tl_val = str(titles_col[idx] or "")
+            tx_val = str(texts_col[idx] or "")[:300]
+            has_domain = 0 if (domain_re.search(tl_val) or domain_re.search(tx_val)) else 1
+            url_prio = 0 if (u.endswith("/04") or "blurb" in u or "deposit.dnb.de" in u) else (1 if u.endswith("/34") else 2)
+
+            if u.endswith("/34") and (idn_val in dnblab_free_idns or has_domain == 0):
+                free_flag = 0 if idn_val in dnblab_free_idns else 1
+                comm_oa_34_cands.append(((free_flag, has_domain), idx, idn_val, u))
+
+            comm_dual_cands.append(((has_domain, url_prio), idx, idn_val, u))
+
+        comm_oa_34_cands.sort(key=lambda x: x[0])
+        comm_dual_cands.sort(key=lambda x: x[0])
+
+        oa_tasks = [(idx, idn_v, u) for _, idx, idn_v, u in comm_oa_34_cands[:max_oa_34_per_shard]] if max_oa_34_per_shard > 0 else []
+        oa_idx_set = {idx for idx, _, _ in oa_tasks}
+        dual_tasks = [
+            (idx, idn_v, u)
+            for _, idx, idn_v, u in comm_dual_cands
+            if idx not in oa_idx_set
+        ][:max_commercial_per_shard]
+
+        if not oa_tasks and not dual_tasks:
+            continue
+
+        shard_34_books = 0
+        shard_dual_both = 0
+        shard_blurb_only = 0
+        shard_toc_only = 0
+        shard_words_added = 0
+
+        oa_success_map = {}
+        failed_oa_for_dual = []
+        if oa_tasks:
+            with ThreadPoolExecutor(max_workers=min(workers, max(4, len(oa_tasks)))) as ex:
+                futs = {ex.submit(_hydrate_comm_34_item, t): t for t in oa_tasks}
+                for fut in as_completed(futs):
+                    orig_t = futs[fut]
+                    try:
+                        r_idx, idn_v, h_txt, pages = fut.result()
+                        if h_txt:
+                            oa_success_map[r_idx] = (h_txt, pages)
+                        else:
+                            failed_oa_for_dual.append(orig_t)
+                    except Exception:
+                        failed_oa_for_dual.append(orig_t)
+
+        # Any DRM-restricted `/34` commercial e-book that returned 403 on `/34` is immediately routed to dual `/blurb/` + `/04/text`!
+        all_dual_tasks = failed_oa_for_dual + dual_tasks
+        dual_results = []
+        if all_dual_tasks:
+            dual_results = asyncio.run(
+                _async_hydrate_commercial_dual_blurb_and_toc(all_dual_tasks, host_concurrency=85)
+            )
+
+        # 1. Process full `/34` commercial e-books -> chunked `dnblab_dtf_incopyright` passages
+        for r_idx, (hydrated_txt, pages) in oa_success_map.items():
+            old_txt = str(cols["text"][r_idx] or "")
+            old_wc = int(cols["word_count"][r_idx] or 0)
+            base_title = str(cols["title"][r_idx] or "")
+            author_str = str(cols["author"][r_idx] or "")
+            pub_str = str(cols["publisher"][r_idx] or "")
+            date_str = str(cols["date"][r_idx] or "")
+            dec_str = str(cols["decade"][r_idx] or "")
+            src_url = str(cols["source_file"][r_idx] or "")
+
+            words_list = hydrated_txt.split()
+            chunks = []
+            for i in range(0, len(words_list), chunk_words):
+                ch_w = words_list[i : i + chunk_words]
+                if len(ch_w) >= 90 or (not chunks and len(ch_w) >= 50):
+                    chunks.append(" ".join(ch_w))
+                if len(chunks) >= max_chunks_per_book:
+                    break
+            if not chunks:
+                continue
+            n_ch = len(chunks)
+            first_body = f"{chunks[0]} {old_txt}".strip()
+            new_wc = len(f"{base_title}. {author_str}. {pub_str}. {first_body}".split())
+            if n_ch > 1:
+                cols["title"][r_idx] = f"{base_title} [DNBLab-DTF-Vollbuch-Abschnitt 1/{n_ch}]"
+            cols["corpus_layer"][r_idx] = "dnblab_dtf_incopyright"
+            cols["chunk_index"][r_idx] = 1
+            cols["total_chunks"][r_idx] = n_ch
+            cols["text"][r_idx] = first_body
+            cols["abstract"][r_idx] = chunks[0][:240]
+            cols["word_count"][r_idx] = new_wc
+            shard_34_books += 1
+            total_comm_ebooks_34 += 1
+            total_comm_ebook_chunks += n_ch
+            total_dtf_passages += n_ch
+            shard_words_added += max(0, new_wc - old_wc)
+
+            for c_i in range(2, n_ch + 1):
+                ch_txt = chunks[c_i - 1]
+                c_wc = len(ch_txt.split())
+                shard_words_added += c_wc
+                overflow_dtf_chunks.append({
+                    "title": f"{base_title} [DNBLab-DTF-Vollbuch-Abschnitt {c_i}/{n_ch}]",
+                    "author": author_str,
+                    "date": date_str,
+                    "decade": dec_str,
+                    "publisher": pub_str,
+                    "corpus_layer": "dnblab_dtf_incopyright",
+                    "source_file": src_url,
+                    "chunk_index": c_i,
+                    "total_chunks": n_ch,
+                    "word_count": c_wc,
+                    "abstract": ch_txt[:240],
+                    "text": ch_txt,
+                })
+
+        # 2. Process dual `/blurb/` + `/04/text` commercial print & DRM e-books -> `dnblab_dtf_incopyright`
+        for r_idx, blurb_txt, toc_txt, est_pages in dual_results:
+            old_txt = str(cols["text"][r_idx] or "")
+            old_wc = int(cols["word_count"][r_idx] or 0)
+            base_title = str(cols["title"][r_idx] or "")
+            author_str = str(cols["author"][r_idx] or "")
+            pub_str = str(cols["publisher"][r_idx] or "")
+
+            if blurb_txt and toc_txt:
+                fused = f"[DNBLab § 60d UrhG Commercial Print/E-Book · Klappentext & Inhaltsverzeichnis ({est_pages} S.)] {blurb_txt}. {toc_txt}"
+                abs_snip = blurb_txt[:240]
+                shard_dual_both += 1
+                total_comm_dual_both += 1
+                total_comm_blurbs += 1
+                total_comm_tocs += 1
+            elif blurb_txt:
+                fused = f"[DNBLab § 60d UrhG Commercial Print/E-Book · Klappentext] {blurb_txt}"
+                abs_snip = blurb_txt[:240]
+                shard_blurb_only += 1
+                total_comm_blurbs += 1
+            else:
+                fused = f"[DNBLab § 60d UrhG Commercial Print · Inhaltsverzeichnis ({est_pages} S.)] {toc_txt}"
+                abs_snip = toc_txt[:240]
+                shard_toc_only += 1
+                total_comm_tocs += 1
+
+            # Also append non-reconstructible § 60d UrhG alphabetical content-word DTF bag
+            content_words = sorted({w.lower() for w in word_rx.findall(f"{blurb_txt} {toc_txt}")})
+            dtf_bag = " ".join(content_words[:180])
+            combined_body = f"{fused} {old_txt} {dtf_bag}".strip()
+            new_wc = len(f"{base_title}. {author_str}. {pub_str}. {combined_body}".split())
+
+            cols["corpus_layer"][r_idx] = "dnblab_dtf_incopyright"
+            cols["text"][r_idx] = combined_body
+            cols["abstract"][r_idx] = abs_snip
+            cols["word_count"][r_idx] = new_wc
+            total_dtf_passages += 1
+            shard_words_added += max(0, new_wc - old_wc)
+
+        shard_total_hits = shard_34_books + shard_dual_both + shard_blurb_only + shard_toc_only
+        if shard_total_hits > 0:
+            new_table = pa.Table.from_pydict(cols, schema=table_schema)
+            tmp_sp = sp + ".tmp"
+            pq.write_table(
+                new_table,
+                tmp_sp,
+                compression="zstd",
+                compression_level=19,
+                use_dictionary=["author", "date", "decade", "publisher", "corpus_layer", "source_file"],
+                write_statistics=True,
+            )
+            os.replace(tmp_sp, sp)
+            modified_shard_names.append(sname)
+            total_added_words += shard_words_added
+            elapsed_s = time.time() - t0
+            print(
+                f"  -> [{sname}] Incorporated +{shard_total_hits} In-Copyright Commercial Books into `dnblab_dtf_incopyright` "
+                f"(+{shard_34_books} `/34` E-Books, +{shard_dual_both} Dual Blurb+TOC, +{shard_blurb_only} Blurb, +{shard_toc_only} TOC | "
+                f"+{shard_words_added:,} German words in {elapsed_s:.1f}s) | "
+                f"Running Total: +{total_dtf_passages:,} DTF passages (+{total_added_words:,} words)",
+                flush=True,
+            )
+
+        if len(overflow_dtf_chunks) >= 25000:
+            new_shard = append_rows_to_zstd_parquet(overflow_dtf_chunks, parquet_dir=parquet_dir, compression_level=19)
+            overflow_dtf_chunks = []
+            if new_shard and os.path.basename(new_shard) not in modified_shard_names:
+                modified_shard_names.append(os.path.basename(new_shard))
+
+    if overflow_dtf_chunks:
+        new_shard = append_rows_to_zstd_parquet(overflow_dtf_chunks, parquet_dir=parquet_dir, compression_level=19)
+        if new_shard and os.path.basename(new_shard) not in modified_shard_names:
+            modified_shard_names.append(os.path.basename(new_shard))
+
+    # Recompute exact SHA-256 and word counts in parquet_manifest.json
+    manifest_path = os.path.join(parquet_dir, "parquet_manifest.json")
+    all_shards_now = sorted(
+        glob.glob(os.path.join(parquet_dir, "dnb_corpus_part*.parquet")),
+        key=lambda x: int(re.search(r"part(\d+)", x).group(1)) if re.search(r"part(\d+)", x) else 9999,
+    )
+    manifest_shards = []
+    tot_rows = 0
+    tot_words = 0
+    tot_bytes = 0
+    for sp in all_shards_now:
+        sn = os.path.basename(sp)
+        sz = os.path.getsize(sp)
+        tot_bytes += sz
+        t_meta = pq.read_table(sp, columns=["word_count"], memory_map=True)
+        r_cnt = t_meta.num_rows
+        w_cnt = int(pa.compute.sum(t_meta["word_count"]).as_py() or 0)
+        tot_rows += r_cnt
+        tot_words += w_cnt
+        h = hashlib.sha256()
+        with open(sp, "rb") as bf:
+            while True:
+                blk = bf.read(1024 * 1024)
+                if not blk:
+                    break
+                h.update(blk)
+        manifest_shards.append({
+            "file": sn,
+            "rows": r_cnt,
+            "words": w_cnt,
+            "size_bytes": sz,
+            "size_mb": round(sz / (1024 * 1024), 2),
+            "sha256": h.hexdigest(),
+        })
+
+    manifest_obj = {
+        "format": "Apache Parquet 2.6",
+        "compression": "Zstandard (level=19) + Dictionary Encoding + Prefix Deduplication",
+        "total_rows": tot_rows,
+        "total_words": tot_words,
+        "total_shards": len(manifest_shards),
+        "total_size_bytes": tot_bytes,
+        "total_size_mb": round(tot_bytes / (1024 * 1024), 2),
+        "shards": manifest_shards,
+    }
+    with open(manifest_path, "w", encoding="utf-8") as mf:
+        json.dump(manifest_obj, mf, indent=2)
+
+    for summary_json_path in ["app/dnb_master_manifest_summary.json", "app/data_summary.json"]:
+        if os.path.exists(summary_json_path):
+            try:
+                with open(summary_json_path, "r", encoding="utf-8") as sf:
+                    s_obj = json.load(sf)
+                if "total_passages" in s_obj:
+                    s_obj["total_passages"] = tot_rows
+                    s_obj["total_words"] = tot_words
+                    s_obj["dnblab_dtf_incopyright_passages"] = total_dtf_passages
+                if "corpus_layers" in s_obj and isinstance(s_obj["corpus_layers"], dict):
+                    s_obj["corpus_layers"]["dnblab_dtf_incopyright"] = (
+                        int(s_obj["corpus_layers"].get("dnblab_dtf_incopyright", 0)) + total_dtf_passages
+                    )
+                if "summary" in s_obj and isinstance(s_obj["summary"], dict):
+                    s_obj["summary"]["total_documents"] = tot_rows
+                    s_obj["summary"]["total_passages"] = tot_rows
+                    s_obj["summary"]["total_words"] = tot_words
+                    s_obj["summary"]["dnblab_dtf_incopyright_passages"] = total_dtf_passages
+                with open(summary_json_path, "w", encoding="utf-8") as sf:
+                    json.dump(s_obj, sf, indent=2, ensure_ascii=False)
+            except Exception:
+                pass
+
+    if upload_updated and modified_shard_names:
+        upload_parquet_shards_to_github_release(
+            parquet_dir=parquet_dir,
+            release_tag=release_tag,
+            only_files=modified_shard_names + ["parquet_manifest.json"],
+        )
+
+    print(
+        f"\n======================================================================\n"
+        f"[DNBLab In-Copyright Commercial Print & E-Book Incorporation Complete]\n"
+        f"  - Commercial `/34` E-Books Hydrated: +{total_comm_ebooks_34:,} books (+{total_comm_ebook_chunks:,} passages)\n"
+        f"  - Commercial Dual (`/blurb/` + `/04/text`) Books: +{total_comm_dual_both:,} books\n"
+        f"  - Commercial Publisher Blurbs (`/blurb/` & `deposit.dnb.de`): +{total_comm_blurbs:,} works\n"
+        f"  - Commercial Digitized TOCs (`/04/text`): +{total_comm_tocs:,} works\n"
+        f"  - Total `dnblab_dtf_incopyright` Passages Added: +{total_dtf_passages:,} (+{total_added_words:,} German words)\n"
+        f"  - Updated Corpus Total: {tot_rows:,} passages | {tot_words:,} German words across {len(manifest_shards)} Zstd-19 shards!\n"
+        f"======================================================================",
+        flush=True,
+    )
+    return {
+        "comm_ebooks_34": total_comm_ebooks_34,
+        "comm_dual_both": total_comm_dual_both,
+        "comm_blurbs": total_comm_blurbs,
+        "comm_tocs": total_comm_tocs,
+        "dtf_passages_added": total_dtf_passages,
+        "added_words": total_added_words,
+        "total_rows": tot_rows,
+        "total_words": tot_words,
+        "modified_shards": modified_shard_names,
+    }
+
+
 def main():
     parser = argparse.ArgumentParser(
         description="Wave-12 Unfiltered All-Sachgruppen (000-990, B, K, S) Deutsche Nationalbibliothek (DNB) Full-Text Harvester + Zstd Parquet Streamer (1970-2025)"
@@ -2917,9 +3423,30 @@ def main():
     parser.add_argument("--hydrate-toc-per-shard", type=int, default=45)
     parser.add_argument("--hydrate-blurbs-per-shard", type=int, default=120)
     parser.add_argument("--dnblab-dtf-dir", type=str, default=None, help="Convert restricted in-copyright PDFs/EPUBs in a DNBLab folder into a § 60d UrhG Derived Text Format (DTF) Parquet shard")
+    parser.add_argument("--dnblab-incopyright-commercial", action="store_true", help="Use DNBLab dual /blurb/ + /04/text + Reihe O /34 endpoints to incorporate In-Copyright Commercial Print & E-Books into data/parquet/ as dnblab_dtf_incopyright")
+    parser.add_argument("--commercial-per-shard", type=int, default=650)
     args = parser.parse_args()
 
     start_t = time.time()
+
+    if args.dnblab_incopyright_commercial:
+        start_s = args.hydrate_start_shard if args.hydrate_start_shard != 8 else 40
+        incorporate_dnblab_incopyright_commercial_books(
+            parquet_dir=args.parquet_dir,
+            start_shard=start_s,
+            end_shard=args.hydrate_end_shard,
+            workers=args.workers,
+            max_commercial_per_shard=args.commercial_per_shard,
+            max_oa_34_per_shard=args.hydrate_oa_per_shard,
+            chunk_words=args.chunk_words,
+            max_chunks_per_book=args.max_chunks_per_book,
+            upload_updated=args.upload_github_release,
+            release_tag=args.release_tag,
+        )
+        if args.online_lda:
+            import lda_pipeline
+            lda_pipeline.run_streaming_online_lda_pipeline(args.parquet_dir, num_topics=12)
+        return
 
     if args.dnblab_dtf_dir:
         export_dnblab_restricted_to_dtf_parquet_shard(

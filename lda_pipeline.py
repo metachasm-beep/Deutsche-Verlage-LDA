@@ -136,7 +136,9 @@ FRAKTUR_AND_META_NOISE = {
     "sociology", "knowledge", "self", "law", "john", "europe", "contribution", "american", "germany",
     "ssoar", "veröffentlichungsversion_version", "ssoar_nutzungsbedingung", "nutzungsbedingung",
     "veröffentlichungsversion", "citation", "dat", "text_deposit", "persönlich_kommerziell",
-    "übertragbar_persönlich", "gebrauch_kopie", "dokument", "sektion", "media"
+    "übertragbar_persönlich", "gebrauch_kopie", "dokument", "sektion", "media",
+    "education", "approach", "care", "aspect", "community", "women", "communities", "sacred",
+    "urban", "people", "transfer", "networks", "processes", "involved", "perceived", "using"
 }
 
 # Canonical sacred/theological terms preserved during entity filtering
@@ -1506,21 +1508,36 @@ def run_streaming_online_lda_pipeline(
                     layer_counts_shard[lyr_val] += 1
             else:
                 shard_added = 0
-                max_hydrated_per_shard = 35
+                dtf_shard_added = 0
+                max_hydrated_per_shard = 18
+                max_dtf_per_shard = 12
+                en_stop_set = {
+                    "the", "and", "with", "from", "this", "that", "between", "through",
+                    "for", "are", "was", "were", "have", "has", "about", "which", "their",
+                    "into", "more", "other", "communities", "sacred", "urban", "people",
+                    "research", "study", "analysis", "approach", "university", "press",
+                }
                 for i in range(n_rows):
                     lyr_val = layers[i] or ""
                     wc_val = wcs[i] or 0
                     if lyr_val not in hydrated_layers and wc_val < 220:
                         continue
+                    is_dtf = lyr_val == "dnblab_dtf_incopyright"
+                    if is_dtf and dtf_shard_added >= max_dtf_per_shard:
+                        continue
                     if shard_added >= max_hydrated_per_shard:
                         break
                     t_str = str(col_texts[i] or "")
+                    if is_dtf and t_str:
+                        t_str = re.sub(r"(?:\s+[a-zäöüß]{4,}){18,}\s*$", "", t_str).strip()
                     tl_str = str(titles[i] or "")
                     if tl_str and tl_str[:40] not in t_str:
                         t_str = f"{tl_str}. {t_str}".strip() if t_str else tl_str
                     if not t_str:
                         continue
                     low_words = {w.lower() for w in _WORD_RE.findall(t_str[:900])}
+                    if low_words & en_stop_set:
+                        continue
                     if len(low_words & domain_lex) < 3:
                         continue
                     raw_p = str(pubs[i] or "")
@@ -1535,16 +1552,19 @@ def run_streaming_online_lda_pipeline(
                         "text": t_str,
                         "abstract": str(abstracts[i] or t_str[:240]),
                         "word_count": int(wc_val),
+                        "_is_core_shard": False,
                     }
                     valid_rows.append(r_dict)
                     texts.append(strip_archival_headers_from_text(t_str, row=r_dict))
                     shard_added += 1
+                    if is_dtf:
+                        dtf_shard_added += 1
                     hydrated_added += 1
 
             if s_idx % 15 == 0 or s_idx <= 6 or s_idx == len(shard_paths):
                 print(
                     f"  [Pass 1 · 126-Shard Stream] Shard #{s_idx}/{len(shard_paths)}: "
-                    f"{total_streamed_docs:,} corpus passages scanned (modeled_pool={len(valid_rows):,}, +{hydrated_added:,} newly hydrated OA/TOC/blurb passages)",
+                    f"{total_streamed_docs:,} corpus passages scanned (modeled_pool={len(valid_rows):,}, +{hydrated_added:,} newly hydrated DTF/OA/TOC/blurb passages)",
                     flush=True,
                 )
     else:
@@ -1563,28 +1583,44 @@ def run_streaming_online_lda_pipeline(
     _TOKEN_CACHE.clear()
     gc.collect()
 
-    filtered_docs = []
-    filtered_rows = []
+    core_docs = []
+    core_rows = []
+    ext_docs = []
+    ext_rows = []
     for doc, row in zip(processed_docs, valid_rows):
         cleaned_doc = clean_row_tokens_for_modeling(doc, row, unboost=(mode_key == "unseeded"))
         if cleaned_doc:
-            filtered_docs.append(cleaned_doc)
-            filtered_rows.append(row)
+            if row.get("_is_core_shard", True):
+                core_docs.append(cleaned_doc)
+                core_rows.append(row)
+            else:
+                ext_docs.append(cleaned_doc)
+                ext_rows.append(row)
     del processed_docs, valid_rows
     gc.collect()
 
-    # Deterministic multi-shard exchangeability shuffle (Hoffman, Blei & Bach, 2010 §2.2)
-    rng = random.Random(100)
-    perm = list(range(len(filtered_docs)))
-    rng.shuffle(perm)
-    filtered_docs = [filtered_docs[idx] for idx in perm]
-    filtered_rows = [filtered_rows[idx] for idx in perm]
+    # Deterministic two-stage multi-shard exchangeability shuffle (Hoffman, Blei & Bach, 2010 §2.2)
+    rng_core = random.Random(100)
+    perm_core = list(range(len(core_docs)))
+    rng_core.shuffle(perm_core)
+    core_docs = [core_docs[idx] for idx in perm_core]
+    core_rows = [core_rows[idx] for idx in perm_core]
+
+    rng_ext = random.Random(101)
+    perm_ext = list(range(len(ext_docs)))
+    rng_ext.shuffle(perm_ext)
+    ext_docs = [ext_docs[idx] for idx in perm_ext]
+    ext_rows = [ext_rows[idx] for idx in perm_ext]
+
+    filtered_docs = core_docs + ext_docs
+    filtered_rows = core_rows + ext_rows
+    n_core = len(core_docs)
     total_modeled_docs = len(filtered_docs)
 
     # 4. Bigram Phraser + Dictionary + Sublinear TF-IDF Low-Information Filter (Santana et al., 2025 §72-73)
-    bigram = gensim.models.Phrases(filtered_docs, min_count=5, threshold=10, max_vocab_size=1500000)
+    bigram = gensim.models.Phrases(core_docs if core_docs else filtered_docs, min_count=5, threshold=10, max_vocab_size=1500000)
     bigram_mod = gensim.models.phrases.Phraser(bigram)
-    del bigram
+    del bigram, core_docs, ext_docs
     gc.collect()
 
     processed_n_grams = []
@@ -1605,13 +1641,16 @@ def run_streaming_online_lda_pipeline(
     del filtered_docs, bigram_mod
     gc.collect()
 
-    dictionary = corpora.Dictionary(processed_n_grams)
-    if len(processed_n_grams) >= 100:
+    core_n_grams = processed_n_grams[:n_core] if n_core > 0 else processed_n_grams
+    dictionary = corpora.Dictionary(core_n_grams)
+    if len(core_n_grams) >= 100:
         dictionary.filter_extremes(no_below=5, no_above=0.55, keep_n=25000)
-    pre_tfidf_corpus = [dictionary.doc2bow(doc) for doc in processed_n_grams]
+    pre_tfidf_corpus = [dictionary.doc2bow(doc) for doc in core_n_grams]
     _, tfidf_audit = apply_tfidf_low_info_filter(pre_tfidf_corpus, dictionary, min_tfidf=0.015)
     del pre_tfidf_corpus
-    corpus = [dictionary.doc2bow(doc) for doc in processed_n_grams]
+    core_corpus = [dictionary.doc2bow(doc) for doc in core_n_grams]
+    ext_corpus = [dictionary.doc2bow(doc) for doc in processed_n_grams[n_core:]] if n_core < len(processed_n_grams) else []
+    corpus = core_corpus + ext_corpus
 
     effective_k = max(2, min(k_topics, max(2, len(corpus))))
     seed_assignments = {}
@@ -1628,11 +1667,11 @@ def run_streaming_online_lda_pipeline(
 
     print(
         f"  [Pass 2 · Online VB Estimation] Training Gensim LdaModel "
-        f"(K={effective_k}, streamed_passages={total_streamed_docs:,}, domain_docs={len(corpus):,}, vocab={len(dictionary):,}, passes={config.PASSES})...",
+        f"(K={effective_k}, streamed_passages={total_streamed_docs:,}, domain_docs={len(corpus):,} [core={len(core_corpus):,}, dtf_ext={len(ext_corpus):,}], vocab={len(dictionary):,}, passes={config.PASSES})...",
         flush=True,
     )
     lda_model = LdaModel(
-        corpus=corpus,
+        corpus=core_corpus,
         id2word=dictionary,
         num_topics=effective_k,
         random_state=100,
@@ -1643,10 +1682,12 @@ def run_streaming_online_lda_pipeline(
         eta=eta_param,
         per_word_topics=False,
     )
+    if ext_corpus:
+        lda_model.update(ext_corpus, chunksize=1500, passes=1, decay=0.85, offset=4096.0)
 
     coherence_model = CoherenceModel(
         model=lda_model,
-        corpus=corpus,
+        corpus=core_corpus,
         dictionary=dictionary,
         coherence="u_mass",
     )

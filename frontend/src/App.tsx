@@ -1242,7 +1242,7 @@ function App() {
                 <Database className="w-3.5 h-3.5 text-traditional" />
               </div>
               <div className="font-serif text-xl font-bold text-parchment-50 tabular-nums">
-                {(summary?.total_records || corpusDocuments || 10528704).toLocaleString()}{' '}
+                {(summary?.total_records || corpusDocuments || 10545315).toLocaleString()}{' '}
                 <span className="text-xs font-sans font-normal text-parchment-300">Passages</span>
               </div>
               <p className="font-mono text-[9px] text-emerald-300 truncate mt-0.5">
@@ -1250,7 +1250,7 @@ function App() {
                   ? `Active Slice: ${selectedYear}`
                   : selectedDecade
                   ? `Active Cohort: ${selectedDecade}s`
-                  : `${(summary?.master_manifest?.total_unique_works_1970_2025 || summary?.unique_books || 10041481).toLocaleString()} Works · ${(summary?.master_manifest?.total_complete_fulltext_books || 18714).toLocaleString()} Full Books · ${((summary?.total_words || 801389747) / 1_000_000).toFixed(1)}M Words`}
+                  : `${(summary?.master_manifest?.total_unique_works_1970_2025 || summary?.unique_books || 10042681).toLocaleString()} Works · ${(summary?.master_manifest?.total_complete_fulltext_books || 19914).toLocaleString()} Full Books · ${((summary?.total_words || 831286411) / 1_000_000).toFixed(1)}M Words`}
               </p>
             </div>
 
@@ -1333,13 +1333,13 @@ function App() {
                   <div className="flex flex-wrap items-center justify-between gap-2 pb-2.5 mb-3 border-b border-white/[0.07]">
                     <div className="flex flex-wrap items-center gap-2">
                       <span className="px-2 py-0.5 rounded bg-emerald-500/15 border border-emerald-500/30 font-mono text-[10px] uppercase tracking-widest text-emerald-300 font-bold">
-                        Complete DNB OpenData + Full-Text Zstd-Parquet Corpus (1970–2025)
+                        Complete DNB OpenData + DNBLab Commercial (§ 60d UrhG DTF) Corpus (1970–2025)
                       </span>
                       <span className="font-serif text-sm sm:text-base font-bold text-parchment-50">
-                        {(summary?.master_manifest?.total_unique_works_1970_2025 || summary?.unique_books || 10041481).toLocaleString()} Unique Works ·{' '}
-                        {(summary?.total_records || 10528704).toLocaleString()} Analytical Passages ·{' '}
-                        {((summary?.total_words || 801389747) / 1_000_000).toFixed(2)}M German Words ·{' '}
-                        102 DNB Sachgruppen · {(summary?.all_publishers_count || 713838).toLocaleString()} Imprints · 126 Zstd-19 Parquet Shards (1,507.6 MB)
+                        {(summary?.master_manifest?.total_unique_works_1970_2025 || summary?.unique_books || 10042681).toLocaleString()} Unique Works ·{' '}
+                        {(summary?.total_records || 10545315).toLocaleString()} Analytical Passages ·{' '}
+                        {((summary?.total_words || 831286411) / 1_000_000).toFixed(2)}M German Words ·{' '}
+                        102 DNB Sachgruppen · {(summary?.all_publishers_count || 713838).toLocaleString()} Imprints · 126 Zstd-19 Parquet Shards (1,575.6 MB)
                       </span>
                     </div>
                     <div className="flex items-center gap-2">
@@ -1347,7 +1347,7 @@ function App() {
                         onClick={() => setWorkspaceMode('pipeline')}
                         className="px-2.5 py-1 rounded bg-traditional/15 hover:bg-traditional/25 border border-traditional/40 font-mono text-[10px] text-traditional transition-colors cursor-pointer"
                       >
-                        13-Layer Table & Length Stats (Mean/IQR) →
+                        14-Layer Table & Length Stats (Mean/IQR) →
                       </button>
                       <button
                         onClick={() => setCorpusDistExpanded(false)}
@@ -1367,13 +1367,13 @@ function App() {
                             Tier 1 · Complete Full-Text Books
                           </span>
                           <span className="px-1.5 py-0.5 rounded bg-emerald-500/15 font-mono text-[9px] text-emerald-300 font-bold">
-                            56.84% of Words
+                            56.92% of Words
                           </span>
                         </div>
                         <div className="font-serif text-lg font-bold text-parchment-50 tabular-nums">
-                          {(summary?.master_manifest?.total_complete_fulltext_books || 18714).toLocaleString()} Books{' '}
+                          {(summary?.master_manifest?.total_complete_fulltext_books || 19914).toLocaleString()} Books{' '}
                           <span className="text-xs font-mono font-normal text-parchment-300">
-                            · 459,841 Passages · 455.55M Words
+                            · 477,652 Passages · 473.18M Words
                           </span>
                         </div>
                         <p className="text-[11px] text-parchment-300 mt-1 leading-relaxed">
@@ -1382,8 +1382,8 @@ function App() {
                       </div>
                       <div className="mt-2 pt-2 border-t border-white/[0.06] space-y-1 font-mono text-[10px]">
                         <div className="flex justify-between text-parchment-200">
-                          <span>• DNBLab /34 & MARC 856 OA Books:</span>
-                          <span className="text-emerald-300 font-bold">14,423 books (206,007 ch.)</span>
+                          <span>• DNBLab /34 OA & Reihe O E-Books:</span>
+                          <span className="text-emerald-300 font-bold">15,623 books (223,818 ch.)</span>
                         </div>
                         <div className="flex justify-between text-parchment-200">
                           <span>• HathiTrust HTRC Print Books:</span>
@@ -1404,13 +1404,13 @@ function App() {
                             Tier 2 · Digitized TOC & Sample PDFs
                           </span>
                           <span className="px-1.5 py-0.5 rounded bg-traditional/15 font-mono text-[9px] text-traditional font-bold">
-                            150,976 PDFs/OCRs
+                            166,290 PDFs/OCRs
                           </span>
                         </div>
                         <div className="font-serif text-lg font-bold text-parchment-50 tabular-nums">
-                          150,976 Works{' '}
+                          166,290 Works{' '}
                           <span className="text-xs font-mono font-normal text-parchment-300">
-                            · 150,976 PDFs/OCRs · 56.82M Words
+                            · 166,290 PDFs/OCRs · 63.78M Words
                           </span>
                         </div>
                         <p className="text-[11px] text-parchment-300 mt-1 leading-relaxed">
@@ -1420,7 +1420,7 @@ function App() {
                       <div className="mt-2 pt-2 border-t border-white/[0.06] space-y-1 font-mono text-[10px]">
                         <div className="flex justify-between text-parchment-200">
                           <span>• DNBLab /04 & /04/text TOCs:</span>
-                          <span className="text-traditional font-bold">136,777 works (136,777 TOCs)</span>
+                          <span className="text-traditional font-bold">152,091 works (152,091 TOCs)</span>
                         </div>
                         <div className="flex justify-between text-parchment-200">
                           <span>• GBV / K10plus Consortial TOC PDFs:</span>
@@ -1441,13 +1441,13 @@ function App() {
                             Tier 3A · Complete DNB OpenData & Blurblist
                           </span>
                           <span className="px-1.5 py-0.5 rounded bg-neoliberal/15 font-mono text-[9px] text-neoliberal font-bold">
-                            94.55% of Records
+                            94.15% of Records
                           </span>
                         </div>
                         <div className="font-serif text-lg font-bold text-parchment-50 tabular-nums">
                           9,946,165 Works{' '}
                           <span className="text-xs font-mono font-normal text-parchment-300">
-                            · 286.65M Words
+                            · 264.07M Words
                           </span>
                         </div>
                         <p className="text-[11px] text-parchment-300 mt-1 leading-relaxed">
@@ -1461,7 +1461,7 @@ function App() {
                         </div>
                         <div className="flex justify-between text-parchment-200">
                           <span>• Hydrated Publisher Blurbs:</span>
-                          <span className="text-parchment-100 font-bold">145,000+ blurbs</span>
+                          <span className="text-parchment-100 font-bold">192,814+ blurbs</span>
                         </div>
                         <div className="flex justify-between text-parchment-300">
                           <span>• Coverage:</span>
@@ -1470,39 +1470,39 @@ function App() {
                       </div>
                     </div>
 
-                    {/* Tier 3B/3C: Multi-API Enriched Paratexts & OpenAlex Abstracts */}
+                    {/* Tier 3B/C: DNBLab In-Copyright Commercial Books (§ 60d UrhG DTF) & Multi-API */}
                     <div className="p-3 rounded-lg bg-obsidian-950/90 border border-critical/30 flex flex-col justify-between">
                       <div>
                         <div className="flex items-center justify-between gap-1 mb-1">
                           <span className="font-mono text-[10px] uppercase text-critical font-bold">
-                            Tier 3B/C · OpenAlex & Enriched
+                            DNBLab § 60d UrhG Commercial Books
                           </span>
                           <span className="px-1.5 py-0.5 rounded bg-critical/15 font-mono text-[9px] text-critical font-bold">
-                            0.91% of Passages
+                            48,527 Passages
                           </span>
                         </div>
                         <div className="font-serif text-lg font-bold text-parchment-50 tabular-nums">
-                          4,156 Works{' '}
+                          44,339 DTF Passages{' '}
                           <span className="text-xs font-mono font-normal text-parchment-300">
-                            · 4,188 Records · 0.36M Words
+                            · 29.90M Words
                           </span>
                         </div>
                         <p className="text-[11px] text-parchment-300 mt-1 leading-relaxed">
-                          Reconstructed OpenAlex inverted-index abstracts & multi-API MARC21 paratexts:
+                          In-Copyright Commercial Print & E-Books (Suhrkamp, Herder, Beck, Kösel, GU, V&R, Mohr, etc.):
                         </p>
                       </div>
                       <div className="mt-2 pt-2 border-t border-white/[0.06] space-y-1 font-mono text-[10px]">
                         <div className="flex justify-between text-parchment-200">
-                          <span>• Multi-API Enriched Paratexts:</span>
-                          <span className="text-critical font-bold">3,530 works (3,561 docs)</span>
+                          <span>• Commercial /34 E-Books (DTF):</span>
+                          <span className="text-emerald-300 font-bold">1,200 books (17,811 ch.)</span>
                         </div>
                         <div className="flex justify-between text-parchment-200">
-                          <span>• OpenAlex German Abstracts:</span>
-                          <span className="text-amber-300 font-bold">626 works (627 docs)</span>
+                          <span>• Dual (/blurb/ + /04/text) Commercial:</span>
+                          <span className="text-critical font-bold">26,528 books (12,414 dual)</span>
                         </div>
                         <div className="flex justify-between text-parchment-300">
-                          <span>• OpenAlex Abstract Length:</span>
-                          <span>Mean 179.8w (Median 138w · IQR 148w)</span>
+                          <span>• Multi-API & OpenAlex Enriched:</span>
+                          <span>4,156 works (4,188 docs · 0.36M w)</span>
                         </div>
                       </div>
                     </div>
