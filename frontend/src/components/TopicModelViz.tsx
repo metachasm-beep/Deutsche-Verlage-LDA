@@ -144,8 +144,8 @@ export const getArchetypeTheme = (label?: string): ArchetypeTheme => {
   if (!label) {
     return {
       id: 'Mixed',
-      hex: '#EAB308',
-      hexSecondary: '#A16207',
+      hex: '#C99A5B',
+      hexSecondary: '#A3763A',
       badgeClass: 'bg-traditional-subtle text-traditional border-traditional/30',
       borderGlow: 'border-traditional/40 shadow-glow-gold',
       textClass: 'text-traditional',
@@ -157,8 +157,8 @@ export const getArchetypeTheme = (label?: string): ArchetypeTheme => {
   if (label.includes('Traditional') || label.includes('Theological')) {
     return {
       id: 'Traditional',
-      hex: '#EAB308',
-      hexSecondary: '#CA8A04',
+      hex: '#C99A5B',
+      hexSecondary: '#A3763A',
       badgeClass: 'bg-traditional-subtle text-traditional border-traditional/30',
       borderGlow: 'border-traditional/40 shadow-glow-gold',
       textClass: 'text-traditional',
@@ -170,8 +170,8 @@ export const getArchetypeTheme = (label?: string): ArchetypeTheme => {
   if (label.includes('Neoliberal') || label.includes('Self-Help')) {
     return {
       id: 'Neoliberal',
-      hex: '#38BDF8',
-      hexSecondary: '#0284C7',
+      hex: '#5B9EA6',
+      hexSecondary: '#407C84',
       badgeClass: 'bg-neoliberal-subtle text-neoliberal border-neoliberal/30',
       borderGlow: 'border-neoliberal/40 shadow-glow-cyan',
       textClass: 'text-neoliberal',
@@ -183,8 +183,8 @@ export const getArchetypeTheme = (label?: string): ArchetypeTheme => {
   if (label.includes('Critical') || label.includes('Secular')) {
     return {
       id: 'Critical',
-      hex: '#FB7185',
-      hexSecondary: '#E11D48',
+      hex: '#C6716B',
+      hexSecondary: '#A4524C',
       badgeClass: 'bg-critical-subtle text-critical border-critical/30',
       borderGlow: 'border-critical/40 shadow-glow-rose',
       textClass: 'text-critical',
@@ -195,8 +195,8 @@ export const getArchetypeTheme = (label?: string): ArchetypeTheme => {
   }
   return {
     id: 'Mixed',
-    hex: '#A78BFA',
-    hexSecondary: '#7C3AED',
+    hex: '#9283B8',
+    hexSecondary: '#726298',
     badgeClass: 'bg-violet-500/10 text-violet-300 border-violet-500/30',
     borderGlow: 'border-violet-500/40',
     textClass: 'text-violet-300',

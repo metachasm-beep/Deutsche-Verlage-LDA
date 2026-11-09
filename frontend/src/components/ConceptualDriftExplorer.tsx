@@ -406,16 +406,16 @@ export const ConceptualDriftExplorer: React.FC<ConceptualDriftExplorerProps> = (
                   >
                     <defs>
                       <linearGradient id="driftTrad" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#EAB308" stopOpacity={0.75} />
-                        <stop offset="95%" stopColor="#EAB308" stopOpacity={0.15} />
+                        <stop offset="5%" stopColor="#C99A5B" stopOpacity={0.75} />
+                        <stop offset="95%" stopColor="#C99A5B" stopOpacity={0.15} />
                       </linearGradient>
                       <linearGradient id="driftNeo" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#38BDF8" stopOpacity={0.8} />
-                        <stop offset="95%" stopColor="#38BDF8" stopOpacity={0.15} />
+                        <stop offset="5%" stopColor="#5B9EA6" stopOpacity={0.8} />
+                        <stop offset="95%" stopColor="#5B9EA6" stopOpacity={0.15} />
                       </linearGradient>
                       <linearGradient id="driftCrit" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#FB7185" stopOpacity={0.75} />
-                        <stop offset="95%" stopColor="#FB7185" stopOpacity={0.15} />
+                        <stop offset="5%" stopColor="#C6716B" stopOpacity={0.75} />
+                        <stop offset="95%" stopColor="#C6716B" stopOpacity={0.15} />
                       </linearGradient>
                     </defs>
                     <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
@@ -447,7 +447,7 @@ export const ConceptualDriftExplorer: React.FC<ConceptualDriftExplorerProps> = (
                       dataKey="Traditional"
                       name="RQ₁ Traditional / Ecclesiastical (%)"
                       stackId="1"
-                      stroke="#EAB308"
+                      stroke="#C99A5B"
                       strokeWidth={2}
                       fill="url(#driftTrad)"
                     />
@@ -456,7 +456,7 @@ export const ConceptualDriftExplorer: React.FC<ConceptualDriftExplorerProps> = (
                       dataKey="Neoliberal"
                       name="RQ₂ Neoliberal / Self-Help (%)"
                       stackId="1"
-                      stroke="#38BDF8"
+                      stroke="#5B9EA6"
                       strokeWidth={2}
                       fill="url(#driftNeo)"
                     />
@@ -465,7 +465,7 @@ export const ConceptualDriftExplorer: React.FC<ConceptualDriftExplorerProps> = (
                       dataKey="Critical"
                       name="RQ₃ Critical / Secular (%)"
                       stackId="1"
-                      stroke="#FB7185"
+                      stroke="#C6716B"
                       strokeWidth={2}
                       fill="url(#driftCrit)"
                     />
@@ -532,9 +532,9 @@ export const ConceptualDriftExplorer: React.FC<ConceptualDriftExplorerProps> = (
                       type="monotone"
                       dataKey="rel_freq_per_10k"
                       name={`"${activeSignifier.lemma}" per 10k tokens`}
-                      stroke="#34D399"
+                      stroke="#689F8D"
                       strokeWidth={2.5}
-                      dot={{ r: 3.5, fill: '#34D399' }}
+                      dot={{ r: 3.5, fill: '#689F8D' }}
                     />
                   </LineChart>
                 </ResponsiveContainer>
@@ -714,19 +714,19 @@ export const ConceptualDriftExplorer: React.FC<ConceptualDriftExplorerProps> = (
                         type="monotone"
                         dataKey="pole_a_share"
                         name={activeDyad.pole_a_label}
-                        stroke="#EAB308"
+                        stroke="#C99A5B"
                         strokeWidth={3}
-                        dot={{ r: 4, fill: '#EAB308' }}
+                        dot={{ r: 4, fill: '#C99A5B' }}
                       />
                       <Line
                         type="monotone"
                         dataKey="pole_b_share"
                         name={activeDyad.pole_b_label}
-                        stroke={activeDyad.direction.includes('RQ₂') ? '#38BDF8' : '#FB7185'}
+                        stroke={activeDyad.direction.includes('RQ₂') ? '#5B9EA6' : '#C6716B'}
                         strokeWidth={3}
                         dot={{
                           r: 4,
-                          fill: activeDyad.direction.includes('RQ₂') ? '#38BDF8' : '#FB7185',
+                          fill: activeDyad.direction.includes('RQ₂') ? '#5B9EA6' : '#C6716B',
                         }}
                       />
                     </LineChart>

@@ -605,7 +605,7 @@ if __name__ == "__main__":
                     <Legend wrapperStyle={{ fontFamily: 'JetBrains Mono', fontSize: '10px' }} />
                     <ReferenceLine
                       y={10.83}
-                      stroke="#F43F5E"
+                      stroke="#B55D57"
                       strokeDasharray="4 4"
                       label={{
                         value: 'p = 0.001 Critical Threshold (F = 10.83)',
@@ -618,24 +618,24 @@ if __name__ == "__main__":
                       dataKey="chow_f_rq2"
                       name="RQ₂ Neoliberal Break F-Stat"
                       fill="rgba(56, 189, 248, 0.35)"
-                      stroke="#38BDF8"
+                      stroke="#5B9EA6"
                       radius={[4, 4, 0, 0]}
                     />
                     <Line
                       type="monotone"
                       dataKey="chow_f_rq1"
                       name="RQ₁ Ecclesiastical Break F-Stat"
-                      stroke="#EAB308"
+                      stroke="#C99A5B"
                       strokeWidth={2.5}
-                      dot={{ r: 3.5, fill: '#EAB308' }}
+                      dot={{ r: 3.5, fill: '#C99A5B' }}
                     />
                     <Line
                       type="monotone"
                       dataKey="chow_f_rq3"
                       name="RQ₃ Critical-Secular Break F-Stat"
-                      stroke="#FB7185"
+                      stroke="#C6716B"
                       strokeWidth={2.5}
-                      dot={{ r: 3.5, fill: '#FB7185' }}
+                      dot={{ r: 3.5, fill: '#C6716B' }}
                     />
                   </ComposedChart>
                 </ResponsiveContainer>
@@ -997,17 +997,17 @@ if __name__ == "__main__":
                       type="monotone"
                       dataKey="regime_alignment"
                       name="Regime Alignment (%)"
-                      stroke="#38BDF8"
+                      stroke="#5B9EA6"
                       strokeWidth={2.5}
-                      dot={{ r: 3.5, fill: '#38BDF8' }}
+                      dot={{ r: 3.5, fill: '#5B9EA6' }}
                     />
                     <Line
                       type="monotone"
                       dataKey="vocab_diversity"
                       name="Unseeded Vocab Diversity (%)"
-                      stroke="#EAB308"
+                      stroke="#C99A5B"
                       strokeWidth={2.5}
-                      dot={{ r: 3.5, fill: '#EAB308' }}
+                      dot={{ r: 3.5, fill: '#C99A5B' }}
                     />
                   </ComposedChart>
                 </ResponsiveContainer>

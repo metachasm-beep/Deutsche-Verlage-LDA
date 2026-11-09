@@ -406,16 +406,16 @@ export const InterTopicDistanceMap: React.FC<InterTopicDistanceMapProps> = ({
                 >
                   <defs>
                     <radialGradient id="haloTrad" cx="50%" cy="50%" r="50%">
-                      <stop offset="0%" stopColor="#EAB308" stopOpacity="0.32" />
-                      <stop offset="100%" stopColor="#EAB308" stopOpacity="0.0" />
+                      <stop offset="0%" stopColor="#C99A5B" stopOpacity="0.32" />
+                      <stop offset="100%" stopColor="#C99A5B" stopOpacity="0.0" />
                     </radialGradient>
                     <radialGradient id="haloNeo" cx="50%" cy="50%" r="50%">
-                      <stop offset="0%" stopColor="#38BDF8" stopOpacity="0.32" />
-                      <stop offset="100%" stopColor="#38BDF8" stopOpacity="0.0" />
+                      <stop offset="0%" stopColor="#5B9EA6" stopOpacity="0.32" />
+                      <stop offset="100%" stopColor="#5B9EA6" stopOpacity="0.0" />
                     </radialGradient>
                     <radialGradient id="haloCrit" cx="50%" cy="50%" r="50%">
-                      <stop offset="0%" stopColor="#FB7185" stopOpacity="0.32" />
-                      <stop offset="100%" stopColor="#FB7185" stopOpacity="0.0" />
+                      <stop offset="0%" stopColor="#C6716B" stopOpacity="0.32" />
+                      <stop offset="100%" stopColor="#C6716B" stopOpacity="0.0" />
                     </radialGradient>
                   </defs>
 
@@ -512,7 +512,7 @@ export const InterTopicDistanceMap: React.FC<InterTopicDistanceMapProps> = ({
                       y1={-activePoint.y * 58}
                       x2={nearestNeighbor.point.x * 85}
                       y2={-nearestNeighbor.point.y * 58}
-                      stroke="#34D399"
+                      stroke="#689F8D"
                       strokeWidth="0.7"
                       strokeDasharray="1.8 1.8"
                       opacity="0.75"
@@ -689,7 +689,7 @@ export const InterTopicDistanceMap: React.FC<InterTopicDistanceMapProps> = ({
               {/* Dual-Overlay Bar Chart (Red/Regime = Topic Freq, Slate = Corpus Marginal Freq) */}
               <div className="space-y-1.5 max-h-[295px] overflow-y-auto pr-1 custom-scrollbar">
                 {rankedKeywords.slice(0, 12).map((item, idx) => {
-                  const themeHex = activePoint?.theme.hex || '#EAB308';
+                  const themeHex = activePoint?.theme.hex || '#C99A5B';
                   return (
                     <div
                       key={item.word}
