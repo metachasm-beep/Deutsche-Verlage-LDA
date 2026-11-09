@@ -436,218 +436,226 @@ function App() {
   return (
     <div className="min-h-dvh lg:h-dvh lg:overflow-hidden bg-obsidian-950 text-parchment-50 font-sans antialiased flex flex-col archival-grid-bg">
       {/* =====================================================================
-          TOP COMPACT IDE COMMAND BAR (h-13 shrink-0)
+          TOP EDITORIAL MASTHEAD & IDE COMMAND BAR (Full Title + Subtitle + Nav)
          ===================================================================== */}
-      <header className="min-h-13 py-1.5 shrink-0 border-b border-white/[0.08] bg-obsidian-900/95 backdrop-blur-xl px-3 sm:px-4 flex flex-wrap items-center justify-between gap-2 z-30">
-        {/* Left: Sidebar Toggle + Monograph Identity (Always fully visible, never truncated) */}
-        <div className="flex items-center gap-2.5 shrink-0">
-          <button
-            onClick={() => setLeftSidebarOpen((prev) => !prev)}
-            title={leftSidebarOpen ? 'Collapse Bayesian Command Rail' : 'Expand Bayesian Command Rail'}
-            aria-label="Toggle Left Command Sidebar"
-            className="p-1.5 rounded-lg bg-white/[0.03] hover:bg-white/[0.08] border border-white/10 text-parchment-200 transition-colors cursor-pointer shrink-0"
-          >
-            {leftSidebarOpen ? (
-              <PanelLeftClose className="w-4 h-4 text-traditional" />
-            ) : (
-              <PanelLeftOpen className="w-4 h-4 text-traditional" />
-            )}
-          </button>
+      <header className="shrink-0 border-b border-white/[0.08] bg-obsidian-900/95 backdrop-blur-xl px-3 sm:px-4 py-2 flex flex-col gap-2 z-30">
+        {/* Top Row: Left Sidebar Toggle + Full Title & Subtitle + Right Action Controls */}
+        <div className="flex flex-wrap items-start xl:items-center justify-between gap-3">
+          <div className="flex items-start sm:items-center gap-2.5 flex-1 min-w-[280px]">
+            <button
+              onClick={() => setLeftSidebarOpen((prev) => !prev)}
+              title={leftSidebarOpen ? 'Collapse Bayesian Command Rail' : 'Expand Bayesian Command Rail'}
+              aria-label="Toggle Left Command Sidebar"
+              className="p-1.5 rounded-lg bg-white/[0.03] hover:bg-white/[0.08] border border-white/10 text-parchment-200 transition-colors cursor-pointer shrink-0 mt-0.5 sm:mt-0"
+            >
+              {leftSidebarOpen ? (
+                <PanelLeftClose className="w-4 h-4 text-traditional" />
+              ) : (
+                <PanelLeftOpen className="w-4 h-4 text-traditional" />
+              )}
+            </button>
 
-          <div className="flex items-center gap-2 shrink-0">
-            <div className="w-7 h-7 rounded-md bg-traditional/15 border border-traditional/40 flex items-center justify-center shrink-0">
-              <BookOpen className="w-3.5 h-3.5 text-traditional" />
-            </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="font-serif font-bold text-sm sm:text-base text-parchment-50 whitespace-nowrap">
-                  Mediating Faith & Power
-                </span>
-                <span className="hidden 2xl:inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/30 font-mono text-[9px] uppercase tracking-widest text-emerald-300 whitespace-nowrap">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                  DNB SRU v1.1 · MARC21
-                </span>
+            <div className="flex items-start sm:items-center gap-2.5">
+              <div className="w-8 h-8 rounded-md bg-traditional/15 border border-traditional/40 flex items-center justify-center shrink-0 mt-0.5 sm:mt-0">
+                <BookOpen className="w-4 h-4 text-traditional" />
+              </div>
+              <div className="space-y-0.5">
+                <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
+                  <span className="font-serif font-bold text-base sm:text-lg text-parchment-50 leading-snug">
+                    Mediating Faith &amp; Power: Ideological Transformation of German Theological, Self-Help &amp; Secular-Academic Publishing (1970–2025)
+                  </span>
+                </div>
+                <p className="font-mono text-[10px] sm:text-[11px] text-parchment-300 leading-relaxed">
+                  A Computational Topic Modeling (LDA) Analysis · DNB SRU v1.1 MARC21 Observatory (10,042,681 Works · 10,612,079 Passages · 894.18M Words) · Centre for German Studies, Jawaharlal Nehru University
+                </p>
               </div>
             </div>
           </div>
-        </div>
 
-        {/* Center: Workspace Layout Switcher */}
-        <div className="hidden md:flex items-center gap-1 p-1 rounded-lg bg-obsidian-950 border border-white/[0.08]">
-          <button
-            onClick={() => setWorkspaceMode('bento')}
-            className={clsx(
-              'flex items-center gap-1.5 px-2.5 py-1 rounded-md font-mono text-[11px] transition-all cursor-pointer',
-              workspaceMode === 'bento'
-                ? 'bg-traditional text-obsidian-950 font-bold shadow-glow-gold'
-                : 'text-parchment-200 hover:text-parchment-50 hover:bg-white/[0.04]'
+          {/* Right: Active Filter Pill, Theme Toggle, Upload, APA Modal, Scholar Badge & Right Inspector Toggle */}
+          <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 shrink-0">
+            {(selectedYear || selectedDecade || selectedPublishers.length > 0) && (
+              <button
+                onClick={handleResetTemporal}
+                title="Reset Sub-Corpus Filters (Timeframe & Publishers)"
+                className="inline-flex items-center gap-1 px-2 py-1 rounded-md bg-neoliberal/15 border border-neoliberal/40 font-mono text-[10px] text-neoliberal hover:bg-neoliberal/25 transition-colors cursor-pointer"
+              >
+                <span>
+                  {[
+                    selectedYear ? `Year: ${selectedYear}` : selectedDecade ? `${selectedDecade}s` : null,
+                    selectedPublishers.length > 0
+                      ? `${selectedPublishers.length} Pub${selectedPublishers.length > 1 ? 's' : ''}`
+                      : null,
+                  ]
+                    .filter(Boolean)
+                    .join(' · ')}
+                </span>
+                <RotateCcw className="w-3 h-3" />
+              </button>
             )}
-          >
-            <LayoutGrid className="w-3.5 h-3.5" />
-            <span>Observatory Bento</span>
-          </button>
-          <button
-            onClick={() => setWorkspaceMode('distance')}
-            className={clsx(
-              'flex items-center gap-1.5 px-2.5 py-1 rounded-md font-mono text-[11px] transition-all cursor-pointer',
-              workspaceMode === 'distance'
-                ? 'bg-traditional text-obsidian-950 font-bold shadow-glow-gold'
-                : 'text-parchment-200 hover:text-parchment-50 hover:bg-white/[0.04]'
-            )}
-          >
-            <Compass className="w-3.5 h-3.5" />
-            <span>2D Distance Map</span>
-          </button>
-          <button
-            onClick={() => setWorkspaceMode('drift')}
-            className={clsx(
-              'flex items-center gap-1.5 px-2.5 py-1 rounded-md font-mono text-[11px] transition-all cursor-pointer',
-              workspaceMode === 'drift'
-                ? 'bg-traditional text-obsidian-950 font-bold shadow-glow-gold'
-                : 'text-parchment-200 hover:text-parchment-50 hover:bg-white/[0.04]'
-            )}
-          >
-            <GitCompare className="w-3.5 h-3.5" />
-            <span>Word-Shift & Drift</span>
-          </button>
-          <button
-            onClick={() => setWorkspaceMode('workbench')}
-            className={clsx(
-              'flex items-center gap-1.5 px-2.5 py-1 rounded-md font-mono text-[11px] transition-all cursor-pointer',
-              workspaceMode === 'workbench'
-                ? 'bg-traditional text-obsidian-950 font-bold shadow-glow-gold'
-                : 'text-parchment-200 hover:text-parchment-50 hover:bg-white/[0.04]'
-            )}
-          >
-            <FileCode2 className="w-3.5 h-3.5" />
-            <span>Seeds, Breakpoints & LaTeX</span>
-          </button>
-          <button
-            onClick={() => setWorkspaceMode('pipeline')}
-            className={clsx(
-              'flex items-center gap-1.5 px-2.5 py-1 rounded-md font-mono text-[11px] transition-all cursor-pointer',
-              workspaceMode === 'pipeline'
-                ? 'bg-traditional text-obsidian-950 font-bold shadow-glow-gold'
-                : 'text-parchment-200 hover:text-parchment-50 hover:bg-white/[0.04]'
-            )}
-          >
-            <Cpu className="w-3.5 h-3.5" />
-            <span>Pipeline & Methodology</span>
-          </button>
-          <button
-            onClick={() => setWorkspaceMode('topics')}
-            className={clsx(
-              'flex items-center gap-1.5 px-2.5 py-1 rounded-md font-mono text-[11px] transition-all cursor-pointer',
-              workspaceMode === 'topics'
-                ? 'bg-traditional text-obsidian-950 font-bold shadow-glow-gold'
-                : 'text-parchment-200 hover:text-parchment-50 hover:bg-white/[0.04]'
-            )}
-          >
-            <BarChart3 className="w-3.5 h-3.5" />
-            <span>Topic Deep-Dive</span>
-          </button>
-          <button
-            onClick={() => setWorkspaceMode('matrix')}
-            className={clsx(
-              'flex items-center gap-1.5 px-2.5 py-1 rounded-md font-mono text-[11px] transition-all cursor-pointer',
-              workspaceMode === 'matrix'
-                ? 'bg-traditional text-obsidian-950 font-bold shadow-glow-gold'
-                : 'text-parchment-200 hover:text-parchment-50 hover:bg-white/[0.04]'
-            )}
-          >
-            <Building2 className="w-3.5 h-3.5" />
-            <span>Publisher Atlas</span>
-          </button>
-        </div>
 
-        {/* Right: Active Filter Pill, Upload, APA Modal, Scholar Badge & Right Inspector Toggle */}
-        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
-          {(selectedYear || selectedDecade || selectedPublishers.length > 0) && (
             <button
-              onClick={handleResetTemporal}
-              title="Reset Sub-Corpus Filters (Timeframe & Publishers)"
-              className="inline-flex items-center gap-1 px-2 py-1 rounded-md bg-neoliberal/15 border border-neoliberal/40 font-mono text-[10px] text-neoliberal hover:bg-neoliberal/25 transition-colors cursor-pointer"
+              onClick={toggleThemeMode}
+              title={
+                themeMode === 'dark'
+                  ? 'Switch to Light Parchment Folio Theme'
+                  : 'Switch to Dark Obsidian Archival Theme'
+              }
+              aria-label="Toggle Light/Dark Theme"
+              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-white/[0.04] hover:bg-white/[0.09] border border-white/10 text-[11px] font-mono text-parchment-100 transition-colors cursor-pointer"
             >
-              <span>
-                {[
-                  selectedYear ? `Year: ${selectedYear}` : selectedDecade ? `${selectedDecade}s` : null,
-                  selectedPublishers.length > 0
-                    ? `${selectedPublishers.length} Pub${selectedPublishers.length > 1 ? 's' : ''}`
-                    : null,
-                ]
-                  .filter(Boolean)
-                  .join(' · ')}
-              </span>
-              <RotateCcw className="w-3 h-3" />
+              {themeMode === 'dark' ? (
+                <>
+                  <Sun className="w-3.5 h-3.5 text-traditional" />
+                  <span className="hidden sm:inline">Light Theme</span>
+                </>
+              ) : (
+                <>
+                  <Moon className="w-3.5 h-3.5 text-traditional" />
+                  <span className="hidden sm:inline">Dark Theme</span>
+                </>
+              )}
             </button>
-          )}
 
-          <button
-            onClick={toggleThemeMode}
-            title={
-              themeMode === 'dark'
-                ? 'Switch to Light Parchment Folio Theme'
-                : 'Switch to Dark Obsidian Archival Theme'
-            }
-            aria-label="Toggle Light/Dark Theme"
-            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-white/[0.04] hover:bg-white/[0.09] border border-white/10 text-[11px] font-mono text-parchment-100 transition-colors cursor-pointer"
-          >
-            {themeMode === 'dark' ? (
-              <>
-                <Sun className="w-3.5 h-3.5 text-traditional" />
-                <span className="hidden sm:inline">Light Theme</span>
-              </>
-            ) : (
-              <>
-                <Moon className="w-3.5 h-3.5 text-traditional" />
-                <span className="hidden sm:inline">Dark Theme</span>
-              </>
-            )}
-          </button>
+            <button
+              onClick={() => setShowCitationModal((prev) => !prev)}
+              className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-white/[0.03] hover:bg-white/[0.08] border border-white/10 text-[11px] font-mono text-parchment-100 transition-colors cursor-pointer"
+            >
+              <Quote className="w-3 h-3 text-traditional" />
+              <span>APA 7th</span>
+            </button>
 
-          <button
-            onClick={() => setShowCitationModal((prev) => !prev)}
-            className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-white/[0.03] hover:bg-white/[0.08] border border-white/10 text-[11px] font-mono text-parchment-100 transition-colors cursor-pointer"
-          >
-            <Quote className="w-3 h-3 text-traditional" />
-            <span>APA 7th</span>
-          </button>
+            <input
+              type="file"
+              accept=".csv"
+              ref={fileInputRef}
+              onChange={handleFileUpload}
+              className="hidden"
+            />
+            <button
+              onClick={() => fileInputRef.current?.click()}
+              disabled={isUploading || isTraining}
+              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-traditional/15 hover:bg-traditional/25 border border-traditional/40 text-traditional text-[11px] font-mono font-medium transition-colors cursor-pointer disabled:opacity-50"
+            >
+              <Upload className="w-3 h-3" />
+              <span className="hidden sm:inline">{isUploading ? 'Ingesting...' : 'Upload CSV'}</span>
+            </button>
 
-          <input
-            type="file"
-            accept=".csv"
-            ref={fileInputRef}
-            onChange={handleFileUpload}
-            className="hidden"
-          />
-          <button
-            onClick={() => fileInputRef.current?.click()}
-            disabled={isUploading || isTraining}
-            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-traditional/15 hover:bg-traditional/25 border border-traditional/40 text-traditional text-[11px] font-mono font-medium transition-colors cursor-pointer disabled:opacity-50"
-          >
-            <Upload className="w-3 h-3" />
-            <span className="hidden sm:inline">{isUploading ? 'Ingesting...' : 'Upload CSV'}</span>
-          </button>
+            <div className="hidden 2xl:flex items-center gap-1.5 pl-2 border-l border-white/10">
+              <GraduationCap className="w-3.5 h-3.5 text-traditional" />
+              <span className="font-mono text-[10px] text-parchment-200">
+                Paul Marandi · Ph.D. Scholar, JNU
+              </span>
+            </div>
 
-          <div className="hidden 2xl:flex items-center gap-1.5 pl-2 border-l border-white/10">
-            <GraduationCap className="w-3.5 h-3.5 text-traditional" />
-            <span className="font-mono text-[10px] text-parchment-200">
-              Paul Marandi · Ph.D. Scholar, JNU
-            </span>
+            <button
+              onClick={() => setRightInspectorOpen((prev) => !prev)}
+              title={rightInspectorOpen ? 'Collapse MARC21 Inspector Drawer' : 'Expand MARC21 Inspector Drawer'}
+              aria-label="Toggle Right MARC21 Inspector Drawer"
+              className="p-1.5 rounded-lg bg-white/[0.03] hover:bg-white/[0.08] border border-white/10 text-parchment-200 transition-colors cursor-pointer"
+            >
+              {rightInspectorOpen ? (
+                <PanelRightClose className="w-4 h-4 text-traditional" />
+              ) : (
+                <PanelRightOpen className="w-4 h-4 text-traditional" />
+              )}
+            </button>
+          </div>
+        </div>
+
+        {/* Bottom Row: Workspace Layout Switcher + Live Corpus Status Badge */}
+        <div className="flex flex-wrap items-center justify-between gap-2 pt-1.5 border-t border-white/[0.06]">
+          <div className="flex flex-wrap items-center gap-1 p-1 rounded-lg bg-obsidian-950 border border-white/[0.08]">
+            <button
+              onClick={() => setWorkspaceMode('bento')}
+              className={clsx(
+                'flex items-center gap-1.5 px-2.5 py-1 rounded-md font-mono text-[11px] transition-all cursor-pointer',
+                workspaceMode === 'bento'
+                  ? 'bg-traditional text-obsidian-950 font-bold shadow-glow-gold'
+                  : 'text-parchment-200 hover:text-parchment-50 hover:bg-white/[0.04]'
+              )}
+            >
+              <LayoutGrid className="w-3.5 h-3.5" />
+              <span>Observatory Bento</span>
+            </button>
+            <button
+              onClick={() => setWorkspaceMode('distance')}
+              className={clsx(
+                'flex items-center gap-1.5 px-2.5 py-1 rounded-md font-mono text-[11px] transition-all cursor-pointer',
+                workspaceMode === 'distance'
+                  ? 'bg-traditional text-obsidian-950 font-bold shadow-glow-gold'
+                  : 'text-parchment-200 hover:text-parchment-50 hover:bg-white/[0.04]'
+              )}
+            >
+              <Compass className="w-3.5 h-3.5" />
+              <span>2D Distance Map</span>
+            </button>
+            <button
+              onClick={() => setWorkspaceMode('drift')}
+              className={clsx(
+                'flex items-center gap-1.5 px-2.5 py-1 rounded-md font-mono text-[11px] transition-all cursor-pointer',
+                workspaceMode === 'drift'
+                  ? 'bg-traditional text-obsidian-950 font-bold shadow-glow-gold'
+                  : 'text-parchment-200 hover:text-parchment-50 hover:bg-white/[0.04]'
+              )}
+            >
+              <GitCompare className="w-3.5 h-3.5" />
+              <span>Word-Shift &amp; Drift</span>
+            </button>
+            <button
+              onClick={() => setWorkspaceMode('workbench')}
+              className={clsx(
+                'flex items-center gap-1.5 px-2.5 py-1 rounded-md font-mono text-[11px] transition-all cursor-pointer',
+                workspaceMode === 'workbench'
+                  ? 'bg-traditional text-obsidian-950 font-bold shadow-glow-gold'
+                  : 'text-parchment-200 hover:text-parchment-50 hover:bg-white/[0.04]'
+              )}
+            >
+              <FileCode2 className="w-3.5 h-3.5" />
+              <span>Seeds, Breakpoints &amp; LaTeX</span>
+            </button>
+            <button
+              onClick={() => setWorkspaceMode('pipeline')}
+              className={clsx(
+                'flex items-center gap-1.5 px-2.5 py-1 rounded-md font-mono text-[11px] transition-all cursor-pointer',
+                workspaceMode === 'pipeline'
+                  ? 'bg-traditional text-obsidian-950 font-bold shadow-glow-gold'
+                  : 'text-parchment-200 hover:text-parchment-50 hover:bg-white/[0.04]'
+              )}
+            >
+              <Cpu className="w-3.5 h-3.5" />
+              <span>Pipeline &amp; Methodology</span>
+            </button>
+            <button
+              onClick={() => setWorkspaceMode('topics')}
+              className={clsx(
+                'flex items-center gap-1.5 px-2.5 py-1 rounded-md font-mono text-[11px] transition-all cursor-pointer',
+                workspaceMode === 'topics'
+                  ? 'bg-traditional text-obsidian-950 font-bold shadow-glow-gold'
+                  : 'text-parchment-200 hover:text-parchment-50 hover:bg-white/[0.04]'
+              )}
+            >
+              <BarChart3 className="w-3.5 h-3.5" />
+              <span>Topic Deep-Dive</span>
+            </button>
+            <button
+              onClick={() => setWorkspaceMode('matrix')}
+              className={clsx(
+                'flex items-center gap-1.5 px-2.5 py-1 rounded-md font-mono text-[11px] transition-all cursor-pointer',
+                workspaceMode === 'matrix'
+                  ? 'bg-traditional text-obsidian-950 font-bold shadow-glow-gold'
+                  : 'text-parchment-200 hover:text-parchment-50 hover:bg-white/[0.04]'
+              )}
+            >
+              <Building2 className="w-3.5 h-3.5" />
+              <span>Publisher Atlas</span>
+            </button>
           </div>
 
-          <button
-            onClick={() => setRightInspectorOpen((prev) => !prev)}
-            title={rightInspectorOpen ? 'Collapse MARC21 Inspector Drawer' : 'Expand MARC21 Inspector Drawer'}
-            aria-label="Toggle Right MARC21 Inspector Drawer"
-            className="p-1.5 rounded-lg bg-white/[0.03] hover:bg-white/[0.08] border border-white/10 text-parchment-200 transition-colors cursor-pointer"
-          >
-            {rightInspectorOpen ? (
-              <PanelRightClose className="w-4 h-4 text-traditional" />
-            ) : (
-              <PanelRightOpen className="w-4 h-4 text-traditional" />
-            )}
-          </button>
+          <span className="hidden lg:inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/30 font-mono text-[9px] uppercase tracking-widest text-emerald-300">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            DNB SRU v1.1 · MARC21 · 4,196 Pre-Computed Permutations Active
+          </span>
         </div>
       </header>
 
