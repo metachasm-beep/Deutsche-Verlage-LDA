@@ -438,9 +438,9 @@ function App() {
       {/* =====================================================================
           TOP COMPACT IDE COMMAND BAR (h-13 shrink-0)
          ===================================================================== */}
-      <header className="h-13 shrink-0 border-b border-white/[0.08] bg-obsidian-900/95 backdrop-blur-xl px-3 sm:px-4 flex items-center justify-between gap-2 z-30">
-        {/* Left: Sidebar Toggle + Monograph Identity */}
-        <div className="flex items-center gap-2.5 min-w-0">
+      <header className="min-h-13 py-1.5 shrink-0 border-b border-white/[0.08] bg-obsidian-900/95 backdrop-blur-xl px-3 sm:px-4 flex flex-wrap items-center justify-between gap-2 z-30">
+        {/* Left: Sidebar Toggle + Monograph Identity (Always fully visible, never truncated) */}
+        <div className="flex items-center gap-2.5 shrink-0">
           <button
             onClick={() => setLeftSidebarOpen((prev) => !prev)}
             title={leftSidebarOpen ? 'Collapse Bayesian Command Rail' : 'Expand Bayesian Command Rail'}
@@ -454,16 +454,16 @@ function App() {
             )}
           </button>
 
-          <div className="flex items-center gap-2 min-w-0">
+          <div className="flex items-center gap-2 shrink-0">
             <div className="w-7 h-7 rounded-md bg-traditional/15 border border-traditional/40 flex items-center justify-center shrink-0">
               <BookOpen className="w-3.5 h-3.5 text-traditional" />
             </div>
-            <div className="truncate">
+            <div>
               <div className="flex items-center gap-2">
-                <span className="font-serif font-bold text-sm sm:text-base text-parchment-50 truncate">
+                <span className="font-serif font-bold text-sm sm:text-base text-parchment-50 whitespace-nowrap">
                   Mediating Faith & Power
                 </span>
-                <span className="hidden xl:inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/30 font-mono text-[9px] uppercase tracking-widest text-emerald-300">
+                <span className="hidden 2xl:inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/30 font-mono text-[9px] uppercase tracking-widest text-emerald-300 whitespace-nowrap">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                   DNB SRU v1.1 · MARC21
                 </span>
@@ -1238,16 +1238,16 @@ function App() {
         <main className="flex-1 min-w-0 lg:h-full lg:overflow-y-auto p-3.5 sm:p-5 space-y-4 custom-scrollbar">
           {/* Collapsible Monograph Abstract & Research Framing Strip */}
           <div className="archival-panel rounded-xl px-4 py-3 border border-white/[0.08]">
-            <div className="flex flex-wrap items-center justify-between gap-2">
-              <div className="flex items-center gap-2.5 min-w-0">
+            <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-2.5">
+              <div className="flex flex-wrap items-center gap-2.5">
                 <span className="px-2 py-0.5 rounded bg-traditional/15 border border-traditional/40 font-mono text-[10px] uppercase tracking-widest text-traditional shrink-0">
                   JNU Doctoral Monograph
                 </span>
-                <h1 className="font-serif text-base sm:text-lg font-bold text-parchment-50 truncate">
+                <h1 className="font-serif text-base sm:text-lg font-bold text-parchment-50 leading-snug">
                   Ideological Transformation of German Theological, Self-Help & Secular Publishing (1970–2025)
                 </h1>
               </div>
-              <div className="flex items-center gap-2 shrink-0">
+              <div className="flex flex-wrap items-center gap-2 shrink-0">
                 <button
                   onClick={() => setCorpusDistExpanded((prev) => !prev)}
                   className={clsx(
@@ -1957,7 +1957,7 @@ function App() {
                           className="w-2 h-2 rounded-full shrink-0"
                           style={{ backgroundColor: activeTopicTheme.hex }}
                         />
-                        <span className="font-serif font-bold text-sm text-parchment-50 truncate">
+                        <span className="font-serif font-bold text-sm text-parchment-50 leading-snug break-words">
                           Topic #{activeTopic.id + 1}: {getTopicDisplayLabel(activeTopic)}
                         </span>
                       </div>
@@ -2088,8 +2088,8 @@ function App() {
                             </p>
                           )}
 
-                          <div className="pt-2 border-t border-white/[0.06] flex items-center justify-between gap-2">
-                            <p className="font-mono text-[9px] text-parchment-300 truncate">
+                          <div className="pt-2 border-t border-white/[0.06] flex items-start justify-between gap-2">
+                            <p className="font-mono text-[9px] text-parchment-300 leading-relaxed break-words">
                               {apaText}
                             </p>
                             <button

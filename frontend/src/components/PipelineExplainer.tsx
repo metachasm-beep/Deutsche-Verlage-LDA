@@ -1073,7 +1073,7 @@ export const PipelineExplainer: React.FC<PipelineExplainerProps> = ({
                             className="w-2 h-2 rounded-full shrink-0"
                             style={{ backgroundColor: meta.color }}
                           />
-                          <span className="font-serif font-bold text-sm text-parchment-50 truncate">
+                          <span className="font-serif font-bold text-sm text-parchment-50 leading-snug break-words">
                             {meta.label}
                           </span>
                           <span className="px-1.5 py-0.5 rounded bg-white/[0.05] border border-white/10 font-mono text-[9px] text-parchment-200 shrink-0">

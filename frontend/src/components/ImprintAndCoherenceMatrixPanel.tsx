@@ -96,7 +96,7 @@ export const ImprintAndCoherenceMatrixPanel: React.FC<ImprintAndCoherenceMatrixP
                   >
                     <div className="flex items-center justify-between gap-2 mb-1.5">
                       <div className="flex items-center gap-2 min-w-0">
-                        <span className="font-serif font-bold text-sm text-parchment-50 truncate">
+                        <span className="font-serif font-bold text-sm text-parchment-50 leading-snug break-words">
                           {isPubActive ? `✓ ${item.publisher}` : item.publisher}
                         </span>
                         <span

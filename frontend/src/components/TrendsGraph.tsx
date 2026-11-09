@@ -865,7 +865,7 @@ export const TrendsGraph: React.FC<TrendsGraphProps> = ({
                       className="w-2 h-2 rounded-full shrink-0"
                       style={{ backgroundColor: isHidden ? '#52525B' : meta.color }}
                     />
-                    <span className="truncate max-w-[165px]">{meta.displayLabel}</span>
+                    <span>{meta.displayLabel}</span>
                     <span
                       className={clsx(
                         'text-[8px] px-1 rounded tabular-nums',

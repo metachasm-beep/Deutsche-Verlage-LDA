@@ -674,7 +674,7 @@ export const TopicModelViz: React.FC<TopicModelVizProps> = ({
                   <span className="font-mono text-[11px] font-bold text-parchment-100">
                     T{String(t.id + 1).padStart(2, '0')}
                   </span>
-                  <span className="text-[11px] text-parchment-200 max-w-[140px] truncate hidden sm:inline">
+                  <span className="text-[11px] text-parchment-200 hidden sm:inline">
                     {pillLabel}
                   </span>
                   {extraCount > 0 && (
@@ -1170,7 +1170,7 @@ export const TopicModelViz: React.FC<TopicModelVizProps> = ({
                           </h5>
                         </div>
                         <div className="flex items-center justify-between gap-2 pt-2 border-t border-white/[0.05]">
-                          <p className="font-mono text-[10px] text-parchment-300 truncate">
+                          <p className="font-mono text-[10px] text-parchment-300 leading-relaxed break-words">
                             <Quote className="w-2.5 h-2.5 inline mr-1 text-traditional" />
                             {apaText}
                           </p>

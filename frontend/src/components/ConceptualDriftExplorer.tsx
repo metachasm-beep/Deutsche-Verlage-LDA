@@ -317,7 +317,7 @@ export const ConceptualDriftExplorer: React.FC<ConceptualDriftExplorerProps> = (
                 )}
               >
                 <div className="flex items-center justify-between gap-1 mb-1">
-                  <span className="font-serif font-bold text-sm text-parchment-50 truncate">
+                  <span className="font-serif font-bold text-sm text-parchment-50 leading-snug break-words">
                     {sig.lemma}
                   </span>
                   <span
