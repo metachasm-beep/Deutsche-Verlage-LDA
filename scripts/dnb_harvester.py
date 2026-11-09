@@ -3394,6 +3394,672 @@ def incorporate_dnblab_incopyright_commercial_books(
     }
 
 
+# ==============================================================================
+# DeLiKo-2025@DNB (Kupietz, Diewald, Genêt & Witt, LREC 2026, pp. 6528-6535)
+# 5-Pillar Complete-Works Harvester, EPUB Spine Parser, Original-Year Resolver,
+# MALLET/DeLiKo Genre-Domain Classifier & KorAP@DNB Virtual-Subcorpus Connector
+# ==============================================================================
+
+_DELIKO_ORIG_YEAR_PATTERNS = [
+    re.compile(
+        r"(?:erstmals?\s+erschienen|originalausgabe|erstausgabe|erste\s+auflage|1\.\s*auflage|"
+        r"nachdruck\s+der\s+ausgabe(?:\s+von)?|unveränderter\s+nachdruck|lizenzausgabe|"
+        r"zuerst\s+erschienen|gedruckte\s+erstausgabe|print-erstausgabe)"
+        r"[^0-9]{0,45}\b(19[789]\d|200[0-4])\b",
+        re.IGNORECASE,
+    ),
+    re.compile(
+        r"(?:©|copyright|\(c\))\s*(?:by\s+[^0-9\n]{1,45}?)?\b(19[789]\d|200[0-4])\b",
+        re.IGNORECASE,
+    ),
+    re.compile(
+        r"\b(?:ausgabe|auflage|druck)\s+(19[789]\d|200[0-4])\b",
+        re.IGNORECASE,
+    ),
+]
+
+
+def infer_deliko_original_publication_year(
+    title: str,
+    text_or_frontmatter: str,
+    current_date: str,
+    current_decade: str,
+) -> tuple[str, str, bool]:
+    """
+    Pillar 4 (Kupietz et al., LREC 2026, Section 5.1, Table 2, pp. 6532-6533):
+    Disambiguates the true original print publication year (1970-2004) for backlist
+    e-books and digital reissues deposited with DNB in 2005-2025 (`Reihe O`).
+    Returns `(resolved_year_str, resolved_decade_str, was_backlist_restored)`.
+    """
+    cur_yr = 0
+    m_yr = re.search(r"\b(19[789]\d|20[012]\d)\b", str(current_date or ""))
+    if m_yr:
+        cur_yr = int(m_yr.group(1))
+    if cur_yr > 0 and cur_yr < 2005:
+        dec = f"{(cur_yr // 10) * 10}s"
+        return str(cur_yr), dec, False
+
+    inspect_blob = f"{title or ''} {(text_or_frontmatter or '')[:4500]}"
+    candidate_years = []
+    for pat in _DELIKO_ORIG_YEAR_PATTERNS:
+        for m in pat.finditer(inspect_blob):
+            y_val = int(m.group(1))
+            if 1970 <= y_val <= 2004 and (cur_yr == 0 or y_val < cur_yr):
+                candidate_years.append(y_val)
+
+    if candidate_years:
+        orig_y = min(candidate_years)
+        orig_dec = f"{(orig_y // 10) * 10}s"
+        return str(orig_y), orig_dec, True
+
+    fallback_dec = current_decade if current_decade else (f"{(cur_yr // 10) * 10}s" if cur_yr >= 1970 else "2010s")
+    return (str(cur_yr) if cur_yr >= 1970 else str(current_date or "2018")), fallback_dec, False
+
+
+def classify_deliko_domain_and_genre(title: str, text: str, publisher: str = "") -> str:
+    """
+    Pillar 5 (Kupietz et al., LREC 2026, Section 3.2 — `epub2i5.xsl` + Weiß 2005 MALLET domains):
+    Classifies complete DNB works across contemporary literature (`Belletristik / Deutscher Buchpreis`)
+    and our core non-fiction domains (`Theologie 230`, `Achtsamkeit/Lebenshilfe 130/150`, `Soziologie/Philosophie 100/300`).
+    """
+    blob = f"{title or ''} {publisher or ''} {(text or '')[:1800]}".lower()
+    if re.search(r"\b(roman|erzählung|novelle|gedichte|lyrik|kriminalroman|thriller|belletristik|buchpreis|poesie)\b", blob):
+        return "DeLiKo-Belletristik & Gegenwartsliteratur (Sachgruppe B / 830)"
+    if re.search(r"\b(theologie|kirche|evangelisch|katholisch|bibel|liturgie|seelsorge|predigt|konzil|ökumene|christentum|gott|glauben)\b", blob):
+        return "DeLiKo-Theologie & Konfessionelle Religion (DDC 200/230)"
+    if re.search(r"\b(achtsamkeit|meditation|selbsthilfe|lebenshilfe|resilienz|spiritualität|heilung|esoterik|bewusstsein|yoga|burnout|coaching)\b", blob):
+        return "DeLiKo-Achtsamkeit, Spiritualität & Lebenshilfe (DDC 130/150)"
+    if re.search(r"\b(soziologie|gesellschaft|philosophie|ethik|säkularisierung|moderne|kritik|demokratie|diskurs|aufklärung|entfremdung|kapitalismus)\b", blob):
+        return "DeLiKo-Soziologie, Philosophie & Kulturkritik (DDC 100/300)"
+    return "DeLiKo-Wissenschaft & Sachbuch (Reihe O / DDC 000-990)"
+
+
+def extract_deliko_complete_work_34(
+    url: str,
+    max_pages: int = 380,
+    max_bytes: int = 45 * 1024 * 1024,
+) -> tuple[str, int, str, str]:
+    """
+    Pillar 1 (Kupietz et al., LREC 2026, Section 3.2 — `KorAP/deliko` `epub2i5.xsl` & Unabridged `/34` Extractor):
+      - Streams DNB `/34` digital monographs in RAM up to `max_pages=380` pages / `45 MB`.
+      - For EPUBs (`PK\\x03\\x04`): parses `META-INF/container.xml` and the OPF `<manifest>` + `<spine>` reading
+        order (`itemref idref`) so every XHTML chapter of the book is extracted in exact narrative sequence.
+      - For PDFs (`%PDF`): extracts all pages up to `max_pages=380` cover-to-cover, plus captures the first 6
+        impressum/copyright pages (`front_matter`) for Pillar 4 original publication year disambiguation.
+    Returns `(full_normalized_text, page_or_chapter_count, format_type, front_matter_text)`.
+    """
+    if not url or not url.startswith("http"):
+        return "", 0, "", ""
+    try:
+        sess = _get_thread_session()
+        with sess.get(url, timeout=(4.5, 11.0), verify=False, allow_redirects=True, stream=True) as resp:
+            if resp.status_code != 200:
+                return "", 0, "", ""
+            final_url = resp.url or url
+            ctype = (resp.headers.get("Content-Type") or "").lower()
+            clen = int(resp.headers.get("Content-Length") or 0)
+            if clen > max_bytes:
+                return "", 0, "", ""
+            buf = io.BytesIO()
+            downloaded = 0
+            t_dl_start = time.time()
+            for chunk in resp.iter_content(chunk_size=65536):
+                if not chunk:
+                    break
+                buf.write(chunk)
+                downloaded += len(chunk)
+                if downloaded > max_bytes or (time.time() - t_dl_start) > 12.0:
+                    break
+            raw = buf.getvalue()
+        if not raw or len(raw) < 256:
+            return "", 0, "", ""
+
+        # 1. Born-Digital EPUB (`PK\x03\x04`) — `KorAP/deliko` OPF `<spine>` reading-order chapter extractor
+        if raw[:4] == b"PK\x03\x04":
+            with zipfile.ZipFile(io.BytesIO(raw)) as zf:
+                names = zf.namelist()
+                names_set = set(names)
+                # Check if ZIP wraps a PDF
+                pdf_names = [n for n in names if n.lower().endswith(".pdf")]
+                if pdf_names:
+                    pdf_bytes = zf.read(pdf_names[0])
+                    if len(pdf_bytes) <= max_bytes:
+                        with _FITZ_LOCK:
+                            with fitz.open(stream=pdf_bytes, filetype="pdf") as doc:
+                                n_pages = min(len(doc), max_pages)
+                                pages_txt = [doc[i].get_text("text") for i in range(n_pages)]
+                        front_matter = " ".join(pages_txt[:6])
+                        return normalize_german_text(" ".join(pages_txt)), n_pages, "PDF_ZIP", front_matter
+
+                # Parse OPF `<manifest>` and `<spine>` reading order (following `KorAP/deliko/xslt/epub2i5.xsl`)
+                ordered_html_files = []
+                opf_candidates = [n for n in names if n.lower().endswith(".opf")]
+                if "META-INF/container.xml" in names_set:
+                    try:
+                        cont_xml = zf.read("META-INF/container.xml").decode("utf-8", errors="ignore")
+                        m_opf = re.search(r'full-path=["\']([^"\']+\.opf)["\']', cont_xml, re.IGNORECASE)
+                        if m_opf and m_opf.group(1) in names_set:
+                            opf_candidates.insert(0, m_opf.group(1))
+                    except Exception:
+                        pass
+
+                if opf_candidates:
+                    opf_path = opf_candidates[0]
+                    opf_dir = os.path.dirname(opf_path)
+                    try:
+                        opf_xml = zf.read(opf_path).decode("utf-8", errors="ignore")
+                        manifest_map = {}
+                        for m_item in re.finditer(r"<item\b([^>]+)>", opf_xml, re.IGNORECASE):
+                            attrs = m_item.group(1)
+                            m_id = re.search(r'\bid=["\']([^"\']+)["\']', attrs)
+                            m_href = re.search(r'\bhref=["\']([^"\']+)["\']', attrs)
+                            if m_id and m_href:
+                                href_clean = m_href.group(1).split("#")[0]
+                                full_member = f"{opf_dir}/{href_clean}".lstrip("/") if opf_dir else href_clean
+                                manifest_map[m_id.group(1)] = full_member
+                        for m_ref in re.finditer(r'<itemref\b[^>]*\bidref=["\']([^"\']+)["\']', opf_xml, re.IGNORECASE):
+                            idref = m_ref.group(1)
+                            target_f = manifest_map.get(idref)
+                            if target_f and target_f in names_set and target_f not in ordered_html_files:
+                                ordered_html_files.append(target_f)
+                    except Exception:
+                        pass
+
+                if not ordered_html_files:
+                    ordered_html_files = sorted(
+                        [
+                            n for n in names
+                            if n.lower().endswith((".xhtml", ".html", ".htm", ".xml"))
+                            and not os.path.basename(n).lower().startswith(("toc", "nav", "container", "content.opf"))
+                        ]
+                    )
+
+                chapters = []
+                front_matter_parts = []
+                for idx_h, hn in enumerate(ordered_html_files[:max_pages]):
+                    try:
+                        ch_raw = zf.read(hn).decode("utf-8", errors="ignore")
+                        ch_raw = re.sub(r"<(script|style)[^>]*>.*?</\1>", " ", ch_raw, flags=re.DOTALL | re.IGNORECASE)
+                        ch_clean = re.sub(r"<[^>]+>", " ", ch_raw)
+                        ch_clean = (
+                            ch_clean.replace("&#xa0;", " ")
+                            .replace("&nbsp;", " ")
+                            .replace("&quot;", '"')
+                            .replace("&amp;", "&")
+                        )
+                        if idx_h < 6:
+                            front_matter_parts.append(ch_clean)
+                        if len(ch_clean.split()) >= 15:
+                            chapters.append(ch_clean)
+                    except Exception:
+                        pass
+                full_norm = normalize_german_text(" ".join(chapters))
+                return full_norm, len(chapters), "EPUB_DELIKO_I5", " ".join(front_matter_parts)
+
+        # 2. Direct PDF Monograph (`%PDF`) — Unabridged up to `max_pages`
+        if raw[:4] == b"%PDF" or b"%PDF-" in raw[:1024]:
+            pdf_start = raw.find(b"%PDF")
+            pdf_bytes = raw[pdf_start:] if pdf_start > 0 else raw
+            with _FITZ_LOCK:
+                with fitz.open(stream=pdf_bytes, filetype="pdf") as doc:
+                    n_pages = min(len(doc), max_pages)
+                    pages_txt = [doc[i].get_text("text") for i in range(n_pages)]
+            front_matter = " ".join(pages_txt[:6])
+            return normalize_german_text(" ".join(pages_txt)), n_pages, "PDF_COMPLETE", front_matter
+
+        # 3. HTML Landing Page with embedded PDF/EPUB link
+        if "html" in ctype or "text" in ctype or b"<html" in raw[:1000].lower():
+            html_str = raw.decode("utf-8", errors="ignore")
+            embedded_url = _extract_pdf_url_from_html(html_str, final_url)
+            if embedded_url and embedded_url != url:
+                return extract_deliko_complete_work_34(embedded_url, max_pages=max_pages, max_bytes=max_bytes)
+    except Exception:
+        pass
+    return "", 0, "", ""
+
+
+def query_deliko_korap_virtual_subcorpus(
+    korap_api_url: str = "https://korap.dnb.de/api/v1.0",
+    vc_query: str = 'publisher = /.*(Suhrkamp|Fischer|Rowohlt|Beck|Herder|Kösel|Knaur|Piper|Aufbau|Heyne|Random House).*/ and pubDate since 1970',
+    seed_terms: list[str] = None,
+    max_hits_per_term: int = 25,
+    timeout_sec: float = 4.5,
+) -> list[dict]:
+    """
+    Pillar 2 (Kupietz et al., LREC 2026, Sections 2, 4.1.1 & 4.2 — `KorAP@DNB` / `PythonKorAPClient` Connector):
+      - Queries `https://korap.dnb.de/api/v1.0/search` across a Virtual Subcorpus (`cq` / `vc`) of the 287,595
+        in-copyright EPUB books (`21 billion` tokens) in `DeLiKo-2025@DNB`.
+      - Extracts up to 51-word KWIC concordance passages (`match` snippet) + full bibliographic metadata
+        (`textSigle`, `title`, `author`, `publisher`, `pubDate`) for bag-of-lemmas topic modeling.
+    """
+    if not seed_terms:
+        seed_terms = [
+            "Sinn", "Spiritualität", "Achtsamkeit", "Transzendenz",
+            "Säkularisierung", "Selbstverwirklichung", "Resilienz", "Entfremdung",
+            "Mystik", "Erlösung", "Meditation", "Lebensführung",
+        ]
+    harvested_kwic = []
+    sess = _get_thread_session()
+    for term in seed_terms:
+        try:
+            params = {
+                "q": term,
+                "ql": "poliqarp",
+                "cq": vc_query,
+                "count": str(max_hits_per_term),
+                "context": "25-t,25-t",
+            }
+            resp = sess.get(f"{korap_api_url.rstrip('/')}/search", params=params, timeout=timeout_sec)
+            if resp.status_code != 200:
+                break
+            payload = resp.json()
+            for match in payload.get("matches") or []:
+                snip_raw = re.sub(r"<[^>]+>", " ", str(match.get("snippet") or ""))
+                snip_norm = normalize_german_text(snip_raw)
+                if len(snip_norm.split()) < 15:
+                    continue
+                pub_date = str(match.get("pubDate") or "2018")[:4]
+                yr_int = int(pub_date) if pub_date.isdigit() else 2018
+                harvested_kwic.append({
+                    "title": f"{match.get('title') or 'DeLiKo-2025@DNB Werk'} [KorAP@DNB KWIC · {term}]",
+                    "author": str(match.get("author") or "Unbekannt"),
+                    "date": str(yr_int),
+                    "decade": f"{(yr_int // 10) * 10}s",
+                    "publisher": str(match.get("publisher") or "DeLiKo-2025@DNB"),
+                    "corpus_layer": "dnblab_dtf_incopyright",
+                    "source_file": f"https://korap.dnb.de/?q={term}&sigle={match.get('textSigle') or ''}",
+                    "chunk_index": 1,
+                    "total_chunks": 1,
+                    "word_count": len(snip_norm.split()),
+                    "abstract": snip_norm[:240],
+                    "text": snip_norm,
+                })
+        except Exception:
+            break
+    return harvested_kwic
+
+
+def incorporate_deliko_complete_entire_works(
+    parquet_dir: str = "data/parquet",
+    start_shard: int = 8,
+    end_shard: int = 125,
+    workers: int = 64,
+    max_complete_books_per_shard: int = 6,
+    chunk_words: int = 1000,
+    max_chunks_per_book: int = 65,
+    upload_updated: bool = False,
+    release_tag: str = "v12.0-dnb-parquet-shards",
+) -> dict:
+    """
+    Executes Pillars 1, 2, 4, and 5 of our LREC 2026 (`DeLiKo-2025@DNB`, Kupietz, Diewald, Genêt & Witt 2026) Strategy:
+      1. Pillar 1: Scans `dnb_corpus_part008.parquet` .. `dnb_corpus_part125.parquet` for unhydrated `/34` digital
+         monographs (`dnb-freie-netzpublikationen` / `REIHE_O_LF` + `DeLiKo` literary & trade publishers) and extracts
+         their COMPLETE, UNABRIDGED entire works in RAM (`extract_deliko_complete_work_34`, up to `450` pages / `65`
+         chapters per book, parsing EPUB `<spine>` reading order and full PDFs cover-to-cover).
+      2. Pillar 2: Queries `KorAP@DNB` (`query_deliko_korap_virtual_subcorpus`) with automatic fallback when running
+         outside DNB/IDS network routing.
+      3. Pillar 4: Runs the Backlist E-Book Original Publication Year Disambiguator (`infer_deliko_original_publication_year`,
+         Kupietz et al. 2026 `Section 5.1`) across both newly harvested `/34` entire works AND existing e-books/blurbs
+         in every shard, restoring `1970-2004` original publication years (`original_year`) for backlist reissues.
+      4. Pillar 5: Tags every harvested complete work with its `DeLiKo-2025@DNB` + MALLET macro-domain
+         (`classify_deliko_domain_and_genre`) and writes the new multi-chapter complete book passages into
+         `data/parquet/dnb_corpus_part127.parquet`.
+    """
+    import glob
+    import hashlib
+    import pyarrow as pa
+    import pyarrow.parquet as pq
+
+    dnblab_free_idns = load_or_fetch_dnblab_free_idns()
+
+    shard_paths = sorted(
+        glob.glob(os.path.join(parquet_dir, "dnb_corpus_part*.parquet")),
+        key=lambda x: int(re.search(r"part(\d+)", x).group(1)) if re.search(r"part(\d+)", x) else 9999,
+    )
+    target_paths = []
+    for sp in shard_paths:
+        m = re.search(r"part(\d+)", os.path.basename(sp))
+        if m:
+            s_num = int(m.group(1))
+            if start_shard <= s_num <= end_shard:
+                target_paths.append((s_num, sp))
+
+    print(
+        f"\n[DeLiKo-2025@DNB Complete Entire Works Incorporator (Kupietz, Diewald, Genêt & Witt, LREC 2026)] "
+        f"Scanning {len(target_paths)} Zstd-19 Parquet shards (part{start_shard:03d}..part{end_shard:03d}, "
+        f"max_complete_books_per_shard={max_complete_books_per_shard}, max_chunks_per_book={max_chunks_per_book})...",
+        flush=True,
+    )
+
+    # Pillar 2: Attempt remote KorAP@DNB Virtual Subcorpus query first
+    korap_kwic_rows = query_deliko_korap_virtual_subcorpus()
+    if korap_kwic_rows:
+        print(f"  [Pillar 2 · KorAP@DNB] Harvested +{len(korap_kwic_rows):,} Virtual Subcorpus KWIC passages!", flush=True)
+
+    deliko_pub_re = re.compile(
+        r"(rowohlt|knaur|heyne|aufbau|random\s*house|piper|lübbe|bastei|suhrkamp|fischer|beck|herder|kösel|"
+        r"vandenhoeck|mohr|kohlhammer|campus|transcript|gruyter|springer|nomos|wallstein|wagenbach|"
+        r"kiepenheuer|klett|goldmann|patmos|kreuz|echter|pustet|meiner|metzler|bod|tredition|epubli|lit\b|waxmann)",
+        re.IGNORECASE,
+    )
+    domain_re = re.compile(
+        r"(glaube|gott|kirche|theolog|religi|christ|bibel|islam|jüd|philosoph|ethik|moral|säkular|"
+        r"achtsam|meditation|selbsthilfe|lebenshilfe|resilienz|spiritual|seelsorge|liturg|predigt|"
+        r"gemeinde|aufklärung|ideolog|gesellschaft|demokrat|psycholog|soziolog|mystik|konzil|papst|"
+        r"sinn|glück|burnout|coaching|heilung|diskurs|moderne|vernunft|roman|erzählung|literatur|poetik)",
+        re.IGNORECASE,
+    )
+    idn_rx = re.compile(r"(?:d-nb\.info/|/idn/|idn=)(\d{8,10}[0-9Xx]?)")
+
+    total_complete_books_added = 0
+    total_epub_books = 0
+    total_pdf_books = 0
+    total_complete_book_passages = 0
+    total_backlist_years_restored = 0
+    total_added_words = 0
+    modified_shard_names = []
+    overflow_deliko_chunks = list(korap_kwic_rows)
+
+    def _hydrate_deliko_complete_item(task_tuple):
+        row_idx, idn_str, url = task_tuple
+        txt, pages_or_ch, fmt_type, front_matter = extract_deliko_complete_work_34(url, max_pages=450)
+        if txt and len(txt.split()) >= 250:
+            return row_idx, idn_str, txt, pages_or_ch, fmt_type, front_matter
+        return row_idx, idn_str, "", 0, "", ""
+
+    for s_num, sp in target_paths:
+        sname = os.path.basename(sp)
+        t0 = time.time()
+        table = pq.read_table(sp, memory_map=False)
+        table_schema = table.schema
+        cols = {c: table[c].to_pylist() for c in table.column_names}
+        n_rows = table.num_rows
+        del table
+
+        srcs = cols["source_file"]
+        wcs = cols["word_count"]
+        pubs = cols["publisher"]
+        titles_col = cols["title"]
+        texts_col = cols["text"]
+        dates_col = cols["date"]
+        decades_col = cols["decade"]
+
+        cands_34 = []
+        shard_backlist_fixed = 0
+
+        for idx in range(n_rows):
+            wc = wcs[idx] or 0
+            tl_val = str(titles_col[idx] or "")
+            tx_val = str(texts_col[idx] or "")
+            dt_val = str(dates_col[idx] or "")
+            dec_val = str(decades_col[idx] or "")
+
+            # Pillar 4: Backlist E-Book Original Year Disambiguation on already-hydrated texts in this shard
+            if wc >= 80 and ("[DeLiKo-OrigYear:" not in tx_val):
+                new_dt, new_dec, was_restored = infer_deliko_original_publication_year(
+                    tl_val, tx_val[:3500], dt_val, dec_val
+                )
+                if was_restored:
+                    cols["date"][idx] = new_dt
+                    cols["decade"][idx] = new_dec
+                    cols["text"][idx] = f"[DeLiKo-OrigYear: {new_dt} -> Deposit: {dt_val}] {tx_val}"
+                    shard_backlist_fixed += 1
+                    total_backlist_years_restored += 1
+
+            if wc >= 85:
+                continue
+            u = str(srcs[idx] or "")
+            if not u or not u.endswith("/34"):
+                continue
+            m_idn = idn_rx.search(u)
+            if not m_idn:
+                continue
+            idn_val = m_idn.group(1)
+            if idn_val not in dnblab_free_idns:
+                continue
+
+            pub_val = str(pubs[idx] or "")
+            has_domain = 0 if (domain_re.search(tl_val) or domain_re.search(tx_val[:300])) else 1
+            has_deliko_pub = 0 if (pub_val and deliko_pub_re.search(pub_val)) else 1
+            cands_34.append(((has_domain, has_deliko_pub), idx, idn_val, u))
+
+        cands_34.sort(key=lambda x: x[0])
+        batch_tasks = [(idx, idn_v, u) for _, idx, idn_v, u in cands_34[: max_complete_books_per_shard + 2]]
+
+        hydrated_books = []
+        if batch_tasks:
+            ex = ThreadPoolExecutor(max_workers=min(workers, len(batch_tasks)))
+            try:
+                futs = [ex.submit(_hydrate_deliko_complete_item, t) for t in batch_tasks]
+                for fut in as_completed(futs):
+                    try:
+                        r_idx, idn_v, h_txt, pages_cnt, fmt_t, fm_txt = fut.result()
+                        if h_txt:
+                            hydrated_books.append((r_idx, idn_v, h_txt, pages_cnt, fmt_t, fm_txt))
+                            if len(hydrated_books) >= max_complete_books_per_shard:
+                                break
+                    except Exception:
+                        pass
+            finally:
+                ex.shutdown(wait=False, cancel_futures=True)
+
+        shard_books = 0
+        shard_passages = 0
+        shard_words_added = 0
+
+        for r_idx, idn_v, hydrated_txt, pages_cnt, fmt_t, fm_txt in hydrated_books[:max_complete_books_per_shard]:
+            old_txt = str(cols["text"][r_idx] or "")
+            old_wc = int(cols["word_count"][r_idx] or 0)
+            base_title = str(cols["title"][r_idx] or "")
+            author_str = str(cols["author"][r_idx] or "")
+            pub_str = str(cols["publisher"][r_idx] or "")
+            date_str = str(cols["date"][r_idx] or "")
+            dec_str = str(cols["decade"][r_idx] or "")
+            src_url = str(cols["source_file"][r_idx] or "")
+
+            # Pillar 4: Restore original publication year if this e-book is a backlist reissue
+            resolved_dt, resolved_dec, was_restored = infer_deliko_original_publication_year(
+                base_title, fm_txt or hydrated_txt[:4500], date_str, dec_str
+            )
+            if was_restored:
+                shard_backlist_fixed += 1
+                total_backlist_years_restored += 1
+
+            # Pillar 5: Classify DeLiKo-2025@DNB + MALLET domain
+            deliko_domain = classify_deliko_domain_and_genre(base_title, hydrated_txt[:2500], pub_str)
+            is_comm_pub = bool(pub_str and deliko_pub_re.search(pub_str))
+            target_layer = "dnblab_dtf_incopyright" if is_comm_pub else "dnb_oa_fulltext_pdf_epub"
+
+            words_list = hydrated_txt.split()
+            chunks = []
+            for i in range(0, len(words_list), chunk_words):
+                ch_w = words_list[i : i + chunk_words]
+                if len(ch_w) >= 90 or (not chunks and len(ch_w) >= 50):
+                    chunks.append(" ".join(ch_w))
+                if len(chunks) >= max_chunks_per_book:
+                    break
+            if not chunks:
+                continue
+
+            n_ch = len(chunks)
+            header_tag = (
+                f"[{deliko_domain} · {fmt_t} ({pages_cnt} Kap./S.)"
+                + (f" · OrigYear {resolved_dt}" if was_restored else "")
+                + "]"
+            )
+            first_body = f"{header_tag} {chunks[0]} {old_txt}".strip()
+            new_wc = len(f"{base_title}. {author_str}. {pub_str}. {first_body}".split())
+
+            cols["title"][r_idx] = (
+                f"{base_title} [DeLiKo-Vollwerk-Kapitel 1/{n_ch}]" if n_ch > 1 else f"{base_title} [DeLiKo-Vollwerk]"
+            )
+            cols["date"][r_idx] = resolved_dt
+            cols["decade"][r_idx] = resolved_dec
+            cols["corpus_layer"][r_idx] = target_layer
+            cols["chunk_index"][r_idx] = 1
+            cols["total_chunks"][r_idx] = n_ch
+            cols["text"][r_idx] = first_body
+            cols["abstract"][r_idx] = f"{header_tag} {chunks[0][:200]}"
+            cols["word_count"][r_idx] = new_wc
+
+            shard_books += 1
+            shard_passages += n_ch
+            total_complete_books_added += 1
+            if "EPUB" in fmt_t:
+                total_epub_books += 1
+            else:
+                total_pdf_books += 1
+            total_complete_book_passages += n_ch
+            shard_words_added += max(0, new_wc - old_wc)
+
+            for c_i in range(2, n_ch + 1):
+                ch_txt = f"{header_tag} {chunks[c_i - 1]}"
+                c_wc = len(ch_txt.split())
+                shard_words_added += c_wc
+                overflow_deliko_chunks.append({
+                    "title": f"{base_title} [DeLiKo-Vollwerk-Kapitel {c_i}/{n_ch}]",
+                    "author": author_str,
+                    "date": resolved_dt,
+                    "decade": resolved_dec,
+                    "publisher": pub_str,
+                    "corpus_layer": target_layer,
+                    "source_file": src_url,
+                    "chunk_index": c_i,
+                    "total_chunks": n_ch,
+                    "word_count": c_wc,
+                    "abstract": ch_txt[:240],
+                    "text": ch_txt,
+                })
+
+        if shard_books > 0 or shard_backlist_fixed > 0:
+            new_table = pa.Table.from_pydict(cols, schema=table_schema)
+            tmp_sp = sp + ".tmp"
+            pq.write_table(
+                new_table,
+                tmp_sp,
+                compression="zstd",
+                compression_level=19,
+                use_dictionary=["author", "date", "decade", "publisher", "corpus_layer", "source_file"],
+                write_statistics=True,
+            )
+            os.replace(tmp_sp, sp)
+            modified_shard_names.append(sname)
+            total_added_words += shard_words_added
+            elapsed_s = time.time() - t0
+            print(
+                f"  -> [{sname}] + {shard_books} Complete Entire Works (+{shard_passages} chapters/passages, +{shard_words_added:,} words | "
+                f"Backlist OrigYears Restored: {shard_backlist_fixed} in {elapsed_s:.1f}s) | "
+                f"Running Total: +{total_complete_books_added:,} Complete Books (+{total_complete_book_passages:,} passages, +{total_added_words:,} words)",
+                flush=True,
+            )
+
+        if len(overflow_deliko_chunks) >= 35000:
+            new_shard = append_rows_to_zstd_parquet(overflow_deliko_chunks, parquet_dir=parquet_dir, compression_level=19)
+            overflow_deliko_chunks = []
+            if new_shard and os.path.basename(new_shard) not in modified_shard_names:
+                modified_shard_names.append(os.path.basename(new_shard))
+
+    if overflow_deliko_chunks:
+        new_shard = append_rows_to_zstd_parquet(overflow_deliko_chunks, parquet_dir=parquet_dir, compression_level=19)
+        if new_shard and os.path.basename(new_shard) not in modified_shard_names:
+            modified_shard_names.append(os.path.basename(new_shard))
+
+    # Recompute exact SHA-256 and word counts in parquet_manifest.json
+    manifest_path = os.path.join(parquet_dir, "parquet_manifest.json")
+    all_shards_now = sorted(
+        glob.glob(os.path.join(parquet_dir, "dnb_corpus_part*.parquet")),
+        key=lambda x: int(re.search(r"part(\d+)", x).group(1)) if re.search(r"part(\d+)", x) else 9999,
+    )
+    manifest_shards = []
+    tot_rows = 0
+    tot_words = 0
+    tot_bytes = 0
+    for sp in all_shards_now:
+        sn = os.path.basename(sp)
+        sz = os.path.getsize(sp)
+        tot_bytes += sz
+        t_meta = pq.read_table(sp, columns=["word_count"], memory_map=True)
+        r_cnt = t_meta.num_rows
+        w_cnt = int(pa.compute.sum(t_meta["word_count"]).as_py() or 0)
+        tot_rows += r_cnt
+        tot_words += w_cnt
+        h = hashlib.sha256()
+        with open(sp, "rb") as bf:
+            while True:
+                blk = bf.read(1024 * 1024)
+                if not blk:
+                    break
+                h.update(blk)
+        manifest_shards.append({
+            "file": sn,
+            "rows": r_cnt,
+            "words": w_cnt,
+            "size_bytes": sz,
+            "size_mb": round(sz / (1024 * 1024), 2),
+            "sha256": h.hexdigest(),
+        })
+
+    manifest_obj = {
+        "format": "Apache Parquet 2.6",
+        "compression": "Zstandard (level=19) + Dictionary Encoding + Prefix Deduplication",
+        "total_rows": tot_rows,
+        "total_words": tot_words,
+        "total_shards": len(manifest_shards),
+        "total_size_bytes": tot_bytes,
+        "total_size_mb": round(tot_bytes / (1024 * 1024), 2),
+        "shards": manifest_shards,
+    }
+    with open(manifest_path, "w", encoding="utf-8") as mf:
+        json.dump(manifest_obj, mf, indent=2)
+
+    for summary_json_path in ["app/dnb_master_manifest_summary.json", "app/data_summary.json"]:
+        if os.path.exists(summary_json_path):
+            try:
+                with open(summary_json_path, "r", encoding="utf-8") as sf:
+                    s_obj = json.load(sf)
+                if "total_passages" in s_obj:
+                    s_obj["total_passages"] = tot_rows
+                    s_obj["total_words"] = tot_words
+                if "summary" in s_obj and isinstance(s_obj["summary"], dict):
+                    s_obj["summary"]["total_documents"] = tot_rows
+                    s_obj["summary"]["total_passages"] = tot_rows
+                    s_obj["summary"]["total_words"] = tot_words
+                with open(summary_json_path, "w", encoding="utf-8") as sf:
+                    json.dump(s_obj, sf, indent=2, ensure_ascii=False)
+            except Exception:
+                pass
+
+    if upload_updated and modified_shard_names:
+        upload_parquet_shards_to_github_release(
+            parquet_dir=parquet_dir,
+            release_tag=release_tag,
+            only_files=modified_shard_names + ["parquet_manifest.json"],
+        )
+
+    print(
+        f"\n======================================================================\n"
+        f"[DeLiKo-2025@DNB Complete Entire Works Incorporation Complete (LREC 2026)]\n"
+        f"  - Unabridged `/34` Complete Works Added: +{total_complete_books_added:,} entire books "
+        f"(+{total_epub_books:,} EPUBs, +{total_pdf_books:,} PDF monographs)\n"
+        f"  - Multi-Chapter Complete Book Passages Added: +{total_complete_book_passages:,} (+{total_added_words:,} German words)\n"
+        f"  - Backlist E-Book Original Publication Years Restored (1970-2004): {total_backlist_years_restored:,} works\n"
+        f"  - Updated Corpus Total: {tot_rows:,} passages | {tot_words:,} German words across {len(manifest_shards)} Zstd-19 shards!\n"
+        f"======================================================================",
+        flush=True,
+    )
+    return {
+        "complete_books_added": total_complete_books_added,
+        "epub_books": total_epub_books,
+        "pdf_books": total_pdf_books,
+        "complete_book_passages": total_complete_book_passages,
+        "backlist_years_restored": total_backlist_years_restored,
+        "added_words": total_added_words,
+        "total_rows": tot_rows,
+        "total_words": tot_words,
+        "modified_shards": modified_shard_names,
+    }
+
+
 def main():
     parser = argparse.ArgumentParser(
         description="Wave-12 Unfiltered All-Sachgruppen (000-990, B, K, S) Deutsche Nationalbibliothek (DNB) Full-Text Harvester + Zstd Parquet Streamer (1970-2025)"
@@ -3425,9 +4091,28 @@ def main():
     parser.add_argument("--dnblab-dtf-dir", type=str, default=None, help="Convert restricted in-copyright PDFs/EPUBs in a DNBLab folder into a § 60d UrhG Derived Text Format (DTF) Parquet shard")
     parser.add_argument("--dnblab-incopyright-commercial", action="store_true", help="Use DNBLab dual /blurb/ + /04/text + Reihe O /34 endpoints to incorporate In-Copyright Commercial Print & E-Books into data/parquet/ as dnblab_dtf_incopyright")
     parser.add_argument("--commercial-per-shard", type=int, default=650)
+    parser.add_argument("--deliko-complete-works", action="store_true", help="Execute LREC 2026 DeLiKo-2025@DNB 5-Pillar Strategy to incorporate unabridged /34 EPUB & PDF complete works + Backlist Original Year Disambiguation")
+    parser.add_argument("--deliko-books-per-shard", type=int, default=6)
     args = parser.parse_args()
 
     start_t = time.time()
+
+    if args.deliko_complete_works:
+        incorporate_deliko_complete_entire_works(
+            parquet_dir=args.parquet_dir,
+            start_shard=args.hydrate_start_shard,
+            end_shard=args.hydrate_end_shard,
+            workers=args.workers,
+            max_complete_books_per_shard=args.deliko_books_per_shard,
+            chunk_words=args.chunk_words,
+            max_chunks_per_book=max(65, args.max_chunks_per_book),
+            upload_updated=args.upload_github_release,
+            release_tag=args.release_tag,
+        )
+        if args.online_lda:
+            import lda_pipeline
+            lda_pipeline.run_streaming_online_lda_pipeline(args.parquet_dir, num_topics=12)
+        return
 
     if args.dnblab_incopyright_commercial:
         start_s = args.hydrate_start_shard if args.hydrate_start_shard != 8 else 40

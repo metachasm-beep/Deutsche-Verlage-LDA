@@ -1018,11 +1018,128 @@ def iter_corpus_rows(data_path: str, include_shards: bool = False, prefer_parque
 
 
 
+def iter_deliko_korapxml_and_tei_i5(archive_or_dir_path: str, chunk_words: int = 1000) -> list[dict]:
+    """
+    Pillar 3 (Kupietz, Diewald, Genêt & Witt, LREC 2026, Sections 3.2 & 5.2 — `DeLiKo-2025@DNB` Reader):
+      - Natively reads IDS/DNB `KorAP-XML` (`*.korapxml.zip` containing `header.xml`, `data.xml`, and
+        `tree_tagger/morpho.xml` | `marmot/morpho.xml` | `spacy/morpho.xml`) and `TEI-I5` (`*.i5.xml`)
+        archives produced by `https://github.com/KorAP/deliko` (`epub2i5.xsl`) across the 287,595
+        deposited EPUB books (`21 billion` tokens) on DNB's 96-core / 1.5 TB RAM server.
+      - When pre-computed `morpho.xml` annotations (`<f name="lemma">`, `<f name="pos">`) are present,
+        populates `_TOKEN_CACHE` directly with filtered content lemmas (`NN`, `NE`, `ADJA`, `NOUN`,
+        `PROPN`, `ADJ`), bypassing runtime tokenization and lemmatization entirely!
+    """
+    import glob
+    import zipfile
+
+    if not archive_or_dir_path or not os.path.exists(archive_or_dir_path):
+        return []
+
+    candidate_files = []
+    if os.path.isfile(archive_or_dir_path):
+        candidate_files.append(archive_or_dir_path)
+    else:
+        for pat in ("**/*.korapxml.zip", "**/*.zip", "**/*.i5.xml", "**/*.xml"):
+            candidate_files.extend(glob.glob(os.path.join(archive_or_dir_path, pat), recursive=True))
+
+    allowed_stts_ud = {"NN", "NE", "ADJA", "ADJD", "NOUN", "PROPN", "ADJ"}
+    lemma_re = re.compile(r'<f\s+name=["\']lemma["\'][^>]*>([^<]+)</f>', re.IGNORECASE)
+    pos_re = re.compile(r'<f\s+name=["\']pos["\'][^>]*>([^<]+)</f>', re.IGNORECASE)
+    span_re = re.compile(r"<span\b[^>]*>(.*?)</span>", re.DOTALL | re.IGNORECASE)
+
+    yielded_rows = []
+    for fpath in candidate_files:
+        fl = fpath.lower()
+        try:
+            # Case A: KorAP-XML ZIP archive (`*.korapxml.zip`)
+            if fl.endswith(".zip"):
+                with zipfile.ZipFile(fpath, "r") as zf:
+                    names = zf.namelist()
+                    morpho_files = [n for n in names if n.endswith("morpho.xml")]
+                    for mf in morpho_files:
+                        doc_prefix = os.path.dirname(os.path.dirname(mf))
+                        hdr_cand = f"{doc_prefix}/header.xml" if doc_prefix else "header.xml"
+                        title_str, author_str, pub_str, yr_str = "DeLiKo-2025@DNB Werk", "Unbekannt", "DeLiKo-2025@DNB", "2018"
+                        if hdr_cand in names:
+                            hdr_xml = zf.read(hdr_cand).decode("utf-8", errors="ignore")
+                            m_t = re.search(r"<t\.title[^>]*>([^<]+)</t\.title>", hdr_xml, re.I)
+                            m_a = re.search(r"<h\.author[^>]*>([^<]+)</h\.author>", hdr_xml, re.I)
+                            m_p = re.search(r"<publisher[^>]*>([^<]+)</publisher>", hdr_xml, re.I)
+                            m_d = re.search(r"<pubDate[^>]*>\s*(19\d\d|20\d\d)", hdr_xml, re.I)
+                            if m_t:
+                                title_str = m_t.group(1).strip()
+                            if m_a:
+                                author_str = m_a.group(1).strip()
+                            if m_p:
+                                pub_str = m_p.group(1).strip()
+                            if m_d:
+                                yr_str = m_d.group(1).strip()
+
+                        morpho_xml = zf.read(mf).decode("utf-8", errors="ignore")
+                        lemmas = []
+                        for m_sp in span_re.finditer(morpho_xml):
+                            sp_body = m_sp.group(1)
+                            m_p_tag = pos_re.search(sp_body)
+                            if m_p_tag and m_p_tag.group(1).strip().upper() not in allowed_stts_ud:
+                                continue
+                            m_l_tag = lemma_re.search(sp_body)
+                            if m_l_tag:
+                                lem = m_l_tag.group(1).strip().lower()
+                                if len(lem) > 2 and lem not in ALL_STOPWORDS:
+                                    lemmas.append(lem)
+                        if len(lemmas) >= 50:
+                            yr_int = int(yr_str) if yr_str.isdigit() else 2018
+                            for c_idx, i in enumerate(range(0, len(lemmas), chunk_words), start=1):
+                                ch_lems = lemmas[i : i + chunk_words]
+                                if len(ch_lems) < 40:
+                                    continue
+                                txt_joined = " ".join(ch_lems)
+                                _TOKEN_CACHE[_hash_text(txt_joined)] = ch_lems
+                                yielded_rows.append({
+                                    "title": f"{title_str} [DeLiKo-KorAPXML-Kapitel {c_idx}]",
+                                    "author": author_str,
+                                    "date": str(yr_int),
+                                    "decade": f"{(yr_int // 10) * 10}s",
+                                    "publisher": pub_str,
+                                    "corpus_layer": "dnblab_dtf_incopyright",
+                                    "text": txt_joined,
+                                    "abstract": txt_joined[:240],
+                                    "word_count": len(ch_lems),
+                                })
+            # Case B: IDS TEI-I5 XML (`*.i5.xml`) produced by `epub2i5.xsl`
+            elif fl.endswith(".xml"):
+                with open(fpath, "r", encoding="utf-8", errors="ignore") as xf:
+                    raw_xml = xf.read()
+                m_t = re.search(r"<title[^>]*>([^<]+)</title>", raw_xml, re.I)
+                title_str = m_t.group(1).strip() if m_t else os.path.basename(fpath)
+                body_clean = re.sub(r"<[^>]+>", " ", raw_xml)
+                words = [w for w in body_clean.split() if len(w) >= 2]
+                for c_idx, i in enumerate(range(0, len(words), chunk_words), start=1):
+                    ch_w = words[i : i + chunk_words]
+                    if len(ch_w) < 60:
+                        continue
+                    txt_joined = " ".join(ch_w)
+                    yielded_rows.append({
+                        "title": f"{title_str} [DeLiKo-TEI-I5-Kapitel {c_idx}]",
+                        "author": "DeLiKo-2025@DNB",
+                        "date": "2018",
+                        "decade": "2010s",
+                        "publisher": "DeLiKo-2025@DNB",
+                        "corpus_layer": "dnblab_dtf_incopyright",
+                        "text": txt_joined,
+                        "abstract": txt_joined[:240],
+                        "word_count": len(ch_w),
+                    })
+        except Exception:
+            pass
+    return yielded_rows
+
+
 _ARCHIVAL_BRACKET_RE = re.compile(
-    r"\[(?:HTRC|DNB|GBV|OpenAlex|Vollbuch|Abschnitt|Forschungsbuch)[^\]]*\]",
+    r"\[(?:HTRC|DNB|DNBLab|DeLiKo|KorAP|GBV|OpenAlex|Vollbuch|Vollwerk|Abschnitt|Kapitel|Forschungsbuch)[^\]]*\]",
     re.IGNORECASE,
 )
-_CHUNK_INDEX_RE = re.compile(r"Abschnitt\s+(\d+)\s*/\s*\d+", re.IGNORECASE)
+_CHUNK_INDEX_RE = re.compile(r"(?:Abschnitt|Kapitel)\s+(\d+)\s*/\s*\d+", re.IGNORECASE)
 
 
 def strip_archival_headers_from_text(text: str, row: dict = None) -> str:

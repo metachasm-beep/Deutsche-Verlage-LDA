@@ -1,11 +1,11 @@
 {
   "source": "DNB SRU v1.1 + GBV/K10plus + HathiTrust HTRC + OpenAlex Unfiltered All-Sachgruppen German Corpus (spr=ger, All 102 DNB Sachgruppen 000–990 + B/K/S, 1970–2025)",
-  "count": 10528704,
-  "total_records": 10528704,
+  "count": 10553776,
+  "total_records": 10553776,
   "unique_books": 10041481,
-  "total_words": 801389747,
+  "total_words": 840107509,
   "vocabulary_size": 25000,
-  "coherence_score": -2.649,
+  "coherence_score": -2.5289,
   "publishers": [
     "Springer Nature / Metzler",
     "Books on Demand (BoD)",
@@ -232,7 +232,7 @@
   "corpus_layers": {
     "dnb_deposit_inhaltstext": 9913690,
     "hathitrust_ef_fullbook_print": 248302,
-    "dnb_oa_fullbook": 206007,
+    "dnb_oa_fullbook": 214862,
     "dnb_toc_pdf_fulltext": 136777,
     "gbv_direct_fulltext_pdf": 14199,
     "entire_fulltext_book_cloud": 4072,
@@ -6925,7 +6925,7 @@
   },
   "master_manifest": {
     "total_unique_works_1970_2025": 10041481,
-    "total_complete_fulltext_books": 18714,
+    "total_complete_fulltext_books": 20308,
     "total_dnb_oa_fulltext_books": 14423,
     "total_hathitrust_fulltext_books": 4056,
     "total_passages_in_corpus": 10528704,
@@ -6963,7 +6963,9 @@
       "2000s": 4380,
       "2010s": 4895,
       "2020s": 5460
-    }
+    },
+    "total_passages_1970_2025": 10553776,
+    "total_words_1970_2025": 840107509
   },
   "publisher_works_counts": {
     "Springer Nature / Metzler": 187803,
@@ -14056,5 +14058,6 @@
       "2024": 128816,
       "2025": 127854
     }
-  }
+  },
+  "total_passages": 10553776
 }

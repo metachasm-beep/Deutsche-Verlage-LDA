@@ -1,6 +1,6 @@
 {
   "total_unique_works_1970_2025": 10041481,
-  "total_complete_fulltext_books": 18714,
+  "total_complete_fulltext_books": 20308,
   "total_dnb_oa_fulltext_books": 14423,
   "total_hathitrust_fulltext_books": 4056,
   "total_passages_in_corpus": 10528704,
@@ -38,5 +38,9 @@
     "2000s": 4380,
     "2010s": 4895,
     "2020s": 5460
-  }
+  },
+  "count": 10553776,
+  "total_records": 10553776,
+  "total_passages": 10553776,
+  "total_words": 840107509
 }

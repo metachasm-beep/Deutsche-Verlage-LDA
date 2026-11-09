@@ -73,13 +73,13 @@ const PIPELINE_STAGES = [
     accent: 'text-traditional',
     borderAccent: 'border-traditional/40',
     bgAccent: 'bg-traditional/10',
-    formula: 'D = 10,545,315 Passages · 10,042,681 Works · 19,914 Full Books · 831.29M Words · 126 Zstd-19 Parquet Shards',
+    formula: 'D = 10,553,776 Passages · 10,042,681 Works · 20,308 Full Books · 840.11M Words · 127 Zstd-19 Parquet Shards',
     summary:
-      'Ingests 100% of the official DNB OpenData MARC21-XML Bulk Dump (Packages 1–5, 40.10M total records scanned) hydrated via DNBLab (REIHE_O_LF & onlinefree /34 OA IDNs, /04/text plain-text TOC OCRs, services.dnb.de/deposit.dnb.de Inhaltstexte, and 44,339 § 60d UrhG In-Copyright Commercial Print & E-Book DTF passages) and HathiTrust full-text books across all 102 DNB Sachgruppen (000–990, B, K, S; 1970–2025).',
+      'Ingests 100% of the official DNB OpenData MARC21-XML Bulk Dump (Packages 1–5, 40.10M total records scanned) hydrated via DNBLab & our LREC 2026 DeLiKo-2025@DNB 5-Pillar Harvester (REIHE_O_LF & onlinefree /34 unabridged EPUBs & PDFs, /04/text plain-text TOC OCRs, services.dnb.de/deposit.dnb.de Inhaltstexte, Backlist E-Book Original Year Disambiguation, and 44,339 § 60d UrhG In-Copyright Commercial Print & E-Book DTF passages) plus HathiTrust full-text books across all 102 DNB Sachgruppen (000–990, B, K, S; 1970–2025).',
     details: [
-      'Combines MARC21 Tag 245$a/$b (Title/Subtitle), Tag 264$b/$c (Imprint/Year across 713,838 raw imprint strings / 109 canonical publishers), Tag 520$a (Abstract), Tags 650/689$a (GND Subject Headings), and Tag 856$u (/04/text TOCs, /34 OA & Reihe O E-Books, services.dnb.de/deposit.dnb.de Inhaltstexte) across all 102 DNB Sachgruppen.',
-      'Stratified across 10,042,681 unique German works (1970–2025): 19,914 complete full-text books (477,652 passages), 44,339 DNBLab § 60d UrhG In-Copyright Commercial Print & E-Book passages (29.90M words), 166,290 works with digitized TOC PDFs/OCRs, and 9,887,162 DNB OpenData MARC21-XML & deposit/services.dnb.de Inhaltstext records.',
-      'Stored in 126 Zstd-19 Apache Parquet shards (data/parquet/ · 1,575.59 MB compressed) backed by GitHub Release v12.0-dnb-parquet-shards and Online Streaming LDA (Hoffman et al., 2010).',
+      'Combines MARC21 Tag 245$a/$b (Title/Subtitle), Tag 264$b/$c (Imprint/Year across 713,838 raw imprint strings / 109 canonical publishers), Tag 520$a (Abstract), Tags 650/689$a (GND Subject Headings), and Tag 856$u (/04/text TOCs, /34 OA & Reihe O EPUBs/PDFs, services.dnb.de/deposit.dnb.de Inhaltstexte) across all 102 DNB Sachgruppen.',
+      'Stratified across 10,042,681 unique German works (1970–2025): 20,308 complete full-text books (486,507 passages · 482.00M words), 44,339 DNBLab § 60d UrhG In-Copyright Commercial Print & E-Book passages (29.90M words), 166,290 works with digitized TOC PDFs/OCRs, and 9,887,162 DNB OpenData MARC21-XML & deposit/services.dnb.de Inhaltstext records.',
+      'Stored in 127 Zstd-19 Apache Parquet shards (data/parquet/ · 1,591.57 MB compressed) backed by GitHub Release v12.0-dnb-parquet-shards and Online Streaming LDA (Hoffman et al., 2010; Kupietz et al., LREC 2026).',
     ],
   },
   {
@@ -294,14 +294,14 @@ export const PipelineExplainer: React.FC<PipelineExplainerProps> = ({
     return () => clearInterval(interval);
   }, [isTraining]);
 
-  const totalRecords = summary?.count || 10545315;
+  const totalRecords = summary?.count || 10553776;
   const uniqueBooks = summary?.master_manifest?.total_unique_works_1970_2025 || summary?.unique_books || 10042681;
-  const totalFullBooks = summary?.master_manifest?.total_complete_fulltext_books || 19914;
-  const totalWords = summary?.total_words || 831286411;
+  const totalFullBooks = summary?.master_manifest?.total_complete_fulltext_books || 20308;
+  const totalWords = summary?.total_words || 840107509;
   const corpusLayers: Record<string, number> = summary?.corpus_layers || {
-    dnb_deposit_inhaltstext: 9887162,
+    dnb_deposit_inhaltstext: 9886768,
     hathitrust_ef_fullbook_print: 248302,
-    dnb_oa_fullbook: 206007,
+    dnb_oa_fullbook: 214862,
     dnb_toc_pdf_fulltext: 136211,
     dnblab_dtf_incopyright: 44339,
     gbv_direct_fulltext_pdf: 14199,
