@@ -19,6 +19,7 @@ import {
 import clsx from 'clsx';
 
 import { type LDAMode, type ModeComparisonRow, type SLDADiagnostics } from '../hooks/useLDA';
+import { ldaClientAdapter } from '../adapters/ldaClientAdapter';
 
 interface PipelineExplainerProps {
   summary: any;
@@ -291,12 +292,9 @@ export const PipelineExplainer: React.FC<PipelineExplainerProps> = ({
     let cancelled = false;
     const timer = setTimeout(async () => {
       try {
-        const res = await fetch(`/api/lemma-inspector?q=${encodeURIComponent(q)}`);
-        if (res.ok) {
-          const data = await res.json();
-          if (!cancelled && data && data.valid !== false) {
-            setLemmaInspectorData(data);
-          }
+        const data = await ldaClientAdapter.inspectGermanLemma(q);
+        if (!cancelled && data && data.valid !== false) {
+          setLemmaInspectorData(data);
         }
       } catch {
         // Fallback handled deterministically below
@@ -1478,136 +1476,29 @@ export const PipelineExplainer: React.FC<PipelineExplainerProps> = ({
         const q = qRaw.toLowerCase().replace(/[^a-zäöüß_]/g, '');
         const hasQuery = q.length > 0;
 
-        const perLocSet = new Set([
-          'steiner', 'rudolf_steiner', 'luther', 'martin_luther', 'habermas', 'ratzinger',
-          'küng', 'hans_küng', 'paulus', 'deutschland', 'rom', 'berlin', 'wien',
-          'bonhoeffer', 'barth', 'rahner', 'drewermann', 'grün', 'anselm_grün', 'kant',
-          'hegel', 'nietzsche', 'foucault', 'marx', 'weber', 'freud', 'heidegger', 'buber',
-          'schleiermacher', 'moltmann', 'bultmann', 'tillich', 'kierkegaard', 'bayern',
-          'österreich', 'schweiz', 'frankreich', 'italien', 'münchen', 'frankfurt', 'köln'
-        ]);
-        const bibSet = new Set([
-          'auflage', 'band', 'herausgeber', 'verlag', 'isbn', 'seite', 'kapitel', 'buch',
-          'leben', 'mensch', 'jahr', 'zeit', 'welt', 'frage', 'inhaltsverzeichnis', 'vorwort',
-          'einleitung', 'literaturverzeichnis', 'anhang', 'register', 'abbildung', 'tabelle',
-          'sammelband', 'monographie', 'dissertation', 'publikation', 'beitrag', 'aufsatz'
-        ]);
-        const stopSet = new Set([
-          'und', 'der', 'die', 'das', 'jedoch', 'bereits', 'innerhalb', 'obwohl', 'während',
-          'oder', 'aber', 'weil', 'wenn', 'dass', 'durch', 'über', 'unter', 'zwischen', 'gegen',
-          'ohne', 'sowie', 'dabei', 'daher', 'deshalb', 'immer', 'wieder', 'mehr', 'sehr'
-        ]);
-        const verbAdvSuffixes = ['ieren', 'machen', 'gehen', 'kommen', 'sagen', 'werden', 'haben', 'sein', 'können', 'müssen', 'sollen', 'wollen'];
-        const boostSet = new Set(resolvedBoostWords.map((w) => w.toLowerCase()));
-
-        // Compute deterministic client-side fallback when API response for `q` is still in flight
-        const charHash = q.split('').reduce((acc, ch, i) => acc + ch.charCodeAt(0) * (i + 3), 0);
-        const rawEst = 4800 + (charHash % 42000);
-        const isBoostedLocal = boostSet.has(q) || Array.from(boostSet).some((bw) => q.includes(bw));
-        const isVerbLocal = verbAdvSuffixes.some((v) => q === v || (q.endsWith('en') && q.length <= 7 && !boostSet.has(q) && !['glauben', 'leben', 'wissen', 'denken', 'wesen', 'orden'].includes(q)));
-
-        let localPrunedStage = 0;
-        let localStatusLabel = `SURVIVED INTO ACTIVE |V| = ${vocabSize.toLocaleString()} DICTIONARY`;
-        let localStageNote = `Retained as a high-salience NOUN/PROPN/ADJ lemma in Gensim Dictionary (${isBoostedLocal ? '2× Domain Salience Boost Applied' : '1× Natural Weight'}).`;
-        let localBadgeColor = 'bg-emerald-500/15 border-emerald-500/40 text-emerald-300';
-
-        if (q.length < 3) {
-          localPrunedStage = 2;
-          localStatusLabel = 'PRUNED AT STAGE 02 (Min-Length Gate |w| < 3)';
-          localStageNote = `Filtered out as a ${q.length}-character orthographic particle or abbreviation.`;
-          localBadgeColor = 'bg-rose-500/15 border-rose-500/40 text-rose-300';
-        } else if (bibSet.has(q)) {
-          localPrunedStage = 3;
-          localStatusLabel = 'PRUNED AT STAGE 03 (Fraktur / Bibliographic Paratext Filter)';
-          localStageNote = 'Excluded via FRAKTUR_AND_META_NOISE to prevent catalog/paratext boilerplate from dominating topics.';
-          localBadgeColor = 'bg-amber-500/15 border-amber-500/40 text-amber-300';
-        } else if (perLocSet.has(q)) {
-          localPrunedStage = 4;
-          localStatusLabel = 'PRUNED AT STAGE 04 (DHQ 2025 PER/LOC Proper-Noun Exclusion)';
-          localStageNote = 'Personal (PER) and geographic (LOC) proper names are strictly excluded (Santana et al., 2025 §56–64).';
-          localBadgeColor = 'bg-rose-500/15 border-rose-500/40 text-rose-300';
-        } else if (stopSet.has(q)) {
-          localPrunedStage = 4;
-          localStatusLabel = 'PRUNED AT STAGE 04 (spaCy + Domain Stopword List)';
-          localStageNote = 'Removed by the 1,170-word German closed-class and academic function-word stopword filter.';
-          localBadgeColor = 'bg-rose-500/15 border-rose-500/40 text-rose-300';
-        } else if (isVerbLocal) {
-          localPrunedStage = 5;
-          localStatusLabel = 'PRUNED AT STAGE 05 (spaCy POS Filter: VERB ∉ {NOUN, PROPN, ADJ})';
-          localStageNote = 'Filtered out by morphological POS gate; only content-bearing NOUN, PROPN, and ADJ lemmas are retained.';
-          localBadgeColor = 'bg-amber-500/15 border-amber-500/40 text-amber-300';
-        }
-
+        // Candidate 1 Deletion Test: Delegate survival evaluation to deepened `app.domain.token_attrition_funnel`
+        // via `/api/lemma-inspector` (`lemmaInspectorData`), keeping only a minimal in-flight placeholder
         const apiMatchesQuery =
           lemmaInspectorData &&
           (lemmaInspectorData.clean_query === q || lemmaInspectorData.query?.toLowerCase() === qRaw.toLowerCase());
 
-        const activeStatusLabel = apiMatchesQuery ? lemmaInspectorData.status_label : localStatusLabel;
-        const activeStageNote = apiMatchesQuery ? lemmaInspectorData.stage_note : localStageNote;
+        const activeStatusLabel = apiMatchesQuery
+          ? lemmaInspectorData.status_label
+          : q.length < 3
+          ? 'PRUNED AT STAGE 02 (Min-Length Gate |w| < 3)'
+          : `EVALUATING IN |V| = ${vocabSize.toLocaleString()} DICTIONARY...`;
+        const activeStageNote = apiMatchesQuery
+          ? lemmaInspectorData.stage_note
+          : 'Tracing lemma through 6-stage Token Attrition Funnel via /api/lemma-inspector...';
         const activeBadgeColor = apiMatchesQuery
           ? lemmaInspectorData.badge_color === 'emerald'
             ? 'bg-emerald-500/15 border-emerald-500/40 text-emerald-300'
             : lemmaInspectorData.badge_color === 'amber'
             ? 'bg-amber-500/15 border-amber-500/40 text-amber-300'
             : 'bg-rose-500/15 border-rose-500/40 text-rose-300'
-          : localBadgeColor;
+          : 'bg-emerald-500/15 border-emerald-500/40 text-emerald-300';
 
-        const s2Local = localPrunedStage === 2 ? 0 : Math.round(rawEst * 0.97);
-        const s3Local = localPrunedStage <= 3 && localPrunedStage > 0 ? 0 : Math.round(s2Local * 0.94);
-        const s4Local = localPrunedStage <= 4 && localPrunedStage > 0 ? 0 : Math.round(s3Local * 0.91);
-        const s5Local = localPrunedStage <= 5 && localPrunedStage > 0 ? 0 : Math.round(s4Local * (isBoostedLocal ? 1.82 : 0.93));
-        const s6Local = localPrunedStage > 0 ? 0 : Math.round(s5Local * 0.89);
-
-        const localWordStages = [
-          {
-            stage: '01 · Raw Surface Matches',
-            tokens_remaining: rawEst,
-            retention_pct: 100.0,
-            dropped_count: 0,
-            rule: `Raw occurrences of „${qRaw}“ across 10.61M passages`,
-            status: 'passed',
-          },
-          {
-            stage: '02 · Length Gate (|w| >= 3)',
-            tokens_remaining: s2Local,
-            retention_pct: Number(((s2Local / rawEst) * 100).toFixed(1)),
-            dropped_count: rawEst - s2Local,
-            rule: `Length |${q}| = ${q.length} chars (${q.length >= 3 ? 'PASSED >= 3' : 'PRUNED < 3'})`,
-            status: localPrunedStage === 2 ? 'pruned' : s2Local > 0 ? 'passed' : 'inactive',
-          },
-          {
-            stage: '03 · Fraktur & Meta Filter',
-            tokens_remaining: s3Local,
-            retention_pct: Number(((s3Local / rawEst) * 100).toFixed(1)),
-            dropped_count: Math.max(0, s2Local - s3Local),
-            rule: localPrunedStage === 3 ? 'PRUNED by FRAKTUR_AND_META_NOISE' : 'Passed Fraktur/paratext gate',
-            status: localPrunedStage === 3 ? 'pruned' : s3Local > 0 ? 'passed' : 'inactive',
-          },
-          {
-            stage: '04 · PER/LOC & Stopwords',
-            tokens_remaining: s4Local,
-            retention_pct: Number(((s4Local / rawEst) * 100).toFixed(1)),
-            dropped_count: Math.max(0, s3Local - s4Local),
-            rule: localPrunedStage === 4 ? 'PRUNED by PER/LOC or Stopword List' : 'Passed 1,170-word stopword & PER/LOC gate',
-            status: localPrunedStage === 4 ? 'pruned' : s4Local > 0 ? 'passed' : 'inactive',
-          },
-          {
-            stage: '05 · spaCy POS & Compounds',
-            tokens_remaining: s5Local,
-            retention_pct: Number(((s5Local / rawEst) * 100).toFixed(1)),
-            dropped_count: Math.max(0, s4Local - s5Local),
-            rule: localPrunedStage === 5 ? 'PRUNED: POS ∉ {NOUN,PROPN,ADJ}' : `Lemma „${q}“${isBoostedLocal ? ' + 2× Salience Boost' : ''}`,
-            status: localPrunedStage === 5 ? 'pruned' : s5Local > 0 ? 'passed' : 'inactive',
-          },
-          {
-            stage: `06 · Active BoW (|V|=${vocabSize.toLocaleString()})`,
-            tokens_remaining: s6Local,
-            retention_pct: Number(((s6Local / rawEst) * 100).toFixed(1)),
-            dropped_count: Math.max(0, s5Local - s6Local),
-            rule: localPrunedStage > 0 ? '0 tokens entering LDA BoW' : `Retained in active |V|=${vocabSize.toLocaleString()} dictionary`,
-            status: localPrunedStage === 6 ? 'pruned' : s6Local > 0 ? 'passed' : 'inactive',
-          },
-        ];
+        const localWordStages: any[] = [];
 
         const corpusWideStages = robustnessTelemetry?.token_attrition_funnel?.stages || [
           {

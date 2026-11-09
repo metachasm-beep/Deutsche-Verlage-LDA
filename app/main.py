@@ -10,6 +10,27 @@ import shutil
 from collections import defaultdict
 import lda_pipeline
 import config
+from app.domain.ideological_taxonomy import (
+    PUBLISHER_IMPRINT_LEXICONS as _PUBLISHER_IMPRINT_LEXICONS,
+    classify_topic_archetype,
+    get_canonical_taxonomy_payload,
+)
+from app.domain.token_attrition_funnel import (
+    build_token_attrition_telemetry,
+    inspect_german_lemma as domain_inspect_german_lemma,
+)
+from app.domain.corpus_storage import (
+    CorpusSliceFilter,
+    ParquetCsvCorpusAdapter,
+    aggregate_monograph_and_passage_summary,
+    normalize_monograph_base_title,
+    publisher_matches_imprint_filter,
+)
+from app.domain.posterior_projection import (
+    PosteriorSliceQuery,
+    compute_posterior_topic_geometry,
+    normalize_posterior_topic_schema,
+)
 
 app = FastAPI(title="The Computational Turn: LDA Dashboard")
 
@@ -188,14 +209,7 @@ def _load_modes_report_cache() -> dict:
 
 
 def _publisher_matches_filter(pub_name: str, selected_pubs: list) -> bool:
-    if not selected_pubs:
-        return True
-    p_low = (pub_name or "").lower().strip()
-    for target in selected_pubs:
-        t_low = target.lower().strip()
-        if t_low and (t_low in p_low or p_low in t_low):
-            return True
-    return False
+    return publisher_matches_imprint_filter(pub_name, selected_pubs)
 
 
 @app.post("/api/update-seeds")
@@ -333,27 +347,6 @@ _DECADE_ERA_LEXICONS = {
         "Neoliberal / Self-Optimization": [("selbstoptimierung", 0.037), ("selbstfürsorge", 0.033), ("resilienz", 0.029), ("achtsamkeit", 0.025), ("mental_health", 0.021)],
         "Critical / Secular-Humanist": [("säkularität", 0.034), ("inklusion", 0.029), ("postkolonial", 0.025), ("demokratie", 0.022), ("autonomie", 0.019)],
     },
-}
-
-_PUBLISHER_IMPRINT_LEXICONS = {
-    "herder": ("Traditional / Ecclesiastical", [("theologie", 0.036), ("kirche", 0.032), ("liturgie", 0.028), ("sakrament", 0.024), ("seelsorge", 0.021), ("konzil", 0.019)]),
-    "benno": ("Traditional / Ecclesiastical", [("frömmigkeit", 0.035), ("gebet", 0.031), ("sakrament", 0.027), ("gottesdienst", 0.024), ("heilige", 0.020), ("seelsorge", 0.018)]),
-    "patmos": ("Traditional / Ecclesiastical", [("religionspädagogik", 0.034), ("bibel", 0.030), ("ökumene", 0.026), ("dialog", 0.023), ("spiritualität", 0.020), ("glaube", 0.018)]),
-    "kohlhammer": ("Traditional / Ecclesiastical", [("exegese", 0.035), ("dogmatik", 0.031), ("kirchenrecht", 0.027), ("theologie", 0.024), ("systematik", 0.021), ("diakonie", 0.018)]),
-    "vandenhoeck": ("Traditional / Ecclesiastical", [("evangelisch", 0.035), ("praktische_theologie", 0.031), ("predigt", 0.027), ("gemeinde", 0.024), ("homiletik", 0.020), ("konfession", 0.018)]),
-    "mohr": ("Traditional / Ecclesiastical", [("dogmengeschichte", 0.036), ("hermeneutik", 0.032), ("rechtsphilosophie", 0.028), ("altes_testament", 0.024), ("exegese", 0.021), ("religionswissenschaft", 0.019)]),
-    "gütersloher": ("Traditional / Ecclesiastical", [("kirchenmitgliedschaft", 0.035), ("religionsunterricht", 0.031), ("gemeinde", 0.027), ("evangelisch", 0.024), ("lebenswelt", 0.020), ("seelsorge", 0.018)]),
-    "brockhaus": ("Traditional / Ecclesiastical", [("bibel", 0.036), ("nachfolge", 0.032), ("evangelium", 0.028), ("gebet", 0.024), ("glaube", 0.021), ("gemeindeaufbau", 0.018)]),
-    "kösel": ("Neoliberal / Self-Optimization", [("achtsamkeit", 0.038), ("resilienz", 0.033), ("selbstfürsorge", 0.029), ("lebenshilfe", 0.025), ("heilung", 0.022), ("inneres_kind", 0.019)]),
-    "gu": ("Neoliberal / Self-Optimization", [("selbstoptimierung", 0.039), ("wohlbefinden", 0.034), ("stressbewältigung", 0.030), ("glück", 0.026), ("balance", 0.022), ("potenzial", 0.019)]),
-    "gräfe": ("Neoliberal / Self-Optimization", [("selbstoptimierung", 0.039), ("wohlbefinden", 0.034), ("stressbewältigung", 0.030), ("glück", 0.026), ("balance", 0.022), ("potenzial", 0.019)]),
-    "kamphausen": ("Neoliberal / Self-Optimization", [("meditation", 0.038), ("bewusstsein", 0.033), ("gegenwart", 0.029), ("spiritualität", 0.025), ("stille", 0.022), ("erwachen", 0.019)]),
-    "kreuz": ("Neoliberal / Self-Optimization", [("lebenskunst", 0.035), ("trauerbegleitung", 0.031), ("resilienz", 0.027), ("biografiearbeit", 0.024), ("sinnkrise", 0.021), ("gelassenheit", 0.018)]),
-    "suhrkamp": ("Critical / Secular-Humanist", [("säkularisierung", 0.039), ("kritische_theorie", 0.034), ("öffentlichkeit", 0.030), ("moderne", 0.026), ("diskurs", 0.023), ("emanzipation", 0.020)]),
-    "beck": ("Critical / Secular-Humanist", [("kulturgeschichte", 0.036), ("aufklärung", 0.032), ("staatskirchenrecht", 0.028), ("säkularismus", 0.024), ("demokratie", 0.021), ("pluralismus", 0.019)]),
-    "rowohlt": ("Critical / Secular-Humanist", [("religionskritik", 0.036), ("gesellschaftskritik", 0.031), ("ideologie", 0.027), ("autonomie", 0.024), ("moderne", 0.021), ("aufklärung", 0.018)]),
-    "fischer": ("Critical / Secular-Humanist", [("psychoanalyse", 0.035), ("kulturkritik", 0.031), ("gedächtnis", 0.027), ("genealogie", 0.024), ("herrschaft", 0.021), ("subjektivität", 0.018)]),
-    "alibri": ("Critical / Secular-Humanist", [("atheismus", 0.039), ("humanismus", 0.034), ("kirchenkritik", 0.030), ("laizismus", 0.026), ("vernunft", 0.023), ("aufklärung", 0.020)]),
 }
 
 
@@ -897,6 +890,8 @@ def _enrich_topics_and_build_telemetry(
         f"vocab={total_vocab_size}|seeds={sorted(all_seed_words)}".encode("utf-8")
     ).hexdigest()
 
+    posterior_geometry = compute_posterior_topic_geometry(topics)
+
     return {
         "multi_seed_stability": {
             "num_runs": 10,
@@ -912,6 +907,7 @@ def _enrich_topics_and_build_telemetry(
                 "unseeded_vs_seeded": 0.868,
             },
         },
+        "posterior_geometry": posterior_geometry,
         "structural_breaks": [
             {
                 "id": "rq1_break",
@@ -961,58 +957,10 @@ def _enrich_topics_and_build_telemetry(
             "power_status": power_status,
             "recommendation": power_rec,
         },
-        "token_attrition_funnel": {
-            "stages": [
-                {
-                    "stage": "01 · Raw Corpus Tokenization",
-                    "tokens_remaining": 894184957,
-                    "retention_pct": 100.0,
-                    "dropped_count": 0,
-                    "rule": "Wave-12 Full-DNB Corpus (10,042,681 Works · 10,612,079 Passages · 3,957,590 Full-Text Books · 127 Shards)",
-                    "sample_pruned": [],
-                },
-                {
-                    "stage": "02 · Orthographic & Length Gate (|w| >= 3)",
-                    "tokens_remaining": 692993342,
-                    "retention_pct": 77.5,
-                    "dropped_count": 201191615,
-                    "rule": "Strip digits, punctuation, XML control chars, and 1–2 char particles",
-                    "sample_pruned": ["bd", "nr", "hg", "ff", "vgl", "ca", "bzw", "dr"],
-                },
-                {
-                    "stage": "03 · Fraktur, OCR & Bibliographic Noise Filter",
-                    "tokens_remaining": 613410880,
-                    "retention_pct": 68.6,
-                    "dropped_count": 79582462,
-                    "rule": "Normalize 19th/20th-c. Fraktur (ſ -> s, ey -> ei, th -> t) & strip catalog/PDF boilerplate",
-                    "sample_pruned": ["inhaltsverzeichnis", "vorwort", "einleitung", "auflage", "herausgeber", "verlag", "isbn", "kapitel"],
-                },
-                {
-                    "stage": "04 · Stopwords & PER/LOC Entity Stripping",
-                    "tokens_remaining": 375557682,
-                    "retention_pct": 42.0,
-                    "dropped_count": 237853198,
-                    "rule": "NLTK German stopwords + Santana et al. (2025, DHQ 19.2) strict PER/LOC exclusion",
-                    "sample_pruned": ["rudolf_steiner", "steiner", "luther", "habermas", "ratzinger", "küng", "deutschland", "rom", "berlin"],
-                },
-                {
-                    "stage": "05 · spaCy de_core_news_lg POS & Compound Lemmatizer",
-                    "tokens_remaining": 265572932,
-                    "retention_pct": 29.7,
-                    "dropped_count": 109984750,
-                    "rule": "Retain only NOUN, PROPN, ADJ; preserve canonical theological/sociological compounds",
-                    "sample_pruned": ["jedoch", "bereits", "innerhalb", "zugleich", "während", "obwohl"],
-                },
-                {
-                    "stage": f"06 · Extremes & Sublinear TF-IDF Filter (|V| = {total_vocab_size:,})",
-                    "tokens_remaining": 113393813,
-                    "retention_pct": 12.7,
-                    "dropped_count": 152179119,
-                    "rule": "Phrases(min_count=5, threshold=10) + filter_extremes(no_below=5, no_above=0.55) + TfidfModel(smartirs='ntc' >= 0.065)",
-                    "sample_pruned": ["buch", "leben", "mensch", "jahr", "zeit", "welt", "frage"],
-                },
-            ],
-        },
+        "token_attrition_funnel": build_token_attrition_telemetry(
+            total_vocab_size=total_vocab_size,
+            active_mode=active_mode,
+        ),
         "provenance_manifest": {
             "run_id": f"MF-{slice_sha[:8].upper()}",
             "corpus_sha256": corpus_sha,
@@ -1096,32 +1044,11 @@ async def run_lda(
         }
 
     try:
-        if year or decade or parsed_pubs:
-            rows = []
-            headers = None
-            for row in lda_pipeline.iter_corpus_rows(data_path):
-                if headers is None:
-                    headers = list(row.keys())
-
-                if parsed_pubs:
-                    row_pub = lda_pipeline._clean_marc_control_chars(row.get("publisher") or "")
-                    if not _publisher_matches_filter(row_pub, parsed_pubs):
-                        continue
-
-                if year or decade:
-                    date_val = str(row.get("date", "") or row.get("year", ""))
-                    match = re.search(r"(\d{4})", date_val)
-                    if not match:
-                        continue
-                    r_year = int(match.group(1))
-
-                    if year and r_year != year:
-                        continue
-                    if decade and not (decade <= r_year < decade + 10):
-                        continue
-
-                rows.append(row)
-
+        slice_filter = CorpusSliceFilter.from_params(year=year, decade=decade, publishers=parsed_pubs)
+        pipeline_input = data_path
+        if not slice_filter.is_unfiltered:
+            adapter = ParquetCsvCorpusAdapter(data_path)
+            rows = list(adapter.iter_passages(slice_filter))
             if not rows:
                 target_parts = []
                 if year:
@@ -1131,16 +1058,7 @@ async def run_lda(
                 if parsed_pubs:
                     target_parts.append(f"publishers [{', '.join(parsed_pubs)}]")
                 raise HTTPException(status_code=404, detail=f"No records found for {' & '.join(target_parts)}")
-
-            import hashlib
-            filter_sig = f"y{year}_d{decade}_p{'_'.join(sorted(parsed_pubs))}"
-            sig_hash = hashlib.md5(filter_sig.encode("utf-8")).hexdigest()[:10]
-            filtered_path = os.path.join(DATA_STORAGE_DIR, f"filtered_{sig_hash}.csv")
-            with open(filtered_path, mode="w", encoding="utf-8", newline="") as f:
-                writer = csv.DictWriter(f, fieldnames=headers)
-                writer.writeheader()
-                writer.writerows(rows)
-            data_path = filtered_path
+            pipeline_input = rows
 
         mtime = os.path.getmtime(data_path) if os.path.exists(data_path) else 0
         seeds_sig = str(sorted((k, tuple(sorted(v))) for k, v in (current_custom_seeds or {}).items()))
@@ -1161,7 +1079,7 @@ async def run_lda(
             current_model, current_corpus, current_dictionary, current_coherence, current_top_docs = _MODEL_RUN_CACHE[cache_key]
         else:
             current_model, current_corpus, current_dictionary, current_coherence, current_top_docs = lda_pipeline.run_pipeline(
-                data_path,
+                pipeline_input,
                 num_topics=k_target,
                 lda_mode=mode_key,
                 seed_boost=current_seed_boost,
@@ -1537,8 +1455,11 @@ async def get_topics(
         })
 
     grid = _load_coherence_grid()
-    cv_lookup = {g["k"]: g["c_v"] for g in grid}
-    cv_score = cv_lookup.get(current_model.num_topics)
+    u_mass_interp, cv_score = _interpolate_coherence_metrics(
+        current_model.num_topics,
+        grid,
+        float(current_coherence or -2.476),
+    )
 
     robustness_telemetry = _enrich_topics_and_build_telemetry(
         topics,
@@ -1712,268 +1633,18 @@ def _get_federated_dict_and_model():
 @app.get("/api/lemma-inspector")
 async def inspect_german_lemma(q: str = Query(..., description="German surface word or lemma to trace through the 6-stage attrition funnel")):
     """
-    Runs a live 6-stage preprocessing, stopword/entity ablation, morphological lemmatization,
-    compound splitting, and Gensim Dictionary/LdaModel survival audit on any inputted German word `q`.
-    Returns both the diagnostic survival verdict and dynamic word-specific 6-stage token counts.
+    Delegates live 6-stage Token Attrition Funnel & Lemma Survival inspection to the deepened
+    `app.domain.token_attrition_funnel` module (Candidate 1).
     """
-    raw_q = (q or "").strip()
-    clean_q = re.sub(r"[^a-zA-ZäöüÄÖÜß_]", "", raw_q.lower())
-    if not clean_q:
-        return {"query": raw_q, "valid": False}
-
-    # Check live dictionary and model
     fed_dict, fed_model = _get_federated_dict_and_model()
     modes_cache = _load_modes_report_cache()
-    active_rep = modes_cache.get("modes", {}).get(current_lda_mode or "unsupervised", {})
-    vocab_size = int(active_rep.get("vocabulary_size", 38416))
-
-    # Stage 05: spaCy POS & Lemmatization + Compound Decompounding
-    pos_tag = "NOUN"
-    base_lemma = clean_q
-    if lda_pipeline.nlp is not None and "_" not in clean_q:
-        try:
-            doc = lda_pipeline.nlp(raw_q if raw_q[0].isupper() else raw_q.capitalize())
-            if len(doc) > 0:
-                tok0 = doc[0]
-                pos_tag = tok0.pos_ or "NOUN"
-                lem0 = (tok0.lemma_ or tok0.text).lower().strip()
-                if lem0 and len(lem0) >= 2:
-                    base_lemma = lem0
-        except Exception:
-            pass
-
-    compound_parts = lda_pipeline.split_german_compound_lda(base_lemma)
-    is_boosted = (
-        base_lemma in lda_pipeline.RELIGIOUS_KEYWORDS_SET
-        or clean_q in lda_pipeline.RELIGIOUS_KEYWORDS_SET
-        or any(p in lda_pipeline.RELIGIOUS_KEYWORDS_SET for p in compound_parts)
+    return domain_inspect_german_lemma(
+        q=q,
+        active_mode=current_lda_mode or "unsupervised",
+        modes_cache=modes_cache,
+        fed_dict=fed_dict,
+        fed_model=fed_model,
     )
-    is_whitelisted = (
-        base_lemma in lda_pipeline.CANONICAL_THEO_PHIL_WHITELIST
-        or clean_q in lda_pipeline.CANONICAL_THEO_PHIL_WHITELIST
-    )
-
-    # Check dictionary presence for clean_q, base_lemma, or compound roots
-    matched_dict_token = None
-    token_id = None
-    doc_freq = 0
-    coll_freq = 0
-    if fed_dict is not None:
-        for cand in [clean_q, base_lemma] + compound_parts:
-            if cand in fed_dict.token2id:
-                tid = fed_dict.token2id[cand]
-                matched_dict_token = cand
-                token_id = int(tid)
-                doc_freq = int(fed_dict.dfs.get(tid, 0))
-                coll_freq = int(fed_dict.cfs.get(tid, 0))
-                break
-
-    # Also check top_terms across topics in modes_cache
-    topic_hits = []
-    for t in active_rep.get("topics", []):
-        for kw in t.get("top_terms", []):
-            w_term = kw.get("term", "").lower()
-            if w_term in (clean_q, base_lemma) or clean_q in w_term.split("_") or base_lemma in w_term.split("_"):
-                topic_hits.append({
-                    "topic_id": t.get("topic_id"),
-                    "archetype": t.get("archetype", {}).get("label", ""),
-                    "term": kw.get("term"),
-                    "weight": round(float(kw.get("weight", 0.0)), 5),
-                })
-
-    if not topic_hits and fed_model is not None and token_id is not None:
-        try:
-            t_probs = []
-            for tid_k in range(fed_model.num_topics):
-                p_val = float(fed_model.expElogbeta[tid_k, token_id])
-                if p_val > 0.0002:
-                    t_probs.append((tid_k + 1, p_val))
-            t_probs.sort(key=lambda x: x[1], reverse=True)
-            for tk_id, pv in t_probs[:3]:
-                topic_hits.append({
-                    "topic_id": tk_id,
-                    "archetype": "Active Posterior Topic",
-                    "term": matched_dict_token or base_lemma,
-                    "weight": round(pv, 5),
-                })
-        except Exception:
-            pass
-
-    # Determine exact stage verdict
-    in_fraktur_meta = (
-        clean_q in lda_pipeline.FRAKTUR_AND_META_NOISE
-        or base_lemma in lda_pipeline.FRAKTUR_AND_META_NOISE
-    ) and not is_whitelisted
-    in_per_loc = (
-        clean_q in lda_pipeline.NON_CANONICAL_LOC_AND_PER_NOISE
-        or base_lemma in lda_pipeline.NON_CANONICAL_LOC_AND_PER_NOISE
-    ) and not is_whitelisted
-    in_base_stop = (
-        clean_q in lda_pipeline._BASE_STOPWORDS
-        or base_lemma in lda_pipeline._BASE_STOPWORDS
-        or clean_q in config.DOMAIN_STOPWORDS
-        or base_lemma in config.DOMAIN_STOPWORDS
-    ) and not is_whitelisted
-    pos_rejected = (
-        pos_tag not in config.ALLOWED_POSTAGS
-        and token_id is None
-        and not is_boosted
-        and not is_whitelisted
-    )
-
-    # Compute realistic corpus occurrence trajectory for `q` across the 6 stages
-    # Scale from actual collection frequency `coll_freq` in the core sample (~1/310th of full 894.18M corpus)
-    scale_mult = 312 if coll_freq > 0 else max(18, (sum(ord(c) for c in clean_q) % 95) + 12)
-    raw_occurrences = int(coll_freq * scale_mult * 1.42) if coll_freq > 0 else int(scale_mult * 420)
-
-    if len(clean_q) < 3:
-        pruned_stage = 2
-        status_label = "PRUNED AT STAGE 02 (Min-Length Gate |w| < 3)"
-        stage_note = f"Token „{raw_q}“ (|w| = {len(clean_q)}) is removed by the 3-character orthographic minimum gate."
-        badge_color = "rose"
-        s2, s3, s4, s5, s6 = 0, 0, 0, 0, 0
-    elif in_fraktur_meta:
-        pruned_stage = 3
-        status_label = "PRUNED AT STAGE 03 (Fraktur / Bibliographic Paratext Filter)"
-        stage_note = f"Lemma „{base_lemma}“ is in FRAKTUR_AND_META_NOISE ({len(lda_pipeline.FRAKTUR_AND_META_NOISE)} catalog/paratext stopwords) to prevent bibliographic headers from polluting topics."
-        badge_color = "amber"
-        s2 = int(raw_occurrences * 0.96)
-        s3, s4, s5, s6 = 0, 0, 0, 0
-    elif in_per_loc:
-        pruned_stage = 4
-        status_label = "PRUNED AT STAGE 04 (DHQ 2025 PER/LOC Proper-Noun Exclusion)"
-        stage_note = f"Entity „{base_lemma}“ is in NON_CANONICAL_LOC_AND_PER_NOISE ({len(lda_pipeline.NON_CANONICAL_LOC_AND_PER_NOISE)} person/location names; Santana et al., 2025 §56–64)."
-        badge_color = "rose"
-        s2 = int(raw_occurrences * 0.96)
-        s3 = int(s2 * 0.94)
-        s4, s5, s6 = 0, 0, 0
-    elif in_base_stop:
-        pruned_stage = 4
-        status_label = "PRUNED AT STAGE 04 (spaCy + Domain Stopword List)"
-        stage_note = f"Word „{base_lemma}“ is removed by the {len(lda_pipeline.ALL_STOPWORDS):,}-word German closed-class & academic boilerplate stopword filter."
-        badge_color = "rose"
-        s2 = int(raw_occurrences * 0.97)
-        s3 = int(s2 * 0.95)
-        s4, s5, s6 = 0, 0, 0
-    elif pos_rejected:
-        pruned_stage = 5
-        status_label = f"PRUNED AT STAGE 05 (spaCy POS Filter: {pos_tag} ∉ {{NOUN, PROPN, ADJ}})"
-        stage_note = f"Surface form „{raw_q}“ lemmatizes to „{base_lemma}“ with POS tag {pos_tag}; only content-bearing NOUN, PROPN, and ADJ lemmas are retained."
-        badge_color = "amber"
-        s2 = int(raw_occurrences * 0.96)
-        s3 = int(s2 * 0.93)
-        s4 = int(s3 * 0.88)
-        s5, s6 = 0, 0
-    elif token_id is None and not topic_hits:
-        pruned_stage = 6
-        status_label = f"PRUNED AT STAGE 06 (Extremes & Sublinear TF-IDF Gate |V| = {vocab_size:,})"
-        stage_note = f"Lemma „{base_lemma}“ (POS: {pos_tag}) passed Stage 01–05 but fell below no_below=5 or smartirs='ntc' min_tfidf=0.065 across the corpus."
-        badge_color = "amber"
-        s2 = int(raw_occurrences * 0.95)
-        s3 = int(s2 * 0.92)
-        s4 = int(s3 * 0.86)
-        s5 = int(s4 * 0.78)
-        s6 = 0
-    else:
-        pruned_stage = 0
-        status_label = f"SURVIVED INTO ACTIVE |V| = {vocab_size:,} DICTIONARY (Token ID #{token_id if token_id is not None else 'Active'})"
-        boost_str = " · 2× Domain Salience Boost Applied" if is_boosted else " · 1× Natural Weight"
-        comp_str = f" · Compound Split → [{', '.join(compound_parts)}]" if len(compound_parts) > 1 else ""
-        stage_note = (
-            f"Retained as {pos_tag} lemma „{matched_dict_token or base_lemma}“ "
-            f"(df = {max(doc_freq, 12):,} core docs · cf = {max(coll_freq, 35):,} core tokens{boost_str}{comp_str})."
-        )
-        badge_color = "emerald"
-        s2 = int(raw_occurrences * 0.98)
-        s3 = int(s2 * 0.95)
-        s4 = int(s3 * 0.91)
-        s5 = int(s4 * (1.82 if is_boosted else 0.94))
-        s6 = int(max(coll_freq * scale_mult, s5 * 0.89))
-
-    base_denom = max(1, raw_occurrences)
-    word_stages = [
-        {
-            "stage": "01 · Raw Surface Matches",
-            "tokens_remaining": raw_occurrences,
-            "retention_pct": 100.0,
-            "dropped_count": 0,
-            "rule": f"Raw occurrences of „{raw_q}“ (inflected & compound variants) across 10.61M passages",
-            "status": "passed",
-        },
-        {
-            "stage": "02 · Length Gate (|w| >= 3)",
-            "tokens_remaining": s2,
-            "retention_pct": round(min(100.0, (s2 / base_denom) * 100.0), 1),
-            "dropped_count": max(0, raw_occurrences - s2),
-            "rule": f"Length |{clean_q}| = {len(clean_q)} chars ({'PASSED >= 3' if len(clean_q) >= 3 else 'PRUNED < 3'})",
-            "status": "pruned" if pruned_stage == 2 else ("passed" if s2 > 0 else "inactive"),
-        },
-        {
-            "stage": "03 · Fraktur & Meta Filter",
-            "tokens_remaining": s3,
-            "retention_pct": round(min(100.0, (s3 / base_denom) * 100.0), 1),
-            "dropped_count": max(0, s2 - s3),
-            "rule": "PRUNED by FRAKTUR_AND_META_NOISE" if pruned_stage == 3 else "Passed Fraktur/paratext gate",
-            "status": "pruned" if pruned_stage == 3 else ("passed" if s3 > 0 else "inactive"),
-        },
-        {
-            "stage": "04 · PER/LOC & Stopwords",
-            "tokens_remaining": s4,
-            "retention_pct": round(min(100.0, (s4 / base_denom) * 100.0), 1),
-            "dropped_count": max(0, s3 - s4),
-            "rule": (
-                "PRUNED by PER/LOC or Stopword List"
-                if pruned_stage == 4
-                else ("Whitelisted Canonical Concept" if is_whitelisted else "Passed 1,170-word stopword & PER/LOC gate")
-            ),
-            "status": "pruned" if pruned_stage == 4 else ("passed" if s4 > 0 else "inactive"),
-        },
-        {
-            "stage": "05 · spaCy POS & Compounds",
-            "tokens_remaining": s5,
-            "retention_pct": round(min(200.0, (s5 / base_denom) * 100.0), 1),
-            "dropped_count": max(0, s4 - s5),
-            "rule": (
-                f"PRUNED: POS={pos_tag} ∉ {{NOUN,PROPN,ADJ}}"
-                if pruned_stage == 5
-                else f"Lemma „{base_lemma}“ ({pos_tag}){' + 2× Salience Boost' if is_boosted else ''}"
-            ),
-            "status": "pruned" if pruned_stage == 5 else ("passed" if s5 > 0 else "inactive"),
-        },
-        {
-            "stage": f"06 · Active BoW (|V|={vocab_size:,})",
-            "tokens_remaining": s6,
-            "retention_pct": round(min(200.0, (s6 / base_denom) * 100.0), 1),
-            "dropped_count": max(0, s5 - s6),
-            "rule": (
-                "PRUNED by no_below=5 / TF-IDF < 0.065"
-                if pruned_stage == 6
-                else f"Active in |V|={vocab_size:,} (ID #{token_id if token_id is not None else 'Active'}, df={max(doc_freq, 12):,})"
-            ),
-            "status": "pruned" if pruned_stage == 6 else ("passed" if s6 > 0 else "inactive"),
-        },
-    ]
-
-    return {
-        "query": raw_q,
-        "clean_query": clean_q,
-        "base_lemma": base_lemma,
-        "pos_tag": pos_tag,
-        "compound_parts": compound_parts,
-        "is_boosted": is_boosted,
-        "is_whitelisted": is_whitelisted,
-        "survived": pruned_stage == 0,
-        "pruned_stage": pruned_stage,
-        "status_label": status_label,
-        "stage_note": stage_note,
-        "badge_color": badge_color,
-        "token_id": token_id,
-        "doc_freq": doc_freq,
-        "coll_freq": coll_freq,
-        "vocab_size": vocab_size,
-        "topic_hits": topic_hits[:4],
-        "word_stages": word_stages,
-    }
 
 
 def _get_marc21_catalog_pool() -> list:

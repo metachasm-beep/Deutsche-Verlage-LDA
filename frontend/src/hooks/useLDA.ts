@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { ldaClientAdapter } from '../adapters/ldaClientAdapter';
 
 const API_BASE = '';
 
@@ -101,8 +102,7 @@ export const useLDA = () => {
 
   const fetchTrends = async () => {
     try {
-      const res = await fetch(`${API_BASE}/api/trends`);
-      const data = await res.json();
+      const data = await ldaClientAdapter.fetchTrends();
       setTrendsData(data);
     } catch (e) {
       console.error("Failed to fetch trends", e);
@@ -111,8 +111,7 @@ export const useLDA = () => {
 
   const fetchCoherenceGrid = async () => {
     try {
-      const res = await fetch(`${API_BASE}/api/coherence-grid`);
-      const data = await res.json();
+      const data = await ldaClientAdapter.fetchCoherenceGrid();
       setCoherenceGrid(data.grid || []);
       setRecommendedRegimes(data.recommended_regimes || []);
     } catch (e) {
@@ -138,25 +137,15 @@ export const useLDA = () => {
       const targetSeedBoost = seedBoostOverride ?? activeFilters.seed_boost ?? 15.0;
       const targetBaseEta = baseEtaOverride ?? activeFilters.base_eta ?? 0.05;
 
-      const params = new URLSearchParams();
-      params.append('lda_mode', targetMode);
-      params.append('num_topics', targetK.toString());
-      if (targetYear !== null && targetYear !== undefined) {
-        params.append('year', targetYear.toString());
-      } else {
-        params.append('year', '0');
-      }
-      if (targetDecade !== null && targetDecade !== undefined) {
-        params.append('decade', targetDecade.toString());
-      } else {
-        params.append('decade', '0');
-      }
-      params.append('publishers', (targetPubs || []).join(','));
-      params.append('seed_boost', targetSeedBoost.toString());
-      params.append('base_eta', targetBaseEta.toString());
-
-      const res = await fetch(`${API_BASE}/api/topics?${params.toString()}`);
-      const data = await res.json();
+      const data = await ldaClientAdapter.queryTopics({
+        ldaMode: targetMode,
+        numTopics: targetK,
+        year: targetYear,
+        decade: targetDecade,
+        publishers: targetPubs,
+        seedBoost: targetSeedBoost,
+        baseEta: targetBaseEta,
+      });
       setTopics(data.topics || []);
       if (data.lda_mode) setLdaMode(data.lda_mode as LDAMode);
       if (data.lda_mode_meta) setLdaModeMeta(data.lda_mode_meta);
@@ -181,8 +170,7 @@ export const useLDA = () => {
 
   const fetchSummary = async () => {
     try {
-      const res = await fetch(`${API_BASE}/api/data-summary`);
-      const data = await res.json();
+      const data = await ldaClientAdapter.fetchDataSummary();
       setSummary(data);
     } catch (e) {
       console.error("Failed to fetch summary", e);
@@ -208,20 +196,7 @@ export const useLDA = () => {
       if (kOverride) setNumTopics(kOverride);
       if (modeOverride) setLdaMode(modeOverride);
 
-      let url = `${API_BASE}/api/run-lda`;
-      const params = new URLSearchParams();
-      if (year) params.append('year', year.toString());
-      if (decade) params.append('decade', decade.toString());
-      if (activeK) params.append('num_topics', activeK.toString());
-      if (activeMode) params.append('lda_mode', activeMode);
-      if (activePubs && activePubs.length > 0) {
-        params.append('publishers', activePubs.join(','));
-      }
-      params.append('seed_boost', activeSeedBoost.toString());
-      params.append('base_eta', activeBaseEta.toString());
-      if (params.toString()) url += `?${params.toString()}`;
-
-      await fetch(url, { method: 'POST' });
+      // Stateless single-roundtrip query across the PosteriorSliceQuery seam (Candidate 5)
       await fetchTopics(
         activeMode,
         activeK,
@@ -232,7 +207,7 @@ export const useLDA = () => {
         activeBaseEta
       );
     } catch (e) {
-      console.error("LDA training failed", e);
+      console.error("LDA slice query failed", e);
     } finally {
       setIsTraining(false);
     }
@@ -289,16 +264,23 @@ export const useLDA = () => {
   ) => {
     setSeedLexicons(newSeeds);
     try {
-      await fetch(`${API_BASE}/api/update-seeds`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          seed_lexicons: newSeeds,
-          seed_boost: seedBoost,
-          base_eta: baseEta,
-        }),
+      await ldaClientAdapter.updateCustomSeeds({
+        seed_lexicons: newSeeds,
+        seed_boost: seedBoost,
+        base_eta: baseEta,
       });
       if (triggerRun) {
+        const params = new URLSearchParams();
+        if (activeFilters.year) params.append('year', activeFilters.year.toString());
+        if (activeFilters.decade) params.append('decade', activeFilters.decade.toString());
+        params.append('num_topics', numTopics.toString());
+        params.append('lda_mode', 'seeded');
+        if (activeFilters.publishers.length > 0) {
+          params.append('publishers', activeFilters.publishers.join(','));
+        }
+        params.append('seed_boost', seedBoost.toString());
+        params.append('base_eta', baseEta.toString());
+        await fetch(`${API_BASE}/api/run-lda?${params.toString()}`, { method: 'POST' });
         await runLDA(
           activeFilters.year,
           activeFilters.decade,

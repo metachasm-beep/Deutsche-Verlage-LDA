@@ -1594,7 +1594,8 @@ def run_pipeline(
 
     valid_rows = []
     texts = []
-    for row in iter_corpus_rows(data_path):
+    row_source = data_path if isinstance(data_path, (list, tuple)) else iter_corpus_rows(data_path)
+    for row in row_source:
         text = row.get("text", "")
         if text and text.strip():
             valid_rows.append(row)
@@ -1613,25 +1614,12 @@ def run_pipeline(
             filtered_docs.append(cleaned_doc)
             filtered_rows.append(row)
 
-    # --- PHASE 1: N-Gram Detection ---
+    # --- PHASE 1: N-Gram Detection (delegating post-bigram cleaning to deepened Token Attrition Funnel module) ---
+    from app.domain.token_attrition_funnel import apply_post_bigram_filter
+
     bigram = gensim.models.Phrases(filtered_docs, min_count=5, threshold=10)
     bigram_mod = gensim.models.phrases.Phraser(bigram)
-    processed_n_grams = []
-    for doc in filtered_docs:
-        ng_doc = []
-        for tok in bigram_mod[doc]:
-            if tok in ALL_STOPWORDS:
-                continue
-            if "_" in tok:
-                parts = tok.split("_")
-                # Unpack artificial self-bigrams (e.g., kirche_kirche -> kirche)
-                if len(set(parts)) == 1:
-                    ng_doc.append(parts[0])
-                    continue
-                if any(p in ALL_STOPWORDS for p in parts):
-                    continue
-            ng_doc.append(tok)
-        processed_n_grams.append(ng_doc)
+    processed_n_grams = [apply_post_bigram_filter(bigram_mod[doc]) for doc in filtered_docs]
 
     # Create Dictionary, apply Extremes + Sublinear TF-IDF Low-Information Filter (Santana et al., 2025 §72-73)
     dictionary = corpora.Dictionary(processed_n_grams)
@@ -1969,30 +1957,10 @@ def run_streaming_online_lda_pipeline(
     del bigram, core_docs, ext_docs, core_docs_unseeded, ext_docs_unseeded
     gc.collect()
 
+    from app.domain.token_attrition_funnel import apply_post_bigram_filter
+
     def _apply_bigram_and_clean(doc_list):
-        out_ng = []
-        for doc in doc_list:
-            ng_doc = []
-            for tok in bigram_mod[doc]:
-                if tok in ALL_STOPWORDS:
-                    continue
-                if "_" in tok:
-                    parts = [p for p in tok.split("_") if p and p not in ALL_STOPWORDS]
-                    if not parts:
-                        continue
-                    if len(set(parts)) == 1:
-                        ng_doc.append(parts[0])
-                        continue
-                    if len(parts) == 2 and (
-                        parts[0] in parts[1]
-                        or parts[1] in parts[0]
-                        or (len(parts[0]) >= 5 and len(parts[1]) >= 5 and parts[0][:5] == parts[1][:5])
-                    ):
-                        ng_doc.extend(parts)
-                        continue
-                ng_doc.append(tok)
-            out_ng.append(ng_doc)
-        return out_ng
+        return [apply_post_bigram_filter(bigram_mod[doc]) for doc in doc_list]
 
     processed_n_grams = _apply_bigram_and_clean(filtered_docs)
     processed_n_grams_unseeded = _apply_bigram_and_clean(filtered_docs_unseeded)

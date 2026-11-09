@@ -224,8 +224,8 @@ export const InterTopicDistanceMap: React.FC<InterTopicDistanceMapProps> = ({
       return {
         index: idx,
         id: t.id,
-        x: coords[idx]?.x ?? 0,
-        y: coords[idx]?.y ?? 0,
+        x: typeof (t as any).mds_pc1 === 'number' ? (t as any).mds_pc1 : (coords[idx]?.x ?? 0),
+        y: typeof (t as any).mds_pc2 === 'number' ? (t as any).mds_pc2 : (coords[idx]?.y ?? 0),
         prevalence: t.prevalence || Number((100 / k).toFixed(1)),
         label: t.archetype?.label || 'Hybrid',
         shortCode: `T${String(t.id + 1).padStart(2, '0')}`,
@@ -244,6 +244,7 @@ export const InterTopicDistanceMap: React.FC<InterTopicDistanceMapProps> = ({
   }, [topics]);
 
   // Compute λ-Relevance ranked keywords for activeTopic (Sievert & Shirley, 2014)
+  // Uses exact backend marginal word probability `kw.corpus_prob` from `app.domain.posterior_projection` (Candidate 7)
   const rankedKeywords = useMemo(() => {
     if (!activeTopic || !activeTopic.keywords) return [];
     const kws: Keyword[] = activeTopic.keywords;
@@ -252,7 +253,8 @@ export const InterTopicDistanceMap: React.FC<InterTopicDistanceMapProps> = ({
     return kws
       .map((kw) => {
         const phiKw = Math.max(1e-6, kw.weight);
-        const pw = Math.max(1e-6, marginalWordProbs[kw.word] || phiKw * 0.5);
+        const backendCorpusProb = typeof (kw as any).corpus_prob === 'number' ? (kw as any).corpus_prob : null;
+        const pw = Math.max(1e-6, backendCorpusProb ?? marginalWordProbs[kw.word] ?? phiKw * 0.5);
         const lift = phiKw / pw;
         const relevance =
           lambda * Math.log(phiKw) + (1 - lambda) * Math.log(lift);
