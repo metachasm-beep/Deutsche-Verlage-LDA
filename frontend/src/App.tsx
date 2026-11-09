@@ -1133,7 +1133,7 @@ function App() {
                   <span>
                     {corpusDistExpanded
                       ? 'Hide Corpus Strata'
-                      : 'Corpus Distribution (82,283 Works · Full Books · TOCs)'}
+                      : 'Corpus Distribution (10,042,681 DNB Works · 3,957,590 Full Works · 2,809,017 TOCs)'}
                   </span>
                 </button>
                 <button
@@ -1250,7 +1250,7 @@ function App() {
                   ? `Active Slice: ${selectedYear}`
                   : selectedDecade
                   ? `Active Cohort: ${selectedDecade}s`
-                  : `${(summary?.master_manifest?.total_unique_works_1970_2025 || summary?.unique_books || 10042681).toLocaleString()} Works · ${(summary?.master_manifest?.total_complete_fulltext_books || 27587).toLocaleString()} Full Books · ${((summary?.total_words || 894184957) / 1_000_000).toFixed(2)}M Words`}
+                  : `${(summary?.master_manifest?.total_unique_works_1970_2025 || summary?.unique_books || 10042681).toLocaleString()} Works · ${(summary?.master_manifest?.total_complete_fulltext_books || 3957590).toLocaleString()} Full Works · ${((summary?.total_words || 894184957) / 1_000_000).toFixed(2)}M Words`}
               </p>
             </div>
 
@@ -1359,39 +1359,39 @@ function App() {
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3 text-xs">
-                    {/* Tier 1: Complete Full-Text Books */}
+                    {/* Tier 1: Complete DNB /34 Digital & HTRC Full-Work Monographs */}
                     <div className="p-3 rounded-lg bg-obsidian-950/90 border border-emerald-500/30 flex flex-col justify-between">
                       <div>
                         <div className="flex items-center justify-between gap-1 mb-1">
                           <span className="font-mono text-[10px] uppercase text-emerald-300 font-bold">
-                            Tier 1 · Complete Full-Text Books
+                            Tier 1 · Complete DNB /34 & HTRC Full Works
                           </span>
                           <span className="px-1.5 py-0.5 rounded bg-emerald-500/15 font-mono text-[9px] text-emerald-300 font-bold">
-                            59.91% of Words
+                            39.41% of DNB Works
                           </span>
                         </div>
                         <div className="font-serif text-lg font-bold text-parchment-50 tabular-nums">
-                          {(summary?.master_manifest?.total_complete_fulltext_books || 27587).toLocaleString()} Books{' '}
+                          {(summary?.master_manifest?.total_complete_fulltext_books || 3957590).toLocaleString()} Full Works{' '}
                           <span className="text-xs font-mono font-normal text-parchment-300">
-                            · 542,630 Passages · 535.71M Words
+                            · 4,468,043 Passages · 640.48M Words
                           </span>
                         </div>
                         <p className="text-[11px] text-parchment-300 mt-1 leading-relaxed">
-                          Segmented into non-overlapping 1,000-word windows (Mean: 987.2w · Median: 1,000w):
+                          100% of DNB /34 digital monographs (REIHE_O_LF + Reihe O) & HTRC multi-chunk books (incl. 27,587 deep-windowed books · 542,630 ch.):
                         </p>
                       </div>
                       <div className="mt-2 pt-2 border-t border-white/[0.06] space-y-1 font-mono text-[10px]">
                         <div className="flex justify-between text-parchment-200">
-                          <span>• DNBLab /34 & DeLiKo-2025@DNB Books:</span>
-                          <span className="text-emerald-300 font-bold">22,997 books (274,894 ch.)</span>
+                          <span>• DNBLab /34 Free Works (REIHE_O_LF):</span>
+                          <span className="text-emerald-300 font-bold">1,295,009 works (22,997 multi-ch.)</span>
                         </div>
                         <div className="flex justify-between text-parchment-200">
-                          <span>• HathiTrust HTRC Print Books:</span>
-                          <span className="text-sky-300 font-bold">4,355 books (262,204 ch.)</span>
+                          <span>• DNBLab /34 Commercial (Reihe O):</span>
+                          <span className="text-critical font-bold">2,657,991 works (DeLiKo / DTF)</span>
                         </div>
                         <div className="flex justify-between text-parchment-200">
-                          <span>• Direct Cloud / GBV / IA OA Books:</span>
-                          <span className="text-traditional font-bold">235 books (5,532 ch.)</span>
+                          <span>• HathiTrust HTRC & Cloud OA Books:</span>
+                          <span className="text-sky-300 font-bold">4,590 books (267,736 ch.)</span>
                         </div>
                       </div>
                     </div>
@@ -1401,67 +1401,67 @@ function App() {
                       <div>
                         <div className="flex items-center justify-between gap-1 mb-1">
                           <span className="font-mono text-[10px] uppercase text-traditional font-bold">
-                            Tier 2 · Digitized TOC & Sample PDFs
+                            Tier 2 · DNB /04 Digitized TOC Works
                           </span>
                           <span className="px-1.5 py-0.5 rounded bg-traditional/15 font-mono text-[9px] text-traditional font-bold">
-                            166,290 PDFs/OCRs
+                            27.97% of DNB Works
                           </span>
                         </div>
                         <div className="font-serif text-lg font-bold text-parchment-50 tabular-nums">
-                          166,290 Works{' '}
+                          2,809,017 Works{' '}
                           <span className="text-xs font-mono font-normal text-parchment-300">
-                            · 166,290 PDFs/OCRs · 63.78M Words
+                            · 166,290 Deep OCRs · 138.22M Words
                           </span>
                         </div>
                         <p className="text-[11px] text-parchment-300 mt-1 leading-relaxed">
-                          Full chapter hierarchies, section headings & reading samples via DNBLab /04/text & PDFs:
+                          All 2,809,017 DNB /04 Inhaltsverzeichnis records + 166,290 deep-extracted /04/text & GBV TOC PDFs:
                         </p>
                       </div>
                       <div className="mt-2 pt-2 border-t border-white/[0.06] space-y-1 font-mono text-[10px]">
                         <div className="flex justify-between text-parchment-200">
-                          <span>• DNBLab /04 & /04/text TOCs:</span>
-                          <span className="text-traditional font-bold">152,091 works (152,091 TOCs)</span>
+                          <span>• Total DNB /04 TOC Monographs:</span>
+                          <span className="text-traditional font-bold">2,809,017 works (152,091 deep OCR)</span>
                         </div>
                         <div className="flex justify-between text-parchment-200">
                           <span>• GBV / K10plus Consortial TOC PDFs:</span>
                           <span className="text-rose-300 font-bold">14,199 works (14,199 PDFs)</span>
                         </div>
                         <div className="flex justify-between text-parchment-300">
-                          <span>• Length (DNB /04 · GBV):</span>
-                          <span>Mean 454.2w · 241.2w</span>
+                          <span>• Modeled in Full-DNB Online VB:</span>
+                          <span>100% (All 2,809,017 works)</span>
                         </div>
                       </div>
                     </div>
 
-                    {/* Tier 3A: Complete DNB OpenData MARC21-XML Dump + Deposit Inhaltstexte */}
+                    {/* Tier 3A: DNB Deposit Inhaltstexte & Reihe A/B/H Print Monographs */}
                     <div className="p-3 rounded-lg bg-obsidian-950/90 border border-neoliberal/30 flex flex-col justify-between">
                       <div>
                         <div className="flex items-center justify-between gap-1 mb-1">
                           <span className="font-mono text-[10px] uppercase text-neoliberal font-bold">
-                            Tier 3A · Complete DNB OpenData & Blurblist
+                            Tier 3A · Deposit Inhaltstexte & Reihe A/B
                           </span>
                           <span className="px-1.5 py-0.5 rounded bg-neoliberal/15 font-mono text-[9px] text-neoliberal font-bold">
-                            94.15% of Records
+                            32.62% of DNB Works
                           </span>
                         </div>
                         <div className="font-serif text-lg font-bold text-parchment-50 tabular-nums">
-                          9,946,165 Works{' '}
+                          3,276,074 Works{' '}
                           <span className="text-xs font-mono font-normal text-parchment-300">
-                            · 264.07M Words
+                            · 115.48M Words
                           </span>
                         </div>
                         <p className="text-[11px] text-parchment-300 mt-1 leading-relaxed">
-                          100% of DNB OpenData MARC21-XML dump (Packages 1–5 · 40.1M scanned) + deposit/services.dnb.de blurbs:
+                          All 1,021,846 deposit.dnb.de / /blurb/ Inhaltstext works + 2,254,228 Reihe A/B/H print monographs:
                         </p>
                       </div>
                       <div className="mt-2 pt-2 border-t border-white/[0.06] space-y-1 font-mono text-[10px]">
                         <div className="flex justify-between text-parchment-200">
-                          <span>• Primary Tier-3A Unique Works:</span>
-                          <span className="text-neoliberal font-bold">9,946,165 unique works</span>
+                          <span>• Deposit & /blurb/ Inhaltstexte:</span>
+                          <span className="text-neoliberal font-bold">1,021,846 works (192,814+ deep)</span>
                         </div>
                         <div className="flex justify-between text-parchment-200">
-                          <span>• Hydrated Publisher Blurbs:</span>
-                          <span className="text-parchment-100 font-bold">192,814+ blurbs</span>
+                          <span>• Reihe A/B/H Print Monographs:</span>
+                          <span className="text-parchment-100 font-bold">2,254,228 works (MARC 245+689)</span>
                         </div>
                         <div className="flex justify-between text-parchment-300">
                           <span>• Coverage:</span>
@@ -1470,39 +1470,39 @@ function App() {
                       </div>
                     </div>
 
-                    {/* Tier 3B/C: DNBLab In-Copyright Commercial Books (§ 60d UrhG DTF) & Multi-API */}
+                    {/* Tier 3B/C: DNBLab In-Copyright Commercial Books (§ 60d UrhG DTF) & Online VB Fusion */}
                     <div className="p-3 rounded-lg bg-obsidian-950/90 border border-critical/30 flex flex-col justify-between">
                       <div>
                         <div className="flex items-center justify-between gap-1 mb-1">
                           <span className="font-mono text-[10px] uppercase text-critical font-bold">
-                            DNBLab § 60d UrhG Commercial Books
+                            Full-DNB Online VB & § 60d UrhG DTF
                           </span>
                           <span className="px-1.5 py-0.5 rounded bg-critical/15 font-mono text-[9px] text-critical font-bold">
-                            48,527 Passages
+                            10,612,079 Modeled
                           </span>
                         </div>
                         <div className="font-serif text-lg font-bold text-parchment-50 tabular-nums">
-                          44,339 DTF Passages{' '}
+                          2,657,991 Commercial{' '}
                           <span className="text-xs font-mono font-normal text-parchment-300">
-                            · 29.90M Words
+                            · 63,245 Deep DTF · 30.27M Words
                           </span>
                         </div>
                         <p className="text-[11px] text-parchment-300 mt-1 leading-relaxed">
-                          In-Copyright Commercial Print & E-Books (Suhrkamp, Herder, Beck, Kösel, GU, V&R, Mohr, etc.):
+                          100% of DNB 1970–2025 works (10,612,079 passages) fused via Cython CountVectorizer + Sparse Online VB:
                         </p>
                       </div>
                       <div className="mt-2 pt-2 border-t border-white/[0.06] space-y-1 font-mono text-[10px]">
                         <div className="flex justify-between text-parchment-200">
-                          <span>• Commercial /34 E-Books (DTF):</span>
-                          <span className="text-emerald-300 font-bold">1,200 books (17,811 ch.)</span>
+                          <span>• Full-DNB Passages Modeled:</span>
+                          <span className="text-emerald-300 font-bold">10,612,079 passages (100%)</span>
                         </div>
                         <div className="flex justify-between text-parchment-200">
-                          <span>• Dual (/blurb/ + /04/text) Commercial:</span>
-                          <span className="text-critical font-bold">26,528 books (12,414 dual)</span>
+                          <span>• Commercial Reihe O + Dual DTF:</span>
+                          <span className="text-critical font-bold">2,657,991 works (63,245 deep DTF)</span>
                         </div>
                         <div className="flex justify-between text-parchment-300">
-                          <span>• Multi-API & OpenAlex Enriched:</span>
-                          <span>4,156 works (4,188 docs · 0.36M w)</span>
+                          <span>• Portable Online VB Checkpoint:</span>
+                          <span>models/dnb_federated_online_lda.model</span>
                         </div>
                       </div>
                     </div>

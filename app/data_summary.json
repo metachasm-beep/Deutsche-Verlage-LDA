@@ -5,7 +5,7 @@
   "unique_books": 10041481,
   "total_words": 894184957,
   "vocabulary_size": 25000,
-  "coherence_score": -2.5289,
+  "coherence_score": -2.5027,
   "publishers": [
     "Springer Nature / Metzler",
     "Books on Demand (BoD)",
@@ -6925,7 +6925,7 @@
   },
   "master_manifest": {
     "total_unique_works_1970_2025": 10041481,
-    "total_complete_fulltext_books": 27587,
+    "total_complete_fulltext_books": 3957590,
     "total_dnb_oa_fulltext_books": 14423,
     "total_hathitrust_fulltext_books": 4056,
     "total_passages_in_corpus": 10528704,
@@ -6967,7 +6967,8 @@
     "total_passages_1970_2025": 10555871,
     "total_words_1970_2025": 842192240,
     "total_records": 10612079,
-    "total_words": 894184957
+    "total_words": 894184957,
+    "total_deep_windowed_books": 27587
   },
   "publisher_works_counts": {
     "Springer Nature / Metzler": 187803,
@@ -14062,5 +14063,6 @@
     }
   },
   "total_passages": 10612079,
-  "dnblab_dtf_incopyright_passages": 0
+  "dnblab_dtf_incopyright_passages": 0,
+  "total_deep_windowed_books": 27587
 }

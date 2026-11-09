@@ -11,7 +11,7 @@
   },
   "corpus_documents": 10612079,
   "vocabulary_size": 25000,
-  "coherence_score": -2.5289,
+  "coherence_score": -2.5027,
   "tfidf_audit": {
     "tfidf_smartirs": "ntc",
     "tfidf_min_threshold": 0.015,
@@ -23,80 +23,80 @@
       "topic_id": 1,
       "archetype": {
         "label": "Critical / Secular-Humanist",
-        "confidence": 100.0,
+        "confidence": 88.5,
         "scores": {
           "Traditional / Ecclesiastical": 0.0,
-          "Neoliberal / Self-Optimization": 0.0,
-          "Critical / Secular-Humanist": 100.0
+          "Neoliberal / Self-Optimization": 11.5,
+          "Critical / Secular-Humanist": 88.5
         }
       },
       "seeded_prior": null,
       "top_terms": [
         {
           "term": "politisch",
-          "weight": 0.02527
+          "weight": 0.02507
         },
         {
           "term": "staat",
-          "weight": 0.02017
+          "weight": 0.02269
         },
         {
           "term": "deutsch",
-          "weight": 0.01555
+          "weight": 0.02141
         },
         {
           "term": "land",
-          "weight": 0.01407
+          "weight": 0.01617
         },
         {
           "term": "politik",
-          "weight": 0.01124
+          "weight": 0.01472
         },
         {
           "term": "islam",
-          "weight": 0.00978
+          "weight": 0.0102
         },
         {
           "term": "krieg",
-          "weight": 0.00872
+          "weight": 0.00951
         },
         {
           "term": "europa",
-          "weight": 0.00745
+          "weight": 0.00871
         },
         {
-          "term": "europäisch",
-          "weight": 0.00644
-        },
-        {
-          "term": "bevölkerung",
-          "weight": 0.00629
+          "term": "gesellschaft",
+          "weight": 0.00729
         },
         {
           "term": "ddr",
-          "weight": 0.0062
+          "weight": 0.00669
+        },
+        {
+          "term": "bevölkerung",
+          "weight": 0.00639
+        },
+        {
+          "term": "europäisch",
+          "weight": 0.00601
+        },
+        {
+          "term": "entwicklung",
+          "weight": 0.0058
         },
         {
           "term": "staatlich",
-          "weight": 0.00587
+          "weight": 0.00551
         },
         {
           "term": "öffentlich",
-          "weight": 0.00554
-        },
-        {
-          "term": "islamisch",
           "weight": 0.00536
-        },
-        {
-          "term": "national",
-          "weight": 0.00528
         }
       ],
       "top_publishers": [
         {
           "publisher": "Campus",
-          "share": 11.2
+          "share": 11.1
         },
         {
           "publisher": "De Gruyter / Transcript",
@@ -104,11 +104,11 @@
         },
         {
           "publisher": "Aschendorff",
-          "share": 7.2
+          "share": 7.3
         },
         {
           "publisher": "Böhlau",
-          "share": 6.1
+          "share": 6.2
         },
         {
           "publisher": "C.H. Beck",
@@ -116,7 +116,7 @@
         },
         {
           "publisher": "Evangelische Verlagsanstalt",
-          "share": 3.1
+          "share": 3.2
         }
       ],
       "representative_docs": [
@@ -126,7 +126,7 @@
           "publisher": "DNB Monograph (DE)",
           "date": "2009",
           "corpus_layer": "dnb_deposit_inhaltstext",
-          "probability": 80.1,
+          "probability": 80.2,
           "keywords": [],
           "snippet": "Politisches System, Wirtschaftsentwicklung, Wirtschaftspolitik, Politischer Prozess, Opposition, Herrschaft, Außenpolitik, Innenpolitik, (thesoz)politisches System, (thesoz)Wirtschaftsentwicklung, (thesoz)Wirtschaftspolitik, (thesoz)politis",
           "apa_citation": "Mattes, Hanspeter (2009). 40 Jahre libysche Revolution: mehr Erfolg bei der Machtsicherung als bei der Landesentwicklung. DNB Monograph (DE)."
@@ -137,7 +137,7 @@
           "publisher": "DNB Monograph (DE)",
           "date": "1998",
           "corpus_layer": "dnb_deposit_inhaltstext",
-          "probability": 76.9,
+          "probability": 77.5,
           "keywords": [],
           "snippet": "Subventionspolitik, Internationale Politik, Handel, Wirtschaft, Integration, Interessenpolitik, Hegemonie, Ordnungspolitik, Außenwirtschaft, Außenhandelspolitik, Wirtschaftspolitik, (thesoz)Subventionspolitik, (thesoz)RGW, (thesoz)DDR, (the",
           "apa_citation": "Herzog, Gerd (1998). Schwäche als Stärke: bargaining power im RGW. DNB Monograph (DE)."
@@ -148,7 +148,7 @@
           "publisher": "DNB Monograph (DE)",
           "date": "2009",
           "corpus_layer": "dnb_deposit_inhaltstext",
-          "probability": 76.7,
+          "probability": 76.9,
           "keywords": [],
           "snippet": "Abstract: 'Die jüngsten Entwicklungen in der Türkei lassen in- und ausländische Beobachter darüber rätseln, welchen weiteren Weg das Land nehmen wird. Seit dem Frühjahr 2007 hat sich der Kampf zwischen den Anhängern der kemalistischen Staat",
           "apa_citation": "Kramer, Heinz (2009). Türkische Turbulenzen: der andauernde Kulturkampf um die \"richtige\" Republik. DNB Monograph (DE)."
@@ -159,80 +159,80 @@
       "topic_id": 2,
       "archetype": {
         "label": "Traditional / Ecclesiastical",
-        "confidence": 89.6,
+        "confidence": 92.5,
         "scores": {
-          "Traditional / Ecclesiastical": 89.6,
+          "Traditional / Ecclesiastical": 92.5,
           "Neoliberal / Self-Optimization": 0.0,
-          "Critical / Secular-Humanist": 10.4
+          "Critical / Secular-Humanist": 7.5
         }
       },
       "seeded_prior": null,
       "top_terms": [
         {
           "term": "theologie",
-          "weight": 0.20184
-        },
-        {
-          "term": "christentum",
-          "weight": 0.01832
-        },
-        {
-          "term": "wissenschaft",
-          "weight": 0.0153
-        },
-        {
-          "term": "theologisch",
-          "weight": 0.01265
-        },
-        {
-          "term": "philosophie",
-          "weight": 0.01181
+          "weight": 0.37267
         },
         {
           "term": "geschichte",
-          "weight": 0.01109
+          "weight": 0.02398
         },
         {
-          "term": "testament",
-          "weight": 0.0082
+          "term": "wissenschaft",
+          "weight": 0.01824
         },
         {
-          "term": "bibel",
-          "weight": 0.00808
+          "term": "christentum",
+          "weight": 0.01686
+        },
+        {
+          "term": "philosophie",
+          "weight": 0.01411
+        },
+        {
+          "term": "theologisch",
+          "weight": 0.00945
         },
         {
           "term": "text",
-          "weight": 0.00772
+          "weight": 0.00713
+        },
+        {
+          "term": "bibel",
+          "weight": 0.00698
+        },
+        {
+          "term": "testament",
+          "weight": 0.00684
         },
         {
           "term": "islam",
-          "weight": 0.00725
-        },
-        {
-          "term": "rezeption",
           "weight": 0.00594
         },
         {
           "term": "praktische",
-          "weight": 0.00572
+          "weight": 0.00481
+        },
+        {
+          "term": "rezeption",
+          "weight": 0.0048
         },
         {
           "term": "exegese",
-          "weight": 0.00503
+          "weight": 0.00381
+        },
+        {
+          "term": "studie",
+          "weight": 0.00371
         },
         {
           "term": "evangelisch",
-          "weight": 0.00469
-        },
-        {
-          "term": "judentum",
-          "weight": 0.00389
+          "weight": 0.00343
         }
       ],
       "top_publishers": [
         {
           "publisher": "De Gruyter / Transcript",
-          "share": 17.5
+          "share": 17.6
         },
         {
           "publisher": "Mohr Siebeck",
@@ -262,7 +262,7 @@
           "publisher": "Penn, University of Pennsylvania Press",
           "date": "2023",
           "corpus_layer": "gbv_direct_fulltext_pdf",
-          "probability": 92.8,
+          "probability": 92.7,
           "keywords": [],
           "snippet": "Knowledge true and useful: a cultural history of early scholasticism. The Middle Ages series. \"A radical shift took place in medieval Europe that still shapes contemporary intellectual life: freeing themselves from the fixed beliefs of the",
           "apa_citation": "Rexroth, Frank (2023). Knowledge true and useful: a cultural history of early scholasticism. Penn, University of Pennsylvania Press."
@@ -284,7 +284,7 @@
           "publisher": "Herder",
           "date": "2025",
           "corpus_layer": "dnb_deposit_inhaltstext",
-          "probability": 89.4,
+          "probability": 89.3,
           "keywords": [],
           "snippet": "Appreciated within a historico-philological frame, citations, allusions, and cognate phenomena – usually subsumed under intertextuality – are purposeful references from one text to another. That is to say, the author of a text which cites a",
           "apa_citation": "Krause, Joachim J. (2025). Citations and Allusions in Pentateuchal Traditions: Biblische Notizen 205/2025. Herder."
@@ -305,70 +305,70 @@
       "seeded_prior": null,
       "top_terms": [
         {
-          "term": "kind",
-          "weight": 0.01472
-        },
-        {
           "term": "arbeit",
-          "weight": 0.01464
+          "weight": 0.02154
         },
         {
-          "term": "sozial",
-          "weight": 0.01241
-        },
-        {
-          "term": "unterricht",
-          "weight": 0.011
+          "term": "kind",
+          "weight": 0.01683
         },
         {
           "term": "schule",
-          "weight": 0.01039
+          "weight": 0.01292
+        },
+        {
+          "term": "sozial",
+          "weight": 0.01211
+        },
+        {
+          "term": "unterricht",
+          "weight": 0.01147
         },
         {
           "term": "bildung",
-          "weight": 0.00965
-        },
-        {
-          "term": "religiös",
-          "weight": 0.00877
-        },
-        {
-          "term": "jugendliche",
-          "weight": 0.00731
-        },
-        {
-          "term": "pädagogik",
-          "weight": 0.00706
-        },
-        {
-          "term": "thema",
-          "weight": 0.00695
+          "weight": 0.01138
         },
         {
           "term": "entwicklung",
-          "weight": 0.00597
+          "weight": 0.00891
         },
         {
-          "term": "mensch",
-          "weight": 0.00593
+          "term": "religiös",
+          "weight": 0.00824
+        },
+        {
+          "term": "jugendliche",
+          "weight": 0.00785
+        },
+        {
+          "term": "pädagogik",
+          "weight": 0.00771
+        },
+        {
+          "term": "thema",
+          "weight": 0.00749
         },
         {
           "term": "studie",
-          "weight": 0.00578
+          "weight": 0.00742
+        },
+        {
+          "term": "mensch",
+          "weight": 0.00685
+        },
+        {
+          "term": "frage",
+          "weight": 0.00642
         },
         {
           "term": "praxis",
-          "weight": 0.00512
-        },
-        {
-          "term": "pädagogisch",
-          "weight": 0.00491
+          "weight": 0.00616
         }
       ],
       "top_publishers": [
         {
           "publisher": "Campus",
-          "share": 11.1
+          "share": 11.0
         },
         {
           "publisher": "Evangelische Verlagsanstalt",
@@ -388,7 +388,7 @@
         },
         {
           "publisher": "Aschendorff",
-          "share": 2.5
+          "share": 2.6
         }
       ],
       "representative_docs": [
@@ -409,7 +409,7 @@
           "publisher": "Evangelische Verlagsanstalt",
           "date": "2019",
           "corpus_layer": "dnb_oa_fullbook",
-          "probability": 87.8,
+          "probability": 88.2,
           "keywords": [],
           "snippet": "Diakonie Text 09.2019: Einrichtungsstatistik 2018: Statistik der Diakonie Deutschland – Stand 01. 01. 2018. o. V.. Evangelische Verlagsanstalt. Deutschland DIAKONIE TEXTE STATISTISCHE INFORMATIONEN 09.2019 Einrichtungs­ statistik 2018 Stati",
           "apa_citation": "o. V. (2019). Diakonie Text 09.2019: Einrichtungsstatistik 2018: Statistik der Diakonie Deutschland – Stand 01. 01. 2018 [DNB-OA-Vollbuch-Abschnitt 1/13]. Evangelische Verlagsanstalt."
@@ -441,64 +441,64 @@
       "seeded_prior": null,
       "top_terms": [
         {
-          "term": "bild",
-          "weight": 0.01306
+          "term": "kunst",
+          "weight": 0.02322
         },
         {
           "term": "raum",
-          "weight": 0.01299
+          "weight": 0.01614
         },
         {
-          "term": "kunst",
-          "weight": 0.01295
-        },
-        {
-          "term": "digital",
-          "weight": 0.01213
-        },
-        {
-          "term": "medium",
-          "weight": 0.01095
-        },
-        {
-          "term": "information",
-          "weight": 0.01045
+          "term": "bild",
+          "weight": 0.01581
         },
         {
           "term": "art",
-          "weight": 0.00975
+          "weight": 0.01576
         },
         {
-          "term": "tier",
-          "weight": 0.00926
+          "term": "digital",
+          "weight": 0.01254
+        },
+        {
+          "term": "information",
+          "weight": 0.01215
+        },
+        {
+          "term": "medium",
+          "weight": 0.01082
         },
         {
           "term": "technik",
-          "weight": 0.00751
+          "weight": 0.00944
+        },
+        {
+          "term": "tier",
+          "weight": 0.0089
         },
         {
           "term": "online",
-          "weight": 0.00724
-        },
-        {
-          "term": "museum",
-          "weight": 0.00645
-        },
-        {
-          "term": "film",
-          "weight": 0.00622
+          "weight": 0.00868
         },
         {
           "term": "form",
-          "weight": 0.00614
-        },
-        {
-          "term": "internet",
-          "weight": 0.00601
+          "weight": 0.00837
         },
         {
           "term": "musik",
-          "weight": 0.00595
+          "weight": 0.0074
+        },
+        {
+          "term": "film",
+          "weight": 0.00713
+        },
+        {
+          "term": "museum",
+          "weight": 0.00689
+        },
+        {
+          "term": "internet",
+          "weight": 0.00661
         }
       ],
       "top_publishers": [
@@ -508,7 +508,7 @@
         },
         {
           "publisher": "Campus",
-          "share": 12.4
+          "share": 12.3
         },
         {
           "publisher": "Aschendorff",
@@ -516,15 +516,15 @@
         },
         {
           "publisher": "Böhlau",
-          "share": 3.0
+          "share": 3.1
         },
         {
           "publisher": "Evangelische Verlagsanstalt",
-          "share": 2.7
+          "share": 2.8
         },
         {
           "publisher": "C.H. Beck",
-          "share": 2.3
+          "share": 2.4
         }
       ],
       "representative_docs": [
@@ -534,7 +534,7 @@
           "publisher": "DNB Monograph (DE)",
           "date": "2003",
           "corpus_layer": "dnb_oa_fullbook",
-          "probability": 75.2,
+          "probability": 75.4,
           "keywords": [],
           "snippet": "Antwortskalen im ALLBUS und ISSP: eine Sammlung. Prüfer, Peter. DNB Monograph (DE). www.ssoar.info Antwortskalen im ALLBUS und ISSP: eine Sammlung Prüfer, Peter; Vazansky, Lisa; Wystup, Darius Veröffentlichungsversion / Published Version Ve",
           "apa_citation": "Prüfer, Peter (2003). Antwortskalen im ALLBUS und ISSP: eine Sammlung [DNB-OA-Vollbuch-Abschnitt 1/9]. DNB Monograph (DE)."
@@ -545,7 +545,7 @@
           "publisher": "DNB Monograph (DE)",
           "date": "2001",
           "corpus_layer": "dnb_oa_fullbook",
-          "probability": 67.0,
+          "probability": 67.3,
           "keywords": [],
           "snippet": "www.immobilienbetrug.de - www.bankopfer.de - www.bankenkriminalität.de ... Grundvorgang und Folgen massenhaft betriebener Immobilienfinanzierung. Schanz, Günther. DNB Monograph (DE). www.ssoar.info www.immobilienbetrug.de - www.bankopfer.de",
           "apa_citation": "Schanz, Günther (2001). www.immobilienbetrug.de - www.bankopfer.de - www.bankenkriminalität.de ... Grundvorgang und Folgen massenhaft betriebener Immobilienfinanzierung [DNB-OA-Vollbuch-Abschnitt 1/8]. DNB Monograph (DE)."
@@ -556,7 +556,7 @@
           "publisher": "Tchibo",
           "date": "1976",
           "corpus_layer": "dnb_toc_pdf_fulltext",
-          "probability": 64.2,
+          "probability": 64.3,
           "keywords": [],
           "snippet": "Das grosse Buch der Handarbeiten. o. V.. Tchibo. STRICKEN MODELLE . . . für die Frau Dreiecktuch aus hand- gesponnener Wolle 18 Jacke - im Cardiganstil aus Bouclöwolle Größe 4 0 + 4 4 13 - Dirndljacke, bestickt Größe 3 6 + 4 0 27 - und Knie",
           "apa_citation": "o. V. (1976). Das grosse Buch der Handarbeiten [DNB-Inhaltsverzeichnis & Leseprobe]. Tchibo."
@@ -578,63 +578,63 @@
       "top_terms": [
         {
           "term": "frau",
-          "weight": 0.04374
+          "weight": 0.05959
         },
         {
           "term": "mann",
-          "weight": 0.02475
+          "weight": 0.02945
         },
         {
           "term": "kind",
-          "weight": 0.01595
-        },
-        {
-          "term": "haus",
-          "weight": 0.01143
+          "weight": 0.01961
         },
         {
           "term": "familie",
-          "weight": 0.01127
+          "weight": 0.01424
+        },
+        {
+          "term": "haus",
+          "weight": 0.01262
         },
         {
           "term": "mutter",
-          "weight": 0.0092
+          "weight": 0.01008
         },
         {
           "term": "alt",
-          "weight": 0.00754
-        },
-        {
-          "term": "herr",
-          "weight": 0.00689
+          "weight": 0.00745
         },
         {
           "term": "hand",
-          "weight": 0.0067
+          "weight": 0.00729
         },
         {
-          "term": "bruder",
-          "weight": 0.00618
-        },
-        {
-          "term": "name",
-          "weight": 0.00611
-        },
-        {
-          "term": "jung",
-          "weight": 0.00605
+          "term": "herr",
+          "weight": 0.00711
         },
         {
           "term": "vater",
-          "weight": 0.00603
+          "weight": 0.00648
+        },
+        {
+          "term": "stadt",
+          "weight": 0.006
+        },
+        {
+          "term": "bruder",
+          "weight": 0.00598
+        },
+        {
+          "term": "name",
+          "weight": 0.00593
+        },
+        {
+          "term": "jung",
+          "weight": 0.0058
         },
         {
           "term": "ehe",
-          "weight": 0.00566
-        },
-        {
-          "term": "schwester",
-          "weight": 0.00528
+          "weight": 0.00578
         }
       ],
       "top_publishers": [
@@ -670,7 +670,7 @@
           "publisher": "Rowohlt",
           "date": "1988",
           "corpus_layer": "hathitrust_ef_fullbook_print",
-          "probability": 81.4,
+          "probability": 81.6,
           "keywords": [],
           "snippet": "bald Taubenkorb Stahl allen Ausrufers Ausrufers Vorgang ihm fertig wolle davon Aufsammeln Tiere geringen geboten kurze ließ Tauben Tauben neben jammernd Körbe bestehlen flatternd herumzutragen unausgesetzt jener Garten Wüstenreiter Sah Gold",
           "apa_citation": "o. V. (1988). An Nachtfeuern der Karawan-Serail [HTRC-Vollbuch-Abschnitt 22/55]. Rowohlt."
@@ -681,7 +681,7 @@
           "publisher": "Böhlau",
           "date": "1974",
           "corpus_layer": "hathitrust_ef_fullbook_print",
-          "probability": 72.2,
+          "probability": 72.4,
           "keywords": [],
           "snippet": "gewesen hierfür fünfzehn frühen XVI grand ammeustres XIII XIII Buck-Fabian Mitglieder nachstehenden Jacques Ulm erst sowie Kap gewisse Rat Rat Rat früheren Rates also Bern Ratsprotokollcn benutzt Zahl Fabian Kammer Jahr beiden folgen membre",
           "apa_citation": "Fabian, Ekkehart (1974). Geheime Räte in Zürich, Bern, Basel und Schaffhausen: Quellen und Untersuchungen zur Staatskirchenrechts- und Verfassungsgeschichte der vier reformierten Orte der alten Eidgenossenschaft (einschließlich der Zürcher Notstandsverfassung) ; mit Namenlisten 1339/1432 - 1798 (1800) [HTRC-Vollbuch-Abschnitt 49/75]. Böhlau."
@@ -692,7 +692,7 @@
           "publisher": "Insel",
           "date": "1988",
           "corpus_layer": "hathitrust_ef_fullbook_print",
-          "probability": 71.7,
+          "probability": 72.0,
           "keywords": [],
           "snippet": "Loch kam Stücke stehen Wirtshaus früh Unterdes sagte stand Ferdinand regieren zuvor einmal zurück Wirt Wald dir drei Morgens fort folgen Schuh König Kanne still Siebenstern Wächter durchs viel mich dann eigentlich lang kommt willst Tagesanb",
           "apa_citation": "Woeller, Waltraud (1988). Deutsche Volksmärchen [HTRC-Vollbuch-Abschnitt 22/55]. Insel."
@@ -714,73 +714,73 @@
       "top_terms": [
         {
           "term": "gott",
-          "weight": 0.17814
+          "weight": 0.32051
         },
         {
           "term": "mensch",
-          "weight": 0.01474
+          "weight": 0.01578
         },
         {
           "term": "jesus",
-          "weight": 0.01386
-        },
-        {
-          "term": "bibel",
-          "weight": 0.01327
+          "weight": 0.01376
         },
         {
           "term": "glaube",
-          "weight": 0.01311
+          "weight": 0.01187
+        },
+        {
+          "term": "bibel",
+          "weight": 0.01178
         },
         {
           "term": "jesu",
-          "weight": 0.01196
-        },
-        {
-          "term": "jüdisch",
-          "weight": 0.01033
+          "weight": 0.01099
         },
         {
           "term": "geist",
-          "weight": 0.00945
-        },
-        {
-          "term": "christlich",
-          "weight": 0.00928
+          "weight": 0.00888
         },
         {
           "term": "wort",
-          "weight": 0.00862
+          "weight": 0.00819
         },
         {
-          "term": "heilig",
-          "weight": 0.00815
+          "term": "jüdisch",
+          "weight": 0.00792
+        },
+        {
+          "term": "welt",
+          "weight": 0.00747
+        },
+        {
+          "term": "christlich",
+          "weight": 0.00727
         },
         {
           "term": "christus",
-          "weight": 0.00774
+          "weight": 0.00722
+        },
+        {
+          "term": "liebe",
+          "weight": 0.00631
+        },
+        {
+          "term": "heilig",
+          "weight": 0.00626
         },
         {
           "term": "israel",
-          "weight": 0.00671
-        },
-        {
-          "term": "biblisch",
-          "weight": 0.00669
-        },
-        {
-          "term": "jude",
-          "weight": 0.0066
+          "weight": 0.00568
         }
       ],
       "top_publishers": [
         {
           "publisher": "Aschendorff",
-          "share": 8.5
+          "share": 8.4
         },
         {
           "publisher": "Herder",
-          "share": 6.4
+          "share": 6.5
         },
         {
           "publisher": "Evangelische Verlagsanstalt",
@@ -801,26 +801,26 @@
       ],
       "representative_docs": [
         {
-          "title": "Der liebe Gott kommt nicht voran: Geschichten aus dem Alltag des Allmächtigen [DNB-Inhaltsverzeichnis & Leseprobe]",
-          "author": "Weinrich, Wolfgang H.",
-          "publisher": "Herder (Kreuz)",
-          "date": "2014",
-          "corpus_layer": "dnb_toc_pdf_fulltext",
-          "probability": 86.8,
-          "keywords": [],
-          "snippet": "Der liebe Gott kommt nicht voran: Geschichten aus dem Alltag des Allmächtigen. Weinrich, Wolfgang H.. Herder (Kreuz). Der liebe Gott am Kiosk 7 Der liebe Gott bleibt inkonsequent 9 Der liebe Gott erinnert sich 11 Der liebe Gott erzählt mehr",
-          "apa_citation": "Weinrich, Wolfgang H. (2014). Der liebe Gott kommt nicht voran: Geschichten aus dem Alltag des Allmächtigen [DNB-Inhaltsverzeichnis & Leseprobe]. Herder (Kreuz)."
-        },
-        {
           "title": "Staunen über Gott",
           "author": "Spangenberg, Peter",
           "publisher": "Agentur des Rauhen Hauses Hamburg",
           "date": "2003",
           "corpus_layer": "dnb_toc_pdf_fulltext",
-          "probability": 86.5,
+          "probability": 85.9,
           "keywords": [],
           "snippet": "Inhalt Vorwort 9 Das Lächeln Gottes 10 Die Unfasslichkeit Gottes 12 Engel Gottes 17 Gottes Namen 21 Gott im Leben 25 Gott in der Bibel 28 Gott im Bekenntnis 37 Gott im Gebet 40 Gott im Gebot 43 Gott im Glauben 46 Gott im Zweifel 49 Gott in",
           "apa_citation": "Spangenberg, Peter (2003). Staunen über Gott. Agentur des Rauhen Hauses Hamburg."
+        },
+        {
+          "title": "Der liebe Gott kommt nicht voran: Geschichten aus dem Alltag des Allmächtigen [DNB-Inhaltsverzeichnis & Leseprobe]",
+          "author": "Weinrich, Wolfgang H.",
+          "publisher": "Herder (Kreuz)",
+          "date": "2014",
+          "corpus_layer": "dnb_toc_pdf_fulltext",
+          "probability": 85.7,
+          "keywords": [],
+          "snippet": "Der liebe Gott kommt nicht voran: Geschichten aus dem Alltag des Allmächtigen. Weinrich, Wolfgang H.. Herder (Kreuz). Der liebe Gott am Kiosk 7 Der liebe Gott bleibt inkonsequent 9 Der liebe Gott erinnert sich 11 Der liebe Gott erzählt mehr",
+          "apa_citation": "Weinrich, Wolfgang H. (2014). Der liebe Gott kommt nicht voran: Geschichten aus dem Alltag des Allmächtigen [DNB-Inhaltsverzeichnis & Leseprobe]. Herder (Kreuz)."
         },
         {
           "title": "Heute steht Gott auf dem Spiel: 15 Predigten zur Gottesfrage in unserer Zeit",
@@ -828,7 +828,7 @@
           "publisher": "Echter",
           "date": "1976",
           "corpus_layer": "dnb_toc_pdf_fulltext",
-          "probability": 84.6,
+          "probability": 84.7,
           "keywords": [],
           "snippet": "Inhalt Vorwort ........................................... 7 Heute steht Gott auf dem Spiel..................... 9 Gotteserfahrung (1).................................14 Gotteserfahrung (2).................................18 Gottesbeweise..",
           "apa_citation": "Kammermeier, Willibald (1976). Heute steht Gott auf dem Spiel: 15 Predigten zur Gottesfrage in unserer Zeit. Echter."
@@ -839,92 +839,92 @@
       "topic_id": 7,
       "archetype": {
         "label": "Traditional / Ecclesiastical",
-        "confidence": 81.5,
+        "confidence": 71.6,
         "scores": {
-          "Traditional / Ecclesiastical": 81.5,
-          "Neoliberal / Self-Optimization": 18.5,
-          "Critical / Secular-Humanist": 0.0
+          "Traditional / Ecclesiastical": 71.6,
+          "Neoliberal / Self-Optimization": 16.0,
+          "Critical / Secular-Humanist": 12.5
         }
       },
       "seeded_prior": null,
       "top_terms": [
         {
           "term": "leben",
-          "weight": 0.0534
+          "weight": 0.09694
         },
         {
           "term": "mensch",
-          "weight": 0.03406
-        },
-        {
-          "term": "glaube",
-          "weight": 0.03226
+          "weight": 0.04038
         },
         {
           "term": "welt",
-          "weight": 0.02211
+          "weight": 0.03408
         },
         {
-          "term": "weg",
-          "weight": 0.01228
-        },
-        {
-          "term": "erfahrung",
-          "weight": 0.01163
-        },
-        {
-          "term": "religiös",
-          "weight": 0.01019
-        },
-        {
-          "term": "spiritualität",
-          "weight": 0.00898
-        },
-        {
-          "term": "tod",
-          "weight": 0.00806
-        },
-        {
-          "term": "liebe",
-          "weight": 0.0079
+          "term": "glaube",
+          "weight": 0.03182
         },
         {
           "term": "geschichte",
-          "weight": 0.00777
+          "weight": 0.02008
+        },
+        {
+          "term": "weg",
+          "weight": 0.01397
+        },
+        {
+          "term": "erfahrung",
+          "weight": 0.01156
+        },
+        {
+          "term": "liebe",
+          "weight": 0.01076
+        },
+        {
+          "term": "religiös",
+          "weight": 0.00877
+        },
+        {
+          "term": "tod",
+          "weight": 0.00877
+        },
+        {
+          "term": "spiritualität",
+          "weight": 0.00851
+        },
+        {
+          "term": "philosophie",
+          "weight": 0.00664
         },
         {
           "term": "christlich",
-          "weight": 0.00731
+          "weight": 0.00629
         },
         {
-          "term": "kraft",
+          "term": "freiheit",
           "weight": 0.0056
         },
         {
-          "term": "meditation",
-          "weight": 0.00558
-        },
-        {
-          "term": "hoffnung",
-          "weight": 0.00544
+          "term": "kraft",
+          "weight": 0.00549
         }
       ],
       "top_publishers": [
         {
           "publisher": "Herder",
-          "share": 6.9
+          "share": 7.0
         },
         {
           "publisher": "Gütersloher Verlagshaus",
-          "share": 4.6
-        },
-        {
-          "publisher": "De Gruyter / Transcript",
-          "share": 4.5
+          "share": 4.7
         },
         {
           "publisher": "Aschendorff",
           "share": 4.5
+        },
+        {
+          "publisher": "De Gruyter / Transcript",
+          "share": 4.4
         },
         {
           "publisher": "Echter",
@@ -942,7 +942,7 @@
           "publisher": "Gerhard Raible - Vision",
           "date": "2025",
           "corpus_layer": "dnb_deposit_inhaltstext",
-          "probability": 90.8,
+          "probability": 90.7,
           "keywords": [],
           "snippet": "Unterbewusstsein, Lebensführung, Spiritualität, Esoterik, (Zielgruppe)Dieses Buch richtet sich an alle Menschen, die tiefer in die Geheimnisse des Unterbewusstseins eintauchen möchten. Angesprochen werden Leserinnen und Leser, die verstehen",
           "apa_citation": "Raible, Gerhard (2025). Mein Freund der Jogi ... und das Unterbewusstsein. Gerhard Raible - Vision."
@@ -953,7 +953,7 @@
           "publisher": "Insel",
           "date": "2025",
           "corpus_layer": "dnb_deposit_inhaltstext",
-          "probability": 88.4,
+          "probability": 88.2,
           "keywords": [],
           "snippet": "Alle reden vom Glück. Nicht wenige Menschen aber werden unglücklich, nur weil sie glauben, immer glücklich sein zu müssen. Ihnen kann geholfen werden. Mit diesem Buch wird die Sehnsucht nach Glück in nachdenklichere Bahnen gelenkt. Es geht",
           "apa_citation": "Schmid, Wilhelm (2025). Die Fülle des Lebens: 100 Fragmente des Glücks. Insel."
@@ -964,7 +964,7 @@
           "publisher": "Fischer",
           "date": "1990",
           "corpus_layer": "gbv_direct_fulltext_pdf",
-          "probability": 87.9,
+          "probability": 87.7,
           "keywords": [],
           "snippet": "Buddhistische Reflexionen: über die Bedeutung des Buddhismus für den Westen. INHALTSVERZEICHNIS Vorwort Einführung: Die Botschaft des Buddha an die Welt von heute und morgen ERSTER TEIL: DIE WELT UND IHRE DEUTUNG Welt und Wirklichkeit Bewuß",
           "apa_citation": "Anagarika Govinda (1990). Buddhistische Reflexionen: über die Bedeutung des Buddhismus für den Westen [GBV-Inhaltsverzeichnis & Paratext]. Fischer."
@@ -986,69 +986,69 @@
       "top_terms": [
         {
           "term": "kirche",
-          "weight": 0.2287
+          "weight": 0.46078
         },
         {
           "term": "katholisch",
-          "weight": 0.02511
+          "weight": 0.01689
         },
         {
           "term": "evangelisch",
-          "weight": 0.02365
+          "weight": 0.01632
         },
         {
           "term": "kirchlich",
-          "weight": 0.02185
+          "weight": 0.01452
         },
         {
           "term": "gemeinde",
-          "weight": 0.01627
-        },
-        {
-          "term": "christlich",
-          "weight": 0.00817
-        },
-        {
-          "term": "dienst",
-          "weight": 0.00749
-        },
-        {
-          "term": "pfarrer",
-          "weight": 0.00739
-        },
-        {
-          "term": "gemeinschaft",
-          "weight": 0.00679
-        },
-        {
-          "term": "theologisch",
-          "weight": 0.00667
-        },
-        {
-          "term": "geistlich",
-          "weight": 0.00598
-        },
-        {
-          "term": "ökumenisch",
-          "weight": 0.00504
-        },
-        {
-          "term": "christ",
-          "weight": 0.00503
+          "weight": 0.01346
         },
         {
           "term": "geschichte",
-          "weight": 0.00496
+          "weight": 0.00947
         },
         {
-          "term": "lutherisch",
-          "weight": 0.00468
+          "term": "christlich",
+          "weight": 0.00556
+        },
+        {
+          "term": "pfarrer",
+          "weight": 0.00549
+        },
+        {
+          "term": "dienst",
+          "weight": 0.0054
+        },
+        {
+          "term": "gemeinschaft",
+          "weight": 0.00516
+        },
+        {
+          "term": "theologisch",
+          "weight": 0.00451
+        },
+        {
+          "term": "geistlich",
+          "weight": 0.0039
+        },
+        {
+          "term": "christ",
+          "weight": 0.00347
+        },
+        {
+          "term": "christentum",
+          "weight": 0.00341
+        },
+        {
+          "term": "ökumenisch",
+          "weight": 0.00328
         }
       ],
       "top_publishers": [
         {
           "publisher": "Aschendorff",
-          "share": 9.8
+          "share": 9.6
         },
         {
           "publisher": "Evangelische Verlagsanstalt",
@@ -1056,15 +1056,15 @@
         },
         {
           "publisher": "Herder",
-          "share": 5.6
+          "share": 5.7
         },
         {
           "publisher": "Böhlau",
-          "share": 5.1
+          "share": 5.0
         },
         {
           "publisher": "De Gruyter / Transcript",
-          "share": 4.3
+          "share": 4.4
         },
         {
           "publisher": "Gütersloher Verlagshaus",
@@ -1078,7 +1078,7 @@
           "publisher": "Gütersloher Verlagshaus (Chr. Kaiser)",
           "date": "1994",
           "corpus_layer": "dnb_deposit_inhaltstext",
-          "probability": 81.7,
+          "probability": 81.3,
           "keywords": [],
           "snippet": "Notrecht, Evangelische Kirche der Union, Bekennende Kirche, Geschichte 1934-1937",
           "apa_citation": "Kersting, Andreas (1994). Kirchenordnung und Widerstand: der Kampf um den Aufbau der Bekennenden Kirche der altpreussischen Union aufgrund des Dahlemer Notrechts von 1934 bis 1937. Gütersloher Verlagshaus (Chr. Kaiser)."
@@ -1089,7 +1089,7 @@
           "publisher": "Herder",
           "date": "2020",
           "corpus_layer": "dnb_deposit_inhaltstext",
-          "probability": 81.0,
+          "probability": 80.0,
           "keywords": [],
           "snippet": "Kirchliche Erneuerung, Widerstand, Intrige, Kirchenpolitik, Kontroverse, (Produktform (spezifisch))With dust jacket, Franziskus, Papst, Papst Franziskus, Vatikan, Intrigen, Katholische Kirche, Kirchenleitung, Kardinal, Synodaler Weg, Amazon",
           "apa_citation": "Politi, Marco (2020). Das Franziskus-Komplott: der einsame Papst und sein Kampf um die Kirche. Herder."
@@ -1100,7 +1100,7 @@
           "publisher": "UEK",
           "date": "2014",
           "corpus_layer": "drm_fallback_multi_api_enriched",
-          "probability": 80.2,
+          "probability": 79.3,
           "keywords": [],
           "snippet": "Aufnahme eines ehemaligen römisch-katholischen Priesters in das Amt der öffentlichen Verkündigung und Einführung in den Dienst eines Pfarrers in einer evangelischen/evangelisch-lutherischen Kirche. Priester, Katholische Kirche, Konversion,",
           "apa_citation": "o. V. (2014). Aufnahme eines ehemaligen römisch-katholischen Priesters in das Amt der öffentlichen Verkündigung und Einführung in den Dienst eines Pfarrers in einer evangelischen/evangelisch-lutherischen Kirche. UEK."
@@ -1121,82 +1121,82 @@
       "seeded_prior": null,
       "top_terms": [
         {
+          "term": "text",
+          "weight": 0.02237
+        },
+        {
           "term": "dienst",
-          "weight": 0.0211
+          "weight": 0.02231
         },
         {
           "term": "gottesdienst",
-          "weight": 0.01704
-        },
-        {
-          "term": "text",
-          "weight": 0.01701
+          "weight": 0.0175
         },
         {
           "term": "predigt",
-          "weight": 0.0126
+          "weight": 0.01318
         },
         {
           "term": "liturgie",
-          "weight": 0.01112
-        },
-        {
-          "term": "feier",
-          "weight": 0.00775
-        },
-        {
-          "term": "brief",
-          "weight": 0.0068
-        },
-        {
-          "term": "lied",
-          "weight": 0.00611
-        },
-        {
-          "term": "gebet",
-          "weight": 0.00608
-        },
-        {
-          "term": "christi",
-          "weight": 0.00589
-        },
-        {
-          "term": "fest",
-          "weight": 0.0058
-        },
-        {
-          "term": "petrus",
-          "weight": 0.0051
+          "weight": 0.01132
         },
         {
           "term": "keywords",
-          "weight": 0.00498
+          "weight": 0.00931
         },
         {
-          "term": "liturgisch",
-          "weight": 0.00432
+          "term": "feier",
+          "weight": 0.0077
+        },
+        {
+          "term": "brief",
+          "weight": 0.00753
+        },
+        {
+          "term": "christi",
+          "weight": 0.00634
+        },
+        {
+          "term": "fest",
+          "weight": 0.0063
+        },
+        {
+          "term": "gebet",
+          "weight": 0.00625
+        },
+        {
+          "term": "lied",
+          "weight": 0.00622
+        },
+        {
+          "term": "petrus",
+          "weight": 0.00511
+        },
+        {
+          "term": "weihnachten",
+          "weight": 0.00451
         },
         {
           "term": "sonntag",
-          "weight": 0.00416
+          "weight": 0.00426
         }
       ],
       "top_publishers": [
         {
           "publisher": "Aschendorff",
-          "share": 19.3
+          "share": 19.1
         },
         {
           "publisher": "Böhlau",
-          "share": 10.9
+          "share": 10.7
         },
         {
           "publisher": "De Gruyter / Transcript",
-          "share": 5.4
+          "share": 5.3
         },
         {
           "publisher": "Evangelische Verlagsanstalt",
-          "share": 4.5
+          "share": 4.6
         },
         {
           "publisher": "Gütersloher Verlagshaus",
@@ -1204,7 +1204,7 @@
         },
         {
           "publisher": "Herder",
-          "share": 4.1
+          "share": 4.2
         }
       ],
       "representative_docs": [
@@ -1214,7 +1214,7 @@
           "publisher": "Monumenta Germaniae Historica",
           "date": "1989",
           "corpus_layer": "hathitrust_ef_fullbook_print",
-          "probability": 88.2,
+          "probability": 88.3,
           "keywords": [],
           "snippet": "que habuimus parte munimine domino remanent idem consilio papa Petrum nrgaiSS pendet rata nos universis Sancta ipse ipse Primo lithichloMfL possint scit ymmo concordesa nato recuperationem filiis ipsius delet manus milium extendere nec eran",
           "apa_citation": "Bork, Ruth (1989). Constitutiones et acta publica imperatorum et regum. Dokumente zur Geschichte des Deutschen Reiches und seiner Verfassung 1331-1334/Constitutiones et acta publica imperatorum et regum (1331-1335), Teil 1 [HTRC-Vollbuch-Abschnitt 2/40]. Monumenta Germaniae Historica."
@@ -1225,7 +1225,7 @@
           "publisher": "Böhlau",
           "date": "1995",
           "corpus_layer": "hathitrust_ef_fullbook_print",
-          "probability": 86.0,
+          "probability": 86.1,
           "keywords": [],
           "snippet": "dat dat dat dat moghen Ezechias Ezechias Ezechias heren besloten vele olden gadderen passchen passchen ment virden sinem Mer Mer godes godes maente temple Schluß Anm dessem slechten here regnerede wyse manck schrifft bracht delt groter also",
           "apa_citation": "Andersson-Schmitt, Margarete (1995). Die Lübecker Historienbibel: die niederdeutsche Version der nordniederländischen Historienbibel [HTRC-Vollbuch-Abschnitt 66/75]. Böhlau."
@@ -1236,7 +1236,7 @@
           "publisher": "Böhlau",
           "date": "1975",
           "corpus_layer": "hathitrust_ef_fullbook_print",
-          "probability": 82.3,
+          "probability": 82.6,
           "keywords": [],
           "snippet": "altohant Brl leuendes wat wat Alse Alse worme Dat vordrucket deme leret dement ouer ouer eyne eyne her dar dar kortlik ghedinckenisse ere ere ersten ghedenckenisse blijscap hijt hijt tid aller dinc steyt gene Hoe vote doets secht secht dode",
           "apa_citation": "Gerardus (1975). De veer utersten: das Cordiale de quatuor novissimis von Gerhard von Vliederhoven in mittelniederdt. Überlieferung; [Text nach Cod. Guelf. 1182 Helmst.] [HTRC-Vollbuch-Abschnitt 30/61]. Böhlau."
@@ -1258,73 +1258,73 @@
       "top_terms": [
         {
           "term": "geschichte",
-          "weight": 0.03729
+          "weight": 0.09681
         },
         {
           "term": "jahrhundert",
-          "weight": 0.02293
+          "weight": 0.02829
         },
         {
-          "term": "kloster",
-          "weight": 0.00909
-        },
-        {
-          "term": "quelle",
-          "weight": 0.0076
+          "term": "literatur",
+          "weight": 0.01008
         },
         {
           "term": "deutsch",
-          "weight": 0.00756
+          "weight": 0.00958
+        },
+        {
+          "term": "kloster",
+          "weight": 0.00855
+        },
+        {
+          "term": "stadt",
+          "weight": 0.00818
+        },
+        {
+          "term": "quelle",
+          "weight": 0.00751
         },
         {
           "term": "mittelalter",
           "weight": 0.00716
         },
         {
-          "term": "stadt",
-          "weight": 0.00701
-        },
-        {
           "term": "schrift",
-          "weight": 0.00684
-        },
-        {
-          "term": "literatur",
-          "weight": 0.00676
+          "weight": 0.00678
         },
         {
           "term": "bischof",
-          "weight": 0.00652
+          "weight": 0.00621
         },
         {
           "term": "brief",
-          "weight": 0.0062
-        },
-        {
-          "term": "alt",
-          "weight": 0.00593
-        },
-        {
-          "term": "historisch",
-          "weight": 0.00531
+          "weight": 0.00608
         },
         {
           "term": "universität",
-          "weight": 0.00524
+          "weight": 0.006
         },
         {
-          "term": "römisch",
-          "weight": 0.00452
+          "term": "alt",
+          "weight": 0.00555
+        },
+        {
+          "term": "historisch",
+          "weight": 0.00503
+        },
+        {
+          "term": "übersetzung",
+          "weight": 0.00426
         }
       ],
       "top_publishers": [
         {
           "publisher": "Aschendorff",
-          "share": 17.5
+          "share": 17.4
         },
         {
           "publisher": "Böhlau",
-          "share": 13.4
+          "share": 13.3
         },
         {
           "publisher": "De Gruyter / Transcript",
@@ -1361,7 +1361,7 @@
           "publisher": "Böhlau",
           "date": "1990",
           "corpus_layer": "hathitrust_ef_fullbook_print",
-          "probability": 84.0,
+          "probability": 83.7,
           "keywords": [],
           "snippet": "Brandenburg CDSaxIB CEV CEV CEV CEV CEV Soldbuch VIII Stuhm Stuhm Anm Toe Toe Toe Toe Toe Marienburg Marienburg Marienburg Marienburg Marienburg Marienburg Marienburg Marienburg Marienburg Marienburg Königsberg III III Montau Danzig Danzig",
           "apa_citation": "Neitmann, Klaus (1990). Der Hochmeister des Deutschen Ordens in Preußen - ein Residenzherrscher unterwegs: Untersuchungen zu den Hochmeisteritineraren im 14. und 15. Jahrhundert [HTRC-Vollbuch-Abschnitt 26/31]. Böhlau."
@@ -1372,7 +1372,7 @@
           "publisher": "Aschendorff",
           "date": "1988",
           "corpus_layer": "hathitrust_ef_fullbook_print",
-          "probability": 82.1,
+          "probability": 82.3,
           "keywords": [],
           "snippet": "Hieronymus Dungersheim von Ochsenfurt am Main: 1465 - 1540 ; Theologieprofessor in Leipzig ; Leben u. Schr.. Freudenberger, Theobald. Aschendorff. Eilenburg Papst Papst Wilhelm Frank Diakon Gratitis Geithain Albert Georg Erfurt Ostanglien E",
           "apa_citation": "Freudenberger, Theobald (1988). Hieronymus Dungersheim von Ochsenfurt am Main: 1465 - 1540 ; Theologieprofessor in Leipzig ; Leben u. Schr. [HTRC-Vollbuch-Abschnitt 75/75]. Aschendorff."
@@ -1393,64 +1393,64 @@
       "seeded_prior": null,
       "top_terms": [
         {
-          "term": "sozial",
-          "weight": 0.0331
+          "term": "gesellschaft",
+          "weight": 0.03382
         },
         {
-          "term": "gesellschaft",
-          "weight": 0.02286
+          "term": "sozial",
+          "weight": 0.03191
         },
         {
           "term": "ethik",
-          "weight": 0.02144
-        },
-        {
-          "term": "kultur",
-          "weight": 0.0142
+          "weight": 0.02414
         },
         {
           "term": "wissenschaft",
-          "weight": 0.01374
+          "weight": 0.01944
         },
         {
-          "term": "politisch",
-          "weight": 0.01252
+          "term": "kultur",
+          "weight": 0.01675
         },
         {
           "term": "theorie",
-          "weight": 0.01036
+          "weight": 0.01265
         },
         {
-          "term": "gesellschaftlich",
-          "weight": 0.00984
+          "term": "politisch",
+          "weight": 0.01187
         },
         {
           "term": "forschung",
-          "weight": 0.00832
+          "weight": 0.00959
+        },
+        {
+          "term": "gesellschaftlich",
+          "weight": 0.00896
+        },
+        {
+          "term": "geschichte",
+          "weight": 0.0089
         },
         {
           "term": "soziologie",
-          "weight": 0.00828
+          "weight": 0.00875
         },
         {
           "term": "perspektive",
-          "weight": 0.00823
-        },
-        {
-          "term": "kulturell",
-          "weight": 0.00806
-        },
-        {
-          "term": "moral",
-          "weight": 0.00781
-        },
-        {
-          "term": "identität",
-          "weight": 0.00774
+          "weight": 0.0086
         },
         {
           "term": "politik",
-          "weight": 0.00666
+          "weight": 0.00831
+        },
+        {
+          "term": "identität",
+          "weight": 0.00811
+        },
+        {
+          "term": "moral",
+          "weight": 0.00771
         }
       ],
       "top_publishers": [
@@ -1460,7 +1460,7 @@
         },
         {
           "publisher": "Campus",
-          "share": 16.2
+          "share": 16.0
         },
         {
           "publisher": "Evangelische Verlagsanstalt",
@@ -1486,7 +1486,7 @@
           "publisher": "De Gruyter / Transcript",
           "date": "2022",
           "corpus_layer": "dnb_deposit_inhaltstext",
-          "probability": 90.5,
+          "probability": 90.6,
           "keywords": [],
           "snippet": "LGBT, Fitnesstraining, Körperbild, Soziale Norm, Schönheitsideal, Empowerment, Ambivalenz, Fitness, Queer-Theorie, (Zielgruppe)Fachpublikum/ Wissenschaft, (Produktform (spezifisch))Unsewn / adhesive bound, Sport, Normierung, Normkritik, Que",
           "apa_citation": "Schmechel, Corinna (2022). Auspowern und Empowern?: eine Ethnografie queerer Fitnesskultur. De Gruyter / Transcript."
@@ -1497,7 +1497,7 @@
           "publisher": "Suhrkamp",
           "date": "2017",
           "corpus_layer": "dnb_toc_pdf_fulltext",
-          "probability": 87.6,
+          "probability": 87.1,
           "keywords": [],
           "snippet": "Die Gesellschaft der Singularitäten: zum Strukturwandel der Moderne. Reckwitz, Andreas. Suhrkamp. Inhalt Einleitung: Die Explosion des Besonderen 7 I. Die Moderne zwischen der sozialen Logik des Allgemeinen und des Besonderen 27 II. Die pos",
           "apa_citation": "Reckwitz, Andreas (2017). Die Gesellschaft der Singularitäten: zum Strukturwandel der Moderne [DNB-Inhaltsverzeichnis & Leseprobe]. Suhrkamp."
@@ -1508,7 +1508,7 @@
           "publisher": "De Gruyter / Transcript",
           "date": "2021",
           "corpus_layer": "dnb_deposit_inhaltstext",
-          "probability": 86.6,
+          "probability": 86.2,
           "keywords": [],
           "snippet": "Theoriebildung, Netzwerkanalyse, Kybernetik, Regierung, Krise, Netzwerk, Avantgarde, Denken, (Zielgruppe)Fachpublikum/ Wissenschaft, Souveränität, Neoliberalismus, Regierungsmodelle, Ideengeschichte, Michel Foucault, Niklas Luhmann, Michel",
           "apa_citation": "August, Vincent (2021). Technologisches Regieren: Der Aufstieg des Netzwerk-Denkens in der Krise der Moderne. Foucault, Luhmann und die Kybernetik. De Gruyter / Transcript."
@@ -1519,88 +1519,88 @@
       "topic_id": 12,
       "archetype": {
         "label": "Neoliberal / Self-Optimization",
-        "confidence": 100.0,
+        "confidence": 73.0,
         "scores": {
           "Traditional / Ecclesiastical": 0.0,
-          "Neoliberal / Self-Optimization": 100.0,
-          "Critical / Secular-Humanist": 0.0
+          "Neoliberal / Self-Optimization": 73.0,
+          "Critical / Secular-Humanist": 27.0
         }
       },
       "seeded_prior": null,
       "top_terms": [
         {
           "term": "frage",
-          "weight": 0.01062
+          "weight": 0.0141
         },
         {
           "term": "begriff",
-          "weight": 0.00882
+          "weight": 0.01037
         },
         {
           "term": "form",
-          "weight": 0.00841
+          "weight": 0.01015
         },
         {
           "term": "sinn",
-          "weight": 0.00759
+          "weight": 0.00824
         },
         {
           "term": "bedeutung",
-          "weight": 0.00606
+          "weight": 0.00805
         },
         {
           "term": "problem",
-          "weight": 0.00581
-        },
-        {
-          "term": "einzeln",
-          "weight": 0.00543
+          "weight": 0.00637
         },
         {
           "term": "weise",
-          "weight": 0.00541
-        },
-        {
-          "term": "verschieden",
-          "weight": 0.00534
+          "weight": 0.00618
         },
         {
           "term": "person",
-          "weight": 0.00512
+          "weight": 0.00543
         },
         {
           "term": "grund",
-          "weight": 0.00488
+          "weight": 0.00537
         },
         {
-          "term": "bestimmt",
-          "weight": 0.00462
-        },
-        {
-          "term": "verhältnis",
-          "weight": 0.0046
+          "term": "art",
+          "weight": 0.00536
         },
         {
           "term": "fall",
-          "weight": 0.00455
+          "weight": 0.00525
+        },
+        {
+          "term": "sprache",
+          "weight": 0.00517
         },
         {
           "term": "zusammenhang",
-          "weight": 0.00449
+          "weight": 0.00511
+        },
+        {
+          "term": "philosophie",
+          "weight": 0.00505
+        },
+        {
+          "term": "einzeln",
+          "weight": 0.00505
         }
       ],
       "top_publishers": [
-        {
-          "publisher": "De Gruyter / Transcript",
-          "share": 9.8
-        },
         {
           "publisher": "Aschendorff",
           "share": 9.8
         },
         {
+          "publisher": "De Gruyter / Transcript",
+          "share": 9.7
+        },
+        {
           "publisher": "Campus",
-          "share": 9.4
+          "share": 9.3
         },
         {
           "publisher": "Böhlau",
@@ -1612,7 +1612,7 @@
         },
         {
           "publisher": "Evangelische Verlagsanstalt",
-          "share": 2.8
+          "share": 2.9
         }
       ],
       "representative_docs": [
@@ -1622,7 +1622,7 @@
           "publisher": "C.H. Beck",
           "date": "1974",
           "corpus_layer": "hathitrust_ef_fullbook_print",
-          "probability": 95.6,
+          "probability": 95.5,
           "keywords": [],
           "snippet": "bestimmten bezeichnet bezeichnet ergeben handelt Recht Recht Recht Recht besagt Sorte vielmehr Wahrheit Wahrheit offensichtlich erstere Ausdrucks Ausdrucks Ausdrucks Ausdrucks Ausdrucks Ausdrucks Ausdrucks Ausdrucks Ausdrucks fungiert betri",
           "apa_citation": "Carl, Wolfgang (1974). Existenz und Prädikation: sprachanalytische Untersuchungen zu Existenz-Aussagen [HTRC-Vollbuch-Abschnitt 59/74]. C.H. Beck."
@@ -1633,7 +1633,7 @@
           "publisher": "C.H. Beck",
           "date": "1988",
           "corpus_layer": "hathitrust_ef_fullbook_print",
-          "probability": 95.2,
+          "probability": 95.3,
           "keywords": [],
           "snippet": "konstituierenden dürfen hQüötov zunächst bereits differentia differentia differentia differentia differentia differentia differentia differentia richtig geben Zweifüßigkeit Aristoteles darstellt Kapitels vgl erster Zusammenhang Gattung Gatt",
           "apa_citation": "Frede, Michael (1988). Aristoteles \"Metaphysik Z\": Text, Übersetzung und Kommentar [HTRC-Vollbuch-Abschnitt 54/75]. C.H. Beck."
@@ -1644,7 +1644,7 @@
           "publisher": "DNB Monograph (DE)",
           "date": "2004",
           "corpus_layer": "dnb_oa_fullbook",
-          "probability": 92.1,
+          "probability": 92.2,
           "keywords": [],
           "snippet": "Der Begriff des Wissens im Wissensmanagementdiskurs: Materialien zur Begriffsgeschichte unter Berücksichtigung der klassischen griechischen Philosophie. Niehaus, Michael. DNB Monograph (DE). Künstler und Techniker sowie Wissenschaftler für",
           "apa_citation": "Niehaus, Michael (2004). Der Begriff des Wissens im Wissensmanagementdiskurs: Materialien zur Begriffsgeschichte unter Berücksichtigung der klassischen griechischen Philosophie [DNB-OA-Vollbuch-Abschnitt 8/28]. DNB Monograph (DE)."
@@ -1654,113 +1654,113 @@
   ],
   "diachronic_decade_shares": {
     "1970s": {
-      "Topic 1": 6.7,
-      "Topic 2": 3.5,
+      "Topic 1": 7.0,
+      "Topic 2": 3.3,
       "Topic 3": 6.4,
       "Topic 4": 2.8,
-      "Topic 5": 6.6,
-      "Topic 6": 11.1,
-      "Topic 7": 7.4,
-      "Topic 8": 8.4,
-      "Topic 9": 7.1,
-      "Topic 10": 14.9,
+      "Topic 5": 6.8,
+      "Topic 6": 10.6,
+      "Topic 7": 7.5,
+      "Topic 8": 7.7,
+      "Topic 9": 7.3,
+      "Topic 10": 15.0,
       "Topic 11": 4.7,
-      "Topic 12": 20.5
+      "Topic 12": 20.8
     },
     "1980s": {
-      "Topic 1": 8.3,
-      "Topic 2": 3.7,
-      "Topic 3": 6.3,
-      "Topic 4": 3.9,
-      "Topic 5": 8.8,
-      "Topic 6": 10.1,
+      "Topic 1": 8.5,
+      "Topic 2": 3.5,
+      "Topic 3": 6.4,
+      "Topic 4": 4.0,
+      "Topic 5": 9.0,
+      "Topic 6": 9.7,
       "Topic 7": 8.1,
-      "Topic 8": 8.3,
-      "Topic 9": 5.8,
+      "Topic 8": 7.6,
+      "Topic 9": 6.0,
       "Topic 10": 12.9,
-      "Topic 11": 5.5,
-      "Topic 12": 18.3
+      "Topic 11": 5.6,
+      "Topic 12": 18.6
     },
     "1990s": {
-      "Topic 1": 7.0,
-      "Topic 2": 4.9,
+      "Topic 1": 7.2,
+      "Topic 2": 4.7,
       "Topic 3": 6.6,
-      "Topic 4": 3.5,
-      "Topic 5": 6.4,
-      "Topic 6": 10.6,
+      "Topic 4": 3.6,
+      "Topic 5": 6.6,
+      "Topic 6": 10.2,
       "Topic 7": 9.3,
-      "Topic 8": 7.9,
-      "Topic 9": 5.1,
-      "Topic 10": 12.8,
+      "Topic 8": 7.3,
+      "Topic 9": 5.3,
+      "Topic 10": 12.9,
       "Topic 11": 7.3,
-      "Topic 12": 18.5
+      "Topic 12": 18.9
     },
     "2000s": {
-      "Topic 1": 8.4,
-      "Topic 2": 4.9,
+      "Topic 1": 8.6,
+      "Topic 2": 4.7,
       "Topic 3": 9.1,
-      "Topic 4": 5.1,
-      "Topic 5": 6.0,
-      "Topic 6": 7.4,
+      "Topic 4": 5.2,
+      "Topic 5": 6.1,
+      "Topic 6": 7.1,
       "Topic 7": 10.7,
-      "Topic 8": 6.8,
-      "Topic 9": 3.1,
+      "Topic 8": 6.3,
+      "Topic 9": 3.2,
       "Topic 10": 10.3,
       "Topic 11": 10.3,
-      "Topic 12": 17.9
+      "Topic 12": 18.2
     },
     "2010s": {
-      "Topic 1": 6.8,
-      "Topic 2": 8.7,
-      "Topic 3": 9.7,
-      "Topic 4": 4.2,
-      "Topic 5": 4.4,
-      "Topic 6": 9.1,
+      "Topic 1": 7.0,
+      "Topic 2": 8.4,
+      "Topic 3": 9.8,
+      "Topic 4": 4.3,
+      "Topic 5": 4.5,
+      "Topic 6": 8.7,
       "Topic 7": 12.7,
-      "Topic 8": 7.8,
-      "Topic 9": 3.0,
-      "Topic 10": 8.7,
-      "Topic 11": 10.3,
-      "Topic 12": 14.7
+      "Topic 8": 7.2,
+      "Topic 9": 3.1,
+      "Topic 10": 8.8,
+      "Topic 11": 10.4,
+      "Topic 12": 15.1
     },
     "2020s": {
-      "Topic 1": 6.0,
-      "Topic 2": 10.5,
-      "Topic 3": 11.7,
-      "Topic 4": 4.9,
-      "Topic 5": 4.1,
-      "Topic 6": 7.7,
-      "Topic 7": 10.3,
-      "Topic 8": 6.3,
-      "Topic 9": 2.6,
-      "Topic 10": 7.1,
-      "Topic 11": 12.4,
-      "Topic 12": 16.5
+      "Topic 1": 6.2,
+      "Topic 2": 10.2,
+      "Topic 3": 11.8,
+      "Topic 4": 5.0,
+      "Topic 5": 4.2,
+      "Topic 6": 7.4,
+      "Topic 7": 10.2,
+      "Topic 8": 5.9,
+      "Topic 9": 2.7,
+      "Topic 10": 7.2,
+      "Topic 11": 12.5,
+      "Topic 12": 16.8
     }
   },
   "slda_diagnostics": {
     "regime_cv_accuracy": 70.7,
     "regime_in_sample_accuracy": 70.7,
-    "regime_macro_f1": 54.0,
-    "publisher_accuracy": 45.0,
-    "r2_explanatory_power": 0.288,
+    "regime_macro_f1": 53.6,
+    "publisher_accuracy": 44.8,
+    "r2_explanatory_power": 0.2861,
     "regime_class_metrics": {
       "Traditional / Ecclesiastical": {
-        "precision": 75.5,
-        "recall": 89.7,
+        "precision": 75.3,
+        "recall": 89.9,
         "f1": 82.0,
         "support": 17000
       },
       "Neoliberal / Self-Optimization": {
-        "precision": 53.5,
-        "recall": 12.0,
-        "f1": 19.6,
+        "precision": 54.2,
+        "recall": 11.0,
+        "f1": 18.2,
         "support": 4181
       },
       "Critical / Secular-Humanist": {
-        "precision": 60.3,
-        "recall": 60.6,
-        "f1": 60.5,
+        "precision": 60.5,
+        "recall": 60.8,
+        "f1": 60.6,
         "support": 7823
       }
     },
@@ -1768,98 +1768,98 @@
       {
         "topic_id": 1,
         "predicted_regime": "Critical / Secular-Humanist",
-        "w_traditional": -0.642,
-        "w_neoliberal": 0.068,
-        "w_critical": 0.574,
-        "discriminative_power": 0.499
+        "w_traditional": -0.64,
+        "w_neoliberal": 0.071,
+        "w_critical": 0.569,
+        "discriminative_power": 0.496
       },
       {
         "topic_id": 2,
         "predicted_regime": "Traditional / Ecclesiastical",
         "w_traditional": 0.252,
-        "w_neoliberal": -0.248,
-        "w_critical": -0.004,
-        "discriminative_power": 0.204
+        "w_neoliberal": -0.243,
+        "w_critical": -0.01,
+        "discriminative_power": 0.202
       },
       {
         "topic_id": 3,
         "predicted_regime": "Neoliberal / Self-Optimization",
-        "w_traditional": -0.106,
+        "w_traditional": -0.112,
         "w_neoliberal": 0.509,
-        "w_critical": -0.403,
-        "discriminative_power": 0.38
+        "w_critical": -0.397,
+        "discriminative_power": 0.378
       },
       {
         "topic_id": 4,
         "predicted_regime": "Critical / Secular-Humanist",
-        "w_traditional": -0.481,
-        "w_neoliberal": 0.129,
-        "w_critical": 0.352,
-        "discriminative_power": 0.352
+        "w_traditional": -0.506,
+        "w_neoliberal": 0.143,
+        "w_critical": 0.364,
+        "discriminative_power": 0.369
       },
       {
         "topic_id": 5,
         "predicted_regime": "Neoliberal / Self-Optimization",
-        "w_traditional": -0.166,
-        "w_neoliberal": 0.246,
-        "w_critical": -0.079,
-        "discriminative_power": 0.177
+        "w_traditional": -0.173,
+        "w_neoliberal": 0.25,
+        "w_critical": -0.077,
+        "discriminative_power": 0.181
       },
       {
         "topic_id": 6,
         "predicted_regime": "Traditional / Ecclesiastical",
-        "w_traditional": 0.807,
-        "w_neoliberal": -0.373,
-        "w_critical": -0.434,
-        "discriminative_power": 0.571
+        "w_traditional": 0.819,
+        "w_neoliberal": -0.382,
+        "w_critical": -0.437,
+        "discriminative_power": 0.579
       },
       {
         "topic_id": 7,
         "predicted_regime": "Neoliberal / Self-Optimization",
-        "w_traditional": -0.128,
-        "w_neoliberal": 0.309,
-        "w_critical": -0.181,
-        "discriminative_power": 0.22
+        "w_traditional": -0.123,
+        "w_neoliberal": 0.304,
+        "w_critical": -0.182,
+        "discriminative_power": 0.217
       },
       {
         "topic_id": 8,
         "predicted_regime": "Traditional / Ecclesiastical",
-        "w_traditional": 1.208,
-        "w_neoliberal": -0.47,
-        "w_critical": -0.738,
-        "discriminative_power": 0.861
+        "w_traditional": 1.249,
+        "w_neoliberal": -0.487,
+        "w_critical": -0.762,
+        "discriminative_power": 0.891
       },
       {
         "topic_id": 9,
         "predicted_regime": "Traditional / Ecclesiastical",
-        "w_traditional": 0.525,
-        "w_neoliberal": -0.171,
-        "w_critical": -0.353,
-        "discriminative_power": 0.378
+        "w_traditional": 0.515,
+        "w_neoliberal": -0.17,
+        "w_critical": -0.345,
+        "discriminative_power": 0.371
       },
       {
         "topic_id": 10,
         "predicted_regime": "Traditional / Ecclesiastical",
-        "w_traditional": 0.053,
-        "w_neoliberal": -0.074,
-        "w_critical": 0.021,
-        "discriminative_power": 0.054
+        "w_traditional": 0.055,
+        "w_neoliberal": -0.075,
+        "w_critical": 0.02,
+        "discriminative_power": 0.055
       },
       {
         "topic_id": 11,
         "predicted_regime": "Critical / Secular-Humanist",
-        "w_traditional": -0.893,
-        "w_neoliberal": -0.136,
-        "w_critical": 1.029,
-        "discriminative_power": 0.791
+        "w_traditional": -0.906,
+        "w_neoliberal": -0.133,
+        "w_critical": 1.038,
+        "discriminative_power": 0.799
       },
       {
         "topic_id": 12,
         "predicted_regime": "Critical / Secular-Humanist",
-        "w_traditional": -0.427,
-        "w_neoliberal": 0.211,
-        "w_critical": 0.216,
-        "discriminative_power": 0.302
+        "w_traditional": -0.431,
+        "w_neoliberal": 0.212,
+        "w_critical": 0.219,
+        "discriminative_power": 0.305
       }
     ]
   }
