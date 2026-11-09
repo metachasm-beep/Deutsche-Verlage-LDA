@@ -36,7 +36,7 @@ import {
 } from 'lucide-react';
 import { useLDA, type LDAMode } from './hooks/useLDA';
 import { TrendsGraph, COMPREHENSIVE_FALLBACK_PUBLISHERS } from './components/TrendsGraph';
-import { TopicModelViz, getArchetypeTheme, type Topic, type RepresentativeDoc, type Keyword } from './components/TopicModelViz';
+import { TopicModelViz, getArchetypeTheme, getTopicDisplayLabel, type Topic, type RepresentativeDoc, type Keyword } from './components/TopicModelViz';
 import { PipelineExplainer } from './components/PipelineExplainer';
 import { ConceptualDriftExplorer } from './components/ConceptualDriftExplorer';
 import { InterTopicDistanceMap } from './components/InterTopicDistanceMap';
@@ -77,6 +77,8 @@ function App() {
     runLDA,
     updateCustomSeeds,
     resetCustomSeeds,
+    updateTopicLabel,
+    resetTopicLabel,
     uploadDataset,
   } = useLDA();
 
@@ -1620,6 +1622,9 @@ function App() {
                     ideologicalFilter={ideologicalFilter}
                     hideInlineInspector={rightInspectorOpen}
                     onOpenInspector={() => setRightInspectorOpen(true)}
+                    onUpdateTopicLabel={updateTopicLabel}
+                    onResetTopicLabel={resetTopicLabel}
+                    onDecadeClick={handleDecadeClick}
                   />
                 </div>
                 <div className="2xl:col-span-5">
@@ -1632,6 +1637,9 @@ function App() {
                     selectedPublishers={selectedPublishers}
                     onTogglePublisher={(pub) => handleTogglePublisher(pub, true)}
                     decadeBreakdown={decadeBreakdown}
+                    topics={typedTopics}
+                    selectedTopicIndex={safeTopicIndex}
+                    onSelectTopicIndex={setSelectedTopicIndex}
                     onYearClick={handleYearClick}
                     selectedYear={selectedYear}
                     onDecadeClick={handleDecadeClick}
@@ -1806,6 +1814,9 @@ function App() {
                 onSelectTopicIndex={setSelectedTopicIndex}
                 ideologicalFilter={ideologicalFilter}
                 hideInlineInspector={false}
+                onUpdateTopicLabel={updateTopicLabel}
+                onResetTopicLabel={resetTopicLabel}
+                onDecadeClick={handleDecadeClick}
               />
             </div>
           )}
@@ -1835,6 +1846,9 @@ function App() {
                 selectedPublishers={selectedPublishers}
                 onTogglePublisher={(pub) => handleTogglePublisher(pub, true)}
                 decadeBreakdown={decadeBreakdown}
+                topics={typedTopics}
+                selectedTopicIndex={safeTopicIndex}
+                onSelectTopicIndex={setSelectedTopicIndex}
                 onYearClick={handleYearClick}
                 selectedYear={selectedYear}
                 onDecadeClick={handleDecadeClick}
@@ -1896,7 +1910,7 @@ function App() {
                           style={{ backgroundColor: activeTopicTheme.hex }}
                         />
                         <span className="font-serif font-bold text-sm text-parchment-50 truncate">
-                          Topic #{activeTopic.id + 1}: {activeTopicTheme.shortLabel}
+                          Topic #{activeTopic.id + 1}: {getTopicDisplayLabel(activeTopic)}
                         </span>
                       </div>
                       <p className="font-mono text-[10px] text-parchment-300 truncate mt-0.5">

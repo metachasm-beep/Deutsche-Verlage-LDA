@@ -307,6 +307,78 @@ export const useLDA = () => {
     }
   };
 
+  const updateTopicLabel = async (
+    topicId: number,
+    customLabel: string,
+    assignedLabels: string[] = [],
+    regimeOverride: string = ''
+  ) => {
+    // Optimistically update local topics state immediately
+    setTopics((prev: any[]) =>
+      prev.map((t) => {
+        if (t.id !== topicId) return t;
+        const defaultLbl = t.default_label || `Topic ${topicId + 1}`;
+        const resolvedCustom = customLabel.trim() || defaultLbl;
+        const nextArch = { ...(t.archetype || {}) };
+        if (regimeOverride.trim()) {
+          nextArch.original_label = nextArch.original_label || nextArch.label;
+          nextArch.label = regimeOverride.trim();
+        } else if (nextArch.original_label) {
+          nextArch.label = nextArch.original_label;
+        }
+        return {
+          ...t,
+          archetype: nextArch,
+          custom_label: resolvedCustom,
+          assigned_labels: assignedLabels,
+          is_label_edited: Boolean(
+            (customLabel.trim() && customLabel.trim() !== defaultLbl) ||
+              assignedLabels.length > 0 ||
+              regimeOverride.trim()
+          ),
+        };
+      })
+    );
+
+    try {
+      await ldaClientAdapter.updateTopicLabel({
+        topic_id: topicId,
+        lda_mode: ldaMode,
+        custom_label: customLabel,
+        assigned_labels: assignedLabels,
+        regime_override: regimeOverride,
+        apply_to_all_modes: true,
+      });
+    } catch (e) {
+      console.error('Failed to persist custom topic label', e);
+    }
+  };
+
+  const resetTopicLabel = async (topicId?: number) => {
+    setTopics((prev: any[]) =>
+      prev.map((t) => {
+        if (topicId !== undefined && t.id !== topicId) return t;
+        const defaultLbl = t.default_label || `Topic ${t.id + 1}`;
+        const nextArch = { ...(t.archetype || {}) };
+        if (nextArch.original_label) {
+          nextArch.label = nextArch.original_label;
+        }
+        return {
+          ...t,
+          archetype: nextArch,
+          custom_label: defaultLbl,
+          assigned_labels: [],
+          is_label_edited: false,
+        };
+      })
+    );
+    try {
+      await ldaClientAdapter.resetTopicLabel(topicId);
+    } catch (e) {
+      console.error('Failed to reset topic label', e);
+    }
+  };
+
   return {
     isTraining,
     isUploading,
@@ -343,6 +415,8 @@ export const useLDA = () => {
     runLDA,
     updateCustomSeeds,
     resetCustomSeeds,
+    updateTopicLabel,
+    resetTopicLabel,
     uploadDataset,
     resetToMock
   };

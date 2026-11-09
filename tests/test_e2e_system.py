@@ -396,6 +396,41 @@ def test_10_http_seed_lexicon_update_and_reset_cycle():
     assert reset_res.get("status") == "success"
     assert "seed_lexicons" in reset_res
 
+    # Verify Topic Label Editing, Multi-Label Assignment, Regime Override & Diachronic Trends
+    update_lbl_res = _http_post_json(
+        f"{FRONTEND_URL}/api/topic-labels",
+        {
+            "lda_mode": "unsupervised",
+            "num_topics": 12,
+            "topic_id": 0,
+            "custom_label": "Post-1989 Catholic Dogmatics & Synodality",
+            "assigned_labels": ["Vatican II Reception", "Dogmatische Theologie", "H1 Confirmed"],
+            "regime_override": "Traditional / Ecclesiastical",
+        },
+    )
+    assert update_lbl_res.get("status") == "success"
+
+    enriched = _http_get_json(f"{FRONTEND_URL}/api/topics?lda_mode=unsupervised&num_topics=12")
+    t0 = enriched["topics"][0]
+    assert t0["custom_label"] == "Post-1989 Catholic Dogmatics & Synodality"
+    assert t0["assigned_labels"] == ["Vatican II Reception", "Dogmatische Theologie", "H1 Confirmed"]
+    assert t0["is_label_edited"] is True
+    assert isinstance(t0.get("default_label"), str) and len(t0["default_label"]) > 3
+    assert isinstance(t0.get("diachronic_trend"), list) and len(t0["diachronic_trend"]) == 6
+    assert [pt["decade"] for pt in t0["diachronic_trend"]] == ["1970s", "1980s", "1990s", "2000s", "2010s", "2020s"]
+
+    reset_lbl_res = _http_post_json(
+        f"{FRONTEND_URL}/api/reset-topic-labels",
+        {"lda_mode": "unsupervised", "num_topics": 12, "topic_id": 0},
+    )
+    assert reset_lbl_res.get("status") == "success"
+
+    after_reset = _http_get_json(f"{FRONTEND_URL}/api/topics?lda_mode=unsupervised&num_topics=12")
+    t0_reset = after_reset["topics"][0]
+    assert t0_reset["custom_label"] == t0_reset["default_label"]
+    assert t0_reset["assigned_labels"] == []
+    assert t0_reset["is_label_edited"] is False
+
 
 # ============================================================================
 # SUITE 3: LIVE VITE FRONTEND & PROXIED API SEAMS (`http://localhost:5173`)

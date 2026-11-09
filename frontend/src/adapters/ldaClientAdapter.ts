@@ -32,6 +32,15 @@ export interface LDAClientPort {
   fetchCoherenceGrid(): Promise<any>;
   searchMarc21Catalog(params: Marc21SearchParams): Promise<any>;
   inspectGermanLemma(queryWord: string, ldaMode?: LDAMode): Promise<any>;
+  updateTopicLabel(payload: {
+    topic_id: number;
+    lda_mode?: string;
+    custom_label?: string;
+    assigned_labels?: string[];
+    regime_override?: string;
+    apply_to_all_modes?: boolean;
+  }): Promise<any>;
+  resetTopicLabel(topicId?: number): Promise<any>;
 }
 
 export class HttpLDAClientAdapter implements LDAClientPort {
@@ -104,6 +113,37 @@ export class HttpLDAClientAdapter implements LDAClientPort {
     );
     if (!res.ok) {
       throw new Error(`Failed to inspect German lemma: ${res.status}`);
+    }
+    return res.json();
+  }
+
+  async updateTopicLabel(payload: {
+    topic_id: number;
+    lda_mode?: string;
+    custom_label?: string;
+    assigned_labels?: string[];
+    regime_override?: string;
+    apply_to_all_modes?: boolean;
+  }): Promise<any> {
+    const res = await fetch(`${API_BASE}/api/topic-labels`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    if (!res.ok) {
+      throw new Error(`Failed to update topic label: ${res.status}`);
+    }
+    return res.json();
+  }
+
+  async resetTopicLabel(topicId?: number): Promise<any> {
+    const res = await fetch(`${API_BASE}/api/reset-topic-labels`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(topicId !== undefined ? { topic_id: topicId } : {}),
+    });
+    if (!res.ok) {
+      throw new Error(`Failed to reset topic label: ${res.status}`);
     }
     return res.json();
   }

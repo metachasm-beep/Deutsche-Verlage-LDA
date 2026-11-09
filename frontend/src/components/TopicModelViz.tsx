@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   BarChart,
   Bar,
+  AreaChart,
+  Area,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -10,7 +12,24 @@ import {
   ResponsiveContainer,
   Cell
 } from 'recharts';
-import { Layers, Activity, Search, BookText, Quote, Copy, Check, Building2, Sparkles, PanelRightOpen } from 'lucide-react';
+import {
+  Layers,
+  Activity,
+  Search,
+  BookText,
+  Quote,
+  Copy,
+  Check,
+  Building2,
+  Sparkles,
+  PanelRightOpen,
+  Pencil,
+  Tag,
+  Plus,
+  X,
+  RotateCcw,
+  TrendingUp,
+} from 'lucide-react';
 import clsx from 'clsx';
 
 export interface Keyword {
@@ -24,6 +43,7 @@ export interface Keyword {
 
 export interface ArchetypeInfo {
   label: string;
+  original_label?: string;
   confidence: number;
   scores?: Record<string, number>;
   seeded_prior?: string;
@@ -52,6 +72,11 @@ export interface TopicDiagnostics {
   exclusive_lemmas: string[];
 }
 
+export interface TopicDecadeTrendPoint {
+  decade: string;
+  share: number;
+}
+
 export interface Topic {
   id: number;
   prevalence?: number;
@@ -61,6 +86,27 @@ export interface Topic {
   top_publishers?: Record<string, number>;
   representative_docs?: RepresentativeDoc[];
   diagnostics?: TopicDiagnostics;
+  default_label?: string;
+  custom_label?: string;
+  assigned_labels?: string[];
+  is_label_edited?: boolean;
+  diachronic_trend?: TopicDecadeTrendPoint[];
+}
+
+export function getTopicDisplayLabel(topic?: Topic): string {
+  if (!topic) return 'Topic 01';
+  if (topic.custom_label && topic.custom_label.trim()) {
+    return topic.custom_label.trim();
+  }
+  if (topic.default_label && topic.default_label.trim()) {
+    return topic.default_label.trim();
+  }
+  const topWords = (topic.keywords || [])
+    .slice(0, 2)
+    .map((k) => k.word.replace(/_/g, ' '))
+    .join(' & ');
+  const shortArch = (topic.archetype?.label || 'Hybrid').split(' / ')[0];
+  return topWords ? `${topWords} (${shortArch})` : `Topic ${topic.id + 1} · ${shortArch}`;
 }
 
 interface TopicModelVizProps {
@@ -72,6 +118,14 @@ interface TopicModelVizProps {
   ideologicalFilter?: string | null;
   hideInlineInspector?: boolean;
   onOpenInspector?: () => void;
+  onUpdateTopicLabel?: (
+    topicId: number,
+    customLabel: string,
+    assignedLabels: string[],
+    regimeOverride: string
+  ) => void;
+  onResetTopicLabel?: (topicId?: number) => void;
+  onDecadeClick?: (decade: number) => void;
 }
 
 export interface ArchetypeTheme {
@@ -161,10 +215,19 @@ export const TopicModelViz: React.FC<TopicModelVizProps> = ({
   ideologicalFilter,
   hideInlineInspector = false,
   onOpenInspector,
+  onUpdateTopicLabel,
+  onResetTopicLabel,
+  onDecadeClick,
 }) => {
   const [internalIndex, setInternalIndex] = useState<number>(0);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [copiedCitation, setCopiedCitation] = useState<string | null>(null);
+
+  // Topic Label Editing & Custom Multi-Label Assignment State
+  const [isEditingLabel, setIsEditingLabel] = useState<boolean>(false);
+  const [draftPrimaryLabel, setDraftPrimaryLabel] = useState<string>('');
+  const [draftRegimeOverride, setDraftRegimeOverride] = useState<string>('');
+  const [draftNewTagInput, setDraftNewTagInput] = useState<string>('');
 
   const selectedTopicIndex = controlledIndex !== undefined ? controlledIndex : internalIndex;
   const setSelectedTopicIndex = (idx: number) => {
@@ -178,6 +241,65 @@ export const TopicModelViz: React.FC<TopicModelVizProps> = ({
   const safeIndex = selectedTopicIndex < topics.length ? selectedTopicIndex : 0;
   const currentTopic = topics[safeIndex];
   const currentTheme = getArchetypeTheme(currentTopic?.archetype?.label);
+  const displayLabel = getTopicDisplayLabel(currentTopic);
+  const assignedCustomLabels = currentTopic?.assigned_labels || [];
+
+  useEffect(() => {
+    if (currentTopic) {
+      setDraftPrimaryLabel(getTopicDisplayLabel(currentTopic));
+      setDraftRegimeOverride(currentTopic.archetype?.label || '');
+      setDraftNewTagInput('');
+    }
+  }, [currentTopic?.id, currentTopic?.custom_label, currentTopic?.default_label, currentTopic?.archetype?.label]);
+
+  const handleSavePrimaryLabel = () => {
+    if (!currentTopic || !onUpdateTopicLabel) return;
+    onUpdateTopicLabel(
+      currentTopic.id,
+      draftPrimaryLabel.trim() || currentTopic.default_label || `Topic ${currentTopic.id + 1}`,
+      assignedCustomLabels,
+      draftRegimeOverride
+    );
+  };
+
+  const handleAddAssignedTag = () => {
+    if (!currentTopic || !onUpdateTopicLabel) return;
+    const tag = draftNewTagInput.trim();
+    if (!tag) return;
+    const nextTags = assignedCustomLabels.includes(tag)
+      ? assignedCustomLabels
+      : [...assignedCustomLabels, tag];
+    onUpdateTopicLabel(
+      currentTopic.id,
+      draftPrimaryLabel.trim() || displayLabel,
+      nextTags,
+      draftRegimeOverride
+    );
+    setDraftNewTagInput('');
+  };
+
+  const handleRemoveAssignedTag = (tagToRemove: string) => {
+    if (!currentTopic || !onUpdateTopicLabel) return;
+    const nextTags = assignedCustomLabels.filter((t) => t !== tagToRemove);
+    onUpdateTopicLabel(
+      currentTopic.id,
+      draftPrimaryLabel.trim() || displayLabel,
+      nextTags,
+      draftRegimeOverride
+    );
+  };
+
+  const handleRegimeSelectChange = (newRegime: string) => {
+    setDraftRegimeOverride(newRegime);
+    if (currentTopic && onUpdateTopicLabel) {
+      onUpdateTopicLabel(
+        currentTopic.id,
+        draftPrimaryLabel.trim() || displayLabel,
+        assignedCustomLabels,
+        newRegime
+      );
+    }
+  };
 
   const handleCopyCitation = (citation: string) => {
     navigator.clipboard.writeText(citation);
@@ -244,6 +366,21 @@ export const TopicModelViz: React.FC<TopicModelVizProps> = ({
     kw.word.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  const topicTrendData: TopicDecadeTrendPoint[] =
+    currentTopic?.diachronic_trend && currentTopic.diachronic_trend.length > 0
+      ? currentTopic.diachronic_trend
+      : [
+          { decade: '1970s', share: currentTopic?.prevalence || 8.3 },
+          { decade: '1980s', share: currentTopic?.prevalence || 8.3 },
+          { decade: '1990s', share: currentTopic?.prevalence || 8.3 },
+          { decade: '2000s', share: currentTopic?.prevalence || 8.3 },
+          { decade: '2010s', share: currentTopic?.prevalence || 8.3 },
+          { decade: '2020s', share: currentTopic?.prevalence || 8.3 },
+        ];
+  const trendStart = topicTrendData[0]?.share ?? 0;
+  const trendEnd = topicTrendData[topicTrendData.length - 1]?.share ?? 0;
+  const trendDelta = Number((trendEnd - trendStart).toFixed(2));
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 8 }}
@@ -254,15 +391,55 @@ export const TopicModelViz: React.FC<TopicModelVizProps> = ({
       {/* Top Header Strip */}
       <div>
         <div className="flex flex-wrap items-center justify-between gap-2 pb-3 mb-3 border-b border-white/[0.07]">
-          <div className="flex items-center gap-2.5">
+          <div className="flex items-center gap-2 flex-wrap">
             <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-white/[0.04] border border-white/10 font-mono text-[10px] uppercase tracking-widest text-parchment-200">
               <Sparkles className="w-3 h-3 text-traditional" />
               Dirichlet Posterior (φ<sub>k</sub>)
             </span>
-            <h3 className="font-serif text-lg sm:text-xl font-bold text-parchment-50">
-              Topic #{currentTopic ? currentTopic.id + 1 : 1}:{' '}
-              <span className={currentTheme.textClass}>{currentTheme.shortLabel}</span>
+            <h3 className="font-serif text-lg sm:text-xl font-bold text-parchment-50 flex items-center gap-2 flex-wrap">
+              <span>Topic #{currentTopic ? currentTopic.id + 1 : 1}:</span>
+              <span className={currentTheme.textClass}>{displayLabel}</span>
+              <span className="font-mono text-[10px] px-2 py-0.5 rounded bg-white/[0.04] border border-white/10 text-parchment-300 font-normal">
+                {currentTheme.shortLabel}
+              </span>
             </h3>
+
+            {/* Additional Assigned Custom Labels Badges */}
+            {assignedCustomLabels.map((lbl) => (
+              <span
+                key={lbl}
+                className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-traditional/15 border border-traditional/40 font-mono text-[10px] text-traditional font-semibold"
+              >
+                <Tag className="w-2.5 h-2.5" />
+                <span>{lbl}</span>
+                {onUpdateTopicLabel && (
+                  <button
+                    onClick={() => handleRemoveAssignedTag(lbl)}
+                    title={`Remove assigned label "${lbl}"`}
+                    className="hover:text-parchment-50 cursor-pointer ml-0.5"
+                  >
+                    <X className="w-2.5 h-2.5" />
+                  </button>
+                )}
+              </span>
+            ))}
+
+            {/* Toggle Edit / Assign Topic Labels Button */}
+            {onUpdateTopicLabel && (
+              <button
+                onClick={() => setIsEditingLabel((prev) => !prev)}
+                title="Edit already-assigned topic label or assign additional custom labels"
+                className={clsx(
+                  'inline-flex items-center gap-1 px-2 py-0.5 rounded border font-mono text-[10px] transition-all cursor-pointer',
+                  isEditingLabel || currentTopic?.is_label_edited
+                    ? 'bg-traditional/20 border-traditional text-traditional font-bold shadow-glow-gold'
+                    : 'bg-white/[0.04] hover:bg-white/[0.08] border-white/10 text-parchment-200'
+                )}
+              >
+                <Pencil className="w-3 h-3" />
+                <span>{isEditingLabel ? 'Close Label Editor' : 'Edit / Assign Labels'}</span>
+              </button>
+            )}
           </div>
 
           <div className="flex items-center gap-2 flex-wrap">
@@ -319,6 +496,111 @@ export const TopicModelViz: React.FC<TopicModelVizProps> = ({
           </div>
         </div>
 
+        {/* Inline Topic Label Editing & Custom Multi-Label Assignment Drawer */}
+        <AnimatePresence initial={false}>
+          {isEditingLabel && currentTopic && onUpdateTopicLabel && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              className="overflow-hidden mb-3"
+            >
+              <div className="p-3 rounded-xl bg-obsidian-950/95 border border-traditional/40 space-y-2.5">
+                <div className="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-white/[0.07]">
+                  <div className="flex items-center gap-1.5 font-mono text-[10px] text-traditional uppercase tracking-widest font-bold">
+                    <Tag className="w-3.5 h-3.5" />
+                    <span>
+                      Topic #{currentTopic.id + 1} Label Editor — Edit Assigned Label or Assign Additional Custom Labels
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    {onResetTopicLabel && (
+                      <button
+                        onClick={() => onResetTopicLabel(currentTopic.id)}
+                        className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-white/[0.05] hover:bg-white/[0.1] border border-white/10 font-mono text-[9px] text-parchment-300 cursor-pointer"
+                      >
+                        <RotateCcw className="w-2.5 h-2.5" />
+                        <span>Reset Topic #{currentTopic.id + 1} to Default ({currentTopic.default_label})</span>
+                      </button>
+                    )}
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-2.5 items-end">
+                  {/* 1. Edit Already-Assigned Primary Topic Label */}
+                  <div className="lg:col-span-5">
+                    <label className="block font-mono text-[9px] uppercase tracking-wider text-parchment-300 mb-1">
+                      1. Edit Assigned Primary Topic Label:
+                    </label>
+                    <div className="flex items-center gap-1.5">
+                      <input
+                        type="text"
+                        value={draftPrimaryLabel}
+                        onChange={(e) => setDraftPrimaryLabel(e.target.value)}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter') handleSavePrimaryLabel();
+                        }}
+                        placeholder={currentTopic.default_label || `Topic ${currentTopic.id + 1}`}
+                        className="flex-1 bg-obsidian-900 border border-white/15 rounded-md px-2.5 py-1 text-xs font-mono text-parchment-50 focus:outline-none focus:border-traditional"
+                      />
+                      <button
+                        onClick={handleSavePrimaryLabel}
+                        className="px-2.5 py-1 rounded-md bg-traditional hover:bg-traditional-light text-obsidian-950 font-mono text-[10px] font-bold cursor-pointer shrink-0"
+                      >
+                        Save Label
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* 2. Edit Assigned Ideological Regime Classification */}
+                  <div className="lg:col-span-3">
+                    <label className="block font-mono text-[9px] uppercase tracking-wider text-parchment-300 mb-1">
+                      2. Edit Assigned Ideological Regime:
+                    </label>
+                    <select
+                      value={draftRegimeOverride || currentTopic.archetype?.label || ''}
+                      onChange={(e) => handleRegimeSelectChange(e.target.value)}
+                      aria-label="Edit Assigned Ideological Regime"
+                      className="w-full bg-obsidian-900 border border-white/15 rounded-md px-2 py-1 text-xs font-mono text-parchment-100 focus:outline-none focus:border-traditional"
+                    >
+                      <option value="Traditional / Ecclesiastical">RQ₁ · Traditional / Ecclesiastical</option>
+                      <option value="Neoliberal / Self-Optimization">RQ₂ · Neoliberal / Self-Optimization</option>
+                      <option value="Critical / Secular-Humanist">RQ₃ · Critical / Secular-Humanist</option>
+                      <option value="Hybrid / Cross-Discursive">Hybrid / Cross-Discursive</option>
+                    </select>
+                  </div>
+
+                  {/* 3. Assign Additional Custom Labels / Tags */}
+                  <div className="lg:col-span-4">
+                    <label className="block font-mono text-[9px] uppercase tracking-wider text-parchment-300 mb-1">
+                      3. Assign Additional Custom Label / Tag:
+                    </label>
+                    <div className="flex items-center gap-1.5">
+                      <input
+                        type="text"
+                        value={draftNewTagInput}
+                        onChange={(e) => setDraftNewTagInput(e.target.value)}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter') handleAddAssignedTag();
+                        }}
+                        placeholder="Add secondary label (e.g. Dogmatik, Ch. 4)..."
+                        className="flex-1 bg-obsidian-900 border border-white/15 rounded-md px-2.5 py-1 text-xs font-mono text-parchment-50 focus:outline-none focus:border-traditional"
+                      />
+                      <button
+                        onClick={handleAddAssignedTag}
+                        className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/40 text-emerald-300 font-mono text-[10px] font-bold cursor-pointer shrink-0"
+                      >
+                        <Plus className="w-3 h-3" />
+                        <span>Assign</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         {/* Active RQ Regime Filter Banner (when an RQ filter is selected in Left Rail) */}
         {ideologicalFilter && (
           <div className="mb-2.5 px-3 py-1.5 rounded-lg bg-obsidian-950/90 border border-white/10 flex items-center justify-between gap-2 font-mono text-[10px]">
@@ -368,11 +650,16 @@ export const TopicModelViz: React.FC<TopicModelVizProps> = ({
             .filter(({ theme }) => !ideologicalFilter || theme.id === ideologicalFilter)
             .map(({ t, idx, theme }) => {
               const isSelected = idx === safeIndex;
+              const pillLabel = getTopicDisplayLabel(t);
+              const extraCount = (t.assigned_labels || []).length;
 
               return (
                 <button
                   key={t.id}
                   onClick={() => setSelectedTopicIndex(idx)}
+                  title={`Topic #${t.id + 1}: ${pillLabel}${
+                    extraCount > 0 ? ` [${(t.assigned_labels || []).join(', ')}]` : ''
+                  }`}
                   className={clsx(
                     'group relative shrink-0 flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border text-left transition-all duration-150 cursor-pointer',
                     isSelected
@@ -387,9 +674,14 @@ export const TopicModelViz: React.FC<TopicModelVizProps> = ({
                   <span className="font-mono text-[11px] font-bold text-parchment-100">
                     T{String(t.id + 1).padStart(2, '0')}
                   </span>
-                  <span className="text-[11px] text-parchment-300 max-w-[110px] truncate hidden sm:inline">
-                    {t.keywords.slice(0, 2).map((k) => k.word).join(' · ')}
+                  <span className="text-[11px] text-parchment-200 max-w-[140px] truncate hidden sm:inline">
+                    {pillLabel}
                   </span>
+                  {extraCount > 0 && (
+                    <span className="px-1 py-0 rounded bg-traditional/20 border border-traditional/40 font-mono text-[8px] text-traditional">
+                      +{extraCount}
+                    </span>
+                  )}
                 </button>
               );
             })}
@@ -666,6 +958,111 @@ export const TopicModelViz: React.FC<TopicModelVizProps> = ({
                     </div>
                   </div>
                 )}
+              </div>
+            </div>
+
+            {/* Diachronic Topic Prevalence Trajectory (1970s–2020s) for Selected Topic */}
+            <div className="bg-obsidian-950/75 border border-white/[0.06] rounded-lg p-3">
+              <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
+                <div className="flex items-center gap-1.5">
+                  <TrendingUp className="w-3.5 h-3.5" style={{ color: currentTheme.hex }} />
+                  <span className="font-mono text-[10px] uppercase tracking-widest text-parchment-200 font-semibold">
+                    Diachronic Topic Trajectory (1970s–2020s) — Topic #{currentTopic.id + 1}: {displayLabel}
+                  </span>
+                </div>
+                <div className="flex items-center gap-2 font-mono text-[10px]">
+                  <span className="text-parchment-300">
+                    1970s: <strong className="text-parchment-100">{trendStart.toFixed(1)}%</strong> → 2020s:{' '}
+                    <strong className="text-parchment-100">{trendEnd.toFixed(1)}%</strong>
+                  </span>
+                  <span
+                    className={clsx(
+                      'px-1.5 py-0.5 rounded border font-bold tabular-nums',
+                      trendDelta > 0.15
+                        ? 'bg-emerald-500/15 border-emerald-500/40 text-emerald-300'
+                        : trendDelta < -0.15
+                        ? 'bg-rose-500/15 border-rose-500/40 text-rose-300'
+                        : 'bg-white/[0.05] border-white/10 text-parchment-200'
+                    )}
+                  >
+                    Δ 55-Yr: {trendDelta >= 0 ? `+${trendDelta.toFixed(2)}%` : `${trendDelta.toFixed(2)}%`}
+                  </span>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-3 items-center">
+                <div className="md:col-span-7 h-[105px]">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <AreaChart
+                      data={topicTrendData}
+                      margin={{ top: 4, right: 10, left: -18, bottom: 0 }}
+                      onClick={(e: any) => {
+                        if (e && e.activeLabel && onDecadeClick) {
+                          const decNum = parseInt(String(e.activeLabel).replace(/\D/g, ''), 10);
+                          if (!isNaN(decNum)) onDecadeClick(decNum);
+                        }
+                      }}
+                    >
+                      <CartesianGrid strokeDasharray="2 4" stroke="rgba(255,255,255,0.05)" vertical={false} />
+                      <XAxis
+                        dataKey="decade"
+                        stroke="#6E6D68"
+                        fontSize={9}
+                        tickLine={false}
+                        axisLine={{ stroke: 'rgba(255,255,255,0.08)' }}
+                        fontFamily="JetBrains Mono, monospace"
+                      />
+                      <YAxis
+                        stroke="#6E6D68"
+                        fontSize={9}
+                        tickLine={false}
+                        axisLine={false}
+                        tickFormatter={(v) => `${v}%`}
+                        fontFamily="JetBrains Mono, monospace"
+                      />
+                      <Tooltip
+                        contentStyle={{
+                          backgroundColor: '#0A0A0F',
+                          borderColor: 'rgba(255,255,255,0.15)',
+                          borderRadius: '8px',
+                          fontSize: '11px',
+                          fontFamily: 'JetBrains Mono, monospace',
+                        }}
+                        formatter={(val: any) => [`${Number(val).toFixed(2)}%`, displayLabel]}
+                      />
+                      <Area
+                        type="monotone"
+                        dataKey="share"
+                        stroke={currentTheme.hex}
+                        strokeWidth={2.2}
+                        fill={currentTheme.hex}
+                        fillOpacity={0.18}
+                      />
+                    </AreaChart>
+                  </ResponsiveContainer>
+                </div>
+
+                <div className="md:col-span-5 grid grid-cols-3 sm:grid-cols-6 md:grid-cols-3 gap-1.5">
+                  {topicTrendData.map((pt) => {
+                    const decNum = parseInt(pt.decade.replace(/\D/g, ''), 10);
+                    return (
+                      <button
+                        key={pt.decade}
+                        onClick={() => onDecadeClick && !isNaN(decNum) && onDecadeClick(decNum)}
+                        title={`Click to slice corpus to ${pt.decade}`}
+                        className="p-1.5 rounded bg-obsidian-900/90 hover:bg-obsidian-800 border border-white/[0.06] hover:border-white/20 text-center transition-colors cursor-pointer"
+                      >
+                        <div className="font-mono text-[9px] text-parchment-300">{pt.decade}</div>
+                        <div
+                          className="font-mono text-xs font-bold tabular-nums"
+                          style={{ color: currentTheme.hex }}
+                        >
+                          {pt.share.toFixed(1)}%
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
             </div>
 

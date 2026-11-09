@@ -27,7 +27,7 @@ import {
   BookOpen,
 } from 'lucide-react';
 import clsx from 'clsx';
-import { type Topic } from './TopicModelViz';
+import { getTopicDisplayLabel, type Topic } from './TopicModelViz';
 import { type ModeComparisonRow, type SLDADiagnostics } from '../hooks/useLDA';
 
 interface HypothesisAndExportWorkbenchProps {
@@ -189,7 +189,12 @@ export const HypothesisAndExportWorkbench: React.FC<HypothesisAndExportWorkbench
       const topicRows = topics
         .map((t) => {
           const tNum = `T${String(t.id + 1).padStart(2, '0')}`;
-          const regime = (t.archetype?.label || 'Hybrid').replace('&', '\\&');
+          const lbl = getTopicDisplayLabel(t).replace(/&/g, '\\&');
+          const extraTags =
+            t.assigned_labels && t.assigned_labels.length > 0
+              ? ` [${t.assigned_labels.join(', ').replace(/&/g, '\\&')}]`
+              : '';
+          const regime = `${lbl}${extraTags}`;
           const conf = `${t.archetype?.confidence ?? 0}\\%`;
           const prev = `${t.prevalence ?? (100 / Math.max(1, topics.length)).toFixed(1)}\\%`;
           const topTerms = (t.keywords || [])

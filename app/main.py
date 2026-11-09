@@ -321,6 +321,185 @@ async def reset_seeds():
     }
 
 
+_CUSTOM_TOPIC_LABELS_CACHE: Optional[dict] = None
+
+
+def _load_custom_topic_labels() -> dict:
+    global _CUSTOM_TOPIC_LABELS_CACHE
+    if _CUSTOM_TOPIC_LABELS_CACHE is not None:
+        return _CUSTOM_TOPIC_LABELS_CACHE
+    labels_path = os.path.join(config.BASE_DIR, "app", "custom_topic_labels.json")
+    if os.path.exists(labels_path):
+        try:
+            import json
+            with open(labels_path, "r", encoding="utf-8") as lf:
+                loaded = json.load(lf)
+                if isinstance(loaded, dict):
+                    _CUSTOM_TOPIC_LABELS_CACHE = loaded
+                    return _CUSTOM_TOPIC_LABELS_CACHE
+        except Exception:
+            pass
+    _CUSTOM_TOPIC_LABELS_CACHE = {}
+    return _CUSTOM_TOPIC_LABELS_CACHE
+
+
+def _save_custom_topic_labels(data: dict) -> None:
+    global _CUSTOM_TOPIC_LABELS_CACHE
+    _CUSTOM_TOPIC_LABELS_CACHE = data
+    labels_path = os.path.join(config.BASE_DIR, "app", "custom_topic_labels.json")
+    try:
+        import json
+        with open(labels_path, "w", encoding="utf-8") as lf:
+            json.dump(data, lf, indent=2, ensure_ascii=False)
+    except Exception:
+        pass
+
+
+def _synthesize_default_topic_label(topic: dict) -> str:
+    """
+    Synthesizes a canonical assigned thematic label from a topic's top German lemmas
+    and its 3-way ideological regime (RQ1-RQ3).
+    """
+    kws = [
+        str(k.get("word", "")).replace("_", " ").title()
+        for k in (topic.get("keywords") or [])[:3]
+        if k.get("word")
+    ]
+    arch_label = (topic.get("archetype") or {}).get("label", "Hybrid")
+    short_regime = arch_label.split(" / ")[0] if " / " in arch_label else arch_label
+    if len(kws) >= 2:
+        return f"{kws[0]} & {kws[1]} ({short_regime})"
+    if len(kws) == 1:
+        return f"{kws[0]} ({short_regime})"
+    return f"Topic {int(topic.get('id', 0)) + 1} · {short_regime}"
+
+
+def _apply_topic_labels_and_trends_to_payload(payload: dict) -> dict:
+    """
+    Enriches every topic in `payload` with:
+    - `default_label`: canonical auto-assigned thematic label
+    - `custom_label`: user-edited primary label (or `default_label` if unedited)
+    - `assigned_labels`: list of additional user-assigned custom labels/tags
+    - `is_label_edited`: boolean indicating whether the topic's label/regime was customized
+    - `diachronic_trend`: 6-decade trajectory array `[{decade: '1970s', share: ...}, ...]`
+    """
+    labels_store = _load_custom_topic_labels()
+    mode_key = payload.get("lda_mode", "unsupervised")
+    dec_breakdown = payload.get("decade_breakdown") or {}
+    decade_keys = ["1970s", "1980s", "1990s", "2000s", "2010s", "2020s"]
+
+    enriched_topics = []
+    for t in payload.get("topics", []):
+        tid = int(t.get("id", 0))
+        default_lbl = _synthesize_default_topic_label(t)
+        entry = (
+            labels_store.get(f"{mode_key}:{tid}")
+            or labels_store.get(f"global:{tid}")
+            or {}
+        )
+        custom_lbl = (entry.get("custom_label") or "").strip() or default_lbl
+        extra_labels = [
+            str(lbl).strip()
+            for lbl in (entry.get("assigned_labels") or [])
+            if str(lbl).strip()
+        ]
+        regime_override = (entry.get("regime_override") or "").strip()
+
+        arch = dict(t.get("archetype") or {})
+        if regime_override:
+            arch["original_label"] = arch.get("original_label") or arch.get("label")
+            arch["label"] = regime_override
+
+        is_edited = bool(
+            (entry.get("custom_label") and entry.get("custom_label").strip() != default_lbl)
+            or extra_labels
+            or regime_override
+        )
+
+        t_key = f"Topic {tid + 1}"
+        trend_series = []
+        for dk in decade_keys:
+            d_map = dec_breakdown.get(dk) or {}
+            share_val = round(float(d_map.get(t_key, t.get("prevalence", 8.33))), 2)
+            trend_series.append({"decade": dk, "share": share_val})
+
+        enriched_topics.append({
+            **t,
+            "archetype": arch,
+            "default_label": default_lbl,
+            "custom_label": custom_lbl,
+            "assigned_labels": extra_labels,
+            "is_label_edited": is_edited,
+            "diachronic_trend": trend_series,
+        })
+
+    return {
+        **payload,
+        "topics": enriched_topics,
+        "custom_topic_labels": labels_store,
+    }
+
+
+@app.get("/api/topic-labels")
+async def get_topic_labels():
+    return {
+        "status": "success",
+        "topic_labels": _load_custom_topic_labels(),
+    }
+
+
+@app.post("/api/topic-labels")
+async def update_topic_label(payload: dict = Body(...)):
+    """
+    Allows editing the already-assigned topic label (`custom_label`), overriding its
+    ideological regime label (`regime_override`), and assigning additional custom
+    hermeneutic labels/tags (`assigned_labels`).
+    """
+    store = dict(_load_custom_topic_labels())
+    topic_id = int(payload.get("topic_id", 0))
+    lda_mode = str(payload.get("lda_mode") or "global").strip()
+    scope_all_modes = bool(payload.get("apply_to_all_modes", True))
+
+    record = {
+        "topic_id": topic_id,
+        "custom_label": str(payload.get("custom_label") or "").strip(),
+        "assigned_labels": [
+            str(x).strip()
+            for x in (payload.get("assigned_labels") or [])
+            if str(x).strip()
+        ],
+        "regime_override": str(payload.get("regime_override") or "").strip(),
+    }
+    store[f"{lda_mode}:{topic_id}"] = record
+    if scope_all_modes:
+        store[f"global:{topic_id}"] = record
+
+    _save_custom_topic_labels(store)
+    return {
+        "status": "success",
+        "key": f"{lda_mode}:{topic_id}",
+        "record": record,
+        "topic_labels": store,
+    }
+
+
+@app.post("/api/reset-topic-labels")
+async def reset_topic_labels(payload: dict = Body(default={})):
+    store = dict(_load_custom_topic_labels())
+    if payload and "topic_id" in payload and payload["topic_id"] is not None:
+        tid = int(payload["topic_id"])
+        keys_to_remove = [k for k in store if k.endswith(f":{tid}")]
+        for k in keys_to_remove:
+            store.pop(k, None)
+    else:
+        store.clear()
+    _save_custom_topic_labels(store)
+    return {
+        "status": "success",
+        "topic_labels": store,
+    }
+
+
 _SUBCLUSTER_LEXICON_BANK = {
     "Traditional / Ecclesiastical": [
         [("liturgie", 0.0285), ("sakrament", 0.0241), ("eucharistie", 0.0198), ("gottesdienst", 0.0174)],
@@ -1529,32 +1708,34 @@ async def get_topics(
 
     if lda_mode and lda_mode in lda_pipeline.LDA_MODES_META:
         current_lda_mode = lda_mode
-    active_mode = current_lda_mode or "unsupervised"
+    active_mode = lda_mode if (lda_mode and lda_mode in lda_pipeline.LDA_MODES_META) else (current_lda_mode or "unsupervised")
 
     target_k = max(2, min(30, int(num_topics))) if num_topics else (current_num_topics or config.NUM_TOPICS)
     current_num_topics = target_k
 
-    if year is not None:
-        current_year_filter = year if year > 0 else None
-    if decade is not None:
-        current_decade_filter = decade if decade > 0 else None
-    if publishers is not None:
-        current_publishers_filter = [p.strip() for p in publishers.split(",") if p.strip()]
-    if seed_boost is not None:
-        current_seed_boost = float(seed_boost)
-    if base_eta is not None:
-        current_base_eta = float(base_eta)
+    req_year = year if (year is not None and year > 0) else None
+    req_decade = decade if (decade is not None and decade > 0) else None
+    req_pubs = [p.strip() for p in publishers.split(",") if p.strip()] if publishers else []
+    req_seed_boost = float(seed_boost) if seed_boost is not None else 15.0
+    req_base_eta = float(base_eta) if base_eta is not None else 0.01
 
-    return compute_parameter_permutation_payload(
+    current_year_filter = req_year
+    current_decade_filter = req_decade
+    current_publishers_filter = req_pubs
+    current_seed_boost = req_seed_boost
+    current_base_eta = req_base_eta
+
+    base_payload = compute_parameter_permutation_payload(
         active_mode=active_mode,
         target_k=target_k,
-        year_filter=current_year_filter,
-        decade_filter=current_decade_filter,
-        pubs_filter=current_publishers_filter,
-        seed_boost=current_seed_boost,
-        base_eta=current_base_eta,
+        year_filter=req_year,
+        decade_filter=req_decade,
+        pubs_filter=req_pubs,
+        seed_boost=req_seed_boost,
+        base_eta=req_base_eta,
         custom_seeds=current_custom_seeds,
     )
+    return _apply_topic_labels_and_trends_to_payload(base_payload)
 
 
 @app.get("/api/data-summary")

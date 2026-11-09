@@ -4,7 +4,7 @@ import {
   Sliders,
 } from 'lucide-react';
 import clsx from 'clsx';
-import { getArchetypeTheme, type Topic, type Keyword } from './TopicModelViz';
+import { getArchetypeTheme, getTopicDisplayLabel, type Topic, type Keyword } from './TopicModelViz';
 
 interface InterTopicDistanceMapProps {
   topics: Topic[];
@@ -245,7 +245,7 @@ export const InterTopicDistanceMap: React.FC<InterTopicDistanceMapProps> = ({
         x: typeof (t as any).mds_pc1 === 'number' ? (t as any).mds_pc1 : (coords[idx]?.x ?? 0),
         y: typeof (t as any).mds_pc2 === 'number' ? (t as any).mds_pc2 : (coords[idx]?.y ?? 0),
         prevalence: t.prevalence || Number((100 / k).toFixed(1)),
-        label: t.archetype?.label || 'Hybrid',
+        label: getTopicDisplayLabel(t),
         shortCode: `T${String(t.id + 1).padStart(2, '0')}`,
         theme,
         topKeywords: (t.keywords || []).slice(0, 4).map((kw) => kw.word),

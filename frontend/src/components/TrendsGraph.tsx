@@ -14,6 +14,7 @@ import {
 import { motion } from 'framer-motion';
 import { Calendar, RotateCcw, Eye, EyeOff, Layers, TrendingUp, Search, Filter } from 'lucide-react';
 import clsx from 'clsx';
+import { getArchetypeTheme, getTopicDisplayLabel, type Topic } from './TopicModelViz';
 
 export interface PublisherDirectoryEntry {
   publisher: string;
@@ -31,6 +32,9 @@ interface TrendsGraphProps {
   selectedPublishers?: string[];
   onTogglePublisher?: (publisher: string) => void;
   decadeBreakdown?: Record<string, Record<string, number>>;
+  topics?: Topic[];
+  selectedTopicIndex?: number;
+  onSelectTopicIndex?: (index: number) => void;
   onYearClick?: (year: number) => void;
   selectedYear?: number | null;
   onDecadeClick?: (decade: number) => void;
@@ -212,6 +216,9 @@ export const TrendsGraph: React.FC<TrendsGraphProps> = ({
   selectedPublishers = [],
   onTogglePublisher,
   decadeBreakdown = {},
+  topics = [],
+  selectedTopicIndex,
+  onSelectTopicIndex,
   onYearClick,
   selectedYear,
   onDecadeClick,
@@ -220,7 +227,10 @@ export const TrendsGraph: React.FC<TrendsGraphProps> = ({
   compact = false,
 }) => {
   const [hiddenPublishers, setHiddenPublishers] = useState<Record<string, boolean>>({});
-  const [chartMode, setChartMode] = useState<'yearly_imprints' | 'decade_topics'>('yearly_imprints');
+  const [hiddenTopics, setHiddenTopics] = useState<Record<string, boolean>>({});
+  const [chartMode, setChartMode] = useState<'yearly_imprints' | 'topic_lines' | 'decade_topics'>(
+    'yearly_imprints'
+  );
   const [pubSearch, setPubSearch] = useState<string>('');
   const [categoryFilter, setCategoryFilter] = useState<
     'ALL' | 'RQ1' | 'RQ2' | 'RQ3' | 'ACADEMIC'
@@ -421,6 +431,50 @@ export const TrendsGraph: React.FC<TrendsGraphProps> = ({
       ? Object.keys(decadeChartData[0]).filter((k) => k !== 'decade')
       : [];
 
+  // Map each "Topic N" key to its rich Topic metadata (assigned/custom label, regime color, 1970s->2020s Δ)
+  const topicSeriesMeta = useMemo(() => {
+    return topicKeys.map((tKey, idx) => {
+      const matchedTopic =
+        topics.find((t) => `Topic ${t.id + 1}` === tKey) || topics[idx];
+      const theme = getArchetypeTheme(matchedTopic?.archetype?.label);
+      const displayLbl = matchedTopic
+        ? `T${String(matchedTopic.id + 1).padStart(2, '0')} · ${getTopicDisplayLabel(matchedTopic)}`
+        : tKey;
+      const s1970 = Number((decadeBreakdown['1970s'] || {})[tKey] ?? matchedTopic?.prevalence ?? 8.3);
+      const s2020 = Number((decadeBreakdown['2020s'] || {})[tKey] ?? matchedTopic?.prevalence ?? 8.3);
+      const delta = Number((s2020 - s1970).toFixed(2));
+      return {
+        key: tKey,
+        index: idx,
+        topicId: matchedTopic?.id ?? idx,
+        displayLabel: displayLbl,
+        color: matchedTopic ? theme.hex : FALLBACK_COLORS[idx % FALLBACK_COLORS.length],
+        delta,
+        assignedLabels: matchedTopic?.assigned_labels || [],
+      };
+    });
+  }, [topicKeys, topics, decadeBreakdown]);
+
+  const toggleTopicVisibility = (tKey: string) => {
+    setHiddenTopics((prev) => ({
+      ...prev,
+      [tKey]: !prev[tKey],
+    }));
+  };
+
+  const isolateSingleTopic = (tKey: string, topicIdx: number) => {
+    const nextHidden: Record<string, boolean> = {};
+    topicKeys.forEach((k) => {
+      nextHidden[k] = k !== tKey;
+    });
+    setHiddenTopics(nextHidden);
+    if (onSelectTopicIndex) {
+      onSelectTopicIndex(topicIdx);
+    }
+  };
+
+  const showAllTopics = () => setHiddenTopics({});
+
   const CustomYearlyTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
       const nonZero = [...payload]
@@ -482,10 +536,10 @@ export const TrendsGraph: React.FC<TrendsGraphProps> = ({
       const sorted = [...payload]
         .filter((p: any) => Number(p.value) > 0)
         .sort((a: any, b: any) => (b.value || 0) - (a.value || 0))
-        .slice(0, 8);
+        .slice(0, 10);
 
       return (
-        <div className="bg-obsidian-900/95 backdrop-blur-xl border border-white/15 p-3 rounded-lg shadow-archival min-w-[210px]">
+        <div className="bg-obsidian-900/95 backdrop-blur-xl border border-white/15 p-3 rounded-lg shadow-archival min-w-[245px]">
           <div className="flex items-center justify-between pb-1.5 mb-2 border-b border-white/10">
             <span className="font-serif font-bold text-sm text-parchment-50">
               Decade Cohort: {label}
@@ -493,20 +547,25 @@ export const TrendsGraph: React.FC<TrendsGraphProps> = ({
             <span className="font-mono text-[10px] text-traditional">Topic Share %</span>
           </div>
           <div className="space-y-1">
-            {sorted.map((entry: any, idx: number) => (
-              <div key={idx} className="flex items-center justify-between gap-3 text-[11px]">
-                <div className="flex items-center gap-1.5">
-                  <span
-                    className="w-2 h-2 rounded-full shrink-0"
-                    style={{ backgroundColor: entry.color || entry.fill }}
-                  />
-                  <span className="font-mono text-parchment-200">{entry.name}</span>
+            {sorted.map((entry: any, idx: number) => {
+              const meta = topicSeriesMeta.find((m) => m.key === entry.dataKey || m.displayLabel === entry.name);
+              return (
+                <div key={idx} className="flex items-center justify-between gap-3 text-[11px]">
+                  <div className="flex items-center gap-1.5 truncate">
+                    <span
+                      className="w-2 h-2 rounded-full shrink-0"
+                      style={{ backgroundColor: meta?.color || entry.color || entry.fill }}
+                    />
+                    <span className="font-mono text-parchment-200 truncate max-w-[180px]">
+                      {meta?.displayLabel || entry.name}
+                    </span>
+                  </div>
+                  <span className="font-mono font-semibold tabular-nums text-parchment-50">
+                    {Number(entry.value).toFixed(1)}%
+                  </span>
                 </div>
-                <span className="font-mono font-semibold tabular-nums text-parchment-50">
-                  {Number(entry.value).toFixed(1)}%
-                </span>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       );
@@ -522,12 +581,12 @@ export const TrendsGraph: React.FC<TrendsGraphProps> = ({
       className="w-full h-full archival-panel rounded-xl p-4 sm:p-5 flex flex-col justify-between"
     >
       <div>
-        {/* Header Bar with Mode Switcher (Yearly Imprints vs Decade Topic Shares) */}
+        {/* Header Bar with Mode Switcher (Yearly Imprints vs Topic Trends vs Decade Stack) */}
         <div className="flex flex-wrap items-center justify-between gap-2 pb-3 mb-2.5 border-b border-white/[0.07]">
           <div>
             <div className="flex items-center gap-1.5 mb-0.5 flex-wrap">
               <span className="px-2 py-0.5 rounded bg-traditional/10 border border-traditional/30 font-mono text-[10px] uppercase tracking-widest text-traditional">
-                Diachronic Monitor · {allPublisherNames.length} Canonical Imprints (713,838 Raw DNB Imprints)
+                Diachronic Monitor · {allPublisherNames.length} Canonical Imprints · {topicSeriesMeta.length || 12} Latent Topics
               </span>
               {selectedYear && (
                 <span className="px-2 py-0.5 rounded bg-neoliberal/15 border border-neoliberal/40 font-mono text-[10px] text-neoliberal">
@@ -543,7 +602,9 @@ export const TrendsGraph: React.FC<TrendsGraphProps> = ({
             <h3 className="font-serif text-lg sm:text-xl font-bold text-parchment-50">
               {chartMode === 'yearly_imprints'
                 ? 'Annual Imprint Output & Temporal Slicer'
-                : 'Decade Topic Share Trajectory (1970s–2020s)'}
+                : chartMode === 'topic_lines'
+                ? 'Diachronic Topic Trend Trajectories (1970s–2020s)'
+                : 'Decade Topic Share Stack (1970s–2020s)'}
             </h3>
           </div>
 
@@ -560,7 +621,19 @@ export const TrendsGraph: React.FC<TrendsGraphProps> = ({
                 )}
               >
                 <TrendingUp className="w-3 h-3" />
-                <span>Yearly ({allPublisherNames.length})</span>
+                <span>Imprints ({allPublisherNames.length})</span>
+              </button>
+              <button
+                onClick={() => setChartMode('topic_lines')}
+                className={clsx(
+                  'px-2 py-1 rounded-md font-mono text-[10px] transition-all cursor-pointer flex items-center gap-1',
+                  chartMode === 'topic_lines'
+                    ? 'bg-traditional text-obsidian-950 font-bold'
+                    : 'text-parchment-300 hover:text-parchment-100'
+                )}
+              >
+                <TrendingUp className="w-3 h-3" />
+                <span>Topic Trends</span>
               </button>
               <button
                 onClick={() => setChartMode('decade_topics')}
@@ -572,7 +645,7 @@ export const TrendsGraph: React.FC<TrendsGraphProps> = ({
                 )}
               >
                 <Layers className="w-3 h-3" />
-                <span>Decades</span>
+                <span>Topic Stack</span>
               </button>
             </div>
 
@@ -750,6 +823,67 @@ export const TrendsGraph: React.FC<TrendsGraphProps> = ({
             </div>
           </div>
         )}
+
+        {/* Interactive Topic Trend Selector & Legend Bar (shown in Topic Trends & Topic Stack modes) */}
+        {(chartMode === 'topic_lines' || chartMode === 'decade_topics') && topicSeriesMeta.length > 0 && (
+          <div className="mb-2.5 space-y-2 bg-obsidian-950/70 p-2.5 rounded-lg border border-white/[0.06]">
+            <div className="flex flex-wrap items-center justify-between gap-1.5 font-mono text-[9px]">
+              <span className="text-parchment-300 flex items-center gap-1">
+                <Layers className="w-2.5 h-2.5 text-traditional" />
+                <span>
+                  Plotted Topic Trajectories (1970s–2020s) — click to toggle curve, double-click to isolate & inspect topic:
+                </span>
+              </span>
+              <button
+                onClick={showAllTopics}
+                className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 cursor-pointer"
+              >
+                <Eye className="w-2.5 h-2.5" />
+                <span>Show All ({topicSeriesMeta.length})</span>
+              </button>
+            </div>
+            <div className="flex flex-wrap items-center gap-1.5 max-h-[110px] overflow-y-auto pr-1 custom-scrollbar">
+              {topicSeriesMeta.map((meta) => {
+                const isHidden = !!hiddenTopics[meta.key];
+                const isSelectedTopic = selectedTopicIndex === meta.index;
+                return (
+                  <button
+                    key={meta.key}
+                    onClick={() => toggleTopicVisibility(meta.key)}
+                    onDoubleClick={() => isolateSingleTopic(meta.key, meta.index)}
+                    title={`${meta.displayLabel} (55-yr Δ: ${meta.delta >= 0 ? `+${meta.delta}%` : `${meta.delta}%`}). Click to toggle curve; double-click to isolate & inspect.`}
+                    className={clsx(
+                      'inline-flex items-center gap-1.5 px-2 py-0.5 rounded border text-[10px] font-mono transition-all cursor-pointer',
+                      isSelectedTopic
+                        ? 'bg-traditional/20 border-traditional text-parchment-50 font-bold shadow-glow-gold'
+                        : isHidden
+                        ? 'bg-obsidian-950/40 border-white/5 text-parchment-300/40 line-through'
+                        : 'bg-obsidian-900/90 border-white/10 text-parchment-100 hover:border-white/25'
+                    )}
+                  >
+                    <span
+                      className="w-2 h-2 rounded-full shrink-0"
+                      style={{ backgroundColor: isHidden ? '#52525B' : meta.color }}
+                    />
+                    <span className="truncate max-w-[165px]">{meta.displayLabel}</span>
+                    <span
+                      className={clsx(
+                        'text-[8px] px-1 rounded tabular-nums',
+                        meta.delta > 0.1
+                          ? 'bg-emerald-500/15 text-emerald-300'
+                          : meta.delta < -0.1
+                          ? 'bg-rose-500/15 text-rose-300'
+                          : 'bg-white/[0.05] text-parchment-300'
+                      )}
+                    >
+                      {meta.delta >= 0 ? `+${meta.delta}%` : `${meta.delta}%`}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Main Chart Container */}
@@ -844,6 +978,62 @@ export const TrendsGraph: React.FC<TrendsGraphProps> = ({
                 );
               })}
             </LineChart>
+          ) : chartMode === 'topic_lines' ? (
+            <LineChart
+              data={decadeChartData}
+              margin={{ top: 8, right: 14, left: -14, bottom: 4 }}
+              onClick={(e: any) => {
+                if (e && e.activeLabel && onDecadeClick) {
+                  const num = parseInt(String(e.activeLabel).replace(/\D/g, ''), 10);
+                  if (!isNaN(num)) onDecadeClick(num);
+                }
+              }}
+            >
+              <CartesianGrid
+                strokeDasharray="2 4"
+                stroke="rgba(255,255,255,0.06)"
+                vertical={true}
+              />
+              <XAxis
+                dataKey="decade"
+                stroke="#ECE8DF"
+                fontSize={10}
+                tickLine={false}
+                axisLine={{ stroke: 'rgba(255,255,255,0.1)' }}
+                fontFamily="JetBrains Mono, monospace"
+              />
+              <YAxis
+                stroke="#6E6D68"
+                fontSize={10}
+                tickLine={false}
+                axisLine={false}
+                tickFormatter={(v) => `${v}%`}
+                fontFamily="JetBrains Mono, monospace"
+              />
+              <Tooltip content={<CustomDecadeTooltip />} />
+              {topicSeriesMeta.map((meta) => {
+                if (hiddenTopics[meta.key]) return null;
+                const isSelected = selectedTopicIndex === meta.index;
+                return (
+                  <Line
+                    key={meta.key}
+                    type="monotone"
+                    dataKey={meta.key}
+                    name={meta.displayLabel}
+                    stroke={meta.color}
+                    strokeWidth={isSelected ? 3.2 : 2.0}
+                    dot={{ r: isSelected ? 4 : 2.5, fill: meta.color }}
+                    activeDot={{
+                      r: 5,
+                      fill: meta.color,
+                      stroke: '#070709',
+                      strokeWidth: 1.5,
+                      cursor: 'pointer',
+                    }}
+                  />
+                );
+              })}
+            </LineChart>
           ) : (
             <BarChart
               data={decadeChartData}
@@ -877,15 +1067,19 @@ export const TrendsGraph: React.FC<TrendsGraphProps> = ({
                 fontFamily="JetBrains Mono, monospace"
               />
               <Tooltip content={<CustomDecadeTooltip />} />
-              {topicKeys.map((tKey, idx) => (
-                <Bar
-                  key={tKey}
-                  dataKey={tKey}
-                  stackId="decadeStack"
-                  fill={FALLBACK_COLORS[idx % FALLBACK_COLORS.length]}
-                  fillOpacity={0.85}
-                />
-              ))}
+              {topicSeriesMeta.map((meta) => {
+                if (hiddenTopics[meta.key]) return null;
+                return (
+                  <Bar
+                    key={meta.key}
+                    dataKey={meta.key}
+                    name={meta.displayLabel}
+                    stackId="decadeStack"
+                    fill={meta.color}
+                    fillOpacity={0.85}
+                  />
+                );
+              })}
             </BarChart>
           )}
         </ResponsiveContainer>
@@ -896,7 +1090,7 @@ export const TrendsGraph: React.FC<TrendsGraphProps> = ({
         <span>
           {chartMode === 'yearly_imprints'
             ? 'Click any publisher pill to toggle line · Double-click pill to isolate & slice LDA · Click chart point to slice by Year'
-            : 'Stacked Topic Shares (1970s–2020s) computed from lda_model.decade_breakdown'}
+            : 'Click any topic pill to toggle trajectory · Double-click topic pill to isolate & inspect · Click decade to slice corpus'}
         </span>
         <span className="text-traditional">
           {allPublisherNames.length} Canonical Imprints · 1970–2025
