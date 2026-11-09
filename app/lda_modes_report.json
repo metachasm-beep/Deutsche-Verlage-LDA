@@ -11,7 +11,7 @@
         "formula": "P(φ_k | η_0), w_n ~ 1× Raw Count",
         "description": "Pure Blei et al. (2003) baseline: removes the 2× RELIGIOUS_VOICE_KEYWORDS salience weight and uses an unseeded symmetric/auto Dirichlet word prior."
       },
-      "corpus_documents": 10553776,
+      "corpus_documents": 10555871,
       "vocabulary_size": 25000,
       "coherence_score": -3.3719,
       "topics": [
@@ -1871,7 +1871,7 @@
         "formula": "P(φ_k | η_auto), w_rel ~ 2× Salience",
         "description": "Amplifies core theological and critical signifiers (2× token weight) while keeping Dirichlet topic slots unseeded so clusters emerge inductively."
       },
-      "corpus_documents": 10553776,
+      "corpus_documents": 10555871,
       "vocabulary_size": 25000,
       "coherence_score": -2.5289,
       "tfidf_audit": {
@@ -1900,7 +1900,7 @@
             },
             {
               "term": "staat",
-              "weight": 0.02017
+              "weight": 0.02018
             },
             {
               "term": "deutsch",
@@ -1912,7 +1912,7 @@
             },
             {
               "term": "politik",
-              "weight": 0.01124
+              "weight": 0.01123
             },
             {
               "term": "islam",
@@ -1920,7 +1920,7 @@
             },
             {
               "term": "krieg",
-              "weight": 0.00872
+              "weight": 0.00871
             },
             {
               "term": "europa",
@@ -2032,7 +2032,7 @@
           "top_terms": [
             {
               "term": "theologie",
-              "weight": 0.20185
+              "weight": 0.20183
             },
             {
               "term": "christentum",
@@ -2084,7 +2084,7 @@
             },
             {
               "term": "evangelisch",
-              "weight": 0.00469
+              "weight": 0.00468
             },
             {
               "term": "judentum",
@@ -2168,7 +2168,7 @@
           "top_terms": [
             {
               "term": "kind",
-              "weight": 0.01473
+              "weight": 0.01472
             },
             {
               "term": "arbeit",
@@ -2196,7 +2196,7 @@
             },
             {
               "term": "jugendliche",
-              "weight": 0.00731
+              "weight": 0.00732
             },
             {
               "term": "pädagogik",
@@ -2444,7 +2444,7 @@
             },
             {
               "term": "mann",
-              "weight": 0.02475
+              "weight": 0.02474
             },
             {
               "term": "kind",
@@ -2584,11 +2584,11 @@
             },
             {
               "term": "jesus",
-              "weight": 0.01386
+              "weight": 0.01385
             },
             {
               "term": "bibel",
-              "weight": 0.01328
+              "weight": 0.01329
             },
             {
               "term": "glaube",
@@ -2596,7 +2596,7 @@
             },
             {
               "term": "jesu",
-              "weight": 0.01195
+              "weight": 0.01194
             },
             {
               "term": "jüdisch",
@@ -2720,11 +2720,11 @@
             },
             {
               "term": "glaube",
-              "weight": 0.03225
+              "weight": 0.03226
             },
             {
               "term": "welt",
-              "weight": 0.02211
+              "weight": 0.02212
             },
             {
               "term": "weg",
@@ -2740,7 +2740,7 @@
             },
             {
               "term": "spiritualität",
-              "weight": 0.00899
+              "weight": 0.00898
             },
             {
               "term": "tod",
@@ -2764,7 +2764,7 @@
             },
             {
               "term": "meditation",
-              "weight": 0.00558
+              "weight": 0.00557
             },
             {
               "term": "hoffnung",
@@ -2790,7 +2790,7 @@
             },
             {
               "publisher": "Echter",
-              "share": 4.3
+              "share": 4.2
             },
             {
               "publisher": "Evangelische Verlagsanstalt",
@@ -2848,7 +2848,7 @@
           "top_terms": [
             {
               "term": "kirche",
-              "weight": 0.22869
+              "weight": 0.22872
             },
             {
               "term": "katholisch",
@@ -2868,11 +2868,11 @@
             },
             {
               "term": "christlich",
-              "weight": 0.00816
+              "weight": 0.00817
             },
             {
               "term": "dienst",
-              "weight": 0.00749
+              "weight": 0.00748
             },
             {
               "term": "pfarrer",
@@ -3004,7 +3004,7 @@
             },
             {
               "term": "feier",
-              "weight": 0.00776
+              "weight": 0.00775
             },
             {
               "term": "brief",
@@ -3124,7 +3124,7 @@
             },
             {
               "term": "jahrhundert",
-              "weight": 0.02293
+              "weight": 0.02294
             },
             {
               "term": "kloster",
@@ -3140,7 +3140,7 @@
             },
             {
               "term": "mittelalter",
-              "weight": 0.00715
+              "weight": 0.00716
             },
             {
               "term": "stadt",
@@ -3428,7 +3428,7 @@
             },
             {
               "term": "person",
-              "weight": 0.00512
+              "weight": 0.00511
             },
             {
               "term": "grund",
@@ -3574,16 +3574,16 @@
         "2010s": {
           "Topic 1": 6.8,
           "Topic 2": 8.7,
-          "Topic 3": 9.7,
+          "Topic 3": 9.6,
           "Topic 4": 4.2,
           "Topic 5": 4.4,
-          "Topic 6": 9.2,
-          "Topic 7": 12.7,
+          "Topic 6": 9.1,
+          "Topic 7": 12.6,
           "Topic 8": 7.7,
           "Topic 9": 3.0,
           "Topic 10": 8.7,
           "Topic 11": 10.3,
-          "Topic 12": 14.7
+          "Topic 12": 14.8
         },
         "2020s": {
           "Topic 1": 6.0,
@@ -3601,23 +3601,23 @@
         }
       },
       "slda_diagnostics": {
-        "regime_cv_accuracy": 70.7,
-        "regime_in_sample_accuracy": 70.8,
+        "regime_cv_accuracy": 70.8,
+        "regime_in_sample_accuracy": 70.7,
         "regime_macro_f1": 54.1,
         "publisher_accuracy": 45.0,
-        "r2_explanatory_power": 0.2883,
+        "r2_explanatory_power": 0.288,
         "regime_class_metrics": {
           "Traditional / Ecclesiastical": {
-            "precision": 75.5,
-            "recall": 89.7,
-            "f1": 82.0,
-            "support": 17014
+            "precision": 75.6,
+            "recall": 89.8,
+            "f1": 82.1,
+            "support": 17026
           },
           "Neoliberal / Self-Optimization": {
-            "precision": 53.2,
-            "recall": 12.0,
-            "f1": 19.6,
-            "support": 4182
+            "precision": 53.7,
+            "recall": 12.1,
+            "f1": 19.7,
+            "support": 4184
           },
           "Critical / Secular-Humanist": {
             "precision": 60.4,
@@ -3630,58 +3630,58 @@
           {
             "topic_id": 1,
             "predicted_regime": "Critical / Secular-Humanist",
-            "w_traditional": -0.64,
-            "w_neoliberal": 0.067,
-            "w_critical": 0.573,
-            "discriminative_power": 0.498
+            "w_traditional": -0.642,
+            "w_neoliberal": 0.068,
+            "w_critical": 0.574,
+            "discriminative_power": 0.499
           },
           {
             "topic_id": 2,
             "predicted_regime": "Traditional / Ecclesiastical",
-            "w_traditional": 0.253,
-            "w_neoliberal": -0.249,
-            "w_critical": -0.004,
-            "discriminative_power": 0.205
+            "w_traditional": 0.252,
+            "w_neoliberal": -0.248,
+            "w_critical": -0.003,
+            "discriminative_power": 0.204
           },
           {
             "topic_id": 3,
             "predicted_regime": "Neoliberal / Self-Optimization",
-            "w_traditional": -0.105,
+            "w_traditional": -0.107,
             "w_neoliberal": 0.51,
-            "w_critical": -0.405,
-            "discriminative_power": 0.381
+            "w_critical": -0.403,
+            "discriminative_power": 0.38
           },
           {
             "topic_id": 4,
             "predicted_regime": "Critical / Secular-Humanist",
-            "w_traditional": -0.492,
-            "w_neoliberal": 0.132,
-            "w_critical": 0.36,
-            "discriminative_power": 0.36
+            "w_traditional": -0.482,
+            "w_neoliberal": 0.13,
+            "w_critical": 0.352,
+            "discriminative_power": 0.353
           },
           {
             "topic_id": 5,
             "predicted_regime": "Neoliberal / Self-Optimization",
-            "w_traditional": -0.168,
-            "w_neoliberal": 0.245,
-            "w_critical": -0.078,
+            "w_traditional": -0.166,
+            "w_neoliberal": 0.246,
+            "w_critical": -0.08,
             "discriminative_power": 0.177
           },
           {
             "topic_id": 6,
             "predicted_regime": "Traditional / Ecclesiastical",
-            "w_traditional": 0.809,
+            "w_traditional": 0.808,
             "w_neoliberal": -0.374,
-            "w_critical": -0.436,
-            "discriminative_power": 0.573
+            "w_critical": -0.435,
+            "discriminative_power": 0.572
           },
           {
             "topic_id": 7,
             "predicted_regime": "Neoliberal / Self-Optimization",
-            "w_traditional": -0.128,
+            "w_traditional": -0.129,
             "w_neoliberal": 0.309,
-            "w_critical": -0.181,
-            "discriminative_power": 0.22
+            "w_critical": -0.18,
+            "discriminative_power": 0.219
           },
           {
             "topic_id": 8,
@@ -3694,26 +3694,26 @@
           {
             "topic_id": 9,
             "predicted_regime": "Traditional / Ecclesiastical",
-            "w_traditional": 0.526,
+            "w_traditional": 0.524,
             "w_neoliberal": -0.171,
-            "w_critical": -0.355,
-            "discriminative_power": 0.379
+            "w_critical": -0.353,
+            "discriminative_power": 0.378
           },
           {
             "topic_id": 10,
             "predicted_regime": "Traditional / Ecclesiastical",
-            "w_traditional": 0.055,
+            "w_traditional": 0.053,
             "w_neoliberal": -0.074,
-            "w_critical": 0.02,
+            "w_critical": 0.021,
             "discriminative_power": 0.054
           },
           {
             "topic_id": 11,
             "predicted_regime": "Critical / Secular-Humanist",
-            "w_traditional": -0.891,
-            "w_neoliberal": -0.137,
-            "w_critical": 1.028,
-            "discriminative_power": 0.789
+            "w_traditional": -0.893,
+            "w_neoliberal": -0.136,
+            "w_critical": 1.029,
+            "discriminative_power": 0.791
           },
           {
             "topic_id": 12,
@@ -3737,7 +3737,7 @@
         "formula": "φ_k ~ Dir(η_k^{(RQ_m)}), η_{k,w∈S_m} = 15.0",
         "description": "Constructs an asymmetric K × |V| conjugate Dirichlet prior matrix η anchoring topic slots to RQ₁ (Traditional), RQ₂ (Neoliberal), and RQ₃ (Critical) seed lexicons (Jagarlamudi et al., 2012)."
       },
-      "corpus_documents": 10553776,
+      "corpus_documents": 10555871,
       "vocabulary_size": 25000,
       "coherence_score": -3.435,
       "topics": [
@@ -5609,7 +5609,7 @@
         "formula": "ŷ_d = ArgMax(θ_d · W + b), η_{k,w} ∝ P(w | y_d)",
         "description": "Combines empirical document-label co-occurrence priors with a 5-fold cross-validated L2 Ridge/Softmax response head predicting Ideological Regime (RQ₁–RQ₃) and Publisher from θ_d (Blei & McAuliffe, 2007)."
       },
-      "corpus_documents": 10553776,
+      "corpus_documents": 10555871,
       "vocabulary_size": 25000,
       "coherence_score": -1.965,
       "topics": [
@@ -7484,7 +7484,7 @@
       "regime_macro_f1": 43.6,
       "publisher_accuracy": 53.6,
       "r2_explanatory_power": 0.2021,
-      "documents": 10553776
+      "documents": 10555871
     },
     {
       "mode": "unsupervised",
@@ -7494,11 +7494,11 @@
       "supervision": "Post-Hoc Archetype Projection",
       "u_mass": -2.5289,
       "vocab_size": 25000,
-      "regime_cv_accuracy": 70.7,
+      "regime_cv_accuracy": 70.8,
       "regime_macro_f1": 54.1,
       "publisher_accuracy": 52.0,
-      "r2_explanatory_power": 0.2883,
-      "documents": 10553776
+      "r2_explanatory_power": 0.288,
+      "documents": 10555871
     },
     {
       "mode": "seeded",
@@ -7512,7 +7512,7 @@
       "regime_macro_f1": 40.2,
       "publisher_accuracy": 46.0,
       "r2_explanatory_power": 0.1711,
-      "documents": 10553776
+      "documents": 10555871
     },
     {
       "mode": "supervised",
@@ -7526,7 +7526,7 @@
       "regime_macro_f1": 56.9,
       "publisher_accuracy": 52.9,
       "r2_explanatory_power": 0.3092,
-      "documents": 10553776
+      "documents": 10555871
     }
   ]
 }

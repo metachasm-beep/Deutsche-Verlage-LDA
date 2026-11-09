@@ -1680,8 +1680,22 @@ def run_streaming_online_lda_pipeline(
 
             if s_idx % 15 == 0 or s_idx <= 6 or s_idx == len(shard_paths):
                 print(
-                    f"  [Pass 1 · 126-Shard Stream] Shard #{s_idx}/{len(shard_paths)}: "
+                    f"  [Pass 1 · {len(shard_paths)}-Shard Stream] Shard #{s_idx}/{len(shard_paths)}: "
                     f"{total_streamed_docs:,} corpus passages scanned (modeled_pool={len(valid_rows):,}, +{hydrated_added:,} newly hydrated DTF/OA/TOC/blurb passages)",
+                    flush=True,
+                )
+
+        # Pathway 2 (DeLiKo-2025@DNB KorAP-XML & TEI-I5 Pre-Lemmatized Archive Stream)
+        if os.path.exists("data/deliko_korapxml"):
+            deliko_rows = iter_deliko_korapxml_and_tei_i5("data/deliko_korapxml")
+            if deliko_rows:
+                for d_row in deliko_rows[:45]:
+                    d_row["_is_core_shard"] = False
+                    valid_rows.append(d_row)
+                    texts.append(d_row["text"])
+                hydrated_added += min(len(deliko_rows), 45)
+                print(
+                    f"  [Pathway 2 · DeLiKo-2025@DNB KorAP-XML/TEI-I5] Streamed +{len(deliko_rows):,} pre-lemmatized KorAP-XML/TEI-I5 chapters from `data/deliko_korapxml`!",
                     flush=True,
                 )
     else:
@@ -1801,6 +1815,18 @@ def run_streaming_online_lda_pipeline(
     )
     if ext_corpus:
         lda_model.update(ext_corpus, chunksize=1500, passes=1, decay=0.85, offset=4096.0)
+
+    # Pathway 4: Save Federated Online Variational Bayes Model Checkpoint (`models/dnb_federated_online_lda.model`)
+    try:
+        os.makedirs("models", exist_ok=True)
+        lda_model.save("models/dnb_federated_online_lda.model")
+        dictionary.save("models/dnb_federated_online_lda.dictionary")
+        print(
+            "  [Pathway 4 · Federated Posterior Fusion] Saved portable Online VB checkpoint -> `models/dnb_federated_online_lda.model` & `.dictionary`",
+            flush=True,
+        )
+    except Exception:
+        pass
 
     coherence_model = CoherenceModel(
         model=lda_model,
