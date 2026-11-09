@@ -34,11 +34,11 @@
       "top_terms": [
         {
           "term": "politisch",
-          "weight": 0.02527
+          "weight": 0.02526
         },
         {
           "term": "staat",
-          "weight": 0.02018
+          "weight": 0.02017
         },
         {
           "term": "deutsch",
@@ -50,7 +50,7 @@
         },
         {
           "term": "politik",
-          "weight": 0.01123
+          "weight": 0.01124
         },
         {
           "term": "islam",
@@ -58,7 +58,7 @@
         },
         {
           "term": "krieg",
-          "weight": 0.00871
+          "weight": 0.00872
         },
         {
           "term": "europa",
@@ -170,7 +170,7 @@
       "top_terms": [
         {
           "term": "theologie",
-          "weight": 0.20183
+          "weight": 0.20185
         },
         {
           "term": "christentum",
@@ -334,7 +334,7 @@
         },
         {
           "term": "jugendliche",
-          "weight": 0.00732
+          "weight": 0.00731
         },
         {
           "term": "pädagogik",
@@ -578,11 +578,11 @@
       "top_terms": [
         {
           "term": "frau",
-          "weight": 0.04373
+          "weight": 0.04374
         },
         {
           "term": "mann",
-          "weight": 0.02474
+          "weight": 0.02475
         },
         {
           "term": "kind",
@@ -714,7 +714,7 @@
       "top_terms": [
         {
           "term": "gott",
-          "weight": 0.17817
+          "weight": 0.17813
         },
         {
           "term": "mensch",
@@ -722,11 +722,11 @@
         },
         {
           "term": "jesus",
-          "weight": 0.01385
+          "weight": 0.01386
         },
         {
           "term": "bibel",
-          "weight": 0.01329
+          "weight": 0.01327
         },
         {
           "term": "glaube",
@@ -734,11 +734,11 @@
         },
         {
           "term": "jesu",
-          "weight": 0.01194
+          "weight": 0.01196
         },
         {
           "term": "jüdisch",
-          "weight": 0.01033
+          "weight": 0.01034
         },
         {
           "term": "geist",
@@ -746,11 +746,11 @@
         },
         {
           "term": "christlich",
-          "weight": 0.00928
+          "weight": 0.00929
         },
         {
           "term": "wort",
-          "weight": 0.00863
+          "weight": 0.00862
         },
         {
           "term": "heilig",
@@ -788,7 +788,7 @@
         },
         {
           "publisher": "Gütersloher Verlagshaus",
-          "share": 4.6
+          "share": 4.7
         },
         {
           "publisher": "Echter",
@@ -850,7 +850,7 @@
       "top_terms": [
         {
           "term": "leben",
-          "weight": 0.05339
+          "weight": 0.0534
         },
         {
           "term": "mensch",
@@ -890,11 +890,11 @@
         },
         {
           "term": "geschichte",
-          "weight": 0.00777
+          "weight": 0.00778
         },
         {
           "term": "christlich",
-          "weight": 0.0073
+          "weight": 0.00731
         },
         {
           "term": "kraft",
@@ -902,7 +902,7 @@
         },
         {
           "term": "meditation",
-          "weight": 0.00557
+          "weight": 0.00558
         },
         {
           "term": "hoffnung",
@@ -928,7 +928,7 @@
         },
         {
           "publisher": "Echter",
-          "share": 4.2
+          "share": 4.3
         },
         {
           "publisher": "Evangelische Verlagsanstalt",
@@ -986,7 +986,7 @@
       "top_terms": [
         {
           "term": "kirche",
-          "weight": 0.22872
+          "weight": 0.2287
         },
         {
           "term": "katholisch",
@@ -1006,11 +1006,11 @@
         },
         {
           "term": "christlich",
-          "weight": 0.00817
+          "weight": 0.00816
         },
         {
           "term": "dienst",
-          "weight": 0.00748
+          "weight": 0.00749
         },
         {
           "term": "pfarrer",
@@ -1122,7 +1122,7 @@
       "top_terms": [
         {
           "term": "dienst",
-          "weight": 0.02109
+          "weight": 0.0211
         },
         {
           "term": "gottesdienst",
@@ -1134,7 +1134,7 @@
         },
         {
           "term": "predigt",
-          "weight": 0.01262
+          "weight": 0.01259
         },
         {
           "term": "liturgie",
@@ -1142,7 +1142,7 @@
         },
         {
           "term": "feier",
-          "weight": 0.00775
+          "weight": 0.00776
         },
         {
           "term": "brief",
@@ -1150,7 +1150,7 @@
         },
         {
           "term": "lied",
-          "weight": 0.00611
+          "weight": 0.0061
         },
         {
           "term": "gebet",
@@ -1178,13 +1178,13 @@
         },
         {
           "term": "sonntag",
-          "weight": 0.00416
+          "weight": 0.00417
         }
       ],
       "top_publishers": [
         {
           "publisher": "Aschendorff",
-          "share": 19.2
+          "share": 19.3
         },
         {
           "publisher": "Böhlau",
@@ -1278,11 +1278,11 @@
         },
         {
           "term": "mittelalter",
-          "weight": 0.00716
+          "weight": 0.00715
         },
         {
           "term": "stadt",
-          "weight": 0.007
+          "weight": 0.00701
         },
         {
           "term": "schrift",
@@ -1398,7 +1398,7 @@
         },
         {
           "term": "gesellschaft",
-          "weight": 0.02286
+          "weight": 0.02285
         },
         {
           "term": "ethik",
@@ -1566,7 +1566,7 @@
         },
         {
           "term": "person",
-          "weight": 0.00511
+          "weight": 0.00512
         },
         {
           "term": "grund",
@@ -1644,7 +1644,7 @@
           "publisher": "DNB Monograph (DE)",
           "date": "2004",
           "corpus_layer": "dnb_oa_fullbook",
-          "probability": 92.1,
+          "probability": 92.2,
           "keywords": [],
           "snippet": "Der Begriff des Wissens im Wissensmanagementdiskurs: Materialien zur Begriffsgeschichte unter Berücksichtigung der klassischen griechischen Philosophie. Niehaus, Michael. DNB Monograph (DE). Künstler und Techniker sowie Wissenschaftler für",
           "apa_citation": "Niehaus, Michael (2004). Der Begriff des Wissens im Wissensmanagementdiskurs: Materialien zur Begriffsgeschichte unter Berücksichtigung der klassischen griechischen Philosophie [DNB-OA-Vollbuch-Abschnitt 8/28]. DNB Monograph (DE)."
@@ -1712,21 +1712,21 @@
     "2010s": {
       "Topic 1": 6.8,
       "Topic 2": 8.7,
-      "Topic 3": 9.6,
+      "Topic 3": 9.7,
       "Topic 4": 4.2,
       "Topic 5": 4.4,
       "Topic 6": 9.1,
-      "Topic 7": 12.6,
-      "Topic 8": 7.7,
+      "Topic 7": 12.7,
+      "Topic 8": 7.8,
       "Topic 9": 3.0,
       "Topic 10": 8.7,
       "Topic 11": 10.3,
-      "Topic 12": 14.8
+      "Topic 12": 14.7
     },
     "2020s": {
       "Topic 1": 6.0,
       "Topic 2": 10.5,
-      "Topic 3": 11.6,
+      "Topic 3": 11.7,
       "Topic 4": 4.9,
       "Topic 5": 4.1,
       "Topic 6": 7.7,
@@ -1739,29 +1739,29 @@
     }
   },
   "slda_diagnostics": {
-    "regime_cv_accuracy": 70.8,
+    "regime_cv_accuracy": 70.7,
     "regime_in_sample_accuracy": 70.7,
     "regime_macro_f1": 54.1,
-    "publisher_accuracy": 45.0,
+    "publisher_accuracy": 44.9,
     "r2_explanatory_power": 0.288,
     "regime_class_metrics": {
       "Traditional / Ecclesiastical": {
         "precision": 75.6,
-        "recall": 89.8,
+        "recall": 89.7,
         "f1": 82.1,
-        "support": 17026
+        "support": 16997
       },
       "Neoliberal / Self-Optimization": {
-        "precision": 53.7,
+        "precision": 54.0,
         "recall": 12.1,
         "f1": 19.7,
-        "support": 4184
+        "support": 4181
       },
       "Critical / Secular-Humanist": {
-        "precision": 60.4,
+        "precision": 60.3,
         "recall": 60.8,
         "f1": 60.6,
-        "support": 7825
+        "support": 7823
       }
     },
     "topic_regression_weights": [
@@ -1778,40 +1778,40 @@
         "predicted_regime": "Traditional / Ecclesiastical",
         "w_traditional": 0.252,
         "w_neoliberal": -0.248,
-        "w_critical": -0.003,
+        "w_critical": -0.004,
         "discriminative_power": 0.204
       },
       {
         "topic_id": 3,
         "predicted_regime": "Neoliberal / Self-Optimization",
-        "w_traditional": -0.107,
-        "w_neoliberal": 0.51,
+        "w_traditional": -0.106,
+        "w_neoliberal": 0.509,
         "w_critical": -0.403,
         "discriminative_power": 0.38
       },
       {
         "topic_id": 4,
         "predicted_regime": "Critical / Secular-Humanist",
-        "w_traditional": -0.482,
-        "w_neoliberal": 0.13,
-        "w_critical": 0.352,
-        "discriminative_power": 0.353
+        "w_traditional": -0.481,
+        "w_neoliberal": 0.129,
+        "w_critical": 0.351,
+        "discriminative_power": 0.352
       },
       {
         "topic_id": 5,
         "predicted_regime": "Neoliberal / Self-Optimization",
-        "w_traditional": -0.166,
+        "w_traditional": -0.167,
         "w_neoliberal": 0.246,
-        "w_critical": -0.08,
+        "w_critical": -0.078,
         "discriminative_power": 0.177
       },
       {
         "topic_id": 6,
         "predicted_regime": "Traditional / Ecclesiastical",
-        "w_traditional": 0.808,
-        "w_neoliberal": -0.374,
-        "w_critical": -0.435,
-        "discriminative_power": 0.572
+        "w_traditional": 0.807,
+        "w_neoliberal": -0.373,
+        "w_critical": -0.434,
+        "discriminative_power": 0.571
       },
       {
         "topic_id": 7,
@@ -1819,7 +1819,7 @@
         "w_traditional": -0.129,
         "w_neoliberal": 0.309,
         "w_critical": -0.18,
-        "discriminative_power": 0.219
+        "discriminative_power": 0.22
       },
       {
         "topic_id": 8,
@@ -1832,9 +1832,9 @@
       {
         "topic_id": 9,
         "predicted_regime": "Traditional / Ecclesiastical",
-        "w_traditional": 0.524,
+        "w_traditional": 0.525,
         "w_neoliberal": -0.171,
-        "w_critical": -0.353,
+        "w_critical": -0.354,
         "discriminative_power": 0.378
       },
       {

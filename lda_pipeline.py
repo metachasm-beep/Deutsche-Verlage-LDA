@@ -1549,6 +1549,7 @@ def run_streaming_online_lda_pipeline(
         "dnb_oa_fullbook",
         "dnb_toc_pdf_fulltext",
         "dnblab_dtf_incopyright",
+        "hathitrust_ef_fullbook_print",
     }
     domain_lex = RELIGIOUS_KEYWORDS_SET | CANONICAL_THEO_PHIL_WHITELIST
     hydrated_added = 0
@@ -1626,15 +1627,17 @@ def run_streaming_online_lda_pipeline(
             else:
                 shard_added = 0
                 dtf_shard_added = 0
-                max_hydrated_per_shard = 18
-                max_dtf_per_shard = 12
+                is_pure_fullbook_shard = s_idx >= 126
+                max_hydrated_per_shard = 120 if is_pure_fullbook_shard else 18
+                max_dtf_per_shard = 65 if is_pure_fullbook_shard else 12
+                row_stride = max(1, n_rows // 900) if is_pure_fullbook_shard else 1
                 en_stop_set = {
                     "the", "and", "with", "from", "this", "that", "between", "through",
                     "for", "are", "was", "were", "have", "has", "about", "which", "their",
                     "into", "more", "other", "communities", "sacred", "urban", "people",
                     "research", "study", "analysis", "approach", "university", "press",
                 }
-                for i in range(n_rows):
+                for i in range(0, n_rows, row_stride):
                     lyr_val = layers[i] or ""
                     wc_val = wcs[i] or 0
                     if lyr_val not in hydrated_layers and wc_val < 220:
