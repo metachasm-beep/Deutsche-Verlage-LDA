@@ -1590,7 +1590,8 @@ def run_pipeline(
     """
     mode_key = lda_mode if lda_mode in LDA_MODES_META else "unsupervised"
     k_topics = int(num_topics) if num_topics else config.NUM_TOPICS
-    print(f"Loading data from {data_path} (+ any shards) (K={k_topics}, mode={mode_key})...", flush=True)
+    src_label = f"in-memory slice ({len(data_path)} passages)" if isinstance(data_path, (list, tuple)) else f"{data_path} (+ any shards)"
+    print(f"Loading data from {src_label} (K={k_topics}, mode={mode_key})...", flush=True)
 
     valid_rows = []
     texts = []
