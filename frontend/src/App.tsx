@@ -466,7 +466,7 @@ function App() {
                   </span>
                 </div>
                 <p className="font-mono text-[10px] sm:text-[11px] text-parchment-300 leading-relaxed">
-                  A Computational Topic Modeling (LDA) Analysis · DNB SRU v1.1 MARC21 Observatory (10,042,681 Works · 10,612,079 Passages · 894.18M Words) · Centre for German Studies, Jawaharlal Nehru University
+                  A Computational Topic Modeling (LDA) Analysis · DNB SRU v1.1 MARC21 Observatory · Centre for German Studies, Jawaharlal Nehru University
                 </p>
               </div>
             </div>
