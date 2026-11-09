@@ -4,13 +4,14 @@
 
 @layer base {
   :root {
+    color-scheme: dark;
     --font-heading: 'Cormorant Garamond', Georgia, serif;
     --font-body: 'Plus Jakarta Sans', system-ui, sans-serif;
     --font-mono: 'JetBrains Mono', monospace;
   }
 
   body {
-    @apply bg-midnight-950 text-neutral-300 font-body antialiased;
+    @apply bg-obsidian-950 text-parchment-100 font-body antialiased;
     background-image: 
       radial-gradient(circle at 18% 12%, rgba(212, 175, 55, 0.06) 0%, transparent 42%),
       radial-gradient(circle at 85% 18%, rgba(56, 189, 248, 0.04) 0%, transparent 38%),
@@ -19,6 +20,33 @@
 
   h1, h2, h3, h4 {
     @apply font-heading tracking-tight;
+  }
+
+  input:not([type="range"]):not([type="checkbox"]):not([type="radio"]):not([type="file"]),
+  select,
+  textarea {
+    background-color: #070709;
+    color: #F6F1E6;
+    caret-color: #D4AF37;
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    color: rgba(168, 160, 144, 0.65);
+  }
+
+  select option {
+    background-color: #0D0E12;
+    color: #F6F1E6;
+  }
+
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  textarea:-webkit-autofill {
+    -webkit-text-fill-color: #F6F1E6;
+    -webkit-box-shadow: 0 0 0px 1000px #070709 inset;
+    transition: background-color 5000s ease-in-out 0s;
   }
 }
 
@@ -30,8 +58,12 @@
     linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
 }
 
+.surface-elevated {
+  @apply bg-obsidian-900/85 backdrop-blur-xl border border-white/[0.08] shadow-xl;
+}
+
 .glass-panel {
-  @apply bg-midnight-900/70 backdrop-blur-xl border border-white/[0.07] rounded-2xl;
+  @apply bg-obsidian-900/70 backdrop-blur-xl border border-white/[0.07] rounded-2xl;
 }
 
 .custom-scrollbar::-webkit-scrollbar {
