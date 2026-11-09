@@ -13,6 +13,7 @@ interface InterTopicDistanceMapProps {
   ideologicalFilter: string | null;
   numTopics: number;
   ldaMode: string;
+  posteriorGeometry?: any;
 }
 
 interface MDSPoint {
@@ -142,6 +143,7 @@ export const InterTopicDistanceMap: React.FC<InterTopicDistanceMapProps> = ({
   ideologicalFilter,
   numTopics,
   ldaMode,
+  posteriorGeometry,
 }) => {
   // Sievert & Shirley (2014) Relevance parameter λ ∈ [0.0, 1.0] (default optimal = 0.6)
   const [lambda, setLambda] = useState<number>(0.6);
@@ -205,19 +207,35 @@ export const InterTopicDistanceMap: React.FC<InterTopicDistanceMapProps> = ({
       return [...lexVec, ...regVec, ...pubVec];
     });
 
-    // Compute K x K pairwise Jensen-Shannon Distance matrix
+    // Prefer backend posterior_geometry JSD matrix and PC1/PC2 variance when dimensions match
     const k = topics.length;
-    const matrix: number[][] = Array.from({ length: k }, () => Array(k).fill(0));
-    for (let i = 0; i < k; i++) {
-      for (let j = i + 1; j < k; j++) {
-        const jsd = computeJSD(featureVectors[i], featureVectors[j]);
-        const dist = Number(Math.sqrt(jsd).toFixed(4));
-        matrix[i][j] = dist;
-        matrix[j][i] = dist;
+    const backendMatrix = posteriorGeometry?.jsd_matrix;
+    const hasBackendMatrix =
+      Array.isArray(backendMatrix) &&
+      backendMatrix.length === k &&
+      Array.isArray(backendMatrix[0]) &&
+      backendMatrix[0].length === k;
+
+    let matrix: number[][];
+    if (hasBackendMatrix) {
+      matrix = backendMatrix;
+    } else {
+      matrix = Array.from({ length: k }, () => Array(k).fill(0));
+      for (let i = 0; i < k; i++) {
+        for (let j = i + 1; j < k; j++) {
+          const jsd = computeJSD(featureVectors[i], featureVectors[j]);
+          const dist = Number(Math.sqrt(jsd).toFixed(4));
+          matrix[i][j] = dist;
+          matrix[j][i] = dist;
+        }
       }
     }
 
     const { coords, varPC1: v1, varPC2: v2 } = computeClassicalMDS(matrix);
+    const finalVarPC1 =
+      typeof posteriorGeometry?.pct_var_1 === 'number' ? posteriorGeometry.pct_var_1 : v1;
+    const finalVarPC2 =
+      typeof posteriorGeometry?.pct_var_2 === 'number' ? posteriorGeometry.pct_var_2 : v2;
 
     const points: MDSPoint[] = topics.map((t, idx) => {
       const theme = getArchetypeTheme(t.archetype?.label);
@@ -237,11 +255,11 @@ export const InterTopicDistanceMap: React.FC<InterTopicDistanceMapProps> = ({
     return {
       mdsPoints: points,
       jsdMatrix: matrix,
-      varPC1: v1,
-      varPC2: v2,
+      varPC1: finalVarPC1,
+      varPC2: finalVarPC2,
       marginalWordProbs: margProbs,
     };
-  }, [topics]);
+  }, [topics, posteriorGeometry]);
 
   // Compute λ-Relevance ranked keywords for activeTopic (Sievert & Shirley, 2014)
   // Uses exact backend marginal word probability `kw.corpus_prob` from `app.domain.posterior_projection` (Candidate 7)

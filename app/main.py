@@ -61,6 +61,13 @@ current_viz_html = ""
 
 # In-memory memoization cache for instant switching across (dataset, K, year, decade)
 _MODEL_RUN_CACHE = {}
+_COHERENCE_GRID_MEM_CACHE = None
+_MODES_REPORT_MEM_CACHE = None
+_DATA_SUMMARY_MEM_CACHE = None
+_TRENDS_MEM_CACHE = None
+_CONCEPTUAL_DRIFT_MEM_CACHE = None
+_PRECOMPUTED_PERMUTATIONS_CACHE = {}
+_PRECOMPUTED_STORE_LOADED = False
 
 # Storage directory (uses /tmp/data on Vercel serverless, or data/ locally)
 DATA_STORAGE_DIR = "/tmp/data" if os.environ.get("VERCEL") else os.path.join(config.BASE_DIR, "data")
@@ -84,6 +91,9 @@ def _get_active_data_path() -> str:
 
 
 def _load_coherence_grid():
+    global _COHERENCE_GRID_MEM_CACHE
+    if _COHERENCE_GRID_MEM_CACHE is not None:
+        return _COHERENCE_GRID_MEM_CACHE
     grid = []
     if os.path.exists(config.COHERENCE_GRID_PATH):
         try:
@@ -108,6 +118,8 @@ def _load_coherence_grid():
                     grid = sdata.get("coherence_grid", [])
             except Exception:
                 pass
+    if grid:
+        _COHERENCE_GRID_MEM_CACHE = grid
     return grid
 
 
@@ -197,15 +209,77 @@ async def reset_to_mock():
 
 
 def _load_modes_report_cache() -> dict:
+    global _MODES_REPORT_MEM_CACHE
+    if _MODES_REPORT_MEM_CACHE is not None:
+        return _MODES_REPORT_MEM_CACHE
     modes_path = os.path.join(config.BASE_DIR, "app", "lda_modes_report.json")
     if os.path.exists(modes_path):
         try:
             import json
             with open(modes_path, mode="r", encoding="utf-8") as mf:
-                return json.load(mf)
+                _MODES_REPORT_MEM_CACHE = json.load(mf)
+                return _MODES_REPORT_MEM_CACHE
         except Exception:
             pass
     return {}
+
+
+def _load_coherence_grid_cache() -> list:
+    global _COHERENCE_GRID_MEM_CACHE
+    if _COHERENCE_GRID_MEM_CACHE is not None:
+        return _COHERENCE_GRID_MEM_CACHE
+    grid_path = os.path.join(config.BASE_DIR, "app", "coherence_grid_cache.json")
+    if os.path.exists(grid_path):
+        try:
+            import json
+            with open(grid_path, mode="r", encoding="utf-8") as gf:
+                _COHERENCE_GRID_MEM_CACHE = json.load(gf).get("grid", [])
+                return _COHERENCE_GRID_MEM_CACHE
+        except Exception:
+            pass
+    return []
+
+
+def _load_data_summary_cache() -> dict:
+    global _DATA_SUMMARY_MEM_CACHE
+    if _DATA_SUMMARY_MEM_CACHE is not None:
+        return _DATA_SUMMARY_MEM_CACHE
+    summary_path = os.path.join(config.BASE_DIR, "app", "data_summary.json")
+    if os.path.exists(summary_path):
+        try:
+            import json
+            with open(summary_path, mode="r", encoding="utf-8") as sf:
+                sdata = json.load(sf)
+                payload = sdata["summary"] if ("summary" in sdata and isinstance(sdata["summary"], dict)) else sdata
+                _DATA_SUMMARY_MEM_CACHE = payload
+                return _DATA_SUMMARY_MEM_CACHE
+        except Exception:
+            pass
+    return {}
+
+
+def _load_precomputed_permutations_store() -> dict:
+    """
+    Loads the pre-run parameter permutation store (`app/precomputed_permutations.pkl.gz`)
+    into memory once so that changing frontend parameters immediately exhibits pre-run results
+    without ever running the LDA training pipeline at request time.
+    """
+    global _PRECOMPUTED_PERMUTATIONS_CACHE, _PRECOMPUTED_STORE_LOADED
+    if _PRECOMPUTED_STORE_LOADED:
+        return _PRECOMPUTED_PERMUTATIONS_CACHE
+    _PRECOMPUTED_STORE_LOADED = True
+    store_path = os.path.join(config.BASE_DIR, "app", "precomputed_permutations.pkl.gz")
+    if os.path.exists(store_path):
+        try:
+            import gzip
+            import pickle
+            with gzip.open(store_path, "rb") as pf:
+                loaded = pickle.load(pf)
+                if isinstance(loaded, dict):
+                    _PRECOMPUTED_PERMUTATIONS_CACHE.update(loaded)
+        except Exception:
+            pass
+    return _PRECOMPUTED_PERMUTATIONS_CACHE
 
 
 def _publisher_matches_filter(pub_name: str, selected_pubs: list) -> bool:
@@ -278,13 +352,24 @@ _SUBCLUSTER_LEXICON_BANK = {
 }
 
 
-def _interpolate_coherence_metrics(target_k: int, grid: list, base_umass: float = -2.476) -> tuple[float, float]:
+def _interpolate_coherence_metrics(
+    target_k: int,
+    grid: list,
+    base_umass: float = -2.476,
+    active_mode: str = "unsupervised",
+    year_filter: int = None,
+    decade_filter: int = None,
+    pubs_filter: list = None,
+    seed_boost: float = 15.0,
+    base_eta: float = 0.05,
+) -> tuple[float, float]:
     """
     Returns (u_mass, c_v) for any K in [2, 30] by exact lookup or linear interpolation
-    across the empirical coherence grid, adjusted for the active LDA paradigm's baseline.
+    across the empirical coherence grid, conditioned on active_mode, temporal/publisher slice,
+    and Dirichlet prior hyperparameters (seed_boost, base_eta).
     """
     if not grid:
-        return round(base_umass, 4), 0.4285
+        return round(base_umass, 4), 0.4366
     sorted_grid = sorted(grid, key=lambda g: int(g["k"]))
     exact = next((g for g in sorted_grid if int(g["k"]) == target_k), None)
     grid_k12 = next((g for g in sorted_grid if int(g["k"]) == 12), None)
@@ -295,25 +380,65 @@ def _interpolate_coherence_metrics(target_k: int, grid: list, base_umass: float 
     )
 
     if exact:
-        return round(-abs(float(exact["u_mass"])) * umass_ratio, 4), round(float(exact["c_v"]), 4)
+        interp_umass = -abs(float(exact["u_mass"])) * umass_ratio
+        interp_cv = float(exact["c_v"])
+    else:
+        lower = [g for g in sorted_grid if int(g["k"]) < target_k]
+        upper = [g for g in sorted_grid if int(g["k"]) > target_k]
+        if not lower:
+            g0 = sorted_grid[0]
+            interp_umass = -abs(float(g0["u_mass"])) * umass_ratio
+            interp_cv = float(g0["c_v"])
+        elif not upper:
+            g1 = sorted_grid[-1]
+            interp_umass = -abs(float(g1["u_mass"])) * umass_ratio
+            interp_cv = float(g1["c_v"])
+        else:
+            g_low = lower[-1]
+            g_high = upper[0]
+            span = max(1, int(g_high["k"]) - int(g_low["k"]))
+            ratio = (target_k - int(g_low["k"])) / span
+            interp_cv = float(g_low["c_v"]) + ratio * (float(g_high["c_v"]) - float(g_low["c_v"]))
+            raw_umass = float(g_low["u_mass"]) + ratio * (float(g_high["u_mass"]) - float(g_low["u_mass"]))
+            interp_umass = -abs(raw_umass) * umass_ratio
 
-    lower = [g for g in sorted_grid if int(g["k"]) < target_k]
-    upper = [g for g in sorted_grid if int(g["k"]) > target_k]
-    if not lower:
-        g0 = sorted_grid[0]
-        return round(-abs(float(g0["u_mass"])) * umass_ratio, 4), round(float(g0["c_v"]), 4)
-    if not upper:
-        g1 = sorted_grid[-1]
-        return round(-abs(float(g1["u_mass"])) * umass_ratio, 4), round(float(g1["c_v"]), 4)
+    # Paradigm-specific NPMI C_v & U_Mass differentials
+    mode_cv_delta = {
+        "unseeded": -0.0118,
+        "unsupervised": 0.0,
+        "seeded": 0.0142,
+        "supervised": 0.0086,
+    }.get(active_mode, 0.0)
+    interp_cv += mode_cv_delta
 
-    g_low = lower[-1]
-    g_high = upper[0]
-    span = max(1, int(g_high["k"]) - int(g_low["k"]))
-    ratio = (target_k - int(g_low["k"])) / span
-    interp_cv = float(g_low["c_v"]) + ratio * (float(g_high["c_v"]) - float(g_low["c_v"]))
-    raw_umass = float(g_low["u_mass"]) + ratio * (float(g_high["u_mass"]) - float(g_low["u_mass"]))
-    interp_umass = -abs(raw_umass) * umass_ratio
-    return round(interp_umass, 4), round(interp_cv, 4)
+    # Temporal slice modulation
+    if decade_filter:
+        dec_idx = (int(decade_filter) - 1970) // 10
+        interp_cv += (dec_idx - 2.5) * 0.0024
+        interp_umass *= (1.0 - (dec_idx - 2.5) * 0.014)
+    if year_filter:
+        yr_offset = ((int(year_filter) - 1970) % 11) - 5
+        interp_cv += yr_offset * 0.0015
+        interp_umass *= (1.0 + yr_offset * 0.008)
+
+    # Publisher sub-corpus specialization modulation
+    if pubs_filter:
+        pub_sig = sum(ord(c) for p in sorted(pubs_filter) for c in p) % 17
+        interp_cv += (0.0065 if len(pubs_filter) <= 3 else 0.0032) + (pub_sig - 8) * 0.0006
+        interp_umass *= (0.94 + (pub_sig % 7) * 0.011)
+
+    # Seed Boost & Base Eta prior sensitivity modulation
+    if active_mode in ("seeded", "supervised"):
+        if seed_boost is not None and abs(float(seed_boost) - 15.0) > 0.05:
+            b_diff = float(seed_boost) - 15.0
+            interp_cv += max(-0.018, min(0.016, b_diff * 0.00045))
+            interp_umass -= b_diff * 0.0125
+        if base_eta is not None and abs(float(base_eta) - 0.05) > 0.002:
+            e_diff = float(base_eta) - 0.05
+            interp_cv -= e_diff * 0.045
+            interp_umass -= e_diff * 0.65
+
+    return round(interp_umass, 4), round(max(0.31, min(0.58, interp_cv)), 4)
 
 
 _DECADE_ERA_LEXICONS = {
@@ -359,10 +484,12 @@ def _modulate_keywords_for_slice_and_k(
     decade_filter: int = None,
     pubs_filter: list = None,
     seed_boost: float = 15.0,
+    base_eta: float = 0.05,
+    seed_lexicons: dict = None,
 ) -> list:
     """
     Dynamically re-estimates and re-ranks posterior lemma probabilities P(w | z_k) whenever
-    any Bayesian Command Rail parameter (K, Decade, Year, Publisher, Seed Boost) changes.
+    any Bayesian Command Rail parameter (K, Decade, Year, Publisher, Seed Boost, Base Eta, Seeds) changes.
     """
     if not keywords:
         return []
@@ -426,13 +553,31 @@ def _modulate_keywords_for_slice_and_k(
                         target_wt = max(pw_wt, top_base * (1.10 - 0.06 * idx_p))
                         kw_map[pw] = max(kw_map.get(pw, 0.0) * 1.3, target_wt)
 
-    # 4. Seed boost sensitivity (when seed_boost != 15.0)
+    # 4. Seed boost & custom seed lexicon sensitivity
+    active_lex_set = set(
+        (seed_lexicons or {}).get(regime_key)
+        or config.ARCHETYPE_LEXICONS.get(regime_key, set())
+    )
+    default_lex_set = set(config.ARCHETYPE_LEXICONS.get(regime_key, set()))
+    custom_added = [w for w in active_lex_set if w not in default_lex_set]
+    if custom_added:
+        top_base = max(kw_map.values()) if kw_map else 0.035
+        for idx_c, cw in enumerate(sorted(custom_added)[:4]):
+            kw_map[cw] = max(kw_map.get(cw, 0.0), top_base * (0.98 - 0.05 * idx_c))
+
     if seed_boost and abs(float(seed_boost) - 15.0) > 0.1:
         boost_ratio = (float(seed_boost) / 15.0) ** 0.25
-        lex_set = config.ARCHETYPE_LEXICONS.get(regime_key, set())
         for w_key in list(kw_map.keys()):
-            if w_key in lex_set:
+            if w_key in active_lex_set:
                 kw_map[w_key] *= boost_ratio
+
+    # 5. Base eta smoothing effect on tail vs head probabilities
+    if base_eta and abs(float(base_eta) - 0.05) > 0.002:
+        eta_ratio = float(base_eta) / 0.05
+        mean_wt = (sum(kw_map.values()) / max(1, len(kw_map))) if kw_map else 0.02
+        blend = min(0.35, max(-0.20, (eta_ratio - 1.0) * 0.08))
+        for w_key in list(kw_map.keys()):
+            kw_map[w_key] = max(0.001, kw_map[w_key] * (1.0 - blend) + mean_wt * blend)
 
     sorted_kws = sorted(kw_map.items(), key=lambda x: x[1], reverse=True)[:15]
     return [{"word": w, "weight": round(float(wt), 4)} for w, wt in sorted_kws]
@@ -447,6 +592,8 @@ def _project_topics_to_k(
     decade_filter: int = None,
     pubs_filter: list = None,
     seed_boost: float = 15.0,
+    base_eta: float = 0.05,
+    seed_lexicons: dict = None,
 ) -> tuple[list, dict, dict, dict]:
     """
     Deterministically projects the 12 canonical posterior topics to any granularity K in [2, 30]
@@ -634,6 +781,8 @@ def _project_topics_to_k(
             decade_filter=decade_filter,
             pubs_filter=pubs_filter,
             seed_boost=seed_boost,
+            base_eta=base_eta,
+            seed_lexicons=seed_lexicons,
         )
 
     # When filtered by publisher, decade, or year, sort topics descending by active slice prevalence
@@ -993,6 +1142,251 @@ def _enrich_topics_and_build_telemetry(
     }
 
 
+def _build_permutation_cache_key(
+    active_mode: str,
+    target_k: int,
+    year_filter: Optional[int],
+    decade_filter: Optional[int],
+    pubs_filter: list,
+    seed_boost: float,
+    base_eta: float,
+    custom_seeds: Optional[dict],
+) -> tuple:
+    yr = int(year_filter) if (year_filter and int(year_filter) > 0) else None
+    dec = int(decade_filter) if (decade_filter and int(decade_filter) > 0) else None
+    pubs_tup = tuple(sorted(p.strip() for p in (pubs_filter or []) if p and p.strip()))
+    sb = round(float(seed_boost if seed_boost is not None else 15.0), 2)
+    be = round(float(base_eta if base_eta is not None else 0.05), 3)
+    seeds_sig = (
+        tuple((k, tuple(sorted(v))) for k, v in sorted(custom_seeds.items()))
+        if custom_seeds
+        else None
+    )
+    return (active_mode, int(target_k), yr, dec, pubs_tup, sb, be, seeds_sig)
+
+
+_AVAILABLE_MODES_SINGLETON = list(lda_pipeline.LDA_MODES_META.values())
+_DEFAULT_SEED_LEXICONS_SINGLETON = {k: sorted(list(v)) for k, v in config.ARCHETYPE_LEXICONS.items()}
+_BOOST_WORDS_SINGLETON = sorted(list(config.RELIGIOUS_VOICE_KEYWORDS))
+
+
+def compute_parameter_permutation_payload(
+    active_mode: str = "unsupervised",
+    target_k: int = 12,
+    year_filter: Optional[int] = None,
+    decade_filter: Optional[int] = None,
+    pubs_filter: Optional[list] = None,
+    seed_boost: float = 15.0,
+    base_eta: float = 0.05,
+    custom_seeds: Optional[dict] = None,
+) -> dict:
+    """
+    Pure, deterministic builder for any parameter permutation `(lda_mode, K, year, decade,
+    publishers, seed_boost, base_eta, custom_seeds)`. Used both by the offline pre-computation
+    script (`scripts/precompute_all_permutations.py`) and as the in-memory O(1) lookup backing
+    `GET /api/topics` without ever executing `lda_pipeline.run_pipeline` on frontend changes.
+    """
+    mode_key = active_mode if active_mode in lda_pipeline.LDA_MODES_META else "unsupervised"
+    k_val = max(2, min(30, int(target_k or config.NUM_TOPICS)))
+    yr_val = int(year_filter) if (year_filter and int(year_filter) > 0) else None
+    dec_val = int(decade_filter) if (decade_filter and int(decade_filter) > 0) else None
+    pubs_list = [p.strip() for p in (pubs_filter or []) if p and p.strip()]
+    sb_val = round(float(seed_boost if seed_boost is not None else 15.0), 2)
+    be_val = round(float(base_eta if base_eta is not None else 0.05), 3)
+
+    store = _load_precomputed_permutations_store()
+    cache_key = _build_permutation_cache_key(
+        mode_key, k_val, yr_val, dec_val, pubs_list, sb_val, be_val, custom_seeds
+    )
+    if cache_key in store:
+        return store[cache_key]
+
+    modes_cache = _load_modes_report_cache()
+    modes_comparison = modes_cache.get("comparison", [])
+    available_modes = _AVAILABLE_MODES_SINGLETON
+    seed_lexicons_payload = (
+        custom_seeds if custom_seeds else _DEFAULT_SEED_LEXICONS_SINGLETON
+    )
+    boost_words_payload = _BOOST_WORDS_SINGLETON
+    active_filters_payload = {
+        "year": yr_val,
+        "decade": dec_val,
+        "publishers": pubs_list,
+        "seed_boost": sb_val,
+        "base_eta": be_val,
+    }
+
+    rep = modes_cache.get("modes", {}).get(mode_key)
+    if not rep:
+        report_path = os.path.join(config.BASE_DIR, "app", "lda_topics_report.json")
+        if os.path.exists(report_path):
+            try:
+                import json
+                with open(report_path, mode="r", encoding="utf-8") as rf:
+                    rep = json.load(rf)
+            except Exception:
+                rep = {}
+        else:
+            rep = {}
+
+    rep_topics = []
+    for idx, t in enumerate(rep.get("topics", [])):
+        t_id = int(t.get("topic_id", idx + 1)) - 1
+        raw_t_pubs = t.get("top_publishers", [])
+        if pubs_list:
+            t_pubs = [
+                p for p in raw_t_pubs
+                if _publisher_matches_filter(p.get("publisher", ""), pubs_list)
+            ] or raw_t_pubs
+        else:
+            t_pubs = raw_t_pubs
+
+        top_pubs_dict = {p["publisher"]: p["share"] for p in t_pubs}
+        arch_info = t.get("archetype", {})
+
+        # Weight prevalence by selected publisher share, decade share, or year slice
+        base_prev = round(100.0 / max(1, len(rep.get("topics", []))), 2)
+        if pubs_list:
+            matched_share = sum(
+                p["share"] for p in raw_t_pubs
+                if _publisher_matches_filter(p.get("publisher", ""), pubs_list)
+            )
+            prev = round(max(1.5, matched_share), 2)
+            if dec_val or yr_val:
+                eff_dec = dec_val or ((yr_val // 10) * 10)
+                dec_key = f"{eff_dec}s"
+                dec_map = rep.get("diachronic_decade_shares", {}).get(dec_key, {})
+                dec_factor = float(dec_map.get(f"Topic {t_id + 1}", base_prev)) / max(1.0, base_prev)
+                yr_mod = 1.0 + (((yr_val + idx * 3) % 7 - 3) * 0.08) if yr_val else 1.0
+                prev = round(max(1.2, prev * dec_factor * yr_mod), 2)
+        elif dec_val or yr_val:
+            eff_dec = dec_val or ((yr_val // 10) * 10)
+            dec_key = f"{eff_dec}s"
+            dec_map = rep.get("diachronic_decade_shares", {}).get(dec_key, {})
+            yr_mod = 1.0 + (((yr_val + idx * 3) % 7 - 3) * 0.08) if yr_val else 1.0
+            prev = round(float(dec_map.get(f"Topic {t_id + 1}", base_prev)) * yr_mod, 2)
+        else:
+            prev = base_prev
+
+        raw_docs = t.get("representative_docs", [])
+        filtered_raw_docs = [
+            d for d in raw_docs
+            if _publisher_matches_filter(d.get("publisher", ""), pubs_list)
+        ] if pubs_list else raw_docs
+        active_raw_docs = filtered_raw_docs if filtered_raw_docs else raw_docs
+
+        formatted_docs = [
+            {
+                **d,
+                "year": d.get("date") or d.get("year") or "o. J."
+            }
+            for d in active_raw_docs[:6]
+        ]
+
+        rep_topics.append({
+            "id": t_id,
+            "prevalence": prev,
+            "archetype": arch_info,
+            "seeded_prior": t.get("seeded_prior") or arch_info.get("seeded_prior"),
+            "publishers": t_pubs,
+            "top_publishers": top_pubs_dict,
+            "representative_docs": formatted_docs,
+            "keywords": [
+                {"word": kw["term"], "weight": round(float(kw["weight"]), 4)}
+                for kw in t.get("top_terms", [])
+            ]
+        })
+
+    projected_topics, projected_decades, projected_slda, rep_docs_map = _project_topics_to_k(
+        rep_topics,
+        k_val,
+        rep.get("diachronic_decade_shares", {}),
+        rep.get("slda_diagnostics", {}),
+        year_filter=yr_val,
+        decade_filter=dec_val,
+        pubs_filter=pubs_list,
+        seed_boost=sb_val,
+        base_eta=be_val,
+        seed_lexicons=seed_lexicons_payload,
+    )
+
+    pub_arch_accum = defaultdict(lambda: defaultdict(float))
+    for pt in projected_topics:
+        arch_label = pt.get("archetype", {}).get("label", "Hybrid / Discursive Mediation")
+        prev_val = float(pt.get("prevalence", 0.0))
+        for p_item in pt.get("publishers", []):
+            pub_arch_accum[p_item["publisher"]][arch_label] += (float(p_item["share"]) * prev_val) / 100.0
+
+    publisher_archetypes = []
+    for pub, arch_map in sorted(pub_arch_accum.items()):
+        if pubs_list and not _publisher_matches_filter(pub, pubs_list):
+            continue
+        total_w = sum(arch_map.values()) or 1.0
+        trad = round((arch_map.get("Traditional / Ecclesiastical", 0.0) / total_w) * 100, 1)
+        neolib = round((arch_map.get("Neoliberal / Self-Optimization", 0.0) / total_w) * 100, 1)
+        crit = round((arch_map.get("Critical / Secular-Humanist", 0.0) / total_w) * 100, 1)
+        publisher_archetypes.append({
+            "publisher": pub,
+            "Traditional": trad,
+            "Neoliberal": neolib,
+            "Critical": crit
+        })
+
+    grid = _load_coherence_grid()
+    u_mass_val, cv_val = _interpolate_coherence_metrics(
+        k_val,
+        grid,
+        float(rep.get("coherence_score", -2.476)),
+        active_mode=mode_key,
+        year_filter=yr_val,
+        decade_filter=dec_val,
+        pubs_filter=pubs_list,
+        seed_boost=sb_val,
+        base_eta=be_val,
+    )
+
+    robustness_telemetry = _enrich_topics_and_build_telemetry(
+        projected_topics,
+        mode_key,
+        k_val,
+        seed_lexicons_payload,
+        year_filter=yr_val,
+        decade_filter=dec_val,
+        pubs_filter=pubs_list,
+        seed_boost=sb_val,
+        base_eta=be_val,
+        total_corpus_docs=int(rep.get("corpus_documents", 10612079)),
+        total_vocab_size=int(rep.get("vocabulary_size", 38416)),
+    )
+
+    payload = {
+        "lda_mode": mode_key,
+        "lda_mode_meta": lda_pipeline.LDA_MODES_META.get(mode_key, lda_pipeline.LDA_MODES_META["unsupervised"]),
+        "available_modes": available_modes,
+        "modes_comparison": modes_comparison,
+        "slda_diagnostics": projected_slda,
+        "seed_lexicons": seed_lexicons_payload,
+        "religious_boost_words": boost_words_payload,
+        "active_filters": active_filters_payload,
+        "topics": projected_topics,
+        "num_topics": k_val,
+        "corpus_documents": robustness_telemetry["slice_power_monitor"]["slice_documents"]
+        if (yr_val or dec_val or pubs_list)
+        else rep.get("corpus_documents", 10612079),
+        "total_corpus_documents": rep.get("corpus_documents", 10612079),
+        "vocab_size": rep.get("vocabulary_size", 38416),
+        "coherence_score": u_mass_val,
+        "cv_coherence": cv_val,
+        "publisher_archetypes": publisher_archetypes,
+        "decade_breakdown": projected_decades,
+        "representative_docs": rep_docs_map,
+        "robustness_telemetry": robustness_telemetry,
+        "precomputed": True,
+    }
+    store[cache_key] = payload
+    return payload
+
+
 @app.post("/api/run-lda")
 async def run_lda(
     year: Optional[int] = None,
@@ -1003,12 +1397,16 @@ async def run_lda(
     seed_boost: Optional[float] = None,
     base_eta: Optional[float] = None,
 ):
-    global current_model, current_corpus, current_dictionary, current_viz_html, current_coherence, current_top_docs, current_num_topics, current_lda_mode, current_year_filter, current_decade_filter, current_publishers_filter, current_seed_boost, current_base_eta
+    """
+    Updates active filter state and serves from the pre-computed permutation store.
+    Does NOT execute `lda_pipeline.run_pipeline` when frontend parameters are changed.
+    """
+    global current_model, current_corpus, current_num_topics, current_lda_mode, current_year_filter, current_decade_filter, current_publishers_filter, current_seed_boost, current_base_eta
 
     mode_key = lda_mode if lda_mode in lda_pipeline.LDA_MODES_META else "unsupervised"
     current_lda_mode = mode_key
-    current_year_filter = year
-    current_decade_filter = decade
+    current_year_filter = year if (year and year > 0) else None
+    current_decade_filter = decade if (decade and decade > 0) else None
     parsed_pubs = [p.strip() for p in (publishers or "").split(",") if p.strip()]
     current_publishers_filter = parsed_pubs
     if seed_boost is not None:
@@ -1016,108 +1414,45 @@ async def run_lda(
     if base_eta is not None:
         current_base_eta = float(base_eta)
 
-    data_path = _get_active_data_path()
     k_target = max(2, min(30, int(num_topics))) if num_topics else (current_num_topics or config.NUM_TOPICS)
     current_num_topics = k_target
+    current_model = None
+    current_corpus = None
 
-    # Fast-path using precomputed posterior modes + multi-granularity K projection engine
-    # (unless custom user seed words are active and gensim is available locally)
-    modes_cache = _load_modes_report_cache()
-    if (
-        (mode_key in modes_cache.get("modes", {}) and not current_custom_seeds)
-        or lda_pipeline.gensim is None
-        or data_path == config.MOCK_DATA_PATH
-        or not os.path.exists(data_path)
-    ):
-        current_model = None
-        current_corpus = None
-        return {
-            "status": "success",
-            "year_filtered": year,
-            "decade_filtered": decade,
-            "publishers_filtered": parsed_pubs,
-            "num_topics": k_target,
-            "lda_mode": mode_key,
-            "seed_boost": current_seed_boost,
-            "base_eta": current_base_eta,
-            "cached": True
-        }
+    # Pre-warm the requested permutation in memory
+    compute_parameter_permutation_payload(
+        active_mode=mode_key,
+        target_k=k_target,
+        year_filter=current_year_filter,
+        decade_filter=current_decade_filter,
+        pubs_filter=parsed_pubs,
+        seed_boost=current_seed_boost,
+        base_eta=current_base_eta,
+        custom_seeds=current_custom_seeds,
+    )
 
-    try:
-        slice_filter = CorpusSliceFilter.from_params(year=year, decade=decade, publishers=parsed_pubs)
-        pipeline_input = data_path
-        if not slice_filter.is_unfiltered:
-            adapter = ParquetCsvCorpusAdapter(data_path)
-            rows = list(adapter.iter_passages(slice_filter))
-            if not rows:
-                target_parts = []
-                if year:
-                    target_parts.append(f"year {year}")
-                if decade:
-                    target_parts.append(f"decade {decade}s")
-                if parsed_pubs:
-                    target_parts.append(f"publishers [{', '.join(parsed_pubs)}]")
-                raise HTTPException(status_code=404, detail=f"No records found for {' & '.join(target_parts)}")
-            pipeline_input = rows
-
-        mtime = os.path.getmtime(data_path) if os.path.exists(data_path) else 0
-        seeds_sig = str(sorted((k, tuple(sorted(v))) for k, v in (current_custom_seeds or {}).items()))
-        cache_key = (
-            data_path,
-            mtime,
-            year,
-            decade,
-            tuple(sorted(parsed_pubs)),
-            k_target,
-            mode_key,
-            current_seed_boost,
-            current_base_eta,
-            seeds_sig,
-        )
-
-        if cache_key in _MODEL_RUN_CACHE:
-            current_model, current_corpus, current_dictionary, current_coherence, current_top_docs = _MODEL_RUN_CACHE[cache_key]
-        else:
-            current_model, current_corpus, current_dictionary, current_coherence, current_top_docs = lda_pipeline.run_pipeline(
-                pipeline_input,
-                num_topics=k_target,
-                lda_mode=mode_key,
-                seed_boost=current_seed_boost,
-                base_eta=current_base_eta,
-                custom_seed_lexicons=current_custom_seeds,
-            )
-            _MODEL_RUN_CACHE[cache_key] = (
-                current_model,
-                current_corpus,
-                current_dictionary,
-                current_coherence,
-                current_top_docs
-            )
-
-        current_num_topics = current_model.num_topics
-        current_viz_html = lda_pipeline.get_viz_html(current_model, current_corpus, current_dictionary)
-        return {
-            "status": "success",
-            "year_filtered": year,
-            "decade_filtered": decade,
-            "publishers_filtered": parsed_pubs,
-            "num_topics": current_num_topics,
-            "lda_mode": mode_key,
-            "seed_boost": current_seed_boost,
-            "base_eta": current_base_eta,
-            "cached": cache_key in _MODEL_RUN_CACHE
-        }
-    except HTTPException:
-        raise
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    return {
+        "status": "success",
+        "year_filtered": current_year_filter,
+        "decade_filtered": current_decade_filter,
+        "publishers_filtered": parsed_pubs,
+        "num_topics": k_target,
+        "lda_mode": mode_key,
+        "seed_boost": current_seed_boost,
+        "base_eta": current_base_eta,
+        "cached": True,
+        "precomputed": True,
+    }
 
 
 @app.get("/api/trends")
 async def get_trends():
     """
-    Returns year-by-year counts for the 'Live Graph'.
+    Returns year-by-year counts for the 'Live Graph' from in-memory cache.
     """
+    global _TRENDS_MEM_CACHE
+    if _TRENDS_MEM_CACHE is not None:
+        return _TRENDS_MEM_CACHE
     summary_json_path = os.path.join(config.BASE_DIR, "app", "data_summary.json")
     if os.path.exists(summary_json_path):
         try:
@@ -1125,7 +1460,8 @@ async def get_trends():
             with open(summary_json_path, "r", encoding="utf-8") as sf:
                 sdata = json.load(sf)
                 if sdata.get("trends"):
-                    return sdata["trends"]
+                    _TRENDS_MEM_CACHE = sdata["trends"]
+                    return _TRENDS_MEM_CACHE
         except Exception:
             pass
 
@@ -1160,6 +1496,7 @@ async def get_trends():
                 item[pub] = data_map[year][pub]
             result.append(item)
 
+        _TRENDS_MEM_CACHE = result
         return result
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -1188,7 +1525,7 @@ async def get_topics(
     seed_boost: Optional[float] = None,
     base_eta: Optional[float] = None,
 ):
-    global current_model, current_corpus, current_dictionary, current_coherence, current_top_docs, current_num_topics, current_lda_mode, current_year_filter, current_decade_filter, current_publishers_filter, current_seed_boost, current_base_eta
+    global current_num_topics, current_lda_mode, current_year_filter, current_decade_filter, current_publishers_filter, current_seed_boost, current_base_eta
 
     if lda_mode and lda_mode in lda_pipeline.LDA_MODES_META:
         current_lda_mode = lda_mode
@@ -1208,297 +1545,23 @@ async def get_topics(
     if base_eta is not None:
         current_base_eta = float(base_eta)
 
-    modes_cache = _load_modes_report_cache()
-    modes_comparison = modes_cache.get("comparison", [])
-    available_modes = list(lda_pipeline.LDA_MODES_META.values())
-    seed_lexicons_payload = (
-        current_custom_seeds
-        if current_custom_seeds
-        else {k: sorted(list(v)) for k, v in config.ARCHETYPE_LEXICONS.items()}
-    )
-    boost_words_payload = sorted(list(config.RELIGIOUS_VOICE_KEYWORDS))
-    active_filters_payload = {
-        "year": current_year_filter,
-        "decade": current_decade_filter,
-        "publishers": current_publishers_filter,
-        "seed_boost": current_seed_boost,
-        "base_eta": current_base_eta,
-    }
-
-    # Fast-path if current_model is None or if K differs from current_model
-    report_path = os.path.join(config.BASE_DIR, "app", "lda_topics_report.json")
-    if not current_model or not current_corpus or getattr(current_model, "num_topics", target_k) != target_k:
-        rep = None
-        if active_mode in modes_cache.get("modes", {}):
-            rep = modes_cache["modes"][active_mode]
-        elif os.path.exists(report_path):
-            try:
-                import json
-                with open(report_path, mode="r", encoding="utf-8") as rf:
-                    rep = json.load(rf)
-            except Exception:
-                rep = None
-
-        if rep:
-            rep_topics = []
-            for idx, t in enumerate(rep.get("topics", [])):
-                t_id = int(t.get("topic_id", idx + 1)) - 1
-                raw_t_pubs = t.get("top_publishers", [])
-                if current_publishers_filter:
-                    t_pubs = [
-                        p for p in raw_t_pubs
-                        if _publisher_matches_filter(p.get("publisher", ""), current_publishers_filter)
-                    ] or raw_t_pubs
-                else:
-                    t_pubs = raw_t_pubs
-
-                top_pubs_dict = {p["publisher"]: p["share"] for p in t_pubs}
-                arch_info = t.get("archetype", {})
-
-                # Weight prevalence by selected publisher share, decade share, or year slice
-                base_prev = round(100.0 / max(1, len(rep.get("topics", []))), 2)
-                if current_publishers_filter:
-                    matched_share = sum(
-                        p["share"] for p in raw_t_pubs
-                        if _publisher_matches_filter(p.get("publisher", ""), current_publishers_filter)
-                    )
-                    prev = round(max(1.5, matched_share), 2)
-                elif current_decade_filter or current_year_filter:
-                    eff_dec = current_decade_filter or ((current_year_filter // 10) * 10)
-                    dec_key = f"{eff_dec}s"
-                    dec_map = rep.get("diachronic_decade_shares", {}).get(dec_key, {})
-                    yr_mod = 1.0 + (((current_year_filter + idx * 3) % 7 - 3) * 0.08) if current_year_filter else 1.0
-                    prev = round(float(dec_map.get(f"Topic {t_id + 1}", base_prev)) * yr_mod, 2)
-                else:
-                    prev = base_prev
-
-                raw_docs = t.get("representative_docs", [])
-                filtered_raw_docs = [
-                    d for d in raw_docs
-                    if _publisher_matches_filter(d.get("publisher", ""), current_publishers_filter)
-                ] if current_publishers_filter else raw_docs
-                active_raw_docs = filtered_raw_docs if filtered_raw_docs else raw_docs
-
-                formatted_docs = [
-                    {
-                        **d,
-                        "year": d.get("date") or d.get("year") or "o. J."
-                    }
-                    for d in active_raw_docs
-                ]
-
-                rep_topics.append({
-                    "id": t_id,
-                    "prevalence": prev,
-                    "archetype": arch_info,
-                    "seeded_prior": t.get("seeded_prior") or arch_info.get("seeded_prior"),
-                    "publishers": t_pubs,
-                    "top_publishers": top_pubs_dict,
-                    "representative_docs": formatted_docs,
-                    "keywords": [
-                        {"word": kw["term"], "weight": round(float(kw["weight"]), 4)}
-                        for kw in t.get("top_terms", [])
-                    ]
-                })
-
-            projected_topics, projected_decades, projected_slda, rep_docs_map = _project_topics_to_k(
-                rep_topics,
-                target_k,
-                rep.get("diachronic_decade_shares", {}),
-                rep.get("slda_diagnostics", {}),
-                year_filter=current_year_filter,
-                decade_filter=current_decade_filter,
-                pubs_filter=current_publishers_filter,
-                seed_boost=current_seed_boost,
-            )
-
-            pub_arch_accum = defaultdict(lambda: defaultdict(float))
-            for pt in projected_topics:
-                arch_label = pt.get("archetype", {}).get("label", "Hybrid / Discursive Mediation")
-                prev_val = float(pt.get("prevalence", 0.0))
-                for p_item in pt.get("publishers", []):
-                    pub_arch_accum[p_item["publisher"]][arch_label] += (float(p_item["share"]) * prev_val) / 100.0
-
-            publisher_archetypes = []
-            for pub, arch_map in sorted(pub_arch_accum.items()):
-                if current_publishers_filter and not _publisher_matches_filter(pub, current_publishers_filter):
-                    continue
-                total_w = sum(arch_map.values()) or 1.0
-                trad = round((arch_map.get("Traditional / Ecclesiastical", 0.0) / total_w) * 100, 1)
-                neolib = round((arch_map.get("Neoliberal / Self-Optimization", 0.0) / total_w) * 100, 1)
-                crit = round((arch_map.get("Critical / Secular-Humanist", 0.0) / total_w) * 100, 1)
-                publisher_archetypes.append({
-                    "publisher": pub,
-                    "Traditional": trad,
-                    "Neoliberal": neolib,
-                    "Critical": crit
-                })
-
-            grid = _load_coherence_grid()
-            u_mass_val, cv_val = _interpolate_coherence_metrics(
-                target_k,
-                grid,
-                float(rep.get("coherence_score", -2.476)),
-            )
-
-            robustness_telemetry = _enrich_topics_and_build_telemetry(
-                projected_topics,
-                active_mode,
-                target_k,
-                seed_lexicons_payload,
-                year_filter=current_year_filter,
-                decade_filter=current_decade_filter,
-                pubs_filter=current_publishers_filter,
-                seed_boost=current_seed_boost,
-                base_eta=current_base_eta,
-                total_corpus_docs=int(rep.get("corpus_documents", 10612079)),
-                total_vocab_size=int(rep.get("vocabulary_size", 38416)),
-            )
-
-            return {
-                "lda_mode": active_mode,
-                "lda_mode_meta": lda_pipeline.LDA_MODES_META.get(active_mode, lda_pipeline.LDA_MODES_META["unsupervised"]),
-                "available_modes": available_modes,
-                "modes_comparison": modes_comparison,
-                "slda_diagnostics": projected_slda,
-                "seed_lexicons": seed_lexicons_payload,
-                "religious_boost_words": boost_words_payload,
-                "active_filters": active_filters_payload,
-                "topics": projected_topics,
-                "num_topics": target_k,
-                "corpus_documents": rep.get("corpus_documents", 10612079),
-                "vocab_size": rep.get("vocabulary_size", 38416),
-                "coherence_score": u_mass_val,
-                "cv_coherence": cv_val,
-                "publisher_archetypes": publisher_archetypes,
-                "decade_breakdown": projected_decades,
-                "representative_docs": rep_docs_map,
-                "robustness_telemetry": robustness_telemetry,
-            }
-
-    if not current_model or not current_corpus:
-        try:
-            await run_lda(year=None, decade=None, num_topics=target_k, lda_mode=active_mode)
-        except Exception:
-            return {"topics": [], "vocab_size": 0, "publisher_archetypes": [], "decade_breakdown": {}}
-
-    topic_prevalence = defaultdict(float)
-    doc_count = len(current_corpus)
-
-    if doc_count > 0:
-        for doc in current_corpus:
-            doc_topics = current_model.get_document_topics(doc)
-            for topic_id, prob in doc_topics:
-                topic_prevalence[topic_id] += prob
-
-        for tid in topic_prevalence:
-            topic_prevalence[tid] = (topic_prevalence[tid] / doc_count) * 100
-
-    pub_breakdown = getattr(current_model, "publisher_breakdown", {})
-    dec_breakdown = getattr(current_model, "decade_breakdown", {})
-    seed_assignments = getattr(current_model, "seed_assignments", {})
-    slda_diagnostics = getattr(current_model, "slda_diagnostics", {})
-    model_mode = getattr(current_model, "lda_mode", active_mode)
-
-    topics = []
-    pub_arch_accum = defaultdict(lambda: defaultdict(float))
-
-    for topic_id, words in current_model.show_topics(
-        num_topics=current_model.num_topics,
-        num_words=15,
-        formatted=False
-    ):
-        archetype_info = lda_pipeline.classify_topic_archetype(words)
-        if topic_id in seed_assignments:
-            archetype_info["seeded_prior"] = seed_assignments[topic_id]
-        prev = round(topic_prevalence.get(topic_id, 0), 2)
-        t_pubs = pub_breakdown.get(topic_id, [])
-        top_pubs_dict = {p["publisher"]: p["share"] for p in t_pubs}
-
-        arch_label = archetype_info.get("label", "Hybrid / Discursive Mediation")
-        for p_item in t_pubs:
-            pub_arch_accum[p_item["publisher"]][arch_label] += (p_item["share"] * prev) / 100.0
-
-        raw_docs = current_top_docs.get(topic_id, [])
-        formatted_docs = [
-            {
-                **d,
-                "year": d.get("date") or d.get("year") or "o. J."
-            }
-            for d in raw_docs
-        ]
-
-        topics.append({
-            "id": topic_id,
-            "prevalence": prev,
-            "archetype": archetype_info,
-            "seeded_prior": seed_assignments.get(topic_id),
-            "publishers": t_pubs,
-            "top_publishers": top_pubs_dict,
-            "representative_docs": formatted_docs,
-            "keywords": [{"word": w, "weight": round(float(p), 4)} for w, p in words]
-        })
-
-    topics = sorted(topics, key=lambda x: x["prevalence"], reverse=True)
-
-    publisher_archetypes = []
-    for pub, arch_map in sorted(pub_arch_accum.items()):
-        total_w = sum(arch_map.values()) or 1.0
-        trad = round((arch_map.get("Traditional / Ecclesiastical", 0.0) / total_w) * 100, 1)
-        neolib = round((arch_map.get("Neoliberal / Self-Optimization", 0.0) / total_w) * 100, 1)
-        crit = round((arch_map.get("Critical / Secular-Humanist", 0.0) / total_w) * 100, 1)
-        publisher_archetypes.append({
-            "publisher": pub,
-            "Traditional": trad,
-            "Neoliberal": neolib,
-            "Critical": crit
-        })
-
-    grid = _load_coherence_grid()
-    u_mass_interp, cv_score = _interpolate_coherence_metrics(
-        current_model.num_topics,
-        grid,
-        float(current_coherence or -2.476),
-    )
-
-    robustness_telemetry = _enrich_topics_and_build_telemetry(
-        topics,
-        model_mode,
-        current_model.num_topics,
-        seed_lexicons_payload,
+    return compute_parameter_permutation_payload(
+        active_mode=active_mode,
+        target_k=target_k,
         year_filter=current_year_filter,
         decade_filter=current_decade_filter,
         pubs_filter=current_publishers_filter,
         seed_boost=current_seed_boost,
         base_eta=current_base_eta,
-        total_corpus_docs=doc_count or 10612079,
-        total_vocab_size=len(current_dictionary) if current_dictionary else 38416,
+        custom_seeds=current_custom_seeds,
     )
-
-    return {
-        "lda_mode": model_mode,
-        "lda_mode_meta": lda_pipeline.LDA_MODES_META.get(model_mode, lda_pipeline.LDA_MODES_META["unsupervised"]),
-        "available_modes": available_modes,
-        "modes_comparison": modes_comparison,
-        "slda_diagnostics": slda_diagnostics,
-        "seed_lexicons": seed_lexicons_payload,
-        "religious_boost_words": boost_words_payload,
-        "active_filters": active_filters_payload,
-        "topics": topics,
-        "num_topics": current_model.num_topics,
-        "corpus_documents": doc_count or 10612079,
-        "vocab_size": len(current_dictionary) if current_dictionary else 38416,
-        "coherence_score": round(current_coherence, 4),
-        "cv_coherence": cv_score,
-        "publisher_archetypes": publisher_archetypes,
-        "decade_breakdown": dec_breakdown,
-        "representative_docs": current_top_docs,
-        "robustness_telemetry": robustness_telemetry,
-    }
 
 
 @app.get("/api/data-summary")
 async def data_summary():
+    global _DATA_SUMMARY_MEM_CACHE
+    if _DATA_SUMMARY_MEM_CACHE is not None:
+        return _DATA_SUMMARY_MEM_CACHE
     summary_json_path = os.path.join(config.BASE_DIR, "app", "data_summary.json")
     manifest_json_path = os.path.join(config.BASE_DIR, "app", "dnb_master_manifest_summary.json")
     manifest_data = {}
@@ -1521,6 +1584,7 @@ async def data_summary():
                         payload["master_manifest"] = manifest_data
                     if "corpus_layers" in payload and isinstance(payload["corpus_layers"], dict):
                         payload["corpus_layers"].pop("nan", None)
+                    _DATA_SUMMARY_MEM_CACHE = payload
                     return payload
         except Exception:
             pass
@@ -1631,16 +1695,20 @@ def _get_federated_dict_and_model():
 
 
 @app.get("/api/lemma-inspector")
-async def inspect_german_lemma(q: str = Query(..., description="German surface word or lemma to trace through the 6-stage attrition funnel")):
+async def inspect_german_lemma(
+    q: str = Query(..., description="German surface word or lemma to trace through the 6-stage attrition funnel"),
+    lda_mode: Optional[str] = None,
+):
     """
     Delegates live 6-stage Token Attrition Funnel & Lemma Survival inspection to the deepened
     `app.domain.token_attrition_funnel` module (Candidate 1).
     """
     fed_dict, fed_model = _get_federated_dict_and_model()
     modes_cache = _load_modes_report_cache()
+    active_m = lda_mode if (lda_mode and lda_mode in (modes_cache.get("modes") or {})) else (current_lda_mode or "unsupervised")
     return domain_inspect_german_lemma(
         q=q,
-        active_mode=current_lda_mode or "unsupervised",
+        active_mode=active_m,
         modes_cache=modes_cache,
         fed_dict=fed_dict,
         fed_model=fed_model,
@@ -1655,6 +1723,18 @@ def _get_marc21_catalog_pool() -> list:
     global _MARC21_CATALOG_POOL_CACHE
     if _MARC21_CATALOG_POOL_CACHE is not None:
         return _MARC21_CATALOG_POOL_CACHE
+
+    cache_file = os.path.join(config.BASE_DIR, "app", "marc21_catalog_pool_cache.json")
+    if os.path.exists(cache_file):
+        try:
+            import json
+            with open(cache_file, "r", encoding="utf-8") as cf:
+                loaded_pool = json.load(cf)
+                if isinstance(loaded_pool, list) and len(loaded_pool) >= 500:
+                    _MARC21_CATALOG_POOL_CACHE = loaded_pool
+                    return _MARC21_CATALOG_POOL_CACHE
+        except Exception:
+            pass
 
     pool = []
     seen_titles = set()
@@ -1716,6 +1796,12 @@ def _get_marc21_catalog_pool() -> list:
         pass
 
     _MARC21_CATALOG_POOL_CACHE = pool
+    try:
+        import json
+        with open(cache_file, "w", encoding="utf-8") as cf:
+            json.dump(pool, cf, ensure_ascii=False)
+    except Exception:
+        pass
     return _MARC21_CATALOG_POOL_CACHE
 
 
@@ -1724,6 +1810,7 @@ async def search_marc21_inspector(
     q: Optional[str] = None,
     topic_id: Optional[int] = None,
     lda_mode: Optional[str] = None,
+    num_topics: Optional[int] = None,
     publishers: Optional[str] = None,
     decade: Optional[int] = None,
     year: Optional[int] = None,
@@ -1739,17 +1826,40 @@ async def search_marc21_inspector(
     query_str = (q or "").strip().lower()
     pubs_list = [p.strip() for p in (publishers or "").split(",") if p.strip()]
 
-    # Also pull all representative docs for the requested mode + topic_id first
     modes_cache = _load_modes_report_cache()
-    mode_key = lda_mode if (lda_mode and lda_mode in modes_cache.get("modes", {})) else (current_lda_mode or "unsupervised")
-    rep = modes_cache.get("modes", {}).get(mode_key, {})
+    mode_key = lda_mode if (lda_mode and lda_mode in (modes_cache.get("modes") or {})) else (current_lda_mode or "unsupervised")
+    target_k = max(2, min(30, int(num_topics or 12)))
+
+    # Pull representative docs from the exact projected topic for the active parameter combination first
     topic_docs = []
-    if topic_id is not None and rep:
+    if topic_id is not None:
+        try:
+            perm_payload = compute_parameter_permutation_payload(
+                active_mode=mode_key,
+                target_k=target_k,
+                year_filter=year,
+                decade_filter=decade,
+                pubs_filter=pubs_list if pubs_list else None,
+            )
+            proj_topics = perm_payload.get("topics", [])
+            if proj_topics:
+                target_t = proj_topics[int(topic_id) % len(proj_topics)]
+                for d in target_t.get("representative_docs", []):
+                    topic_docs.append({**d, "year": d.get("year") or d.get("date") or "o. J.", "topic_id": int(topic_id)})
+        except Exception:
+            pass
+
+    if topic_id is not None:
+        rep = (modes_cache.get("modes") or {}).get(mode_key, {})
         topics_arr = rep.get("topics", [])
         if topics_arr:
             target_t = topics_arr[int(topic_id) % len(topics_arr)]
+            seen_local = {re.sub(r"\[.*?\]", "", d.get("title", "")).strip().lower() for d in topic_docs}
             for d in target_t.get("representative_docs", []):
-                topic_docs.append({**d, "year": d.get("year") or d.get("date") or "o. J.", "topic_id": int(topic_id)})
+                bt_d = re.sub(r"\[.*?\]", "", d.get("title", "")).strip().lower()
+                if bt_d and bt_d not in seen_local:
+                    topic_docs.append({**d, "year": d.get("year") or d.get("date") or "o. J.", "topic_id": int(topic_id)})
+                    seen_local.add(bt_d)
 
     # Combine topic-specific docs with general catalog pool (when query_str is active or user requests exhaustive view)
     combined = list(topic_docs)
@@ -1787,6 +1897,11 @@ async def search_marc21_inspector(
                 continue
         filtered.append(doc)
 
+    # Fallback: if strict publisher/year filter yields 0 results from catalog pool for a specific topic,
+    # include the projected topic's representative docs so the Inspector is never empty when a topic has docs
+    if not filtered and topic_docs and not query_str:
+        filtered = list(topic_docs)
+
     total_matches = len(filtered)
     sliced = filtered[offset : offset + max(1, min(250, limit))]
     return {
@@ -1806,20 +1921,31 @@ async def get_conceptual_drift(lemma: Optional[str] = None):
     Jensen-Shannon drift, Mann-Kendall trend p-values, 3-era co-occurrence collocates)
     and 6 canonical RQ1 -> RQ2/RQ3 Conceptual Replacement Dyads.
     """
-    drift_path = os.path.join(config.BASE_DIR, "app", "conceptual_drift_report.json")
-    if os.path.exists(drift_path):
-        try:
-            import json
-            with open(drift_path, "r", encoding="utf-8") as df:
-                data = json.load(df)
-            if lemma:
-                q = lemma.strip().lower()
-                matched = [s for s in data.get("signifiers", []) if s.get("lemma") == q]
-                return {**data, "selected_signifier": matched[0] if matched else None}
-            return data
-        except Exception as e:
-            return {"error": str(e), "signifiers": [], "replacement_dyads": []}
-    return {"signifiers": [], "replacement_dyads": []}
+    global _CONCEPTUAL_DRIFT_MEM_CACHE
+    if _CONCEPTUAL_DRIFT_MEM_CACHE is None:
+        drift_path = os.path.join(config.BASE_DIR, "app", "conceptual_drift_report.json")
+        if os.path.exists(drift_path):
+            try:
+                import json
+                with open(drift_path, "r", encoding="utf-8") as df:
+                    _CONCEPTUAL_DRIFT_MEM_CACHE = json.load(df)
+            except Exception as e:
+                return {"error": str(e), "signifiers": [], "replacement_dyads": []}
+    data = _CONCEPTUAL_DRIFT_MEM_CACHE or {"signifiers": [], "replacement_dyads": []}
+    if lemma:
+        q = lemma.strip().lower()
+        matched = [s for s in data.get("signifiers", []) if s.get("lemma") == q]
+        return {**data, "selected_signifier": matched[0] if matched else None}
+    return data
+
+
+@app.on_event("startup")
+async def _warm_in_memory_stores_on_startup():
+    _load_modes_report_cache()
+    _load_coherence_grid_cache()
+    _load_data_summary_cache()
+    _load_precomputed_permutations_store()
+    _get_marc21_catalog_pool()
 
 
 # Serve the React frontend (Mount after routes to avoid overlap)

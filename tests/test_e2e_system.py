@@ -9,9 +9,15 @@ Covers:
 from __future__ import annotations
 
 import json
+import os
+import sys
 import time
 import urllib.parse
 import urllib.request
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if BASE_DIR not in sys.path:
+    sys.path.insert(0, BASE_DIR)
 
 import lda_pipeline
 from app.domain.corpus_storage import (
@@ -45,12 +51,12 @@ from app.domain.token_attrition_funnel import (
     inspect_german_lemma,
 )
 
-BACKEND_URL = "http://localhost:8000"
+BACKEND_URL = "http://127.0.0.1:8000"
 FRONTEND_URL = "http://localhost:5173"
 
 
 def _http_get_json(url: str) -> dict | list:
-    req = urllib.request.Request(url, headers={"Accept": "application/json"})
+    req = urllib.request.Request(url, headers={"Accept": "application/json", "Connection": "close"})
     with urllib.request.urlopen(req, timeout=20) as resp:
         assert resp.status == 200, f"GET {url} returned HTTP {resp.status}"
         return json.loads(resp.read().decode("utf-8"))
@@ -61,7 +67,7 @@ def _http_post_json(url: str, payload: dict | None = None) -> dict:
     req = urllib.request.Request(
         url,
         data=data,
-        headers={"Content-Type": "application/json", "Accept": "application/json"},
+        headers={"Content-Type": "application/json", "Accept": "application/json", "Connection": "close"},
         method="POST",
     )
     with urllib.request.urlopen(req, timeout=20) as resp:
@@ -416,6 +422,65 @@ def test_11_vite_frontend_and_api_proxy_e2e():
     assert proxied_marc["total_matches"] >= 50 and len(proxied_marc["results"]) == 25
 
 
+def test_12_precomputed_permutations_and_zero_pipeline_execution_e2e():
+    # 1. Verify offline pre-computed permutations archive & manifest
+    manifest_path = os.path.join(BASE_DIR, "app", "precomputed_permutations_manifest.json")
+    pkl_path = os.path.join(BASE_DIR, "app", "precomputed_permutations.pkl.gz")
+    assert os.path.exists(manifest_path), "Missing precomputed_permutations_manifest.json"
+    assert os.path.exists(pkl_path), "Missing precomputed_permutations.pkl.gz"
+
+    with open(manifest_path, "r", encoding="utf-8") as mf:
+        manifest = json.load(mf)
+    assert manifest["total_precomputed_permutations"] >= 4000
+    assert manifest["grid_breakdown"]["mode_x_all_k"] == 116  # 4 modes x 29 K (2..30)
+    assert manifest["grid_breakdown"]["mode_x_all_k_x_decade"] == 696  # 4 x 29 x 6 decades
+    assert manifest["grid_breakdown"]["mode_x_key_k_x_year"] == 896  # 4 x 4 x 56 years
+
+    # 2. Enforce that lda_pipeline.run_pipeline is NEVER called when parameters change
+    from app import main as app_main
+    orig_run_pipeline = lda_pipeline.run_pipeline
+
+    def _forbidden_run_pipeline(*args, **kwargs):
+        raise AssertionError("lda_pipeline.run_pipeline MUST NEVER BE EXECUTED when frontend parameters change!")
+
+    lda_pipeline.run_pipeline = _forbidden_run_pipeline
+    try:
+        p1 = app_main.compute_parameter_permutation_payload(active_mode="unseeded", target_k=8)
+        p2 = app_main.compute_parameter_permutation_payload(active_mode="seeded", target_k=8, decade_filter=1990)
+        p3 = app_main.compute_parameter_permutation_payload(
+            active_mode="supervised", target_k=16, year_filter=2018, pubs_filter=["Herder"], seed_boost=25.0, base_eta=0.02
+        )
+        assert len(p1["topics"]) == 8 and p1["vocab_size"] == 34892
+        assert len(p2["topics"]) == 8 and p2["vocab_size"] == 38416
+        assert len(p3["topics"]) == 16 and p3["corpus_documents"] < 10612079
+        assert p1["coherence_score"] != p2["coherence_score"]
+        assert p2["cv_coherence"] != p3["cv_coherence"]
+    finally:
+        lda_pipeline.run_pipeline = orig_run_pipeline
+
+    # 3. Verify live HTTP & Vite-proxied parameter switches exhibit distinct pre-computed results immediately
+    u_k4 = _http_get_json(f"{FRONTEND_URL}/api/topics?lda_mode=unseeded&num_topics=4")
+    s_k20_d2010 = _http_get_json(
+        f"{FRONTEND_URL}/api/topics?lda_mode=seeded&num_topics=20&decade=2010&publishers=Herder&seed_boost=25.0&base_eta=0.02"
+    )
+    assert len(u_k4["topics"]) == 4 and u_k4["vocab_size"] == 34892
+    assert len(s_k20_d2010["topics"]) == 20 and s_k20_d2010["vocab_size"] == 38416
+    assert u_k4["coherence_score"] != s_k20_d2010["coherence_score"]
+    assert u_k4["cv_coherence"] != s_k20_d2010["cv_coherence"]
+    assert s_k20_d2010["corpus_documents"] < u_k4["corpus_documents"]
+
+    # 4. Verify /api/lemma-inspector with lda_mode parameter & /api/marc21-search with num_topics parameter
+    lem_unseeded = _http_get_json(f"{FRONTEND_URL}/api/lemma-inspector?q=Gott&lda_mode=unseeded")
+    lem_seeded = _http_get_json(f"{FRONTEND_URL}/api/lemma-inspector?q=Gott&lda_mode=seeded")
+    assert "34,892" in lem_unseeded["word_stages"][-1]["stage"]
+    assert "38,416" in lem_seeded["word_stages"][-1]["stage"]
+
+    marc_k20 = _http_get_json(
+        f"{FRONTEND_URL}/api/marc21-search?topic_id=0&lda_mode=seeded&num_topics=20&decade=2010&limit=20"
+    )
+    assert marc_k20["returned_count"] > 0
+
+
 if __name__ == "__main__":
     t_start = time.time()
     all_tests = [
@@ -430,6 +495,7 @@ if __name__ == "__main__":
         test_09_http_marc21_search_exhaustive,
         test_10_http_seed_lexicon_update_and_reset_cycle,
         test_11_vite_frontend_and_api_proxy_e2e,
+        test_12_precomputed_permutations_and_zero_pipeline_execution_e2e,
     ]
     for idx, fn in enumerate(all_tests, start=1):
         t0 = time.time()

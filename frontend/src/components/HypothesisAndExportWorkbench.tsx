@@ -161,16 +161,19 @@ export const HypothesisAndExportWorkbench: React.FC<HypothesisAndExportWorkbench
         [regimeKey]: [...currentList, raw],
       };
       setLocalSeeds(updated);
+      onUpdateCustomSeeds(updated, seedBoost, baseEta, true);
     }
     setNewLemmaInputs((prev) => ({ ...prev, [regimeKey]: '' }));
   };
 
   const handleRemoveSeed = (regimeKey: string, wordToRemove: string) => {
     const currentList = localSeeds[regimeKey] || [];
-    setLocalSeeds({
+    const updated = {
       ...localSeeds,
       [regimeKey]: currentList.filter((w) => w !== wordToRemove),
-    });
+    };
+    setLocalSeeds(updated);
+    onUpdateCustomSeeds(updated, seedBoost, baseEta, true);
   };
 
   const handleResetSeedsClick = () => {
@@ -795,7 +798,11 @@ if __name__ == "__main__":
                   max="50"
                   step="1"
                   value={seedBoost}
-                  onChange={(e) => setSeedBoost(parseFloat(e.target.value))}
+                  onChange={(e) => {
+                    const nextBoost = parseFloat(e.target.value);
+                    setSeedBoost(nextBoost);
+                    onUpdateCustomSeeds(localSeeds, nextBoost, baseEta, true);
+                  }}
                   aria-label="Target seed prior boost eta_seed"
                   className="w-full h-1.5 bg-obsidian-800 rounded-lg appearance-none cursor-pointer accent-neoliberal"
                 />
@@ -821,7 +828,11 @@ if __name__ == "__main__":
                   max="0.25"
                   step="0.01"
                   value={baseEta}
-                  onChange={(e) => setBaseEta(parseFloat(e.target.value))}
+                  onChange={(e) => {
+                    const nextEta = parseFloat(e.target.value);
+                    setBaseEta(nextEta);
+                    onUpdateCustomSeeds(localSeeds, seedBoost, nextEta, true);
+                  }}
                   aria-label="Neutral vocabulary baseline prior eta_base"
                   className="w-full h-1.5 bg-obsidian-800 rounded-lg appearance-none cursor-pointer accent-traditional"
                 />

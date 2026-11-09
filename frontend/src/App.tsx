@@ -281,7 +281,7 @@ function App() {
     (activeTopic && representativeDocs[activeTopic.id]) ||
     [];
 
-  // Fetch exhaustive MARC21 catalog results from /api/marc21-search whenever topic, mode, filters, or search query change
+  // Fetch exhaustive MARC21 catalog results from /api/marc21-search whenever topic, mode, K, filters, or search query change
   useEffect(() => {
     let cancelled = false;
     const timer = setTimeout(async () => {
@@ -290,6 +290,7 @@ function App() {
         if (inspectorSearch.trim()) params.set('q', inspectorSearch.trim());
         if (!inspectorGlobalScope && activeTopic) params.set('topic_id', String(activeTopic.id));
         if (ldaMode) params.set('lda_mode', ldaMode);
+        if (numTopics) params.set('num_topics', String(numTopics));
         if (selectedPublishers.length > 0) params.set('publishers', selectedPublishers.join(','));
         if (selectedDecade) params.set('decade', String(selectedDecade));
         if (selectedYear) params.set('year', String(selectedYear));
@@ -316,6 +317,7 @@ function App() {
     inspectorSearch,
     activeTopic?.id,
     ldaMode,
+    numTopics,
     selectedPublishers,
     selectedDecade,
     selectedYear,
@@ -350,7 +352,7 @@ function App() {
     copyText('batch-topic-apa', allCitations);
   };
 
-  // Compute Aggregate Ideological Regime Share across current topics
+  // Compute Aggregate Ideological Regime Share across current topics (weighted by prevalence θ_k)
   const computeCorpusArchetypeSummary = () => {
     if (!typedTopics || typedTopics.length === 0) {
       return {
@@ -358,22 +360,45 @@ function App() {
         tradCount: 0,
         neoCount: 0,
         critCount: 0,
+        tradShare: 33.4,
+        neoShare: 33.3,
+        critShare: 33.3,
       };
     }
     let tradCount = 0;
     let neoCount = 0;
     let critCount = 0;
+    let tradMass = 0;
+    let neoMass = 0;
+    let critMass = 0;
+    const defaultPrev = 100 / Math.max(1, typedTopics.length);
     typedTopics.forEach((t: Topic) => {
       const label = t.archetype?.label || '';
+      const prev = typeof t.prevalence === 'number' ? t.prevalence : defaultPrev;
+      const scores = t.archetype?.scores || {};
+      const sTrad = scores['Traditional / Ecclesiastical'] ?? (label.includes('Traditional') ? 70 : 15);
+      const sNeo = scores['Neoliberal / Self-Optimization'] ?? (label.includes('Neoliberal') ? 70 : 15);
+      const sCrit = scores['Critical / Secular-Humanist'] ?? (label.includes('Critical') ? 70 : 15);
+      const sSum = Math.max(1, sTrad + sNeo + sCrit);
+
+      tradMass += prev * (sTrad / sSum);
+      neoMass += prev * (sNeo / sSum);
+      critMass += prev * (sCrit / sSum);
+
       if (label.includes('Traditional') || label.includes('Theological')) tradCount += 1;
       else if (label.includes('Neoliberal') || label.includes('Self-Help')) neoCount += 1;
       else if (label.includes('Critical') || label.includes('Secular')) critCount += 1;
     });
+    const totalMass = Math.max(0.001, tradMass + neoMass + critMass);
+    const tradShare = Number(((tradMass / totalMass) * 100).toFixed(1));
+    const neoShare = Number(((neoMass / totalMass) * 100).toFixed(1));
+    const critShare = Number((100 - tradShare - neoShare).toFixed(1));
+
     let dominant = 'Traditional / Ecclesiastical';
-    if (neoCount >= tradCount && neoCount >= critCount) dominant = 'Neoliberal / Self-Optimization';
-    if (critCount >= tradCount && critCount >= neoCount && critCount > 0)
+    if (neoShare >= tradShare && neoShare >= critShare) dominant = 'Neoliberal / Self-Optimization';
+    if (critShare >= tradShare && critShare >= neoShare && critShare > 0)
       dominant = 'Critical / Secular-Humanist';
-    return { dominant, tradCount, neoCount, critCount };
+    return { dominant, tradCount, neoCount, critCount, tradShare, neoShare, critShare };
   };
 
   const archetypeSummary = computeCorpusArchetypeSummary();
@@ -1295,14 +1320,21 @@ function App() {
                 <Database className="w-3.5 h-3.5 text-traditional" />
               </div>
               <div className="font-serif text-xl font-bold text-parchment-50 tabular-nums">
-                {(summary?.total_records || corpusDocuments || 10612079).toLocaleString()}{' '}
+                {(selectedYear || selectedDecade || selectedPublishers.length > 0
+                  ? corpusDocuments || summary?.total_records || 10612079
+                  : summary?.total_records || corpusDocuments || 10612079
+                ).toLocaleString()}{' '}
                 <span className="text-xs font-sans font-normal text-parchment-300">Passages</span>
               </div>
               <p className="font-mono text-[9px] text-emerald-300 truncate mt-0.5">
-                {selectedYear
-                  ? `Active Slice: ${selectedYear}`
-                  : selectedDecade
-                  ? `Active Cohort: ${selectedDecade}s`
+                {selectedYear || selectedDecade || selectedPublishers.length > 0
+                  ? `Active Slice (${[
+                      selectedYear ? `${selectedYear}` : null,
+                      selectedDecade ? `${selectedDecade}s` : null,
+                      selectedPublishers.length > 0 ? `${selectedPublishers.length} Imprint(s)` : null,
+                    ]
+                      .filter(Boolean)
+                      .join(' · ')}) of ${(summary?.total_records || 10612079).toLocaleString()}`
                   : `${(summary?.master_manifest?.total_unique_works_1970_2025 || summary?.unique_books || 10042681).toLocaleString()} Works · ${(summary?.master_manifest?.total_complete_fulltext_books || 3957590).toLocaleString()} Full Works · ${((summary?.total_words || 894184957) / 1_000_000).toFixed(2)}M Words`}
               </p>
             </div>
@@ -1360,12 +1392,18 @@ function App() {
                 </span>
                 <Scale className="w-3.5 h-3.5 text-traditional" />
               </div>
-              <div className="flex items-center gap-2 font-mono text-xs font-bold tabular-nums">
-                <span className="text-traditional">T:{archetypeSummary.tradCount}</span>
+              <div className="flex items-center gap-1.5 font-mono text-xs font-bold tabular-nums">
+                <span className="text-traditional">
+                  T:{archetypeSummary.tradCount} ({archetypeSummary.tradShare.toFixed(0)}%)
+                </span>
                 <span className="text-parchment-300">/</span>
-                <span className="text-neoliberal">N:{archetypeSummary.neoCount}</span>
+                <span className="text-neoliberal">
+                  N:{archetypeSummary.neoCount} ({archetypeSummary.neoShare.toFixed(0)}%)
+                </span>
                 <span className="text-parchment-300">/</span>
-                <span className="text-critical">C:{archetypeSummary.critCount}</span>
+                <span className="text-critical">
+                  C:{archetypeSummary.critCount} ({archetypeSummary.critShare.toFixed(0)}%)
+                </span>
               </div>
               <p className="font-mono text-[9px] text-parchment-300 truncate mt-0.5">
                 Lead: {archetypeSummary.dominant.split(' / ')[0]}
@@ -1685,6 +1723,7 @@ function App() {
               ideologicalFilter={ideologicalFilter}
               numTopics={numTopics}
               ldaMode={ldaMode}
+              posteriorGeometry={robustnessTelemetry?.posterior_geometry}
             />
           )}
 

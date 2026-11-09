@@ -292,7 +292,7 @@ export const PipelineExplainer: React.FC<PipelineExplainerProps> = ({
     let cancelled = false;
     const timer = setTimeout(async () => {
       try {
-        const data = await ldaClientAdapter.inspectGermanLemma(q);
+        const data = await ldaClientAdapter.inspectGermanLemma(q, ldaMode);
         if (!cancelled && data && data.valid !== false) {
           setLemmaInspectorData(data);
         }
@@ -304,7 +304,7 @@ export const PipelineExplainer: React.FC<PipelineExplainerProps> = ({
       cancelled = true;
       clearTimeout(timer);
     };
-  }, [vocabLookupQuery]);
+  }, [vocabLookupQuery, ldaMode]);
 
   // Animate through stages 1..6 when isTraining is active
   useEffect(() => {

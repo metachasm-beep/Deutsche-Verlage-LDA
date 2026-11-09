@@ -31,7 +31,7 @@ export interface LDAClientPort {
   fetchDataSummary(): Promise<any>;
   fetchCoherenceGrid(): Promise<any>;
   searchMarc21Catalog(params: Marc21SearchParams): Promise<any>;
-  inspectGermanLemma(queryWord: string): Promise<any>;
+  inspectGermanLemma(queryWord: string, ldaMode?: LDAMode): Promise<any>;
 }
 
 export class HttpLDAClientAdapter implements LDAClientPort {
@@ -97,9 +97,10 @@ export class HttpLDAClientAdapter implements LDAClientPort {
     return res.json();
   }
 
-  async inspectGermanLemma(queryWord: string): Promise<any> {
+  async inspectGermanLemma(queryWord: string, ldaMode?: LDAMode): Promise<any> {
+    const modeQuery = ldaMode ? `&lda_mode=${encodeURIComponent(ldaMode)}` : '';
     const res = await fetch(
-      `${API_BASE}/api/lemma-inspector?q=${encodeURIComponent(queryWord.trim())}`
+      `${API_BASE}/api/lemma-inspector?q=${encodeURIComponent(queryWord.trim())}${modeQuery}`
     );
     if (!res.ok) {
       throw new Error(`Failed to inspect German lemma: ${res.status}`);

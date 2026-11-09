@@ -805,6 +805,17 @@ export const TrendsGraph: React.FC<TrendsGraphProps> = ({
               )}
               {allPublisherNames.map((pub, idx) => {
                 if (hiddenPublishers[pub]) return null;
+                if (
+                  selectedPublishers.length > 0 &&
+                  !selectedPublishers.some(
+                    (sp) =>
+                      sp.toLowerCase() === pub.toLowerCase() ||
+                      pub.toLowerCase().includes(sp.toLowerCase()) ||
+                      sp.toLowerCase().includes(pub.toLowerCase())
+                  )
+                ) {
+                  return null;
+                }
                 const color =
                   PUBLISHER_COLORS[pub] || FALLBACK_COLORS[idx % FALLBACK_COLORS.length];
                 return (
@@ -814,7 +825,7 @@ export const TrendsGraph: React.FC<TrendsGraphProps> = ({
                     dataKey={pub}
                     name={pub}
                     stroke={color}
-                    strokeWidth={1.8}
+                    strokeWidth={selectedPublishers.length > 0 ? 2.5 : 1.8}
                     dot={false}
                     activeDot={{
                       r: 4.5,

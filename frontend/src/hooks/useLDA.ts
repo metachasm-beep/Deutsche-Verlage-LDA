@@ -186,7 +186,8 @@ export const useLDA = () => {
     seedBoostOverride?: number,
     baseEtaOverride?: number
   ) => {
-    setIsTraining(true);
+    const showSpinner = topics.length === 0;
+    if (showSpinner) setIsTraining(true);
     try {
       const activeK = kOverride ?? numTopics;
       const activeMode = modeOverride ?? ldaMode;
@@ -196,7 +197,7 @@ export const useLDA = () => {
       if (kOverride) setNumTopics(kOverride);
       if (modeOverride) setLdaMode(modeOverride);
 
-      // Stateless single-roundtrip query across the PosteriorSliceQuery seam (Candidate 5)
+      // Stateless single-roundtrip lookup of pre-computed posterior slice (Zero live training)
       await fetchTopics(
         activeMode,
         activeK,
@@ -209,7 +210,7 @@ export const useLDA = () => {
     } catch (e) {
       console.error("LDA slice query failed", e);
     } finally {
-      setIsTraining(false);
+      if (showSpinner) setIsTraining(false);
     }
   };
 
@@ -270,22 +271,13 @@ export const useLDA = () => {
         base_eta: baseEta,
       });
       if (triggerRun) {
-        const params = new URLSearchParams();
-        if (activeFilters.year) params.append('year', activeFilters.year.toString());
-        if (activeFilters.decade) params.append('decade', activeFilters.decade.toString());
-        params.append('num_topics', numTopics.toString());
-        params.append('lda_mode', 'seeded');
-        if (activeFilters.publishers.length > 0) {
-          params.append('publishers', activeFilters.publishers.join(','));
-        }
-        params.append('seed_boost', seedBoost.toString());
-        params.append('base_eta', baseEta.toString());
-        await fetch(`${API_BASE}/api/run-lda?${params.toString()}`, { method: 'POST' });
-        await runLDA(
+        const targetMode: LDAMode =
+          ldaMode === 'seeded' || ldaMode === 'supervised' ? ldaMode : 'seeded';
+        await fetchTopics(
+          targetMode,
+          numTopics,
           activeFilters.year,
           activeFilters.decade,
-          numTopics,
-          'seeded',
           activeFilters.publishers,
           seedBoost,
           baseEta

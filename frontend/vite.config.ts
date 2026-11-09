@@ -6,11 +6,11 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
-      '/api': 'http://localhost:8000',
-      '/run-lda': 'http://localhost:8000',
-      '/trends': 'http://localhost:8000',
-      '/topic-viz': 'http://localhost:8000',
-      '/data-summary': 'http://localhost:8000',
+      '/api': 'http://127.0.0.1:8000',
+      '/run-lda': 'http://127.0.0.1:8000',
+      '/trends': 'http://127.0.0.1:8000',
+      '/topic-viz': 'http://127.0.0.1:8000',
+      '/data-summary': 'http://127.0.0.1:8000',
     }
   }
 })
