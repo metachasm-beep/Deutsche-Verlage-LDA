@@ -1242,7 +1242,7 @@ function App() {
                 <Database className="w-3.5 h-3.5 text-traditional" />
               </div>
               <div className="font-serif text-xl font-bold text-parchment-50 tabular-nums">
-                {(summary?.total_records || corpusDocuments || 10576485).toLocaleString()}{' '}
+                {(summary?.total_records || corpusDocuments || 10612079).toLocaleString()}{' '}
                 <span className="text-xs font-sans font-normal text-parchment-300">Passages</span>
               </div>
               <p className="font-mono text-[9px] text-emerald-300 truncate mt-0.5">
@@ -1250,7 +1250,7 @@ function App() {
                   ? `Active Slice: ${selectedYear}`
                   : selectedDecade
                   ? `Active Cohort: ${selectedDecade}s`
-                  : `${(summary?.master_manifest?.total_unique_works_1970_2025 || summary?.unique_books || 10042681).toLocaleString()} Works · ${(summary?.master_manifest?.total_complete_fulltext_books || 22433).toLocaleString()} Full Books · ${((summary?.total_words || 862191438) / 1_000_000).toFixed(2)}M Words`}
+                  : `${(summary?.master_manifest?.total_unique_works_1970_2025 || summary?.unique_books || 10042681).toLocaleString()} Works · ${(summary?.master_manifest?.total_complete_fulltext_books || 27587).toLocaleString()} Full Books · ${((summary?.total_words || 894184957) / 1_000_000).toFixed(2)}M Words`}
               </p>
             </div>
 
@@ -1337,9 +1337,9 @@ function App() {
                       </span>
                       <span className="font-serif text-sm sm:text-base font-bold text-parchment-50">
                         {(summary?.master_manifest?.total_unique_works_1970_2025 || summary?.unique_books || 10042681).toLocaleString()} Unique Works ·{' '}
-                        {(summary?.total_records || 10576485).toLocaleString()} Analytical Passages ·{' '}
-                        {((summary?.total_words || 862191438) / 1_000_000).toFixed(2)}M German Words ·{' '}
-                        102 DNB Sachgruppen · {(summary?.all_publishers_count || 713838).toLocaleString()} Imprints · 127 Zstd-19 Parquet Shards (1,615.5 MB)
+                        {(summary?.total_records || 10612079).toLocaleString()} Analytical Passages ·{' '}
+                        {((summary?.total_words || 894184957) / 1_000_000).toFixed(2)}M German Words ·{' '}
+                        102 DNB Sachgruppen · {(summary?.all_publishers_count || 713838).toLocaleString()} Imprints · 127 Zstd-19 Parquet Shards (1,668.1 MB)
                       </span>
                     </div>
                     <div className="flex items-center gap-2">
@@ -1367,27 +1367,27 @@ function App() {
                             Tier 1 · Complete Full-Text Books
                           </span>
                           <span className="px-1.5 py-0.5 rounded bg-emerald-500/15 font-mono text-[9px] text-emerald-300 font-bold">
-                            58.47% of Words
+                            59.91% of Words
                           </span>
                         </div>
                         <div className="font-serif text-lg font-bold text-parchment-50 tabular-nums">
-                          {(summary?.master_manifest?.total_complete_fulltext_books || 22433).toLocaleString()} Books{' '}
+                          {(summary?.master_manifest?.total_complete_fulltext_books || 27587).toLocaleString()} Books{' '}
                           <span className="text-xs font-mono font-normal text-parchment-300">
-                            · 509,216 Passages · 504.09M Words
+                            · 542,630 Passages · 535.71M Words
                           </span>
                         </div>
                         <p className="text-[11px] text-parchment-300 mt-1 leading-relaxed">
-                          Segmented into non-overlapping 1,000-word windows (Mean: 990.8w · Median: 1,000w):
+                          Segmented into non-overlapping 1,000-word windows (Mean: 987.2w · Median: 1,000w):
                         </p>
                       </div>
                       <div className="mt-2 pt-2 border-t border-white/[0.06] space-y-1 font-mono text-[10px]">
                         <div className="flex justify-between text-parchment-200">
                           <span>• DNBLab /34 & DeLiKo-2025@DNB Books:</span>
-                          <span className="text-emerald-300 font-bold">18,017 books (249,558 ch.)</span>
+                          <span className="text-emerald-300 font-bold">22,997 books (274,894 ch.)</span>
                         </div>
                         <div className="flex justify-between text-parchment-200">
                           <span>• HathiTrust HTRC Print Books:</span>
-                          <span className="text-sky-300 font-bold">4,181 books (254,126 ch.)</span>
+                          <span className="text-sky-300 font-bold">4,355 books (262,204 ch.)</span>
                         </div>
                         <div className="flex justify-between text-parchment-200">
                           <span>• Direct Cloud / GBV / IA OA Books:</span>

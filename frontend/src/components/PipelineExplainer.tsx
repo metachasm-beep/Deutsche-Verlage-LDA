@@ -73,13 +73,13 @@ const PIPELINE_STAGES = [
     accent: 'text-traditional',
     borderAccent: 'border-traditional/40',
     bgAccent: 'bg-traditional/10',
-    formula: 'D = 10,576,485 Passages · 10,042,681 Works · 22,433 Full Books · 862.19M Words · 127 Zstd-19 Parquet Shards',
+    formula: 'D = 10,612,079 Passages · 10,042,681 Works · 27,587 Full Books · 894.18M Words · 127 Zstd-19 Parquet Shards',
     summary:
-      'Ingests 100% of the official DNB OpenData MARC21-XML Bulk Dump (Packages 1–5, 40.10M total records scanned) hydrated across all 4 Complete-Works Pathways & 12x Turbo Sufficient-Statistic Streamer: Pathway 1 (unabridged & 42-page sufficient-statistic /34 EPUB & PDF monographs), Pathway 2 (DNBLab § 60d UrhG Commercial Books + DeLiKo-2025@DNB KorAP-XML/TEI-I5), Pathway 3 (HathiTrust HTRC Extracted Features 2.0 pre-2006 printed German books), and Pathway 4 (Federated Online Variational Bayes Posterior Fusion).',
+      'Ingests 100% of the official DNB OpenData MARC21-XML Bulk Dump (Packages 1–5, 40.10M total records scanned) hydrated across all 4 Complete-Works Pathways & 144-Worker Turbo Sufficient-Statistic Streamer: Pathway 1 (unabridged & sufficient-statistic /34 EPUB & PDF monographs), Pathway 2 (DNBLab § 60d UrhG Commercial Books + DeLiKo-2025@DNB KorAP-XML/TEI-I5), Pathway 3 (HathiTrust HTRC Extracted Features 2.0 pre-2006 printed German books), and Pathway 4 (Federated Online Variational Bayes Posterior Fusion).',
     details: [
       'Combines MARC21 Tag 245$a/$b (Title/Subtitle), Tag 264$b/$c (Imprint/Year across 713,838 raw imprint strings / 109 canonical publishers), Tag 520$a (Abstract), Tags 650/689$a (GND Subject Headings), and Tag 856$u (/04/text TOCs, /34 OA & Reihe O EPUBs/PDFs, services.dnb.de/deposit.dnb.de Inhaltstexte) across all 102 DNB Sachgruppen.',
-      'Stratified across 10,042,681 unique German works (1970–2025): 22,433 complete full-text books (509,216 passages · 504.09M words), 44,339 DNBLab § 60d UrhG In-Copyright Commercial Print & E-Book passages (29.90M words), 166,290 works with digitized TOC PDFs/OCRs, and 9,887,162 DNB OpenData MARC21-XML & deposit/services.dnb.de Inhaltstext records.',
-      'Stored in 127 Zstd-19 Apache Parquet shards (data/parquet/ · 1,615.52 MB compressed) backed by GitHub Release v12.0-dnb-parquet-shards and Federated Online Streaming LDA (Hoffman et al., 2010; Kupietz et al., LREC 2026).',
+      'Stratified across 10,042,681 unique German works (1970–2025): 27,587 complete full-text books (542,630 passages · 535.71M words), 46,519 DNBLab § 60d UrhG In-Copyright Commercial Print & E-Book passages (30.27M words), 166,290 works with digitized TOC PDFs/OCRs, and 9,887,162 DNB OpenData MARC21-XML & deposit/services.dnb.de Inhaltstext records.',
+      'Stored in 127 Zstd-19 Apache Parquet shards (data/parquet/ · 1,668.09 MB compressed) backed by GitHub Release v12.0-dnb-parquet-shards and Federated Online Streaming LDA (Hoffman et al., 2010; Kupietz et al., LREC 2026).',
     ],
   },
   {

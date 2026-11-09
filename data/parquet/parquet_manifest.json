@@ -1,11 +1,11 @@
 {
   "format": "Apache Parquet 2.6",
   "compression": "Zstandard (level=19) + Dictionary Encoding + Prefix Deduplication",
-  "total_rows": 10576485,
-  "total_words": 862191438,
+  "total_rows": 10612079,
+  "total_words": 894184957,
   "total_shards": 127,
-  "total_size_bytes": 1693994212,
-  "total_size_mb": 1615.52,
+  "total_size_bytes": 1749124262,
+  "total_size_mb": 1668.09,
   "shards": [
     {
       "file": "dnb_corpus_part001.parquet",
@@ -1017,11 +1017,11 @@
     },
     {
       "file": "dnb_corpus_part127.parquet",
-      "rows": 31170,
-      "words": 30513574,
-      "size_bytes": 43507606,
-      "size_mb": 41.49,
-      "sha256": "f45bd27a41d4ec4d7209154eb43f72a6287cdee796fcf1aa8a7a27402d44580b"
+      "rows": 66764,
+      "words": 62507093,
+      "size_bytes": 98637656,
+      "size_mb": 94.07,
+      "sha256": "b8cb030e67d56ef723eec1163fa5c0e0a34814a679db5390b6916def58effa6a"
     }
   ]
 }

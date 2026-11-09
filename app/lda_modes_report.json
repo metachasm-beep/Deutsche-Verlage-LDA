@@ -11,7 +11,7 @@
         "formula": "P(φ_k | η_0), w_n ~ 1× Raw Count",
         "description": "Pure Blei et al. (2003) baseline: removes the 2× RELIGIOUS_VOICE_KEYWORDS salience weight and uses an unseeded symmetric/auto Dirichlet word prior."
       },
-      "corpus_documents": 10576485,
+      "corpus_documents": 10612079,
       "vocabulary_size": 25000,
       "coherence_score": -3.3719,
       "topics": [
@@ -1871,7 +1871,7 @@
         "formula": "P(φ_k | η_auto), w_rel ~ 2× Salience",
         "description": "Amplifies core theological and critical signifiers (2× token weight) while keeping Dirichlet topic slots unseeded so clusters emerge inductively."
       },
-      "corpus_documents": 10576485,
+      "corpus_documents": 10612079,
       "vocabulary_size": 25000,
       "coherence_score": -2.5289,
       "tfidf_audit": {
@@ -1896,7 +1896,7 @@
           "top_terms": [
             {
               "term": "politisch",
-              "weight": 0.02526
+              "weight": 0.02527
             },
             {
               "term": "staat",
@@ -1920,7 +1920,7 @@
             },
             {
               "term": "krieg",
-              "weight": 0.00871
+              "weight": 0.00872
             },
             {
               "term": "europa",
@@ -1928,7 +1928,7 @@
             },
             {
               "term": "europäisch",
-              "weight": 0.00643
+              "weight": 0.00644
             },
             {
               "term": "bevölkerung",
@@ -2072,7 +2072,7 @@
             },
             {
               "term": "rezeption",
-              "weight": 0.00593
+              "weight": 0.00594
             },
             {
               "term": "praktische",
@@ -2084,7 +2084,7 @@
             },
             {
               "term": "evangelisch",
-              "weight": 0.00468
+              "weight": 0.00469
             },
             {
               "term": "judentum",
@@ -2510,7 +2510,7 @@
             },
             {
               "publisher": "De Gruyter / Transcript",
-              "share": 5.6
+              "share": 5.5
             },
             {
               "publisher": "Campus",
@@ -2576,7 +2576,7 @@
           "top_terms": [
             {
               "term": "gott",
-              "weight": 0.17815
+              "weight": 0.17814
             },
             {
               "term": "mensch",
@@ -2712,7 +2712,7 @@
           "top_terms": [
             {
               "term": "leben",
-              "weight": 0.05339
+              "weight": 0.0534
             },
             {
               "term": "mensch",
@@ -2728,11 +2728,11 @@
             },
             {
               "term": "weg",
-              "weight": 0.01229
+              "weight": 0.01228
             },
             {
               "term": "erfahrung",
-              "weight": 0.01164
+              "weight": 0.01163
             },
             {
               "term": "religiös",
@@ -2740,7 +2740,7 @@
             },
             {
               "term": "spiritualität",
-              "weight": 0.00899
+              "weight": 0.00898
             },
             {
               "term": "tod",
@@ -2756,7 +2756,7 @@
             },
             {
               "term": "christlich",
-              "weight": 0.0073
+              "weight": 0.00731
             },
             {
               "term": "kraft",
@@ -2764,7 +2764,7 @@
             },
             {
               "term": "meditation",
-              "weight": 0.00557
+              "weight": 0.00558
             },
             {
               "term": "hoffnung",
@@ -2848,7 +2848,7 @@
           "top_terms": [
             {
               "term": "kirche",
-              "weight": 0.22873
+              "weight": 0.2287
             },
             {
               "term": "katholisch",
@@ -2856,7 +2856,7 @@
             },
             {
               "term": "evangelisch",
-              "weight": 0.02364
+              "weight": 0.02365
             },
             {
               "term": "kirchlich",
@@ -2868,7 +2868,7 @@
             },
             {
               "term": "christlich",
-              "weight": 0.00816
+              "weight": 0.00817
             },
             {
               "term": "dienst",
@@ -2996,7 +2996,7 @@
             },
             {
               "term": "predigt",
-              "weight": 0.01259
+              "weight": 0.0126
             },
             {
               "term": "liturgie",
@@ -3004,7 +3004,7 @@
             },
             {
               "term": "feier",
-              "weight": 0.00776
+              "weight": 0.00775
             },
             {
               "term": "brief",
@@ -3012,7 +3012,7 @@
             },
             {
               "term": "lied",
-              "weight": 0.0061
+              "weight": 0.00611
             },
             {
               "term": "gebet",
@@ -3172,7 +3172,7 @@
             },
             {
               "term": "universität",
-              "weight": 0.00525
+              "weight": 0.00524
             },
             {
               "term": "römisch",
@@ -3212,7 +3212,7 @@
               "publisher": "Aschendorff",
               "date": "2003",
               "corpus_layer": "hathitrust_ef_fullbook_print",
-              "probability": 85.4,
+              "probability": 85.3,
               "keywords": [],
               "snippet": "Dänemark, Norwegen und Schweden im Zeitalter der Reformation und Konfessionalisierung: nordische Königreiche und Konfession 1500 bis 1660. Asche, Matthias. Aschendorff. Bodils Herzogin Herzogin Äbtissin Otto Ove Burmeister Brodd Ansger Birg",
               "apa_citation": "Asche, Matthias (2003). Dänemark, Norwegen und Schweden im Zeitalter der Reformation und Konfessionalisierung: nordische Königreiche und Konfession 1500 bis 1660 [HTRC-Vollbuch-Abschnitt 74/75]. Aschendorff."
@@ -3260,7 +3260,7 @@
             },
             {
               "term": "gesellschaft",
-              "weight": 0.02285
+              "weight": 0.02286
             },
             {
               "term": "ethik",
@@ -3506,7 +3506,7 @@
               "publisher": "DNB Monograph (DE)",
               "date": "2004",
               "corpus_layer": "dnb_oa_fullbook",
-              "probability": 92.2,
+              "probability": 92.1,
               "keywords": [],
               "snippet": "Der Begriff des Wissens im Wissensmanagementdiskurs: Materialien zur Begriffsgeschichte unter Berücksichtigung der klassischen griechischen Philosophie. Niehaus, Michael. DNB Monograph (DE). Künstler und Techniker sowie Wissenschaftler für",
               "apa_citation": "Niehaus, Michael (2004). Der Begriff des Wissens im Wissensmanagementdiskurs: Materialien zur Begriffsgeschichte unter Berücksichtigung der klassischen griechischen Philosophie [DNB-OA-Vollbuch-Abschnitt 8/28]. DNB Monograph (DE)."
@@ -3521,8 +3521,8 @@
           "Topic 3": 6.4,
           "Topic 4": 2.8,
           "Topic 5": 6.6,
-          "Topic 6": 11.0,
-          "Topic 7": 7.5,
+          "Topic 6": 11.1,
+          "Topic 7": 7.4,
           "Topic 8": 8.4,
           "Topic 9": 7.1,
           "Topic 10": 14.9,
@@ -3603,26 +3603,26 @@
       "slda_diagnostics": {
         "regime_cv_accuracy": 70.7,
         "regime_in_sample_accuracy": 70.7,
-        "regime_macro_f1": 54.1,
+        "regime_macro_f1": 54.0,
         "publisher_accuracy": 45.0,
         "r2_explanatory_power": 0.288,
         "regime_class_metrics": {
           "Traditional / Ecclesiastical": {
             "precision": 75.5,
-            "recall": 89.8,
+            "recall": 89.7,
             "f1": 82.0,
-            "support": 16996
+            "support": 17000
           },
           "Neoliberal / Self-Optimization": {
-            "precision": 53.9,
+            "precision": 53.5,
             "recall": 12.0,
             "f1": 19.6,
             "support": 4181
           },
           "Critical / Secular-Humanist": {
-            "precision": 60.4,
-            "recall": 60.8,
-            "f1": 60.6,
+            "precision": 60.3,
+            "recall": 60.6,
+            "f1": 60.5,
             "support": 7823
           }
         },
@@ -3654,17 +3654,17 @@
           {
             "topic_id": 4,
             "predicted_regime": "Critical / Secular-Humanist",
-            "w_traditional": -0.482,
-            "w_neoliberal": 0.13,
+            "w_traditional": -0.481,
+            "w_neoliberal": 0.129,
             "w_critical": 0.352,
             "discriminative_power": 0.352
           },
           {
             "topic_id": 5,
             "predicted_regime": "Neoliberal / Self-Optimization",
-            "w_traditional": -0.167,
-            "w_neoliberal": 0.245,
-            "w_critical": -0.078,
+            "w_traditional": -0.166,
+            "w_neoliberal": 0.246,
+            "w_critical": -0.079,
             "discriminative_power": 0.177
           },
           {
@@ -3678,7 +3678,7 @@
           {
             "topic_id": 7,
             "predicted_regime": "Neoliberal / Self-Optimization",
-            "w_traditional": -0.129,
+            "w_traditional": -0.128,
             "w_neoliberal": 0.309,
             "w_critical": -0.181,
             "discriminative_power": 0.22
@@ -3694,7 +3694,7 @@
           {
             "topic_id": 9,
             "predicted_regime": "Traditional / Ecclesiastical",
-            "w_traditional": 0.524,
+            "w_traditional": 0.525,
             "w_neoliberal": -0.171,
             "w_critical": -0.353,
             "discriminative_power": 0.378
@@ -3702,7 +3702,7 @@
           {
             "topic_id": 10,
             "predicted_regime": "Traditional / Ecclesiastical",
-            "w_traditional": 0.054,
+            "w_traditional": 0.053,
             "w_neoliberal": -0.074,
             "w_critical": 0.021,
             "discriminative_power": 0.054
@@ -3737,7 +3737,7 @@
         "formula": "φ_k ~ Dir(η_k^{(RQ_m)}), η_{k,w∈S_m} = 15.0",
         "description": "Constructs an asymmetric K × |V| conjugate Dirichlet prior matrix η anchoring topic slots to RQ₁ (Traditional), RQ₂ (Neoliberal), and RQ₃ (Critical) seed lexicons (Jagarlamudi et al., 2012)."
       },
-      "corpus_documents": 10576485,
+      "corpus_documents": 10612079,
       "vocabulary_size": 25000,
       "coherence_score": -3.435,
       "topics": [
@@ -5609,7 +5609,7 @@
         "formula": "ŷ_d = ArgMax(θ_d · W + b), η_{k,w} ∝ P(w | y_d)",
         "description": "Combines empirical document-label co-occurrence priors with a 5-fold cross-validated L2 Ridge/Softmax response head predicting Ideological Regime (RQ₁–RQ₃) and Publisher from θ_d (Blei & McAuliffe, 2007)."
       },
-      "corpus_documents": 10576485,
+      "corpus_documents": 10612079,
       "vocabulary_size": 25000,
       "coherence_score": -1.965,
       "topics": [
@@ -7484,7 +7484,7 @@
       "regime_macro_f1": 43.6,
       "publisher_accuracy": 53.6,
       "r2_explanatory_power": 0.2021,
-      "documents": 10576485
+      "documents": 10612079
     },
     {
       "mode": "unsupervised",
@@ -7495,10 +7495,10 @@
       "u_mass": -2.5289,
       "vocab_size": 25000,
       "regime_cv_accuracy": 70.7,
-      "regime_macro_f1": 54.1,
+      "regime_macro_f1": 54.0,
       "publisher_accuracy": 52.0,
       "r2_explanatory_power": 0.288,
-      "documents": 10576485
+      "documents": 10612079
     },
     {
       "mode": "seeded",
@@ -7512,7 +7512,7 @@
       "regime_macro_f1": 40.2,
       "publisher_accuracy": 46.0,
       "r2_explanatory_power": 0.1711,
-      "documents": 10576485
+      "documents": 10612079
     },
     {
       "mode": "supervised",
@@ -7526,7 +7526,7 @@
       "regime_macro_f1": 56.9,
       "publisher_accuracy": 52.9,
       "r2_explanatory_power": 0.3092,
-      "documents": 10576485
+      "documents": 10612079
     }
   ]
 }
