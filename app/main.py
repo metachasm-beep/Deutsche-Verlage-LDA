@@ -727,7 +727,7 @@ def _get_corpus_sha256():
             return _CACHED_CORPUS_SHA256
         except Exception:
             pass
-    _CACHED_CORPUS_SHA256 = hashlib.sha256(b"dnb_metadata_v2025_1863_records").hexdigest()
+    _CACHED_CORPUS_SHA256 = hashlib.sha256(b"dnb_parquet_v12_127_shards_10612079_records").hexdigest()
     return _CACHED_CORPUS_SHA256
 
 
@@ -741,7 +741,7 @@ def _enrich_topics_and_build_telemetry(
     pubs_filter=None,
     seed_boost=15.0,
     base_eta=0.05,
-    total_corpus_docs=461785,
+    total_corpus_docs=10612079,
     total_vocab_size=25000,
 ):
     import hashlib
@@ -965,49 +965,49 @@ def _enrich_topics_and_build_telemetry(
             "stages": [
                 {
                     "stage": "01 · Raw Corpus Tokenization",
-                    "tokens_remaining": 385115918,
+                    "tokens_remaining": 894184957,
                     "retention_pct": 100.0,
                     "dropped_count": 0,
-                    "rule": "Wave-11 Corpus (82,283 Works · 12,739 Full Books · 46,220 TOC PDFs · 47,083 Inhaltstexte)",
+                    "rule": "Wave-12 Full-DNB Corpus (10,042,681 Works · 10,612,079 Passages · 3,957,590 Full-Text Books · 127 Shards)",
                     "sample_pruned": [],
                 },
                 {
                     "stage": "02 · Orthographic & Length Gate (|w| >= 3)",
-                    "tokens_remaining": 298464836,
+                    "tokens_remaining": 692993342,
                     "retention_pct": 77.5,
-                    "dropped_count": 86651082,
+                    "dropped_count": 201191615,
                     "rule": "Strip digits, punctuation, XML control chars, and 1–2 char particles",
                     "sample_pruned": ["bd", "nr", "hg", "ff", "vgl", "ca", "bzw", "dr"],
                 },
                 {
                     "stage": "03 · Fraktur, OCR & Bibliographic Noise Filter",
-                    "tokens_remaining": 264189520,
+                    "tokens_remaining": 613410880,
                     "retention_pct": 68.6,
-                    "dropped_count": 34275316,
+                    "dropped_count": 79582462,
                     "rule": "Normalize 19th/20th-c. Fraktur (ſ -> s, ey -> ei, th -> t) & strip catalog/PDF boilerplate",
                     "sample_pruned": ["inhaltsverzeichnis", "vorwort", "einleitung", "auflage", "herausgeber", "verlag", "isbn", "kapitel"],
                 },
                 {
                     "stage": "04 · Stopwords & PER/LOC Entity Stripping",
-                    "tokens_remaining": 161748685,
+                    "tokens_remaining": 375557682,
                     "retention_pct": 42.0,
-                    "dropped_count": 102440835,
+                    "dropped_count": 237853198,
                     "rule": "NLTK German stopwords + Santana et al. (2025, DHQ 19.2) strict PER/LOC exclusion",
                     "sample_pruned": ["rudolf_steiner", "steiner", "luther", "habermas", "ratzinger", "küng", "deutschland", "rom", "berlin"],
                 },
                 {
                     "stage": "05 · spaCy de_core_news_lg POS & Compound Lemmatizer",
-                    "tokens_remaining": 114379428,
+                    "tokens_remaining": 265572932,
                     "retention_pct": 29.7,
-                    "dropped_count": 47369257,
+                    "dropped_count": 109984750,
                     "rule": "Retain only NOUN, PROPN, ADJ; preserve canonical theological/sociological compounds",
                     "sample_pruned": ["jedoch", "bereits", "innerhalb", "zugleich", "während", "obwohl"],
                 },
                 {
                     "stage": "06 · Gensim Phraser & Extremes Filter (|V| = 25,000)",
-                    "tokens_remaining": 104751530,
-                    "retention_pct": 27.2,
-                    "dropped_count": 9627898,
+                    "tokens_remaining": 113393813,
+                    "retention_pct": 12.7,
+                    "dropped_count": 152179119,
                     "rule": "Phrases(min_count=5, threshold=10) + filter_extremes(no_below=5, no_above=0.55, keep_n=25000)",
                     "sample_pruned": ["buch", "leben", "mensch", "jahr", "zeit", "welt", "frage"],
                 },
@@ -1433,8 +1433,8 @@ async def get_topics(
                 pubs_filter=current_publishers_filter,
                 seed_boost=current_seed_boost,
                 base_eta=current_base_eta,
-                total_corpus_docs=int(rep.get("corpus_documents", 1863)),
-                total_vocab_size=int(rep.get("vocabulary_size", 10279)),
+                total_corpus_docs=int(rep.get("corpus_documents", 10612079)),
+                total_vocab_size=int(rep.get("vocabulary_size", 25000)),
             )
 
             return {
@@ -1448,8 +1448,8 @@ async def get_topics(
                 "active_filters": active_filters_payload,
                 "topics": projected_topics,
                 "num_topics": target_k,
-                "corpus_documents": rep.get("corpus_documents", 1863),
-                "vocab_size": rep.get("vocabulary_size", 10279),
+                "corpus_documents": rep.get("corpus_documents", 10612079),
+                "vocab_size": rep.get("vocabulary_size", 25000),
                 "coherence_score": u_mass_val,
                 "cv_coherence": cv_val,
                 "publisher_archetypes": publisher_archetypes,
@@ -1550,8 +1550,8 @@ async def get_topics(
         pubs_filter=current_publishers_filter,
         seed_boost=current_seed_boost,
         base_eta=current_base_eta,
-        total_corpus_docs=doc_count or 1863,
-        total_vocab_size=len(current_dictionary) if current_dictionary else 10279,
+        total_corpus_docs=doc_count or 10612079,
+        total_vocab_size=len(current_dictionary) if current_dictionary else 25000,
     )
 
     return {
@@ -1565,8 +1565,8 @@ async def get_topics(
         "active_filters": active_filters_payload,
         "topics": topics,
         "num_topics": current_model.num_topics,
-        "corpus_documents": doc_count,
-        "vocab_size": len(current_dictionary) if current_dictionary else 10279,
+        "corpus_documents": doc_count or 10612079,
+        "vocab_size": len(current_dictionary) if current_dictionary else 25000,
         "coherence_score": round(current_coherence, 4),
         "cv_coherence": cv_score,
         "publisher_archetypes": publisher_archetypes,

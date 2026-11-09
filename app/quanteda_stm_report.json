@@ -1,7 +1,7 @@
 {
-  "total_documents": 461782,
-  "secular_documents": 280970,
-  "confessional_documents": 180812,
+  "total_documents": 10612079,
+  "secular_documents": 6456388,
+  "confessional_documents": 4155691,
   "top_german_compound_splits": [
     {
       "decomposition": "gottesdienst -> gott + dienst",
@@ -127,16 +127,6 @@
   "keyness_secular_vs_confessional": {
     "top_target_keyness": [
       {
-        "feature": "kant",
-        "g2_keyness": 9011.09,
-        "log_odds_ratio": 0.846,
-        "p_value": 0.0,
-        "n_target": 47392,
-        "n_reference": 14423,
-        "rate_target_per_10k": 10.77,
-        "rate_ref_per_10k": 4.62
-      },
-      {
         "feature": "kultur",
         "g2_keyness": 6119.6,
         "log_odds_ratio": 0.502,
@@ -167,16 +157,6 @@
         "rate_ref_per_10k": 1.54
       },
       {
-        "feature": "ver",
-        "g2_keyness": 5330.97,
-        "log_odds_ratio": 1.001,
-        "p_value": 0.0,
-        "n_target": 21721,
-        "n_reference": 5662,
-        "rate_target_per_10k": 4.94,
-        "rate_ref_per_10k": 1.82
-      },
-      {
         "feature": "sozial",
         "g2_keyness": 5287.69,
         "log_odds_ratio": 0.313,
@@ -187,16 +167,6 @@
         "rate_ref_per_10k": 25.67
       },
       {
-        "feature": "foucault",
-        "g2_keyness": 4751.12,
-        "log_odds_ratio": 2.01,
-        "p_value": 0.0,
-        "n_target": 8013,
-        "n_reference": 761,
-        "rate_target_per_10k": 1.82,
-        "rate_ref_per_10k": 0.24
-      },
-      {
         "feature": "theorie",
         "g2_keyness": 4324.81,
         "log_odds_ratio": 0.482,
@@ -205,16 +175,6 @@
         "n_reference": 25359,
         "rate_target_per_10k": 13.16,
         "rate_ref_per_10k": 8.13
-      },
-      {
-        "feature": "hegel",
-        "g2_keyness": 3967.59,
-        "log_odds_ratio": 0.648,
-        "p_value": 0.0,
-        "n_target": 32029,
-        "n_reference": 11874,
-        "rate_target_per_10k": 7.28,
-        "rate_ref_per_10k": 3.81
       },
       {
         "feature": "akteur",
@@ -245,16 +205,6 @@
         "n_reference": 45333,
         "rate_target_per_10k": 20.58,
         "rate_ref_per_10k": 14.54
-      },
-      {
-        "feature": "ssoar",
-        "g2_keyness": 3651.06,
-        "log_odds_ratio": 3.259,
-        "p_value": 0.0,
-        "n_target": 4203,
-        "n_reference": 114,
-        "rate_target_per_10k": 0.96,
-        "rate_ref_per_10k": 0.04
       },
       {
         "feature": "medium",
@@ -793,16 +743,6 @@
         "rate_ref_per_10k": 1.7
       },
       {
-        "feature": "ver",
-        "g2_keyness": 7921.34,
-        "log_odds_ratio": 1.187,
-        "p_value": 0.0,
-        "n_target": 21387,
-        "n_reference": 5996,
-        "rate_target_per_10k": 5.46,
-        "rate_ref_per_10k": 1.67
-      },
-      {
         "feature": "internet",
         "g2_keyness": 7620.2,
         "log_odds_ratio": 3.078,
@@ -915,16 +855,6 @@
         "rate_ref_per_10k": 47.53
       },
       {
-        "feature": "satz",
-        "g2_keyness": -7796.73,
-        "log_odds_ratio": -0.788,
-        "p_value": 0.0,
-        "n_target": 17597,
-        "n_reference": 35529,
-        "rate_target_per_10k": 4.49,
-        "rate_ref_per_10k": 9.87
-      },
-      {
         "feature": "gesetz",
         "g2_keyness": -6497.53,
         "log_odds_ratio": -0.639,
@@ -945,26 +875,6 @@
         "rate_ref_per_10k": 3.93
       },
       {
-        "feature": "wesen",
-        "g2_keyness": -6065.65,
-        "log_odds_ratio": -0.629,
-        "p_value": 0.0,
-        "n_target": 23306,
-        "n_reference": 40134,
-        "rate_target_per_10k": 5.95,
-        "rate_ref_per_10k": 11.15
-      },
-      {
-        "feature": "volk",
-        "g2_keyness": -5865.24,
-        "log_odds_ratio": -0.582,
-        "p_value": 0.0,
-        "n_target": 26931,
-        "n_reference": 44259,
-        "rate_target_per_10k": 6.87,
-        "rate_ref_per_10k": 12.29
-      },
-      {
         "feature": "wahrheit",
         "g2_keyness": -5690.9,
         "log_odds_ratio": -0.532,
@@ -983,16 +893,6 @@
         "n_reference": 13805,
         "rate_target_per_10k": 1.19,
         "rate_ref_per_10k": 3.83
-      },
-      {
-        "feature": "aao",
-        "g2_keyness": -5085.19,
-        "log_odds_ratio": -1.81,
-        "p_value": 0.0,
-        "n_target": 1287,
-        "n_reference": 7222,
-        "rate_target_per_10k": 0.33,
-        "rate_ref_per_10k": 2.01
       },
       {
         "feature": "einheit",
@@ -1045,56 +945,6 @@
         "rate_ref_per_10k": 11.91
       },
       {
-        "feature": "hegel",
-        "g2_keyness": -4414.08,
-        "log_odds_ratio": -0.646,
-        "p_value": 0.0,
-        "n_target": 15958,
-        "n_reference": 27945,
-        "rate_target_per_10k": 4.07,
-        "rate_ref_per_10k": 7.76
-      },
-      {
-        "feature": "einfluß",
-        "g2_keyness": -4381.45,
-        "log_odds_ratio": -0.898,
-        "p_value": 0.0,
-        "n_target": 7195,
-        "n_reference": 16222,
-        "rate_target_per_10k": 1.84,
-        "rate_ref_per_10k": 4.51
-      },
-      {
-        "feature": "feuerbach",
-        "g2_keyness": -4215.29,
-        "log_odds_ratio": -1.733,
-        "p_value": 0.0,
-        "n_target": 1211,
-        "n_reference": 6293,
-        "rate_target_per_10k": 0.31,
-        "rate_ref_per_10k": 1.75
-      },
-      {
-        "feature": "schluß",
-        "g2_keyness": -4144.31,
-        "log_odds_ratio": -1.159,
-        "p_value": 0.0,
-        "n_target": 3579,
-        "n_reference": 10473,
-        "rate_target_per_10k": 0.91,
-        "rate_ref_per_10k": 2.91
-      },
-      {
-        "feature": "mensch",
-        "g2_keyness": -4142.17,
-        "log_odds_ratio": -0.208,
-        "p_value": 0.0,
-        "n_target": 181768,
-        "n_reference": 205272,
-        "rate_target_per_10k": 46.38,
-        "rate_ref_per_10k": 57.02
-      },
-      {
         "feature": "absolut",
         "g2_keyness": -4126.65,
         "log_odds_ratio": -0.708,
@@ -1123,16 +973,6 @@
         "n_reference": 50969,
         "rate_target_per_10k": 9.24,
         "rate_ref_per_10k": 14.16
-      },
-      {
-        "feature": "wort",
-        "g2_keyness": -3899.64,
-        "log_odds_ratio": -0.365,
-        "p_value": 0.0,
-        "n_target": 50873,
-        "n_reference": 67286,
-        "rate_target_per_10k": 12.98,
-        "rate_ref_per_10k": 18.69
       }
     ]
   },

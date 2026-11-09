@@ -126,7 +126,7 @@ function App() {
       ? summary.publishers
       : COMPREHENSIVE_FALLBACK_PUBLISHERS.map((p) => p.publisher);
 
-  // Full comprehensive list of canonical imprints across the 461,785-passage corpus for single/multi-publisher slicing
+  // Full comprehensive list of canonical imprints across the 10,612,079-passage corpus for single/multi-publisher slicing
   const sliceablePublishers: string[] = Array.from(
     new Set([
       ...publishersList,

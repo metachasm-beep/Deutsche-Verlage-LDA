@@ -1,11 +1,11 @@
 {
   "source": "DNB SRU v1.1 + GBV/K10plus + HathiTrust HTRC + OpenAlex Unfiltered All-Sachgruppen German Corpus (spr=ger, All 102 DNB Sachgruppen 000–990 + B/K/S, 1970–2025)",
-  "count": 10555871,
+  "count": 10612079,
   "total_records": 10612079,
-  "unique_books": 10041481,
+  "unique_books": 10042681,
   "total_words": 894184957,
   "vocabulary_size": 25000,
-  "coherence_score": -2.5027,
+  "coherence_score": -3.1992,
   "publishers": [
     "Springer Nature / Metzler",
     "Books on Demand (BoD)",
@@ -6924,12 +6924,12 @@
     "incorporated_unique_dnb_oa_books": 9692
   },
   "master_manifest": {
-    "total_unique_works_1970_2025": 10041481,
+    "total_unique_works_1970_2025": 10042681,
     "total_complete_fulltext_books": 3957590,
-    "total_dnb_oa_fulltext_books": 14423,
+    "total_dnb_oa_fulltext_books": 21370,
     "total_hathitrust_fulltext_books": 4056,
-    "total_passages_in_corpus": 10528704,
-    "total_words_in_corpus": 801389747,
+    "total_passages_in_corpus": 10612079,
+    "total_words_in_corpus": 894184957,
     "works_by_highest_tier": {
       "Tier 3: DNB Deposit.dnb.de Inhaltstext, MARC 520 Abstract & Indexing": 9913690,
       "Tier 2: DNB Digitized /04 Inhaltsverzeichnis & Reading-Sample PDF": 136777,

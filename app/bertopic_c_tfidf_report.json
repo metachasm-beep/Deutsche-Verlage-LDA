@@ -1,6 +1,6 @@
 {
   "architecture": "Neural Contextual Document Embeddings (128-dim PV-DM Doc2Vec) + SVD Manifold + Grootendorst (2022) Class-Based TF-IDF (c-TF-IDF)",
-  "total_documents": 461782,
+  "total_documents": 10612079,
   "num_clusters": 12,
   "clusters": [
     {

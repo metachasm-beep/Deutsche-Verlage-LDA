@@ -68,7 +68,7 @@ export const useLDA = () => {
   const [ldaModeMeta, setLdaModeMeta] = useState<any>(null);
   const [modesComparison, setModesComparison] = useState<ModeComparisonRow[]>([]);
   const [sldaDiagnostics, setSldaDiagnostics] = useState<SLDADiagnostics | null>(null);
-  const [corpusDocuments, setCorpusDocuments] = useState<number>(461785);
+  const [corpusDocuments, setCorpusDocuments] = useState<number>(10612079);
   const [vocabSize, setVocabSize] = useState<number>(25000);
   const [coherenceScore, setCoherenceScore] = useState<number>(-2.4760);
   const [cvCoherence, setCvCoherence] = useState<number | null>(null);

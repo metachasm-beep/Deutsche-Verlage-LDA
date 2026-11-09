@@ -25,14 +25,20 @@ CITATION_STYLE = "APA"  # Enforce APA 7th Edition for all research and writing s
 # POS tags to keep for LDA
 ALLOWED_POSTAGS = ["NOUN", "PROPN", "ADJ"]
 
-# Domain-specific German stopwords (Archival, MARC21 & Publishing Noise)
+# Domain-specific German stopwords (Archival, MARC21 & Publishing Noise + Generic Ubiquity Nouns)
 DOMAIN_STOPWORDS = [
     "verlag", "seiten", "isbn", "auflage", "euro", "jahr", "märz", "berlin", "frankfurt",
     "ebd", "vgl", "hrsg", "hg", "abb", "anm", "aufl", "bd", "bde", "bzw", "ca", "dh",
     "diss", "me", "ua", "usw", "zb", "zt", "ff", "f", "s",
     "dnb", "bibliothek", "deutsche", "nationalbibliothek", "katalog", "reihe",
     "produktform", "spezifisch", "paperback", "hardback", "schutzumschlag", "with", "dust", "jacket",
-    "sachbücher", "sachbuch", "band", "bände", "ausgabe", "neuausgabe", "beitrag", "buch", "werk"
+    "sachbücher", "sachbuch", "band", "bände", "ausgabe", "neuausgabe", "beitrag", "buch", "werk",
+    "fall", "stelle", "tatsache", "name", "frage", "wort", "begriff", "bedeutung", "problem",
+    "form", "art", "weise", "seite", "teil", "zeit", "mensch", "leben", "welt", "land", "stadt",
+    "hand", "auge", "tag", "weg", "ort", "bild", "raum", "arbeit", "text", "autor", "beispiel",
+    "grund", "folge", "sicht", "rahmen", "zusammenhang", "blick", "anfang", "ende", "mitte",
+    "zahl", "punkt", "ebene", "bereich", "gebiet", "feld", "schrift", "brief", "person", "leute",
+    "volk", "frau", "mann", "kind", "mädchen", "junge", "eltern", "mutter", "vater", "sohn", "tochter"
 ]
 
 # Specialized keywords for Ph.D. Research weighting (Thematic Focus)
@@ -48,20 +54,35 @@ ARCHETYPE_LEXICONS = {
     "Traditional / Ecclesiastical": {
         "kirche", "gott", "seelsorge", "liturgie", "gemeinde", "glaube", "christlich",
         "dogmatik", "sakrament", "gottesdienst", "bibel", "bischof", "ökumene",
-        "gebet", "erlösung", "gnade", "christus", "jesus", "katholisch", "evangelisch",
-        "theologie", "pfarrer", "eucharistie", "messfeier", "kirchenjahr", "christentum"
+        "gebet", "erlösung", "gnade", "christus", "jesus", "jesu", "katholisch", "evangelisch",
+        "theologie", "theologisch", "pfarrer", "eucharistie", "messfeier", "kirchenjahr", "christentum",
+        "christ", "religionspädagogik", "religionsunterricht", "diakonie", "caritas", "exegese",
+        "testament", "psalm", "schöpfung", "auferstehung", "verkündigung", "konfession", "kloster",
+        "mönch", "papst", "konzil", "taufe", "frömmigkeit", "heilig", "predigt", "mission",
+        "katechismus", "synode", "trinität", "offenbarung", "kirchengeschichte", "kirchenrecht"
     },
     "Neoliberal / Self-Optimization": {
         "selbstoptimierung", "erfolg", "achtsamkeit", "markt", "selbsthilfe", "lebenshilfe",
-        "glück", "resilienz", "gesundheit", "führung", "management", "selbst", "gelingen",
+        "glück", "resilienz", "gesundheit", "führung", "management", "gelingen",
         "heilung", "spiritualität", "potenzial", "erfüllung", "spirituell", "alltag",
-        "lebensführung", "coaching", "wohlbefinden", "krise", "sinn", "person", "gruppe",
-        "entwicklung", "bildung", "familie", "beziehung"
+        "lebensführung", "coaching", "wohlbefinden", "krise", "sinn", "meditation",
+        "burnout", "selbstliebe", "gelassenheit", "lebenskunst", "selbstfürsorge",
+        "stressbewältigung", "therapie", "psychologie", "psychologisch", "psychotherapie",
+        "beratung", "bewusstsein", "seele", "körper", "lebenspraxis", "erfahrung",
+        "identität", "pädagogik", "erziehung", "anthroposophie", "waldorfschule",
+        "ganzheitlich", "harmonie", "trauma", "biografiearbeit", "sinnkrise"
     },
     "Critical / Secular-Humanist": {
-        "atheismus", "aufklärung", "machtkritik", "säkularismus", "humanismus",
-        "religionskritik", "kirchenkritik", "wissenschaft", "vernunft", "säkular",
-        "demokratie", "politik", "ideologie", "herrschaft", "diktatur", "antisemitismus",
-        "kritik", "machtmissbrauch", "klerikalismus", "philosophie", "gesellschaft", "staat"
+        "atheismus", "atheist", "atheistisch", "aufklärung", "machtkritik", "säkularismus",
+        "säkularisierung", "säkularität", "humanismus", "humanistisch", "religionskritik",
+        "kirchenkritik", "wissenschaft", "wissenschaftlich", "vernunft", "säkular",
+        "demokratie", "demokratisch", "politik", "politisch", "ideologie", "ideologiekritik",
+        "herrschaft", "diktatur", "antisemitismus", "kritik", "kritisch", "machtmissbrauch",
+        "klerikalismus", "philosophie", "philosoph", "philosophisch", "gesellschaft",
+        "gesellschaftlich", "staat", "staatlich", "recht", "rechtlich", "gesetz",
+        "freiheit", "autonomie", "emanzipation", "moderne", "modernisierung", "pluralismus",
+        "diskurs", "öffentlichkeit", "soziologie", "religionssoziologie", "systemtheorie",
+        "ethik", "ethisch", "moral", "moralisch", "kultur", "kulturell", "freidenker",
+        "materialismus", "naturalismus", "laizismus", "toleranz", "menschenrechte"
     }
 }

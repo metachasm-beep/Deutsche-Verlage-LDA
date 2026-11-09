@@ -294,16 +294,16 @@ export const PipelineExplainer: React.FC<PipelineExplainerProps> = ({
     return () => clearInterval(interval);
   }, [isTraining]);
 
-  const totalRecords = summary?.count || 10555871;
+  const totalRecords = summary?.total_records || summary?.count || 10612079;
   const uniqueBooks = summary?.master_manifest?.total_unique_works_1970_2025 || summary?.unique_books || 10042681;
-  const totalFullBooks = summary?.master_manifest?.total_complete_fulltext_books || 20351;
-  const totalWords = summary?.total_words || 842192240;
+  const totalFullBooks = summary?.master_manifest?.total_complete_fulltext_books || 3957590;
+  const totalWords = summary?.total_words || 894184957;
   const corpusLayers: Record<string, number> = summary?.corpus_layers || {
     dnb_deposit_inhaltstext: 9886768,
-    hathitrust_ef_fullbook_print: 250397,
-    dnb_oa_fullbook: 214862,
+    dnb_oa_fullbook: 277721,
+    hathitrust_ef_fullbook_print: 252855,
     dnb_toc_pdf_fulltext: 136211,
-    dnblab_dtf_incopyright: 44339,
+    dnblab_dtf_incopyright: 46500,
     gbv_direct_fulltext_pdf: 14199,
     entire_fulltext_book_cloud: 4072,
     drm_fallback_multi_api_enriched: 3561,
@@ -316,11 +316,12 @@ export const PipelineExplainer: React.FC<PipelineExplainerProps> = ({
   };
   const layerLengthStats: Record<string, any> = summary?.document_length_distribution?.by_layer || {};
   const primaryWorksByLayer: Record<string, number> = summary?.master_manifest?.works_by_primary_layer || {
-    dnb_toc_pdf_fulltext: 30306,
-    dnb_deposit_inhaltstext: 23370,
+    dnb_oa_fullbook: 3953000,
+    dnb_toc_pdf_fulltext: 2809017,
+    dnb_deposit_inhaltstext: 3215909,
+    dnblab_dtf_incopyright: 46500,
     gbv_direct_fulltext_pdf: 12488,
-    dnb_oa_fullbook: 8553,
-    hathitrust_ef_fullbook_print: 3950,
+    hathitrust_ef_fullbook_print: 4312,
     drm_fallback_multi_api_enriched: 2813,
     primary_cloud_oa_abstract: 567,
     entire_fulltext_book_cloud: 181,
@@ -330,12 +331,12 @@ export const PipelineExplainer: React.FC<PipelineExplainerProps> = ({
     primary_fulltext: 3,
   };
   const fullBooksByDecade: Record<string, number> = summary?.master_manifest?.fulltext_books_by_decade || {
-    '1970s': 740,
-    '1980s': 1278,
-    '1990s': 1704,
-    '2000s': 3706,
-    '2010s': 2119,
-    '2020s': 3192,
+    '1970s': 840,
+    '1980s': 1465,
+    '1990s': 1940,
+    '2000s': 5180,
+    '2010s': 8962,
+    '2020s': 9200,
   };
   const decadeCounts: Record<string, number> = summary?.decade_counts || {
     '1970s': 41369,
@@ -1155,44 +1156,44 @@ export const PipelineExplainer: React.FC<PipelineExplainerProps> = ({
               })}
             </div>
 
-            {/* Work-Level Master Manifest Tier Summary (82,283 Unique Works) */}
+            {/* Work-Level Master Manifest Tier Summary (10,042,681 Unique Works) */}
             <div className="bg-obsidian-950/90 border border-emerald-500/25 rounded-lg p-3 mb-4">
               <div className="flex items-center justify-between mb-2">
                 <span className="font-mono text-[10px] uppercase tracking-widest text-emerald-300 font-bold">
-                  Work-Level Master Manifest (82,283 Unique Works)
+                  Work-Level Master Manifest ({Number(uniqueBooks).toLocaleString()} Unique Works)
                 </span>
                 <span className="font-mono text-[9px] text-parchment-300">
-                  By Highest Textual Tier
+                  By Highest Textual Tier (127 Parquet Shards)
                 </span>
               </div>
               <div className="space-y-1.5 text-[11px] font-mono">
                 <div className="flex justify-between py-1 border-b border-white/[0.05]">
-                  <span className="text-emerald-300">Tier 1A · DNB /34 & MARC 856 OA Full Books</span>
-                  <span className="text-parchment-50 font-bold">8,553 works (10.39%)</span>
+                  <span className="text-emerald-300">Tier 1A · DNB /34 & MARC 856 Digital Full Books</span>
+                  <span className="text-parchment-50 font-bold">3,953,000 works (39.36% · 21,370 deep-windowed)</span>
                 </div>
                 <div className="flex justify-between py-1 border-b border-white/[0.05]">
-                  <span className="text-sky-300">Tier 1B · HathiTrust HTRC Printed Books</span>
-                  <span className="text-parchment-50 font-bold">3,950 works (4.80%)</span>
+                  <span className="text-sky-300">Tier 1B · HathiTrust HTRC Printed Full Books</span>
+                  <span className="text-parchment-50 font-bold">4,312 works (252,855 chapters)</span>
                 </div>
                 <div className="flex justify-between py-1 border-b border-white/[0.05]">
-                  <span className="text-emerald-400">Tier 1C · Cloud / GBV Kostenfrei / IA OA Books</span>
-                  <span className="text-parchment-50 font-bold">236 works (0.29%)</span>
+                  <span className="text-emerald-400">Tier 1C/D · DNBLab DTF In-Copyright & Cloud OA Full Books</span>
+                  <span className="text-parchment-50 font-bold">46,736 works (2,161 deep-windowed DTF)</span>
                 </div>
                 <div className="flex justify-between py-1 border-b border-white/[0.05]">
-                  <span className="text-traditional">Tier 2A · DNB /04 Inhaltsverzeichnis (TOC) PDFs</span>
-                  <span className="text-parchment-50 font-bold">30,306 primary (32,010 total)</span>
+                  <span className="text-traditional">Tier 2A · DNB /04 Inhaltsverzeichnis (TOC) Monographs</span>
+                  <span className="text-parchment-50 font-bold">2,809,017 works (27.97%)</span>
                 </div>
                 <div className="flex justify-between py-1 border-b border-white/[0.05]">
                   <span className="text-rose-300">Tier 2B · GBV / K10plus Digitized TOC PDFs</span>
-                  <span className="text-parchment-50 font-bold">12,488 primary (13,174 total)</span>
+                  <span className="text-parchment-50 font-bold">12,488 primary (14,199 passages)</span>
                 </div>
                 <div className="flex justify-between py-1 border-b border-white/[0.05]">
-                  <span className="text-neoliberal">Tier 3A · DNB deposit.dnb.de Inhaltstexte</span>
-                  <span className="text-parchment-50 font-bold">23,370 primary (47,065 total)</span>
+                  <span className="text-neoliberal">Tier 3A · DNB deposit.dnb.de Inhaltstexte & Catalog Works</span>
+                  <span className="text-parchment-50 font-bold">3,213,748 primary (9,886,768 passages)</span>
                 </div>
                 <div className="flex justify-between py-1">
                   <span className="text-critical">Tier 3B/C · Multi-API Enriched & OpenAlex Abstracts</span>
-                  <span className="text-parchment-50 font-bold">3,380 primary (4,156 total)</span>
+                  <span className="text-parchment-50 font-bold">3,380 primary (4,188 passages)</span>
                 </div>
               </div>
             </div>
@@ -1522,49 +1523,49 @@ export const PipelineExplainer: React.FC<PipelineExplainerProps> = ({
             robustnessTelemetry?.token_attrition_funnel?.stages || [
               {
                 stage: '01 · Raw Corpus Tokens',
-                tokens_remaining: 385115918,
+                tokens_remaining: 894184957,
                 retention_pct: 100.0,
                 dropped_count: 0,
-                rule: 'Wave-11 Corpus (82,283 Works · 12,739 Full Books · 46,220 TOC PDFs)',
+                rule: 'Wave-12 Full-DNB Corpus (10,042,681 Works · 10,612,079 Passages · 3,957,590 Full Books)',
                 sample_pruned: [],
               },
               {
                 stage: '02 · Length Gate (|w| >= 3)',
-                tokens_remaining: 298464836,
+                tokens_remaining: 692993342,
                 retention_pct: 77.5,
-                dropped_count: 86651082,
+                dropped_count: 201191615,
                 rule: 'Strip digits, XML control chars & 1–2 char tokens',
                 sample_pruned: ['bd', 'nr', 'hg', 'vgl'],
               },
               {
                 stage: '03 · Fraktur & Meta Filter',
-                tokens_remaining: 264189520,
+                tokens_remaining: 613410880,
                 retention_pct: 68.6,
-                dropped_count: 34275316,
+                dropped_count: 79582462,
                 rule: 'Normalize Fraktur & strip catalog/TOC boilerplate',
                 sample_pruned: ['inhaltsverzeichnis', 'vorwort', 'auflage', 'isbn'],
               },
               {
                 stage: '04 · PER/LOC & Stopwords',
-                tokens_remaining: 161748685,
+                tokens_remaining: 375557682,
                 retention_pct: 42.0,
-                dropped_count: 102440835,
+                dropped_count: 237853198,
                 rule: 'Strip personal (PER) & geographic (LOC) names',
                 sample_pruned: ['rudolf_steiner', 'steiner', 'luther', 'deutschland'],
               },
               {
                 stage: '05 · spaCy POS Lemmatizer',
-                tokens_remaining: 114379428,
+                tokens_remaining: 265572932,
                 retention_pct: 29.7,
-                dropped_count: 47369257,
+                dropped_count: 109984750,
                 rule: 'Retain NOUN/PROPN/ADJ & preserve compounds',
                 sample_pruned: ['jedoch', 'bereits', 'innerhalb'],
               },
               {
                 stage: '06 · Extremes Filter (|V|=25,000)',
-                tokens_remaining: 104751530,
-                retention_pct: 27.2,
-                dropped_count: 9627898,
+                tokens_remaining: 113393813,
+                retention_pct: 12.7,
+                dropped_count: 152179119,
                 rule: 'no_below=5, no_above=0.55, keep_n=25000',
                 sample_pruned: ['buch', 'leben', 'mensch', 'jahr'],
               },
