@@ -9,7 +9,7 @@
     "formula": "P(φ_k | η_auto), w_rel ~ 2× Salience",
     "description": "Amplifies core theological and critical signifiers (2× token weight) while keeping Dirichlet topic slots unseeded so clusters emerge inductively."
   },
-  "corpus_documents": 10555871,
+  "corpus_documents": 10576485,
   "vocabulary_size": 25000,
   "coherence_score": -2.5289,
   "tfidf_audit": {
@@ -58,7 +58,7 @@
         },
         {
           "term": "krieg",
-          "weight": 0.00872
+          "weight": 0.00871
         },
         {
           "term": "europa",
@@ -66,7 +66,7 @@
         },
         {
           "term": "europäisch",
-          "weight": 0.00644
+          "weight": 0.00643
         },
         {
           "term": "bevölkerung",
@@ -170,7 +170,7 @@
       "top_terms": [
         {
           "term": "theologie",
-          "weight": 0.20185
+          "weight": 0.20184
         },
         {
           "term": "christentum",
@@ -648,7 +648,7 @@
         },
         {
           "publisher": "De Gruyter / Transcript",
-          "share": 5.5
+          "share": 5.6
         },
         {
           "publisher": "Campus",
@@ -714,7 +714,7 @@
       "top_terms": [
         {
           "term": "gott",
-          "weight": 0.17813
+          "weight": 0.17815
         },
         {
           "term": "mensch",
@@ -738,7 +738,7 @@
         },
         {
           "term": "jüdisch",
-          "weight": 0.01034
+          "weight": 0.01033
         },
         {
           "term": "geist",
@@ -746,7 +746,7 @@
         },
         {
           "term": "christlich",
-          "weight": 0.00929
+          "weight": 0.00928
         },
         {
           "term": "wort",
@@ -754,7 +754,7 @@
         },
         {
           "term": "heilig",
-          "weight": 0.00814
+          "weight": 0.00815
         },
         {
           "term": "christus",
@@ -850,7 +850,7 @@
       "top_terms": [
         {
           "term": "leben",
-          "weight": 0.0534
+          "weight": 0.05339
         },
         {
           "term": "mensch",
@@ -862,15 +862,15 @@
         },
         {
           "term": "welt",
-          "weight": 0.02212
+          "weight": 0.02211
         },
         {
           "term": "weg",
-          "weight": 0.01228
+          "weight": 0.01229
         },
         {
           "term": "erfahrung",
-          "weight": 0.01163
+          "weight": 0.01164
         },
         {
           "term": "religiös",
@@ -878,7 +878,7 @@
         },
         {
           "term": "spiritualität",
-          "weight": 0.00898
+          "weight": 0.00899
         },
         {
           "term": "tod",
@@ -890,11 +890,11 @@
         },
         {
           "term": "geschichte",
-          "weight": 0.00778
+          "weight": 0.00777
         },
         {
           "term": "christlich",
-          "weight": 0.00731
+          "weight": 0.0073
         },
         {
           "term": "kraft",
@@ -902,7 +902,7 @@
         },
         {
           "term": "meditation",
-          "weight": 0.00558
+          "weight": 0.00557
         },
         {
           "term": "hoffnung",
@@ -986,7 +986,7 @@
       "top_terms": [
         {
           "term": "kirche",
-          "weight": 0.2287
+          "weight": 0.22873
         },
         {
           "term": "katholisch",
@@ -994,7 +994,7 @@
         },
         {
           "term": "evangelisch",
-          "weight": 0.02365
+          "weight": 0.02364
         },
         {
           "term": "kirchlich",
@@ -1178,7 +1178,7 @@
         },
         {
           "term": "sonntag",
-          "weight": 0.00417
+          "weight": 0.00416
         }
       ],
       "top_publishers": [
@@ -1262,7 +1262,7 @@
         },
         {
           "term": "jahrhundert",
-          "weight": 0.02294
+          "weight": 0.02293
         },
         {
           "term": "kloster",
@@ -1278,7 +1278,7 @@
         },
         {
           "term": "mittelalter",
-          "weight": 0.00715
+          "weight": 0.00716
         },
         {
           "term": "stadt",
@@ -1310,7 +1310,7 @@
         },
         {
           "term": "universität",
-          "weight": 0.00524
+          "weight": 0.00525
         },
         {
           "term": "römisch",
@@ -1350,7 +1350,7 @@
           "publisher": "Aschendorff",
           "date": "2003",
           "corpus_layer": "hathitrust_ef_fullbook_print",
-          "probability": 85.3,
+          "probability": 85.4,
           "keywords": [],
           "snippet": "Dänemark, Norwegen und Schweden im Zeitalter der Reformation und Konfessionalisierung: nordische Königreiche und Konfession 1500 bis 1660. Asche, Matthias. Aschendorff. Bodils Herzogin Herzogin Äbtissin Otto Ove Burmeister Brodd Ansger Birg",
           "apa_citation": "Asche, Matthias (2003). Dänemark, Norwegen und Schweden im Zeitalter der Reformation und Konfessionalisierung: nordische Königreiche und Konfession 1500 bis 1660 [HTRC-Vollbuch-Abschnitt 74/75]. Aschendorff."
@@ -1742,23 +1742,23 @@
     "regime_cv_accuracy": 70.7,
     "regime_in_sample_accuracy": 70.7,
     "regime_macro_f1": 54.1,
-    "publisher_accuracy": 44.9,
+    "publisher_accuracy": 45.0,
     "r2_explanatory_power": 0.288,
     "regime_class_metrics": {
       "Traditional / Ecclesiastical": {
-        "precision": 75.6,
-        "recall": 89.7,
-        "f1": 82.1,
-        "support": 16997
+        "precision": 75.5,
+        "recall": 89.8,
+        "f1": 82.0,
+        "support": 16996
       },
       "Neoliberal / Self-Optimization": {
-        "precision": 54.0,
-        "recall": 12.1,
-        "f1": 19.7,
+        "precision": 53.9,
+        "recall": 12.0,
+        "f1": 19.6,
         "support": 4181
       },
       "Critical / Secular-Humanist": {
-        "precision": 60.3,
+        "precision": 60.4,
         "recall": 60.8,
         "f1": 60.6,
         "support": 7823
@@ -1792,16 +1792,16 @@
       {
         "topic_id": 4,
         "predicted_regime": "Critical / Secular-Humanist",
-        "w_traditional": -0.481,
-        "w_neoliberal": 0.129,
-        "w_critical": 0.351,
+        "w_traditional": -0.482,
+        "w_neoliberal": 0.13,
+        "w_critical": 0.352,
         "discriminative_power": 0.352
       },
       {
         "topic_id": 5,
         "predicted_regime": "Neoliberal / Self-Optimization",
         "w_traditional": -0.167,
-        "w_neoliberal": 0.246,
+        "w_neoliberal": 0.245,
         "w_critical": -0.078,
         "discriminative_power": 0.177
       },
@@ -1818,7 +1818,7 @@
         "predicted_regime": "Neoliberal / Self-Optimization",
         "w_traditional": -0.129,
         "w_neoliberal": 0.309,
-        "w_critical": -0.18,
+        "w_critical": -0.181,
         "discriminative_power": 0.22
       },
       {
@@ -1832,15 +1832,15 @@
       {
         "topic_id": 9,
         "predicted_regime": "Traditional / Ecclesiastical",
-        "w_traditional": 0.525,
+        "w_traditional": 0.524,
         "w_neoliberal": -0.171,
-        "w_critical": -0.354,
+        "w_critical": -0.353,
         "discriminative_power": 0.378
       },
       {
         "topic_id": 10,
         "predicted_regime": "Traditional / Ecclesiastical",
-        "w_traditional": 0.053,
+        "w_traditional": 0.054,
         "w_neoliberal": -0.074,
         "w_critical": 0.021,
         "discriminative_power": 0.054
