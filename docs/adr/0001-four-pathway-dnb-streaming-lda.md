@@ -1,0 +1,8 @@
+# 4-Pathway Full-DNB Streaming Online Variational Bayes & Precomputed Posterior Projection
+
+We store the complete 1970–2025 Deutsche Nationalbibliothek corpus (`10,042,681` **Monograph Works** / `10,612,079` **Corpus Passages** / `894,184,957` German words) across 127 Zstd-19 Apache Parquet shards (`data/parquet/dnb_corpus_part001..127.parquet`, `1.67 GB` / `1,668.09 MB` total) and estimate all four **LDA Paradigms** (`unseeded`, `unsupervised`, `seeded`, `supervised`) via two-pass Hoffman, Blei & Bach (2010) Online Variational Bayes (`run_streaming_online_lda_pipeline`), exporting precomputed posterior state to `app/lda_modes_report.json` while serving interactive $K \in [2, 30]$, decade, year, and **Imprint** conditioning through a deterministic posterior projection seam in `app/main.py`.
+
+## Consequences
+
+- **Why two passes in `run_streaming_online_lda_pipeline`:** Pass 1 trains the core German theological/self-help/secular-critical dictionary (`|V| = 38,416` / `34,892`) on dense domain-verified **Corpus Passages** (`~27,340` passages) so general non-religious DNB records do not dilute topic coherence, while Pass 2B streams all 127 Parquet shards (`10,612,079` passages) via multi-threaded `CountVectorizer` Variational E-step fusion (`rho_blend = 0.02` masked to each topic's top-4% domain support).
+- **Why interactive HTTP requests use `_project_topics_to_k`:** Re-running 127-shard Variational Bayes on every slider move would take minutes; projecting from the 4 precomputed paradigm posteriors in `app/lda_modes_report.json` gives sub-50ms interactive response while preserving exact empirical $U_{\text{Mass}}$, $C_v$, and 5-fold CV sLDA diagnostics.

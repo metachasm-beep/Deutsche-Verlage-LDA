@@ -690,7 +690,9 @@ export const TopicModelViz: React.FC<TopicModelVizProps> = ({
                     }));
                     const rawText = `${doc.title}${doc.snippet ? ' — ' + doc.snippet : ''}`;
                     const tokens = rawText.split(/(\s+)/);
-                    const docProb = Number(doc.probability ?? 0.85);
+                    const rawProb = Number(doc.probability ?? 85.0);
+                    const docProbPct = rawProb > 1 ? rawProb : rawProb * 100;
+                    const docProb = docProbPct / 100;
                     return (
                       <div
                         key={dIdx}
@@ -701,7 +703,7 @@ export const TopicModelViz: React.FC<TopicModelVizProps> = ({
                             {doc.publisher} ({doc.year})
                           </span>
                           <span style={{ color: currentTheme.hex }}>
-                            θ<sub>d,{currentTopic.id + 1}</sub> = {(docProb * 100).toFixed(1)}%
+                            θ<sub>d,{currentTopic.id + 1}</sub> = {docProbPct.toFixed(1)}%
                           </span>
                         </div>
                         <p className="font-serif text-xs text-parchment-100 leading-relaxed">

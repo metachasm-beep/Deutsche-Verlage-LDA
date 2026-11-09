@@ -811,20 +811,20 @@ function App() {
                     className="w-full h-1.5 bg-obsidian-800 rounded-lg appearance-none cursor-pointer accent-traditional mb-1.5"
                   />
                   <div className="flex justify-between text-[9px] font-mono text-parchment-300 mb-2.5">
-                    <span>2 (Macro)</span>
+                    <span>4 (Macro)</span>
                     <span>12 (Meso)</span>
-                    <span>25 (Optimum)</span>
-                    <span>30</span>
+                    <span>20 (Sub-Genres)</span>
+                    <span>30 (Optimum)</span>
                   </div>
 
-                  {/* 3 Regime Presets */}
+                  {/* Regime Presets */}
                   <div className="grid grid-cols-3 gap-1.5 mb-2.5">
                     {(recommendedRegimes.length > 0
                       ? recommendedRegimes
                       : [
-                          { k: 6, label: 'Macro', description: '3-Way Ideological Regimes' },
+                          { k: 4, label: 'Macro', description: '3-Way Ideological Regimes' },
                           { k: 12, label: 'Meso', description: 'Balanced Sub-Genres' },
-                          { k: 25, label: 'Micro', description: 'Global Cv Optimum' },
+                          { k: 30, label: 'Micro', description: 'Global Cv Optimum' },
                         ]
                     ).map((reg) => {
                       const isCurrent = numTopics === reg.k;
@@ -1349,7 +1349,7 @@ function App() {
                 {(cvCoherence || 0.4366).toFixed(4)}
               </div>
               <p className="font-mono text-[9px] text-parchment-300 truncate mt-0.5">
-                U_Mass: {(coherenceScore || -2.476).toFixed(3)} · Peak K=25
+                U_Mass: {(coherenceScore || -2.476).toFixed(3)} · Peak K=30
               </p>
             </div>
 
@@ -1733,7 +1733,8 @@ function App() {
                         <tbody className="divide-y divide-white/[0.05]">
                           {coherenceGrid.map((row) => {
                             const isActive = row.k === numTopics;
-                            const isPeak = row.k === 25;
+                            const maxCv = Math.max(...coherenceGrid.map((r) => r.c_v));
+                            const isPeak = row.c_v === maxCv;
                             return (
                               <tr
                                 key={row.k}
@@ -2039,7 +2040,8 @@ function App() {
                     <tbody className="divide-y divide-white/[0.05]">
                       {coherenceGrid.map((row) => {
                         const isActive = row.k === numTopics;
-                        const isPeak = row.k === 25;
+                        const maxCv = Math.max(...coherenceGrid.map((r) => r.c_v));
+                        const isPeak = row.c_v === maxCv;
                         return (
                           <tr
                             key={row.k}

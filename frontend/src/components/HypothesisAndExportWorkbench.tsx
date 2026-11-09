@@ -201,10 +201,10 @@ export const HypothesisAndExportWorkbench: React.FC<HypothesisAndExportWorkbench
       const benchRows = (modesComparison.length > 0
         ? modesComparison
         : [
-            { short_label: 'Unseeded', u_mass: -3.3719, regime_cv_accuracy: 71.0, regime_macro_f1: 58.4, r2_explanatory_power: 0.251 },
-            { short_label: 'Unsupervised', u_mass: -2.9771, regime_cv_accuracy: 71.3, regime_macro_f1: 59.8, r2_explanatory_power: 0.268 },
-            { short_label: 'Seeded ($\\eta$-Matrix)', u_mass: -3.435, regime_cv_accuracy: 68.1, regime_macro_f1: 56.2, r2_explanatory_power: 0.224 },
-            { short_label: 'Supervised (sLDA)', u_mass: -1.965, regime_cv_accuracy: 75.1, regime_macro_f1: 64.7, r2_explanatory_power: 0.342 },
+            { short_label: 'Unseeded', u_mass: -3.2269, regime_cv_accuracy: 73.1, regime_macro_f1: 50.7, r2_explanatory_power: 0.3396 },
+            { short_label: 'Unsupervised', u_mass: -3.1992, regime_cv_accuracy: 74.9, regime_macro_f1: 54.0, r2_explanatory_power: 0.3736 },
+            { short_label: 'Seeded ($\\eta$-Matrix)', u_mass: -2.8888, regime_cv_accuracy: 74.7, regime_macro_f1: 59.6, r2_explanatory_power: 0.3613 },
+            { short_label: 'Supervised (sLDA)', u_mass: -3.1599, regime_cv_accuracy: 75.0, regime_macro_f1: 61.5, r2_explanatory_power: 0.3507 },
           ]
       )
         .map(
@@ -388,7 +388,7 @@ ${monographEntries.slice(0, 18).join('\n\n')}`;
 Standalone Computational Replication Script — German Publishing LDA (1970–2025)
 Scholar: Paul Marandi, Ph.D. Scholar, Centre for German Studies, SLL&CS, JNU
 Verified Run ID: ${prov.run_id || 'MF-VERIFIED'}
-Corpus SHA-256:  ${prov.corpus_sha256 || 'dnb_metadata_1863_records'}
+Corpus SHA-256:  ${prov.corpus_sha256 || 'dnb_parquet_v12_127_shards_10612079_records'}
 Slice SHA-256:   ${prov.slice_signature_sha256 || 'active_slice'}
 Timestamp (UTC): ${prov.timestamp_utc || new Date().toISOString()}
 """
@@ -417,9 +417,9 @@ if __name__ == "__main__":
     print(f"Replicating Run {CONFIG['lda_mode'].upper()} (K={CONFIG['num_topics']})...")
     model, corpus, dictionary, coherence, top_docs = lda_pipeline.run_pipeline(
         data_path=CONFIG["data_path"],
-        k_topics=CONFIG["num_topics"],
+        num_topics=CONFIG["num_topics"],
         lda_mode=CONFIG["lda_mode"],
-        custom_seeds=CUSTOM_SEEDS,
+        custom_seed_lexicons=CUSTOM_SEEDS,
         seed_boost=CONFIG["seed_boost"],
         base_eta=CONFIG["base_eta"],
     )

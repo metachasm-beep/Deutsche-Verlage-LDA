@@ -1004,11 +1004,11 @@ def _enrich_topics_and_build_telemetry(
                     "sample_pruned": ["jedoch", "bereits", "innerhalb", "zugleich", "während", "obwohl"],
                 },
                 {
-                    "stage": "06 · Gensim Phraser & Extremes Filter (|V| = 25,000)",
+                    "stage": f"06 · Extremes & Sublinear TF-IDF Filter (|V| = {total_vocab_size:,})",
                     "tokens_remaining": 113393813,
                     "retention_pct": 12.7,
                     "dropped_count": 152179119,
-                    "rule": "Phrases(min_count=5, threshold=10) + filter_extremes(no_below=5, no_above=0.55, keep_n=25000)",
+                    "rule": "Phrases(min_count=5, threshold=10) + filter_extremes(no_below=5, no_above=0.55) + TfidfModel(smartirs='ntc' >= 0.065)",
                     "sample_pruned": ["buch", "leben", "mensch", "jahr", "zeit", "welt", "frage"],
                 },
             ],

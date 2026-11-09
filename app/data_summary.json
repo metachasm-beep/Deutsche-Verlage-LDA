@@ -257,7 +257,7 @@
   "year_range": "1970–2025",
   "document_length_distribution": {
     "overall": {
-      "count": 10519923,
+      "count": 10612079,
       "total_words": 801389747,
       "mean": 74.0,
       "sd": 464.0,
@@ -6918,8 +6918,8 @@
     "dnb_38_target_publishers_all_languages_1970_2025": 544425,
     "dnb_38_target_publishers_german_spr_ger_all_subjects_1970_2025": 461491,
     "dnb_38_target_publishers_german_spr_ger_onlinefree_oa_1970_2025": 12251,
-    "incorporated_total_corpus_documents": 10519923,
-    "incorporated_unique_books": 10041481,
+    "incorporated_total_corpus_documents": 10612079,
+    "incorporated_unique_books": 10042681,
     "incorporated_direct_dnb_sru_documents": 10247693,
     "incorporated_unique_dnb_oa_books": 9692
   },
@@ -7737,7 +7737,7 @@
       "category": "Academic & Philosophical"
     }
   ],
-  "total_documents": 10519923,
+  "total_documents": 10612079,
   "publisher_annual_curves": {
     "Springer Nature / Metzler": {
       "1970": 1183,

@@ -773,9 +773,9 @@ _PUBLISHER_REGIME_MAP = {
         "Katholisches Bibelwerk", "Deutsche Bibelgesellschaft", "Butzon & Bercker", "Christophorus",
     },
     "Neoliberal / Self-Optimization": {
-        "Kösel", "Gräfe und Unzer (GU)", "Kamphausen", "Kreuz", "Patmos", "Herder",
+        "Kösel", "Gräfe und Unzer (GU)", "Kamphausen", "Kreuz",
         "Scorpio", "Arkana", "Goldmann", "Knaur", "Integral", "Beltz", "Klett-Cotta",
-        "Ernst Reinhardt", "Hogrefe", "Junfermann", "Vandenhoeck & Ruprecht", "Gütersloher Verlagshaus",
+        "Ernst Reinhardt", "Hogrefe", "Junfermann",
         "ownd", "Irisiana", "Kailash", "Lotos", "Schirner", "Windpferd", "Aquamarin", "Theseus",
     },
     "Critical / Secular-Humanist": {
@@ -1224,7 +1224,7 @@ def save_corpus_to_zstd_parquet(
     compression_ratio = round(raw_csv_bytes / max(1, total_parquet_bytes), 2) if raw_csv_bytes else 0.0
 
     manifest = {
-        "format": "Apache Parquet 2.6 + Zstandard (level 9) + Dictionary Encoding",
+        "format": f"Apache Parquet 2.6 + Zstandard (level {compression_level}) + Dictionary Encoding",
         "total_rows": total_rows,
         "total_words": total_words,
         "total_shards": len(shard_summaries),
@@ -2013,8 +2013,15 @@ def run_streaming_online_lda_pipeline(
     corpus = core_corpus + ext_corpus
 
     core_n_grams_unseeded = processed_n_grams_unseeded[:n_core] if n_core > 0 else processed_n_grams_unseeded
-    core_corpus_unseeded = [dictionary.doc2bow(doc) for doc in core_n_grams_unseeded]
-    ext_corpus_unseeded = [dictionary.doc2bow(doc) for doc in processed_n_grams_unseeded[n_core:]] if n_core < len(processed_n_grams_unseeded) else []
+    dictionary_unseeded = corpora.Dictionary(core_n_grams_unseeded)
+    if len(core_n_grams_unseeded) >= 100:
+        dictionary_unseeded.filter_extremes(no_below=5, no_above=0.55, keep_n=100000)
+    pre_tfidf_corpus_unseeded = [dictionary_unseeded.doc2bow(doc) for doc in core_n_grams_unseeded]
+    _, tfidf_audit_unseeded = apply_tfidf_low_info_filter(pre_tfidf_corpus_unseeded, dictionary_unseeded, min_tfidf=0.065)
+    del pre_tfidf_corpus_unseeded
+
+    core_corpus_unseeded = [dictionary_unseeded.doc2bow(doc) for doc in core_n_grams_unseeded]
+    ext_corpus_unseeded = [dictionary_unseeded.doc2bow(doc) for doc in processed_n_grams_unseeded[n_core:]] if n_core < len(processed_n_grams_unseeded) else []
     corpus_unseeded = core_corpus_unseeded + ext_corpus_unseeded
 
     effective_k = max(2, min(k_topics, max(2, len(corpus))))
@@ -2025,27 +2032,29 @@ def run_streaming_online_lda_pipeline(
         p_core = core_corpus_unseeded if p_mode == "unseeded" else core_corpus
         p_ext = ext_corpus_unseeded if p_mode == "unseeded" else ext_corpus
         p_ngrams = processed_n_grams_unseeded if p_mode == "unseeded" else processed_n_grams
+        p_dict = dictionary_unseeded if p_mode == "unseeded" else dictionary
+        p_tfidf_audit = tfidf_audit_unseeded if p_mode == "unseeded" else tfidf_audit
 
         p_seeds = {}
         if p_mode == "seeded":
             p_eta, p_seeds = build_seeded_eta_matrix(
-                dictionary, effective_k, seed_boost=seed_boost, base_eta=base_eta
+                p_dict, effective_k, seed_boost=seed_boost, base_eta=base_eta
             )
         elif p_mode == "supervised":
             p_eta, p_seeds = build_supervised_eta_matrix(
-                dictionary, p_ngrams, filtered_rows, effective_k
+                p_dict, p_ngrams, filtered_rows, effective_k
             )
         else:
             p_eta = config.ETA
 
         print(
             f"  [Pass 2 · Online VB Estimation ({p_mode})] Training Gensim LdaModel "
-            f"(K={effective_k}, streamed_passages={total_streamed_docs:,}, domain_docs={len(p_core) + len(p_ext):,}, vocab={len(dictionary):,}, passes={config.PASSES})...",
+            f"(K={effective_k}, streamed_passages={total_streamed_docs:,}, domain_docs={len(p_core) + len(p_ext):,}, vocab={len(p_dict):,}, passes={config.PASSES})...",
             flush=True,
         )
         m_inst = LdaModel(
             corpus=p_core,
-            id2word=dictionary,
+            id2word=p_dict,
             num_topics=effective_k,
             random_state=100,
             update_every=1,
@@ -2059,7 +2068,7 @@ def run_streaming_online_lda_pipeline(
             m_inst.update(p_ext, chunksize=1500, passes=1, decay=0.85, offset=4096.0)
         m_inst.lda_mode = p_mode
         m_inst.seed_assignments = p_seeds
-        m_inst.tfidf_audit = tfidf_audit
+        m_inst.tfidf_audit = p_tfidf_audit
         trained_models[p_mode] = m_inst
 
     # Pass 2B: Full-Database 127-Shard Vectorized Online Variational Bayes Posterior Fusion across ALL trained paradigms
@@ -2077,17 +2086,23 @@ def run_streaming_online_lda_pipeline(
             from sklearn.feature_extraction.text import CountVectorizer
 
             t_vb_full = time.time()
+            unified_vocab = dict(dictionary.token2id)
+            for w_u in dictionary_unseeded.token2id:
+                if w_u not in unified_vocab:
+                    unified_vocab[w_u] = len(unified_vocab)
             cv_full = CountVectorizer(
-                vocabulary=dictionary.token2id,
+                vocabulary=unified_vocab,
                 lowercase=True,
                 token_pattern=r"(?u)\b[a-zA-ZäöüÄÖÜß]{3,}\b",
             )
             model_vb_params = {}
             total_sstats_by_mode = {}
             for p_mode, m_inst in trained_models.items():
+                p_dict = dictionary_unseeded if p_mode == "unseeded" else dictionary
+                col_idx = _np.array([unified_vocab[p_dict[i]] for i in range(len(p_dict))], dtype=_np.int32)
                 b_mat = _np.asarray(m_inst.expElogbeta, dtype=_np.float32)
                 a_vec = _np.asarray(m_inst.alpha, dtype=_np.float32).reshape(1, -1)
-                model_vb_params[p_mode] = (b_mat, b_mat.T, a_vec)
+                model_vb_params[p_mode] = (b_mat, b_mat.T, a_vec, col_idx)
                 total_sstats_by_mode[p_mode] = _np.zeros_like(b_mat, dtype=_np.float64)
 
             def _vectorize_shard_online_vb(task_arg):
@@ -2128,10 +2143,11 @@ def run_streaming_online_lda_pipeline(
                     return s_i, n_s, nnz_total, {}, c_34, c_04, c_bl
 
                 sstats_dict = {}
-                for p_mode, (b_mat, b_T, a_vec) in model_vb_params.items():
-                    gamma_s = X_sub.dot(b_T) + a_vec
+                for p_mode, (b_mat, b_T, a_vec, col_idx) in model_vb_params.items():
+                    X_mode = X_sub[:, col_idx]
+                    gamma_s = X_mode.dot(b_T) + a_vec
                     theta_s = gamma_s / _np.maximum(gamma_s.sum(axis=1, keepdims=True), 1e-12)
-                    sstats_dict[p_mode] = (X_sub.T.dot(theta_s)).T * b_mat
+                    sstats_dict[p_mode] = (X_mode.T.dot(theta_s)).T * b_mat
                 return s_i, n_s, nnz_total, sstats_dict, c_34, c_04, c_bl
 
             print(
@@ -2196,11 +2212,12 @@ def run_streaming_online_lda_pipeline(
         p_core = core_corpus_unseeded if p_mode == "unseeded" else core_corpus
         p_corp = corpus_unseeded if p_mode == "unseeded" else corpus
         p_ngrams = processed_n_grams_unseeded if p_mode == "unseeded" else processed_n_grams
+        p_dict = dictionary_unseeded if p_mode == "unseeded" else dictionary
 
         coh_mod = CoherenceModel(
             model=m_inst,
             corpus=p_core,
-            dictionary=dictionary,
+            dictionary=p_dict,
             coherence="u_mass",
         )
         p_coh = float(coh_mod.get_coherence())
@@ -2219,7 +2236,7 @@ def run_streaming_online_lda_pipeline(
         p_report = build_report_dict(
             m_inst,
             p_corp,
-            dictionary,
+            p_dict,
             coherence_score=p_coh,
             representative_docs=p_rep_docs,
         )
@@ -2236,7 +2253,7 @@ def run_streaming_online_lda_pipeline(
             "supervision": meta_m["supervision"],
             "formula": meta_m["formula"],
             "documents": int(total_streamed_docs),
-            "vocab_size": len(dictionary),
+            "vocab_size": len(p_dict),
             "u_mass": round(float(p_coh), 4),
             "regime_cv_accuracy": p_slda.get("regime_cv_accuracy", 0.0),
             "regime_macro_f1": p_slda.get("regime_macro_f1", 0.0),
@@ -2251,7 +2268,7 @@ def run_streaming_online_lda_pipeline(
         )
 
         if p_mode == mode_key or primary_tuple is None:
-            primary_tuple = (m_inst, p_corp, dictionary, p_coh, p_rep_docs)
+            primary_tuple = (m_inst, p_corp, p_dict, p_coh, p_rep_docs)
 
     lda_model, corpus, dictionary, coherence_score, representative_docs = primary_tuple
 
@@ -2447,13 +2464,6 @@ def build_report_dict(model, corpus, dictionary, coherence_score=0.0, representa
             for w, p in raw_terms
             if w.lower() not in ALL_STOPWORDS
             and not any(pt in ALL_STOPWORDS for pt in w.lower().split("_"))
-            and w.isascii() is False or (w.lower() not in ALL_STOPWORDS and not re.match(r"^[a-z]+$", w.lower()) or w.lower() in RELIGIOUS_KEYWORDS_SET or any(w.lower().startswith(pr) for pr_tup in _ARCHETYPE_STEM_PREFIXES.values() for pr in pr_tup) or len(w) >= 4)
-        ]
-        terms = [
-            (w, p)
-            for w, p in raw_terms
-            if w.lower() not in ALL_STOPWORDS
-            and not any(pt in ALL_STOPWORDS for pt in w.lower().split("_"))
         ][:15]
         if len(terms) < 15:
             terms = raw_terms[:15]
@@ -2629,7 +2639,7 @@ def export_results(model, corpus, dictionary, data_path, coherence_score=0.0, re
         }
     }
     fair_ddi_env = collect_fair_ddi_environment()
-    tfidf_audit = getattr(model, "tfidf_audit", {"tfidf_min_threshold": 0.015, "tfidf_pruned_tokens_count": 0})
+    tfidf_audit = getattr(model, "tfidf_audit", {"tfidf_min_threshold": 0.065, "tfidf_pruned_tokens_count": 0})
 
     full_summary = {
         "source": "DNB SRU v1.1 + GBV/K10plus + HathiTrust HTRC + OpenAlex Full-Book Corpus (1970–2025)",
@@ -2664,9 +2674,9 @@ def export_results(model, corpus, dictionary, data_path, coherence_score=0.0, re
             "bigram_threshold": 10,
             "filter_no_below": 5,
             "filter_no_above": 0.55,
-            "filter_keep_n": 25000,
+            "filter_keep_n": 100000,
             "tfidf_smartirs": tfidf_audit.get("tfidf_smartirs", "ntc"),
-            "tfidf_min_threshold": tfidf_audit.get("tfidf_min_threshold", 0.015),
+            "tfidf_min_threshold": tfidf_audit.get("tfidf_min_threshold", 0.065),
             "tfidf_pruned_tokens_count": tfidf_audit.get("tfidf_pruned_tokens_count", 0),
             "lda_passes": config.PASSES,
             "lda_chunksize": 1500,
@@ -2685,7 +2695,7 @@ def export_results(model, corpus, dictionary, data_path, coherence_score=0.0, re
     with open("app/data_summary.json", "w", encoding="utf-8") as f:
         json.dump(summary_payload, f, indent=2, ensure_ascii=False)
 
-    # Synchronize app/lda_modes_report.json with the full corpus scale
+    # Synchronize app/lda_modes_report.json with the active paradigm without clobbering unseeded's distinct vocabulary size
     modes_path = "app/lda_modes_report.json"
     if os.path.exists(modes_path):
         try:
@@ -2695,12 +2705,13 @@ def export_results(model, corpus, dictionary, data_path, coherence_score=0.0, re
                 modes_data["modes"][report["lda_mode"]] = report
                 for m_key, m_obj in modes_data["modes"].items():
                     m_obj["corpus_documents"] = len(corpus)
-                    m_obj["vocabulary_size"] = len(dictionary)
+                    if m_key == report["lda_mode"]:
+                        m_obj["vocabulary_size"] = len(dictionary)
             if "comparison" in modes_data:
                 for comp in modes_data["comparison"]:
                     comp["documents"] = len(corpus)
-                    comp["vocab_size"] = len(dictionary)
                     if comp.get("mode") == report["lda_mode"]:
+                        comp["vocab_size"] = len(dictionary)
                         comp["u_mass"] = round(float(coherence_score), 4)
             with open(modes_path, "w", encoding="utf-8") as mf:
                 json.dump(modes_data, mf, indent=2, ensure_ascii=False)

@@ -527,7 +527,7 @@ export const TrendsGraph: React.FC<TrendsGraphProps> = ({
           <div>
             <div className="flex items-center gap-1.5 mb-0.5 flex-wrap">
               <span className="px-2 py-0.5 rounded bg-traditional/10 border border-traditional/30 font-mono text-[10px] uppercase tracking-widest text-traditional">
-                Diachronic Monitor · {allPublisherNames.length} Canonical Imprints (4,235 Raw DNB Publishers)
+                Diachronic Monitor · {allPublisherNames.length} Canonical Imprints (713,838 Raw DNB Imprints)
               </span>
               {selectedYear && (
                 <span className="px-2 py-0.5 rounded bg-neoliberal/15 border border-neoliberal/40 font-mono text-[10px] text-neoliberal">
