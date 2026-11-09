@@ -945,7 +945,7 @@ def _compute_salient_publisher_and_decade_breakdowns(
                 "snippet": snippet,
                 "apa_citation": format_apa_citation(r),
             })
-            if len(structured_list) >= 3:
+            if len(structured_list) >= 30:
                 break
         representative_docs[topic_id] = structured_list
 
@@ -1636,9 +1636,9 @@ def run_pipeline(
     # Create Dictionary, apply Extremes + Sublinear TF-IDF Low-Information Filter (Santana et al., 2025 §72-73)
     dictionary = corpora.Dictionary(processed_n_grams)
     if len(processed_n_grams) >= 100:
-        dictionary.filter_extremes(no_below=5, no_above=0.55, keep_n=25000)
+        dictionary.filter_extremes(no_below=5, no_above=0.55, keep_n=100000)
     pre_tfidf_corpus = [dictionary.doc2bow(doc) for doc in processed_n_grams]
-    _, tfidf_audit = apply_tfidf_low_info_filter(pre_tfidf_corpus, dictionary, min_tfidf=0.015)
+    _, tfidf_audit = apply_tfidf_low_info_filter(pre_tfidf_corpus, dictionary, min_tfidf=0.065)
     corpus = [dictionary.doc2bow(doc) for doc in processed_n_grams]
 
     # Guard against tiny temporal slices where K exceeds vocabulary/corpus size
@@ -2002,9 +2002,9 @@ def run_streaming_online_lda_pipeline(
     core_n_grams = processed_n_grams[:n_core] if n_core > 0 else processed_n_grams
     dictionary = corpora.Dictionary(core_n_grams)
     if len(core_n_grams) >= 100:
-        dictionary.filter_extremes(no_below=5, no_above=0.55, keep_n=25000)
+        dictionary.filter_extremes(no_below=5, no_above=0.55, keep_n=100000)
     pre_tfidf_corpus = [dictionary.doc2bow(doc) for doc in core_n_grams]
-    _, tfidf_audit = apply_tfidf_low_info_filter(pre_tfidf_corpus, dictionary, min_tfidf=0.015)
+    _, tfidf_audit = apply_tfidf_low_info_filter(pre_tfidf_corpus, dictionary, min_tfidf=0.065)
     del pre_tfidf_corpus
 
     # Build both weighted BoW corpus (for unsupervised, seeded, supervised) and unseeded 1x BoW corpus (for unseeded)

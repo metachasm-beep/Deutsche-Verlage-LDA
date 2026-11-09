@@ -106,6 +106,10 @@ function App() {
   const [selectedTopicIndex, setSelectedTopicIndex] = useState<number>(0);
   const [ideologicalFilter, setIdeologicalFilter] = useState<string | null>(null);
   const [inspectorSearch, setInspectorSearch] = useState<string>('');
+  const [inspectorLimit, setInspectorLimit] = useState<number>(60);
+  const [exhaustiveInspectorDocs, setExhaustiveInspectorDocs] = useState<RepresentativeDoc[] | null>(null);
+  const [exhaustiveTotalMatches, setExhaustiveTotalMatches] = useState<number>(0);
+  const [inspectorGlobalScope, setInspectorGlobalScope] = useState<boolean>(false);
 
   // Upload & Citation Copy State
   const [uploadStatus, setUploadStatus] = useState<{
@@ -277,9 +281,70 @@ function App() {
     (activeTopic && representativeDocs[activeTopic.id]) ||
     [];
 
+  // Fetch exhaustive MARC21 catalog results from /api/marc21-search whenever topic, mode, filters, or search query change
+  useEffect(() => {
+    let cancelled = false;
+    const timer = setTimeout(async () => {
+      try {
+        const params = new URLSearchParams();
+        if (inspectorSearch.trim()) params.set('q', inspectorSearch.trim());
+        if (!inspectorGlobalScope && activeTopic) params.set('topic_id', String(activeTopic.id));
+        if (ldaMode) params.set('lda_mode', ldaMode);
+        if (selectedPublishers.length > 0) params.set('publishers', selectedPublishers.join(','));
+        if (selectedDecade) params.set('decade', String(selectedDecade));
+        if (selectedYear) params.set('year', String(selectedYear));
+        params.set('limit', String(inspectorLimit));
+        const res = await fetch(`/api/marc21-search?${params.toString()}`);
+        if (res.ok) {
+          const data = await res.json();
+          if (!cancelled && Array.isArray(data.results)) {
+            setExhaustiveInspectorDocs(data.results);
+            setExhaustiveTotalMatches(Number(data.total_matches || data.results.length));
+          }
+        }
+      } catch {
+        if (!cancelled) {
+          setExhaustiveInspectorDocs(null);
+        }
+      }
+    }, 120);
+    return () => {
+      cancelled = true;
+      clearTimeout(timer);
+    };
+  }, [
+    inspectorSearch,
+    activeTopic?.id,
+    ldaMode,
+    selectedPublishers,
+    selectedDecade,
+    selectedYear,
+    inspectorLimit,
+    inspectorGlobalScope,
+  ]);
+
+  const localFilteredInspectorDocs = activeTopicDocs.filter((doc: RepresentativeDoc) => {
+    if (!inspectorSearch.trim()) return true;
+    const q = inspectorSearch.toLowerCase();
+    return (
+      doc.title.toLowerCase().includes(q) ||
+      doc.publisher.toLowerCase().includes(q) ||
+      Boolean(doc.author && doc.author.toLowerCase().includes(q)) ||
+      Boolean(doc.snippet && doc.snippet.toLowerCase().includes(q)) ||
+      String(doc.year || doc.date || '').toLowerCase().includes(q)
+    );
+  });
+
+  const filteredInspectorDocs: RepresentativeDoc[] =
+    exhaustiveInspectorDocs && exhaustiveInspectorDocs.length >= localFilteredInspectorDocs.length
+      ? exhaustiveInspectorDocs
+      : localFilteredInspectorDocs;
+
+  const totalInspectorMatches = Math.max(exhaustiveTotalMatches, filteredInspectorDocs.length);
+
   const handleCopyAllTopicCitations = () => {
-    if (!activeTopicDocs.length) return;
-    const allCitations = activeTopicDocs
+    if (!filteredInspectorDocs.length) return;
+    const allCitations = filteredInspectorDocs
       .map((doc: RepresentativeDoc) => doc.apa_citation || `${doc.publisher}. (${doc.year}). ${doc.title}.`)
       .join('\n\n');
     copyText('batch-topic-apa', allCitations);
@@ -315,18 +380,6 @@ function App() {
 
   const dissertationCitationAPA =
     'Marandi, P. (2026). Mediating faith and power: A computational topic modeling (LDA) analysis of German theological, self-help, and secular-academic publishing (1970–2025) [Doctoral dissertation research observatory, Centre for German Studies, Jawaharlal Nehru University].';
-
-  const filteredInspectorDocs = activeTopicDocs.filter((doc: RepresentativeDoc) => {
-    if (!inspectorSearch.trim()) return true;
-    const q = inspectorSearch.toLowerCase();
-    return (
-      doc.title.toLowerCase().includes(q) ||
-      doc.publisher.toLowerCase().includes(q) ||
-      Boolean(doc.author && doc.author.toLowerCase().includes(q)) ||
-      Boolean(doc.snippet && doc.snippet.toLowerCase().includes(q)) ||
-      String(doc.year || doc.date || '').toLowerCase().includes(q)
-    );
-  });
 
   return (
     <div className="min-h-dvh lg:h-dvh lg:overflow-hidden bg-obsidian-950 text-parchment-50 font-sans antialiased flex flex-col archival-grid-bg">
@@ -2108,9 +2161,20 @@ function App() {
                           .join(' · ')}
                       </p>
                     </div>
-                    <span className="font-mono text-[10px] px-1.5 py-0.5 rounded bg-white/[0.05] text-parchment-200 shrink-0">
-                      {filteredInspectorDocs.length} Docs
-                    </span>
+                    <div className="flex flex-col items-end gap-1 shrink-0">
+                      <span className="font-mono text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 font-bold">
+                        {filteredInspectorDocs.length} / {totalInspectorMatches.toLocaleString()} Works
+                      </span>
+                      <button
+                        onClick={() => {
+                          setInspectorGlobalScope((prev) => !prev);
+                          setInspectorLimit(80);
+                        }}
+                        className="font-mono text-[9px] text-traditional hover:underline cursor-pointer"
+                      >
+                        {inspectorGlobalScope ? 'Scope: All Topics' : 'Scope: Active Topic'}
+                      </button>
+                    </div>
                   </div>
                 )}
 
@@ -2120,8 +2184,11 @@ function App() {
                   <input
                     type="text"
                     value={inspectorSearch}
-                    onChange={(e) => setInspectorSearch(e.target.value)}
-                    placeholder="Search MARC21 titles, publishers, blurbs..."
+                    onChange={(e) => {
+                      setInspectorSearch(e.target.value);
+                      setInspectorLimit(80);
+                    }}
+                    placeholder="Exhaustive search: MARC21 titles, authors, publishers, blurbs..."
                     className="w-full bg-obsidian-900 border border-white/10 rounded-lg pl-8 pr-3 py-1.5 text-xs font-mono text-parchment-100 placeholder:text-parchment-300/50 focus:outline-none focus:border-traditional"
                   />
                 </div>
@@ -2245,6 +2312,32 @@ function App() {
                       </p>
                     </div>
                   )}
+
+                  {filteredInspectorDocs.length > 0 &&
+                    (filteredInspectorDocs.length < totalInspectorMatches || !inspectorGlobalScope) && (
+                      <div className="pt-2 flex flex-col gap-1.5">
+                        {filteredInspectorDocs.length < totalInspectorMatches && (
+                          <button
+                            onClick={() => setInspectorLimit((prev) => Math.min(250, prev + 60))}
+                            className="w-full py-2 rounded-lg bg-traditional/15 hover:bg-traditional/25 border border-traditional/40 font-mono text-[10px] font-bold text-traditional transition-colors cursor-pointer"
+                          >
+                            Load More MARC21 Monographs ({filteredInspectorDocs.length} of{' '}
+                            {totalInspectorMatches.toLocaleString()} shown)
+                          </button>
+                        )}
+                        {!inspectorGlobalScope && (
+                          <button
+                            onClick={() => {
+                              setInspectorGlobalScope(true);
+                              setInspectorLimit(120);
+                            }}
+                            className="w-full py-1.5 rounded-lg bg-white/[0.04] hover:bg-white/[0.09] border border-white/10 font-mono text-[10px] text-parchment-200 transition-colors cursor-pointer"
+                          >
+                            Expand to Exhaustive All-Topic MARC21 Catalog (3,500+ Indexed Works)
+                          </button>
+                        )}
+                      </div>
+                    )}
                 </div>
               </div>
             </motion.aside>
