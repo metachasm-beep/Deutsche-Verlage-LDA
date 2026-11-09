@@ -33,6 +33,8 @@ import {
   GitCompare,
   FileCode2,
   Activity,
+  Sun,
+  Moon,
 } from 'lucide-react';
 import { useLDA, type LDAMode } from './hooks/useLDA';
 import { TrendsGraph, COMPREHENSIVE_FALLBACK_PUBLISHERS } from './components/TrendsGraph';
@@ -91,7 +93,30 @@ function App() {
     fetchConceptualDrift();
   }, []);
 
-  // 3-Pane Split-View IDE State
+  // 3-Pane Split-View IDE State & Theme Mode ('dark' Obsidian vs. 'light' Parchment Folio)
+  const [themeMode, setThemeMode] = useState<'dark' | 'light'>(() => {
+    try {
+      const saved = window.localStorage.getItem('dnb_lda_theme');
+      if (saved === 'light' || saved === 'dark') return saved;
+    } catch {
+      // ignore storage errors
+    }
+    return 'dark';
+  });
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', themeMode);
+    try {
+      window.localStorage.setItem('dnb_lda_theme', themeMode);
+    } catch {
+      // ignore storage errors
+    }
+  }, [themeMode]);
+
+  const toggleThemeMode = () => {
+    setThemeMode((prev) => (prev === 'dark' ? 'light' : 'dark'));
+  };
+
   const [workspaceMode, setWorkspaceMode] = useState<
     'bento' | 'distance' | 'drift' | 'workbench' | 'pipeline' | 'topics' | 'matrix'
   >('bento');
@@ -556,6 +581,29 @@ function App() {
               <RotateCcw className="w-3 h-3" />
             </button>
           )}
+
+          <button
+            onClick={toggleThemeMode}
+            title={
+              themeMode === 'dark'
+                ? 'Switch to Light Parchment Folio Theme'
+                : 'Switch to Dark Obsidian Archival Theme'
+            }
+            aria-label="Toggle Light/Dark Theme"
+            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-white/[0.04] hover:bg-white/[0.09] border border-white/10 text-[11px] font-mono text-parchment-100 transition-colors cursor-pointer"
+          >
+            {themeMode === 'dark' ? (
+              <>
+                <Sun className="w-3.5 h-3.5 text-traditional" />
+                <span className="hidden sm:inline">Light Theme</span>
+              </>
+            ) : (
+              <>
+                <Moon className="w-3.5 h-3.5 text-traditional" />
+                <span className="hidden sm:inline">Dark Theme</span>
+              </>
+            )}
+          </button>
 
           <button
             onClick={() => setShowCitationModal((prev) => !prev)}
