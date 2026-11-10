@@ -59,6 +59,9 @@ export interface RepresentativeDoc {
   probability?: number;
   apa_citation?: string;
   snippet?: string;
+  dnb_publication_type?: string;
+  dnb_series?: string;
+  dnb_textplus_collection?: string;
 }
 
 export interface TopicDiagnostics {

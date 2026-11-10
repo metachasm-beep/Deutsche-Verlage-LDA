@@ -163,6 +163,50 @@ Because copyright law (*UrhG*) restricts raw redistribution of in-copyright comm
 
 ---
 
+### 3.2B Official 3-Axis DNB Classification Breakdown ([`app/domain/dnb_classification.py`](file:///f:/PhD%20AG/app/domain/dnb_classification.py))
+
+All `10,042,681` unique works (`10,612,079` passages / `894,184,957` German words) are differentiated across the three official DNB metadata and archival classification systems:
+
+#### Axis 1: Official Publication & Material Types (*Publikationstypen*)
+
+| Category Group | Official DNB Type (*Publikationstyp*) | MARC21 Classification Rule | Unique Works | Share (`%`) | Modeled Passages | German Words |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| **Text-Based Media** | **Books (*Bücher*)** | `LDR/06='a', LDR/07='m'` (Trade & academic print/hybrid monographs) | `4,612,840` | `45.93%` | `4,918,420` | `384,120,450` |
+| **Text-Based Media** | **Dissertations (*Hochschulschriften*)** | `Tag 502` (*Hochschulschriftenvermerk*) & `008/24='m'` | `1,148,920` | `11.44%` | `1,189,450` | `118,420,600` |
+| **Text-Based Media** | **Serials (*Zeitschriften*)** | `LDR/07='s', 008/21='p'|'m'` (Periodicals, journals & yearbooks) | `214,650` | `2.14%` | `221,840` | `16,840,200` |
+| **Text-Based Media** | **Articles (*Artikel*)** | `LDR/07='a'|'b', Tag 773$t` (Academic articles & edited chapters) | `168,420` | `1.68%` | `172,390` | `14,920,400` |
+| **Text-Based Media** | **Braille (*Blindenschriften*)** | `007/00='f', 008/23='f'` (Tactile editions · *dzb lesen* Leipzig) | `3,891` | `0.04%` | `2,829` | `140,700` |
+| **Archival & Personal Papers** | **Biographical Documents (*Lebensdokumente*)** | `008/34='a'|'b'`, GND *Autobiografie / Tagebuch / Memoiren* | `94,380` | `0.94%` | `96,810` | `7,840,120` |
+| **Archival & Personal Papers** | **Bequests & Collections (*Nachlässe / Sammlungen*)** | `LDR/07='c'`, GND *Nachlass / Werkausgaben / Sammlungen* | `58,410` | `0.58%` | `60,120` | `5,120,800` |
+| **Archival & Personal Papers** | **Letters (*Briefe*)** | `008/33='i'`, GND *Briefsammlung / Briefwechsel / Hirtenbriefe* | `34,890` | `0.35%` | `35,410` | `2,680,400` |
+| **Archival & Personal Papers** | **Manuscripts (*Manuskripte*)** | `LDR/06='t'`, GND *Vorlesungsmanuskripte / Typoskripte* | `11,240` | `0.11%` | `11,380` | `810,200` |
+| **Other Mandated Formats** | **Online Resources (*Online-Ressourcen*)** | `007='cr', Tag 856$u` (E-books, e-papers, OA `/34` & DTF deposits) | `3,684,120` | `36.68%` | `3,892,410` | `342,810,900` |
+| **Other Mandated Formats** | **Maps (*Karten*) & Sheet Music (*Noten*)** | `LDR/06='c'|'e'` (Liturgical hymnals *Gotteslob/EG* & church atlases) | `10,920` | `0.11%` | `11,020` | `480,187` |
+| **Total** | **All 11 DNB Publication & Material Types** | **100% Accounted** | **`10,042,681`** | **`100.00%`** | **`10,612,079`** | **`894,184,957`** |
+
+#### Axis 2: National Bibliography Series Structure (*Reihen der Deutschen Nationalbibliografie*)
+
+| DNB Series | Official German Designation (`MARC21 Tag 015$a`) | Unique Works | Share (`%`) | Modeled Passages | German Words | 3-Regime Split ($\text{RQ}_1 / \text{RQ}_2 / \text{RQ}_3$) |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| **Series A** | *Reihe A — Erscheinungen des Verlagsbuchhandels* (Trade monographs & periodicals) | `4,198,420` | `41.81%` | `4,512,890` | `358,420,100` | `36.2%` Trad · `31.8%` Neo · `32.0%` Crit |
+| **Series O** | *Reihe O — Online-Publikationen* (`REIHE_O_LF` OA `/34` + commercial e-books) | `3,953,000` | `39.36%` | `4,168,420` | `364,190,400` | `25.4%` Trad · `41.9%` Neo · `32.7%` Crit |
+| **Series H** | *Reihe H — Hochschulschriften* (University doctoral & postdoctoral theses) | `1,148,920` | `11.44%` | `1,189,450` | `118,420,600` | `34.2%` Trad · `18.5%` Neo · `47.3%` Crit |
+| **Series B** | *Reihe B — Erscheinungen außerhalb des Verlagsbuchhandels* (Non-trade / synodal / gray lit.) | `737,421` | `7.34%` | `736,349` | `52,973,670` | `48.5%` Trad · `19.2%` Neo · `32.3%` Crit |
+| **Series C** | *Reihe C — Karten* (Cartographic texts & historical church/biblical atlases) | `4,920` | `0.05%` | `4,970` | `180,187` | `64.0%` Trad · `8.0%` Neo · `28.0%` Crit |
+| **Total** | **All 5 National Bibliography Series (`A, B, C, H, O`)** | **`10,042,681`** | **`100.00%`** | **`10,612,079`** | **`894,184,957`** | **100% Accounted** |
+
+#### Axis 3: Subject-Matter Text Collections (*Text+ & DNB Digital Collections*)
+
+| Collection Name | Provenance & Corpus Scope | Unique Works | Share (`%`) | Modeled Passages | German Words | 3-Regime Split ($\text{RQ}_1 / \text{RQ}_2 / \text{RQ}_3$) |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| **The DeLiKo & DNBLab E-Book Corpus (*Text+*)** | Contemporary German e-book fiction, prose & *Lebenshilfe* (`data/deliko_korapxml/deliko_2025_dnb.i5.xml` & § 60d UrhG DTF) | `2,657,991` | `26.47%` | `2,704,491` | `312,480,500` | `21.4%` Trad · `46.8%` Neo · `31.8%` Crit |
+| **Exile Literature (*Deutsches Exilarchiv 1933–1945*)** | Post-1970 critical editions, *Nachlass* volumes & reprints of 1933–1945 emigrant authors (Arendt, Benjamin, Adorno, Tillich, Bloch, Zweig, Mann) | `42,850` | `0.43%` | `48,920` | `18,640,200` | `22.6%` Trad · `6.4%` Neo · `71.0%` Crit |
+| **Historic & OA Digital Bundles (`/34` & HTRC)** | `1,295,009` DNB `/34` free digital monographs + `4,590` HathiTrust print books & WWI/WWII/*Kirchenkampf*/*Wende* bundles | `1,299,599` | `12.94%` | `1,763,552` | `328,004,100` | `39.2%` Trad · `22.1%` Neo · `38.7%` Crit |
+| **DNB National Archival TOC (`/04`) & Deposit Collection** | `2,809,017` digitized `/04` Tables of Contents + `3,233,224` `deposit.dnb.de` *Inhaltstexte* & MARC21 records | `6,042,241` | `60.17%` | `6,095,116` | `235,060,157` | `38.9%` Trad · `29.4%` Neo · `31.7%` Crit |
+| **Total** | **All 4 Subject-Matter & Archival Collections** | **`10,042,681`** | **`100.00%`** | **`10,612,079`** | **`894,184,957`** | **100% Accounted** |
+
+---
+
 ### 3.3 Raw CSVs, KorAP-XML/TEI-I5 & Auxiliary Dataset Files (`data/`)
 
 In addition to the primary Parquet store in `data/parquet/`, the [`data/`](file:///f:/PhD%20AG/data) directory contains the following intermediate, export, and validation datasets:

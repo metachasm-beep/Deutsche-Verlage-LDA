@@ -124,6 +124,9 @@ function App() {
   const [rightInspectorOpen, setRightInspectorOpen] = useState<boolean>(true);
   const [monographBannerExpanded, setMonographBannerExpanded] = useState<boolean>(false);
   const [corpusDistExpanded, setCorpusDistExpanded] = useState<boolean>(true);
+  const [dnbTaxonomyTab, setDnbTaxonomyTab] = useState<
+    'pub_types' | 'series' | 'textplus' | 'provenance'
+  >('pub_types');
 
   // Synchronized Selection & Filter State across Panes 1, 2, and 3
   const [selectedYear, setSelectedYear] = useState<number | null>(null);
@@ -1507,6 +1510,478 @@ function App() {
                     </div>
                   </div>
 
+                  {/* 4-Axis Official DNB Classification Switcher */}
+                  <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
+                    <div className="flex flex-wrap items-center gap-1.5 p-1 rounded-lg bg-obsidian-950 border border-white/[0.08]">
+                      <button
+                        onClick={() => setDnbTaxonomyTab('pub_types')}
+                        className={clsx(
+                          'px-2.5 py-1 rounded font-mono text-[10px] transition-all cursor-pointer',
+                          dnbTaxonomyTab === 'pub_types'
+                            ? 'bg-traditional text-obsidian-950 font-bold'
+                            : 'text-parchment-200 hover:text-parchment-50 hover:bg-white/[0.04]'
+                        )}
+                      >
+                        1. Official Publication &amp; Material Types (Publikationstypen)
+                      </button>
+                      <button
+                        onClick={() => setDnbTaxonomyTab('series')}
+                        className={clsx(
+                          'px-2.5 py-1 rounded font-mono text-[10px] transition-all cursor-pointer',
+                          dnbTaxonomyTab === 'series'
+                            ? 'bg-traditional text-obsidian-950 font-bold'
+                            : 'text-parchment-200 hover:text-parchment-50 hover:bg-white/[0.04]'
+                        )}
+                      >
+                        2. National Bibliography Series (Reihen A, B, C, H, O)
+                      </button>
+                      <button
+                        onClick={() => setDnbTaxonomyTab('textplus')}
+                        className={clsx(
+                          'px-2.5 py-1 rounded font-mono text-[10px] transition-all cursor-pointer',
+                          dnbTaxonomyTab === 'textplus'
+                            ? 'bg-traditional text-obsidian-950 font-bold'
+                            : 'text-parchment-200 hover:text-parchment-50 hover:bg-white/[0.04]'
+                        )}
+                      >
+                        3. Subject-Matter Text Collections (Text+ &amp; Digital Archives)
+                      </button>
+                      <button
+                        onClick={() => setDnbTaxonomyTab('provenance')}
+                        className={clsx(
+                          'px-2.5 py-1 rounded font-mono text-[10px] transition-all cursor-pointer',
+                          dnbTaxonomyTab === 'provenance'
+                            ? 'bg-traditional text-obsidian-950 font-bold'
+                            : 'text-parchment-200 hover:text-parchment-50 hover:bg-white/[0.04]'
+                        )}
+                      >
+                        4. Full-Text Extraction Tiers (Tiers 1–3)
+                      </button>
+                    </div>
+                    <span className="font-mono text-[9px] text-parchment-300">
+                      Click any DNB classification card to filter the Right MARC21 Inspector →
+                    </span>
+                  </div>
+
+                  {/* TAB 1: OFFICIAL PUBLICATION & MATERIAL TYPES (PUBLIKATIONSTYPEN) */}
+                  {dnbTaxonomyTab === 'pub_types' && (
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+                      {/* Column 1: Text-Based Media (Textbasierte Medien) */}
+                      <div className="p-3 rounded-lg bg-obsidian-950/90 border border-traditional/30 space-y-2">
+                        <div className="flex items-center justify-between border-b border-white/[0.06] pb-1.5">
+                          <span className="font-mono text-[10px] uppercase text-traditional font-bold">
+                            Text-Based Media (Textbasierte Medien)
+                          </span>
+                          <span className="px-1.5 py-0.5 rounded bg-traditional/15 font-mono text-[9px] text-traditional font-bold">
+                            61.22% · 6,148,721 Works
+                          </span>
+                        </div>
+                        <div className="space-y-1.5 font-mono text-[10px]">
+                          {[
+                            {
+                              label: 'Books (Bücher)',
+                              sub: 'Standard physical & digital trade monographs (LDR/06=a, 07=m)',
+                              works: '4,612,840',
+                              passages: '4,918,420',
+                              pct: '45.93%',
+                              q: 'Books (Bücher)',
+                            },
+                            {
+                              label: 'Dissertations (Hochschulschriften)',
+                              sub: 'University doctoral theses & Habilitationen (MARC Tag 502)',
+                              works: '1,148,920',
+                              passages: '1,189,450',
+                              pct: '11.44%',
+                              q: 'Dissertations',
+                            },
+                            {
+                              label: 'Serials (Zeitschriften)',
+                              sub: 'Periodicals, theological journals & yearbooks (LDR/07=s)',
+                              works: '214,650',
+                              passages: '221,840',
+                              pct: '2.14%',
+                              q: 'Serials',
+                            },
+                            {
+                              label: 'Articles (Artikel)',
+                              sub: 'Academic entries, Festschriften & edited chapters (LDR/07=a/b)',
+                              works: '168,420',
+                              passages: '172,390',
+                              pct: '1.68%',
+                              q: 'Articles',
+                            },
+                            {
+                              label: 'Braille (Blindenschriften)',
+                              sub: 'Tactile text editions (MARC 007=f · dzb lesen Leipzig)',
+                              works: '3,891',
+                              passages: '2,829',
+                              pct: '0.04%',
+                              q: 'Books (Bücher)',
+                            },
+                          ].map((item) => (
+                            <div
+                              key={item.label}
+                              onClick={() => {
+                                setRightInspectorOpen(true);
+                                setInspectorGlobalScope(true);
+                                setInspectorSearch(item.q);
+                              }}
+                              className="p-2 rounded bg-obsidian-900/80 hover:bg-obsidian-800 border border-white/[0.06] hover:border-traditional/40 transition-all cursor-pointer"
+                            >
+                              <div className="flex items-center justify-between text-parchment-50 font-bold">
+                                <span>{item.label}</span>
+                                <span className="text-traditional">
+                                  {item.works} works ({item.pct})
+                                </span>
+                              </div>
+                              <div className="text-[9px] text-parchment-300 mt-0.5 flex justify-between gap-2">
+                                <span>{item.sub}</span>
+                                <span className="shrink-0 text-parchment-200">{item.passages} passages</span>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Column 2: Archival & Personal Papers (Archivalien & Nachlässe) */}
+                      <div className="p-3 rounded-lg bg-obsidian-950/90 border border-neoliberal/30 space-y-2">
+                        <div className="flex items-center justify-between border-b border-white/[0.06] pb-1.5">
+                          <span className="font-mono text-[10px] uppercase text-neoliberal font-bold">
+                            Archival &amp; Personal Papers (Nachlässe &amp; Briefe)
+                          </span>
+                          <span className="px-1.5 py-0.5 rounded bg-neoliberal/15 font-mono text-[9px] text-neoliberal font-bold">
+                            1.98% · 198,920 Works
+                          </span>
+                        </div>
+                        <div className="space-y-1.5 font-mono text-[10px]">
+                          {[
+                            {
+                              label: 'Biographical Documents (Lebensdokumente)',
+                              sub: 'Personal records, diaries (Tagebücher), memoirs & Biografiearbeit',
+                              works: '94,380',
+                              passages: '96,810',
+                              pct: '0.94%',
+                              q: 'Biographical Documents',
+                            },
+                            {
+                              label: 'Bequests & Collections (Nachlässe / Sammlungen)',
+                              sub: 'Literary/theological estates & Werkausgaben (Rahner, Barth, Adorno)',
+                              works: '58,410',
+                              passages: '60,120',
+                              pct: '0.58%',
+                              q: 'Bequests',
+                            },
+                            {
+                              label: 'Letters (Briefe)',
+                              sub: 'Historical correspondence (Briefwechsel), Hirtenbriefe & ephemera',
+                              works: '34,890',
+                              passages: '35,410',
+                              pct: '0.35%',
+                              q: 'Letters',
+                            },
+                            {
+                              label: 'Manuscripts (Manuskripte)',
+                              sub: 'Critical lecture manuscripts (Vorlesungsmanuskripte) & typescripts',
+                              works: '11,240',
+                              passages: '11,380',
+                              pct: '0.11%',
+                              q: 'Manuscripts',
+                            },
+                          ].map((item) => (
+                            <div
+                              key={item.label}
+                              onClick={() => {
+                                setRightInspectorOpen(true);
+                                setInspectorGlobalScope(true);
+                                setInspectorSearch(item.q);
+                              }}
+                              className="p-2 rounded bg-obsidian-900/80 hover:bg-obsidian-800 border border-white/[0.06] hover:border-neoliberal/40 transition-all cursor-pointer"
+                            >
+                              <div className="flex items-center justify-between text-parchment-50 font-bold">
+                                <span>{item.label}</span>
+                                <span className="text-neoliberal">
+                                  {item.works} works ({item.pct})
+                                </span>
+                              </div>
+                              <div className="text-[9px] text-parchment-300 mt-0.5 flex justify-between gap-2">
+                                <span>{item.sub}</span>
+                                <span className="shrink-0 text-parchment-200">{item.passages} passages</span>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Column 3: Other Mandated Formats & Born-Digital (Online-Ressourcen, Karten & Noten) */}
+                      <div className="p-3 rounded-lg bg-obsidian-950/90 border border-emerald-500/30 space-y-2 flex flex-col justify-between">
+                        <div className="space-y-2">
+                          <div className="flex items-center justify-between border-b border-white/[0.06] pb-1.5">
+                            <span className="font-mono text-[10px] uppercase text-emerald-300 font-bold">
+                              Other Mandated Formats (Online, Karten &amp; Noten)
+                            </span>
+                            <span className="px-1.5 py-0.5 rounded bg-emerald-500/15 font-mono text-[9px] text-emerald-300 font-bold">
+                              36.79% · 3,695,040 Works
+                            </span>
+                          </div>
+                          <div className="space-y-1.5 font-mono text-[10px]">
+                            {[
+                              {
+                                label: 'Online Resources (Online-Ressourcen)',
+                                sub: 'Born-digital e-books, e-papers, websites & OA /34 deposits (007=cr, 856$u)',
+                                works: '3,684,120',
+                                passages: '3,892,410',
+                                words: '342.81M words',
+                                pct: '36.68%',
+                                q: 'Online Resources',
+                              },
+                              {
+                                label: 'Maps (Karten) & Sheet Music (Noten)',
+                                sub: 'Liturgical hymnals (Gotteslob, EG) & historical church/biblical atlases',
+                                works: '10,920',
+                                passages: '11,020',
+                                words: '0.48M words',
+                                pct: '0.11%',
+                                q: 'Maps',
+                              },
+                            ].map((item) => (
+                              <div
+                                key={item.label}
+                                onClick={() => {
+                                  setRightInspectorOpen(true);
+                                  setInspectorGlobalScope(true);
+                                  setInspectorSearch(item.q);
+                                }}
+                                className="p-2.5 rounded bg-obsidian-900/80 hover:bg-obsidian-800 border border-white/[0.06] hover:border-emerald-500/40 transition-all cursor-pointer"
+                              >
+                                <div className="flex items-center justify-between text-parchment-50 font-bold">
+                                  <span>{item.label}</span>
+                                  <span className="text-emerald-300">
+                                    {item.works} works ({item.pct})
+                                  </span>
+                                </div>
+                                <p className="text-[9px] text-parchment-300 mt-1 leading-relaxed">
+                                  {item.sub}
+                                </p>
+                                <div className="text-[9px] text-parchment-200 mt-1 flex justify-between">
+                                  <span>Passages: {item.passages}</span>
+                                  <span>Token Mass: {item.words}</span>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                        <div className="p-2 rounded bg-obsidian-900/60 border border-white/[0.05] font-mono text-[9px] text-parchment-300 leading-relaxed">
+                          <strong className="text-parchment-100">Total Across All 11 DNB Publikationstypen:</strong>{' '}
+                          10,042,681 Unique Works · 10,612,079 Passages · 894,184,957 German Words (100% accounted).
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* TAB 2: NATIONAL BIBLIOGRAPHY SERIES STRUCTURE (REIHEN A, B, C, H, O) */}
+                  {dnbTaxonomyTab === 'series' && (
+                    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-3 text-xs">
+                      {[
+                        {
+                          code: 'Series A (Reihe A)',
+                          title: 'Trade Monographs & Periodicals',
+                          german: 'Erscheinungen des Verlagsbuchhandels',
+                          works: '4,198,420',
+                          passages: '4,512,890',
+                          words: '358.42M',
+                          pct: '41.81%',
+                          split: 'T:36% · N:32% · C:32%',
+                          desc: 'Mainstream published books & periodicals distributed through bookstores (Herder, Suhrkamp, C.H. Beck, Kösel, Mohr Siebeck, V&R, GU, Rowohlt).',
+                          accent: 'border-traditional/40 text-traditional',
+                          q: 'Series A',
+                        },
+                        {
+                          code: 'Series O (Reihe O)',
+                          title: 'Online & Born-Digital Publications',
+                          german: 'Online-Publikationen / Netzpublikationen',
+                          works: '3,953,000',
+                          passages: '4,168,420',
+                          words: '364.19M',
+                          pct: '39.36%',
+                          split: 'T:25% · N:42% · C:33%',
+                          desc: 'Purely internet-based digital publications: 1,295,009 free DNB /34 OA works (REIHE_O_LF) + 2,657,991 commercial e-books (DeLiKo / DNBLab DTF).',
+                          accent: 'border-emerald-500/40 text-emerald-300',
+                          q: 'Series O',
+                        },
+                        {
+                          code: 'Series H (Reihe H)',
+                          title: 'University Theses & Dissertations',
+                          german: 'Hochschulschriften (Tag 502)',
+                          works: '1,148,920',
+                          passages: '1,189,450',
+                          words: '118.42M',
+                          pct: '11.44%',
+                          split: 'T:34% · N:19% · C:47%',
+                          desc: 'Doctoral dissertations (Inauguraldissertationen) and postdoctoral Habilitationsschriften across German university faculties.',
+                          accent: 'border-neoliberal/40 text-neoliberal',
+                          q: 'Series H',
+                        },
+                        {
+                          code: 'Series B (Reihe B)',
+                          title: 'Non-Trade & Gray Literature',
+                          german: 'Außerhalb des Verlagsbuchhandels',
+                          works: '737,421',
+                          passages: '736,349',
+                          words: '52.97M',
+                          pct: '7.34%',
+                          split: 'T:49% · N:19% · C:32%',
+                          desc: 'Institutional papers, DBK Catholic synodal reports, Protestant EKD-Texte, Evangelische/Katholische Akademien, foundations & pamphlets.',
+                          accent: 'border-critical/40 text-critical',
+                          q: 'Series B',
+                        },
+                        {
+                          code: 'Series C (Reihe C)',
+                          title: 'Maps & Cartographic Texts',
+                          german: 'Karten & Kirchenhistorische Atlanten',
+                          works: '4,920',
+                          passages: '4,970',
+                          words: '0.18M',
+                          pct: '0.05%',
+                          split: 'T:64% · N:8% · C:28%',
+                          desc: 'Cartographic publications with explanatory German text: historical church atlases (Atlas zur Kirchengeschichte) & biblical topography.',
+                          accent: 'border-violet-400/40 text-violet-300',
+                          q: 'Series C',
+                        },
+                      ].map((s) => (
+                        <div
+                          key={s.code}
+                          onClick={() => {
+                            setRightInspectorOpen(true);
+                            setInspectorGlobalScope(true);
+                            setInspectorSearch(s.q);
+                          }}
+                          className={clsx(
+                            'p-3 rounded-lg bg-obsidian-950/90 border flex flex-col justify-between cursor-pointer hover:bg-obsidian-900 transition-all',
+                            s.accent.split(' ')[0]
+                          )}
+                        >
+                          <div>
+                            <div className="flex items-center justify-between gap-1 mb-1">
+                              <span className={clsx('font-mono text-[10px] uppercase font-bold', s.accent.split(' ')[1])}>
+                                {s.code}
+                              </span>
+                              <span className="px-1.5 py-0.5 rounded bg-white/[0.05] font-mono text-[9px] text-parchment-100 font-bold">
+                                {s.pct}
+                              </span>
+                            </div>
+                            <div className="font-serif text-base font-bold text-parchment-50 leading-snug">
+                              {s.title}
+                            </div>
+                            <div className="font-mono text-[9px] text-parchment-300 mt-0.5">
+                              {s.german}
+                            </div>
+                            <div className="font-serif text-lg font-bold text-parchment-50 tabular-nums mt-1.5">
+                              {s.works} Works
+                            </div>
+                            <p className="text-[10px] text-parchment-300 mt-1 leading-relaxed">
+                              {s.desc}
+                            </p>
+                          </div>
+                          <div className="mt-2 pt-2 border-t border-white/[0.06] space-y-1 font-mono text-[9px]">
+                            <div className="flex justify-between text-parchment-200">
+                              <span>Passages / Words:</span>
+                              <span className="font-bold">{s.passages} · {s.words}</span>
+                            </div>
+                            <div className="flex justify-between text-parchment-300">
+                              <span>Regime Split:</span>
+                              <span className="text-parchment-100">{s.split}</span>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* TAB 3: SUBJECT-MATTER TEXT COLLECTIONS (TEXT+ & DIGITAL ARCHIVES) */}
+                  {dnbTaxonomyTab === 'textplus' && (
+                    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3 text-xs">
+                      {[
+                        {
+                          title: 'The DeLiKo & DNBLab E-Book Corpus (Text+)',
+                          german: 'DeLiKo@DNB (KorAP-XML / TEI-I5) & § 60d UrhG DTF',
+                          works: '2,657,991 Works',
+                          sub: '2,704,491 Passages · 312.48M Words (26.47%)',
+                          split: 'Traditional: 21.4% · Neoliberal: 46.8% · Critical: 31.8%',
+                          desc: 'Massive Text+ digital collection of contemporary German e-books (prose, narrative fiction, and Lebenshilfe/self-help non-fiction) formatted in IDS Mannheim KorAP-XML / TEI-I5 (data/deliko_korapxml/deliko_2025_dnb.i5.xml) and DNBLab DTF.',
+                          accent: 'border-critical/40 text-critical',
+                          q: 'DeLiKo',
+                        },
+                        {
+                          title: 'Exile Literature (Deutsches Exilarchiv 1933–1945)',
+                          german: 'Kritische Werkausgaben, Nachlässe & Exilforschung (1970–2025)',
+                          works: '42,850 Works',
+                          sub: '48,920 Passages · 18.64M Words (0.43%)',
+                          split: 'Traditional: 22.6% · Neoliberal: 6.4% · Critical: 71.0%',
+                          desc: 'Post-1970 critical editions, Nachlass volumes, and scholarly reprints of German-speaking emigrant literature and anti-totalitarian theology/philosophy written 1933–1945 (Arendt, Benjamin, Adorno, Horkheimer, Tillich, Löwith, Bloch, Zweig, Mann).',
+                          accent: 'border-traditional/40 text-traditional',
+                          q: 'Exile Literature',
+                        },
+                        {
+                          title: 'Historic & Open-Access Digital Bundles (/34 & HTRC)',
+                          german: 'DNB FreieOnlineHochschulschriften (/34) & HathiTrust Print',
+                          works: '1,299,599 Works',
+                          sub: '1,763,552 Passages · 328.00M Words (12.94%)',
+                          split: 'Traditional: 39.2% · Neoliberal: 22.1% · Critical: 38.7%',
+                          desc: '1,295,009 unrestricted DNB /34 Open-Access full-text monographs and dissertations + 4,590 HathiTrust pre-2006 multi-chunk print books and historical commemoration bundles (WWI/WWII Kirchenkampf & 1989 Wende archives).',
+                          accent: 'border-emerald-500/40 text-emerald-300',
+                          q: 'Historic & OA Digital Bundles',
+                        },
+                        {
+                          title: 'DNB National Archival TOC (/04) & Deposit Collection',
+                          german: 'Inhaltsverzeichnisse (/04 OCR) & deposit.dnb.de Inhaltstexte',
+                          works: '6,042,241 Works',
+                          sub: '6,095,116 Passages · 235.06M Words (60.17%)',
+                          split: 'Traditional: 38.9% · Neoliberal: 29.4% · Critical: 31.7%',
+                          desc: 'Comprehensive bibliographic and paratextual backbone of the 1970–2025 DNB catalog: 2,809,017 digitized Tables of Contents (/04 PDFs) and 3,233,224 publisher deposit abstracts (Inhaltstexte) and MARC21 245/520/689 records.',
+                          accent: 'border-neoliberal/40 text-neoliberal',
+                          q: 'DNB Archival TOC',
+                        },
+                      ].map((c) => (
+                        <div
+                          key={c.title}
+                          onClick={() => {
+                            setRightInspectorOpen(true);
+                            setInspectorGlobalScope(true);
+                            setInspectorSearch(c.q);
+                          }}
+                          className={clsx(
+                            'p-3 rounded-lg bg-obsidian-950/90 border flex flex-col justify-between cursor-pointer hover:bg-obsidian-900 transition-all',
+                            c.accent.split(' ')[0]
+                          )}
+                        >
+                          <div>
+                            <div className={clsx('font-mono text-[10px] uppercase font-bold mb-1', c.accent.split(' ')[1])}>
+                              {c.title}
+                            </div>
+                            <div className="font-mono text-[9px] text-parchment-300 mb-1.5">
+                              {c.german}
+                            </div>
+                            <div className="font-serif text-lg font-bold text-parchment-50 tabular-nums">
+                              {c.works}{' '}
+                              <span className="text-[11px] font-mono font-normal text-parchment-300">
+                                · {c.sub}
+                              </span>
+                            </div>
+                            <p className="text-[11px] text-parchment-300 mt-1.5 leading-relaxed">
+                              {c.desc}
+                            </p>
+                          </div>
+                          <div className="mt-2 pt-2 border-t border-white/[0.06] font-mono text-[9px] text-parchment-200 flex justify-between">
+                            <span>3-Regime Alignment:</span>
+                            <span className="font-bold text-parchment-100">{c.split}</span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* TAB 4: FULL-TEXT EXTRACTION PROVENANCE TIERS (TIERS 1-3) */}
+                  {dnbTaxonomyTab === 'provenance' && (
                   <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3 text-xs">
                     {/* Tier 1: Complete DNB /34 Digital & HTRC Full-Work Monographs */}
                     <div className="p-3 rounded-lg bg-obsidian-950/90 border border-emerald-500/30 flex flex-col justify-between">
@@ -1656,6 +2131,7 @@ function App() {
                       </div>
                     </div>
                   </div>
+                  )}
                 </div>
               </motion.div>
             )}
@@ -2077,15 +2553,36 @@ function App() {
                             {doc.title}
                           </h4>
 
-                          {(doc.author || doc.corpus_layer) && (
-                            <div className="flex flex-wrap items-center justify-between gap-1.5 text-[10px] font-mono text-parchment-300">
-                              {doc.author && doc.author !== 'N/A' && (
-                                <span className="truncate">Tag 100$a · {doc.author}</span>
-                              )}
-                              {doc.corpus_layer && (
-                                <span className="px-1.5 py-0.5 rounded bg-white/[0.04] border border-white/[0.07] text-[9px] text-neoliberal">
-                                  {doc.corpus_layer}
-                                </span>
+                          {(doc.author || doc.corpus_layer || doc.dnb_series) && (
+                            <div className="space-y-1.5">
+                              <div className="flex flex-wrap items-center justify-between gap-1.5 text-[10px] font-mono text-parchment-300">
+                                {doc.author && doc.author !== 'N/A' && (
+                                  <span className="truncate">Tag 100$a · {doc.author}</span>
+                                )}
+                                {doc.corpus_layer && (
+                                  <span className="px-1.5 py-0.5 rounded bg-white/[0.04] border border-white/[0.07] text-[9px] text-neoliberal">
+                                    {doc.corpus_layer}
+                                  </span>
+                                )}
+                              </div>
+                              {(doc.dnb_series || doc.dnb_publication_type || doc.dnb_textplus_collection) && (
+                                <div className="flex flex-wrap items-center gap-1 text-[9px] font-mono">
+                                  {doc.dnb_series && (
+                                    <span className="px-1.5 py-0.5 rounded bg-traditional/15 border border-traditional/30 text-traditional font-bold">
+                                      {doc.dnb_series}
+                                    </span>
+                                  )}
+                                  {doc.dnb_publication_type && (
+                                    <span className="px-1.5 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/30 text-emerald-300">
+                                      {doc.dnb_publication_type}
+                                    </span>
+                                  )}
+                                  {doc.dnb_textplus_collection && (
+                                    <span className="px-1.5 py-0.5 rounded bg-white/[0.04] border border-white/10 text-parchment-200">
+                                      {doc.dnb_textplus_collection}
+                                    </span>
+                                  )}
+                                </div>
                               )}
                             </div>
                           )}

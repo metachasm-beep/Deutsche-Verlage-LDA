@@ -31,6 +31,10 @@ from app.domain.posterior_projection import (
     compute_posterior_topic_geometry,
     normalize_posterior_topic_schema,
 )
+from app.domain.dnb_classification import (
+    classify_marc21_record_dnb_axes,
+    get_dnb_classifications_payload,
+)
 
 app = FastAPI(title="The Computational Turn: LDA Dashboard")
 
@@ -243,6 +247,8 @@ def _load_coherence_grid_cache() -> list:
 def _load_data_summary_cache() -> dict:
     global _DATA_SUMMARY_MEM_CACHE
     if _DATA_SUMMARY_MEM_CACHE is not None:
+        if "dnb_classifications" not in _DATA_SUMMARY_MEM_CACHE:
+            _DATA_SUMMARY_MEM_CACHE["dnb_classifications"] = get_dnb_classifications_payload()
         return _DATA_SUMMARY_MEM_CACHE
     summary_path = os.path.join(config.BASE_DIR, "app", "data_summary.json")
     if os.path.exists(summary_path):
@@ -251,11 +257,12 @@ def _load_data_summary_cache() -> dict:
             with open(summary_path, mode="r", encoding="utf-8") as sf:
                 sdata = json.load(sf)
                 payload = sdata["summary"] if ("summary" in sdata and isinstance(sdata["summary"], dict)) else sdata
+                payload["dnb_classifications"] = get_dnb_classifications_payload()
                 _DATA_SUMMARY_MEM_CACHE = payload
                 return _DATA_SUMMARY_MEM_CACHE
         except Exception:
             pass
-    return {}
+    return {"dnb_classifications": get_dnb_classifications_payload()}
 
 
 def _load_precomputed_permutations_store() -> dict:
@@ -2055,6 +2062,8 @@ async def search_marc21_inspector(
 
     filtered = []
     for doc in combined:
+        if "dnb_series" not in doc:
+            doc.update(classify_marc21_record_dnb_axes(doc))
         if pubs_list and not _publisher_matches_filter(doc.get("publisher", ""), pubs_list):
             continue
         if year or decade:
@@ -2073,6 +2082,9 @@ async def search_marc21_inspector(
                 str(doc.get("snippet") or ""),
                 str(doc.get("year") or doc.get("date") or ""),
                 str(doc.get("corpus_layer") or ""),
+                str(doc.get("dnb_publication_type") or ""),
+                str(doc.get("dnb_series") or ""),
+                str(doc.get("dnb_textplus_collection") or ""),
             ]).lower()
             if query_str not in haystack:
                 continue
