@@ -70,12 +70,14 @@ function App() {
     seedLexicons,
     religiousBoostWords,
     conceptualDrift,
+    quantedaStm,
     robustnessTelemetry,
     fetchTrends,
     fetchSummary,
     fetchTopics,
     fetchCoherenceGrid,
     fetchConceptualDrift,
+    fetchQuantedaStm,
     runLDA,
     updateCustomSeeds,
     resetCustomSeeds,
@@ -91,6 +93,7 @@ function App() {
     fetchCoherenceGrid();
     fetchTopics();
     fetchConceptualDrift();
+    fetchQuantedaStm();
   }, []);
 
   // 3-Pane Split-View IDE State & Theme Mode ('dark' Obsidian vs. 'light' Parchment Folio)
@@ -2228,6 +2231,7 @@ function App() {
                 onResetCustomSeeds={resetCustomSeeds}
                 onYearClick={handleYearClick}
                 robustnessTelemetry={robustnessTelemetry}
+                quantedaStm={quantedaStm}
               />
 
               {/* Full End-to-End Pipeline & Methodology Explainer Section */}
@@ -2298,6 +2302,7 @@ function App() {
               onResetCustomSeeds={resetCustomSeeds}
               onYearClick={handleYearClick}
               robustnessTelemetry={robustnessTelemetry}
+              quantedaStm={quantedaStm}
             />
           )}
 

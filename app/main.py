@@ -70,6 +70,7 @@ _MODES_REPORT_MEM_CACHE = None
 _DATA_SUMMARY_MEM_CACHE = None
 _TRENDS_MEM_CACHE = None
 _CONCEPTUAL_DRIFT_MEM_CACHE = None
+_QUANTEDA_STM_MEM_CACHE = None
 _PRECOMPUTED_PERMUTATIONS_CACHE = {}
 _PRECOMPUTED_STORE_LOADED = False
 
@@ -2132,6 +2133,46 @@ async def get_conceptual_drift(lemma: Optional[str] = None):
     return data
 
 
+@app.get("/api/quanteda-stm")
+async def get_quanteda_stm():
+    """
+    Returns the exact Quanteda Dunning's Log-Likelihood Keyness (G^2) tables
+    (Secular vs. Confessional internal reference contrast + Post-2000 vs. Pre-2000 contrast),
+    12-topic Structural Topic Model (STM) OLS covariate regressions (theta ~ IsSecular + TimeNorm),
+    top German compound decompositions (Komposita-Zerlegung), and KWIC concordances.
+    """
+    global _QUANTEDA_STM_MEM_CACHE
+    if _QUANTEDA_STM_MEM_CACHE is None:
+        q_path = os.path.join(config.BASE_DIR, "app", "quanteda_stm_report.json")
+        if os.path.exists(q_path):
+            try:
+                import json
+                with open(q_path, "r", encoding="utf-8") as qf:
+                    _QUANTEDA_STM_MEM_CACHE = json.load(qf)
+            except Exception as e:
+                return {
+                    "error": str(e),
+                    "total_documents": 0,
+                    "secular_documents": 0,
+                    "confessional_documents": 0,
+                    "keyness_secular_vs_confessional": {"top_target_keyness": [], "top_reference_keyness": []},
+                    "keyness_2000_2025_vs_1970_1999": {"top_target_keyness": [], "top_reference_keyness": []},
+                    "stm_covariate_regressions": [],
+                    "top_german_compound_splits": [],
+                    "kwic_samples": [],
+                }
+    return _QUANTEDA_STM_MEM_CACHE or {
+        "total_documents": 0,
+        "secular_documents": 0,
+        "confessional_documents": 0,
+        "keyness_secular_vs_confessional": {"top_target_keyness": [], "top_reference_keyness": []},
+        "keyness_2000_2025_vs_1970_1999": {"top_target_keyness": [], "top_reference_keyness": []},
+        "stm_covariate_regressions": [],
+        "top_german_compound_splits": [],
+        "kwic_samples": [],
+    }
+
+
 @app.on_event("startup")
 async def _warm_in_memory_stores_on_startup():
     _load_modes_report_cache()
@@ -2139,6 +2180,7 @@ async def _warm_in_memory_stores_on_startup():
     _load_data_summary_cache()
     _load_precomputed_permutations_store()
     _get_marc21_catalog_pool()
+    await get_quanteda_stm()
 
 
 # Serve the React frontend (Mount after routes to avoid overlap)

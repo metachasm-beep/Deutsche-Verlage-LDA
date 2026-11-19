@@ -28,7 +28,12 @@ import {
 } from 'lucide-react';
 import clsx from 'clsx';
 import { getTopicDisplayLabel, type Topic } from './TopicModelViz';
-import { type ModeComparisonRow, type SLDADiagnostics } from '../hooks/useLDA';
+import {
+  type ModeComparisonRow,
+  type SLDADiagnostics,
+  type QuantedaSTMReport,
+} from '../hooks/useLDA';
+import { QuantedaKeynessAndSTMPanel } from './QuantedaKeynessAndSTMPanel';
 
 interface HypothesisAndExportWorkbenchProps {
   topics: Topic[];
@@ -55,6 +60,7 @@ interface HypothesisAndExportWorkbenchProps {
   onResetCustomSeeds: () => void;
   onYearClick?: (year: number) => void;
   robustnessTelemetry?: any;
+  quantedaStm?: QuantedaSTMReport | null;
 }
 
 const DEFAULT_SEEDS: Record<string, string[]> = {
@@ -117,6 +123,7 @@ export const HypothesisAndExportWorkbench: React.FC<HypothesisAndExportWorkbench
   onResetCustomSeeds,
   onYearClick,
   robustnessTelemetry,
+  quantedaStm,
 }) => {
   // Module 5 State: Custom Seed Lexicon Editor & Hyperparameters
   const [localSeeds, setLocalSeeds] = useState<Record<string, string[]>>(DEFAULT_SEEDS);
@@ -229,6 +236,41 @@ export const HypothesisAndExportWorkbench: React.FC<HypothesisAndExportWorkbench
         )
         .join('\n');
 
+      const stmRows = (quantedaStm?.stm_covariate_regressions || [])
+        .map((r) => {
+          const tId = `T${String(r.topic_id).padStart(2, '0')}`;
+          const safeLbl = r.topic_label
+            .replace(/^Topic\s+\d+\s*\(/, '')
+            .replace(/\)$/, '')
+            .replace(/&/g, '\\&');
+          const b1 =
+            r.secular_vs_confessional_effect_pct >= 0
+              ? `+${r.secular_vs_confessional_effect_pct.toFixed(2)}\\%`
+              : `${r.secular_vs_confessional_effect_pct.toFixed(2)}\\%`;
+          const b2 =
+            r.diachronic_1970_2025_shift_pct >= 0
+              ? `+${r.diachronic_1970_2025_shift_pct.toFixed(2)}\\%`
+              : `${r.diachronic_1970_2025_shift_pct.toFixed(2)}\\%`;
+          return `    ${tId} & ${safeLbl} & ${b1} & ${r.secular_t_stat.toFixed(1)} & ${b2} & ${r.diachronic_t_stat.toFixed(1)} \\\\`;
+        })
+        .join('\n');
+
+      const stmLatexBlock = stmRows
+        ? `\n\n\\begin{table}[htbp]
+  \\centering
+  \\caption{12-Topic Structural Topic Model (STM) Covariate Regressions ($D = ${(quantedaStm?.total_documents || 10612079).toLocaleString()}$, $\\theta_{d,k} \\sim \\text{IsSecular}_d + \\text{TimeNorm}_d$)}
+  \\label{tab:stm_covariate_regressions}
+  \\footnotesize
+  \\begin{tabular}{lp{5.8cm}rrrr}
+    \\toprule
+    \\textbf{ID} & \\textbf{Regime \\& Top German Lemmas} & \\textbf{$\\beta_1$ Ownership} & \\textbf{$t_1$} & \\textbf{$\\beta_2$ 1970--2025} & \\textbf{$t_2$} \\\\
+    \\midrule
+${stmRows}
+    \\bottomrule
+  \\end{tabular}
+\\end{table}`
+        : '';
+
       return `% ============================================================================
 % LaTeX Booktabs Tables — Doctoral Dissertation (JNU, Centre for German Studies)
 % Scholar: Paul Marandi | Active Paradigm: ${ldaMode.toUpperCase()} (K = ${numTopics})
@@ -275,7 +317,7 @@ ${benchRows}
 ${pubRows}
     \\bottomrule
   \\end{tabular}
-\\end{table}`;
+\\end{table}${stmLatexBlock}`;
     }
 
     if (exportFormat === 'bibtex') {
@@ -480,6 +522,7 @@ if __name__ == "__main__":
     sldaDiagnostics,
     robustnessTelemetry,
     localSeeds,
+    quantedaStm,
   ]);
 
   const handleCopyExport = () => {
@@ -737,6 +780,11 @@ if __name__ == "__main__":
           </div>
         </div>
       </div>
+
+      {/* =====================================================================
+          MODULE 4: QUANTEDA DUNNING'S G² KEYNESS BUTTERFLY & 12-TOPIC STM TABLE
+         ===================================================================== */}
+      <QuantedaKeynessAndSTMPanel quantedaStm={quantedaStm ?? null} />
 
       {/* =====================================================================
           MODULE 5: INTERACTIVE CUSTOM SEED-WORD & PRIOR SENSITIVITY WORKBENCH

@@ -58,6 +58,57 @@ export interface SLDADiagnostics {
   topic_regression_weights?: TopicRegressionWeight[];
 }
 
+export interface KeynessTermRow {
+  feature: string;
+  g2_keyness: number;
+  log_odds_ratio: number;
+  p_value: number;
+  n_target: number;
+  n_reference: number;
+  rate_target_per_10k: number;
+  rate_ref_per_10k: number;
+}
+
+export interface KeynessContrastGroup {
+  top_target_keyness: KeynessTermRow[];
+  top_reference_keyness: KeynessTermRow[];
+}
+
+export interface STMCovariateRow {
+  topic_id: number;
+  topic_label: string;
+  secular_vs_confessional_effect_pct: number;
+  secular_ci_95: [number, number];
+  secular_t_stat: number;
+  secular_p_value: number;
+  secular_significant: boolean;
+  diachronic_1970_2025_shift_pct: number;
+  diachronic_ci_95: [number, number];
+  diachronic_t_stat: number;
+  diachronic_p_value: number;
+  diachronic_significant: boolean;
+}
+
+export interface QuantedaSTMReport {
+  total_documents: number;
+  secular_documents: number;
+  confessional_documents: number;
+  top_german_compound_splits?: { decomposition: string; count: number }[];
+  keyness_secular_vs_confessional: KeynessContrastGroup;
+  keyness_2000_2025_vs_1970_1999: KeynessContrastGroup;
+  stm_covariate_regressions: STMCovariateRow[];
+  kwic_sample_count?: number;
+  kwic_samples?: {
+    keyword: string;
+    pre_context: string;
+    keyword_in_text: string;
+    post_context: string;
+    publisher: string;
+    year: string;
+    apa_citation: string;
+  }[];
+}
+
 export const useLDA = () => {
   const [isTraining, setIsTraining] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
@@ -81,6 +132,7 @@ export const useLDA = () => {
   const [seedLexicons, setSeedLexicons] = useState<Record<string, string[]>>({});
   const [religiousBoostWords, setReligiousBoostWords] = useState<string[]>([]);
   const [conceptualDrift, setConceptualDrift] = useState<any>(null);
+  const [quantedaStm, setQuantedaStm] = useState<QuantedaSTMReport | null>(null);
   const [robustnessTelemetry, setRobustnessTelemetry] = useState<any>(null);
   const [activeFilters, setActiveFilters] = useState<{
     year: number | null;
@@ -97,6 +149,17 @@ export const useLDA = () => {
       setConceptualDrift(data);
     } catch (e) {
       console.error("Failed to fetch conceptual drift", e);
+    }
+  };
+
+  const fetchQuantedaStm = async () => {
+    try {
+      const res = await fetch(`${API_BASE}/api/quanteda-stm`);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data: QuantedaSTMReport = await res.json();
+      setQuantedaStm(data);
+    } catch (e) {
+      console.error("Failed to fetch Quanteda Keyness & STM report", e);
     }
   };
 
@@ -405,6 +468,7 @@ export const useLDA = () => {
     setSeedLexicons,
     religiousBoostWords,
     conceptualDrift,
+    quantedaStm,
     robustnessTelemetry,
     activeFilters,
     fetchTrends,
@@ -412,6 +476,7 @@ export const useLDA = () => {
     fetchTopics,
     fetchCoherenceGrid,
     fetchConceptualDrift,
+    fetchQuantedaStm,
     runLDA,
     updateCustomSeeds,
     resetCustomSeeds,
