@@ -34,6 +34,7 @@ import {
   type QuantedaSTMReport,
 } from '../hooks/useLDA';
 import { QuantedaKeynessAndSTMPanel } from './QuantedaKeynessAndSTMPanel';
+import { InfoTooltip } from './InfoTooltip';
 
 interface HypothesisAndExportWorkbenchProps {
   topics: Topic[];
@@ -565,8 +566,12 @@ if __name__ == "__main__":
                 Chow F-Test · Mann-Kendall Monotonic Trend · Pettitt Change-Point
               </span>
             </div>
-            <h2 className="font-serif text-xl sm:text-2xl font-bold text-parchment-50">
-              Diachronic Structural Breakpoints & Formal Hypothesis Verification (RQ₁–RQ₃)
+            <h2 className="font-serif text-xl sm:text-2xl font-bold text-parchment-50 flex items-center gap-2 flex-wrap">
+              <span>Diachronic Structural Breakpoints &amp; Formal Hypothesis Verification (RQ₁–RQ₃)</span>
+              <InfoTooltip
+                title="Structural Breakpoint Detector (Chow F / Pettitt / CUSUM)"
+                content="Tests every year between 1975 and 2020 to pinpoint exact historical turning points where German publishing discourse sharply changed trajectory. Click any breakpoint pill on the right to jump the whole dashboard to that year."
+              />
             </h2>
           </div>
 
@@ -802,8 +807,12 @@ if __name__ == "__main__":
                 {Math.round(seedBoost / baseEta)}×
               </span>
             </div>
-            <h2 className="font-serif text-xl sm:text-2xl font-bold text-parchment-50">
-              Live Bayesian Prior Manipulation (η ∈ ℝ<sup>K×|V|</sup>) & Seed Robustness Testing
+            <h2 className="font-serif text-xl sm:text-2xl font-bold text-parchment-50 flex items-center gap-2 flex-wrap">
+              <span>Live Bayesian Prior Manipulation (η ∈ ℝ<sup>K×|V|</sup>) &amp; Seed Robustness Testing</span>
+              <InfoTooltip
+                title="Interactive Seed-Word & Sensitivity Lab"
+                content="Add or remove German seed words for each research pole, slide η_seed up or down to test how strongly the prior nudges the model, and click 'Run Custom Seeded LDA' to re-estimate live."
+              />
             </h2>
           </div>
 
@@ -838,9 +847,15 @@ if __name__ == "__main__":
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 p-3.5 rounded-xl bg-obsidian-950/90 border border-white/[0.07]">
               <div>
                 <div className="flex items-center justify-between font-mono text-[10px] mb-1">
-                  <span className="text-parchment-200">
-                    Target Seed Prior Boost (<code>η_seed</code>):
-                  </span>
+                  <InfoTooltip
+                    title="Seed Prior Boost (η_seed)"
+                    content="Controls how strongly your custom seed words nudge a topic. Low values (1–5) let the raw corpus dominate; medium values (10–15) gently anchor topics without overriding empirical evidence."
+                    showIcon
+                  >
+                    <span className="text-parchment-200">
+                      Target Seed Prior Boost (<code>η_seed</code>):
+                    </span>
+                  </InfoTooltip>
                   <span className="text-neoliberal font-bold">
                     η_seed = {seedBoost.toFixed(1)} ({Math.round(seedBoost / baseEta)}× baseline)
                   </span>
@@ -1098,8 +1113,12 @@ if __name__ == "__main__":
                 Overleaf / TeXstudio Ready · APA 7th · FAIR/DDI JSON
               </span>
             </div>
-            <h2 className="font-serif text-xl sm:text-2xl font-bold text-parchment-50">
-              Live Publication & Thesis Table Generator (Synchronized with Active Model State)
+            <h2 className="font-serif text-xl sm:text-2xl font-bold text-parchment-50 flex items-center gap-2 flex-wrap">
+              <span>Live Publication &amp; Thesis Table Generator (Synchronized with Active Model State)</span>
+              <InfoTooltip
+                title="One-Click Dissertation Exporters"
+                content="Automatically formats your active LDA results into publication-ready LaTeX tables, BibTeX references, APA 7th summaries, FAIR JSON, or a standalone Python script that reproduces this exact run."
+              />
             </h2>
           </div>
 

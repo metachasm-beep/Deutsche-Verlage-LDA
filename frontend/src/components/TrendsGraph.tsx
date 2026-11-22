@@ -14,6 +14,7 @@ import {
 import { motion } from 'framer-motion';
 import { Calendar, RotateCcw, Eye, EyeOff, Layers, TrendingUp, Search, Filter } from 'lucide-react';
 import clsx from 'clsx';
+import { InfoTooltip } from './InfoTooltip';
 import { getArchetypeTheme, getTopicDisplayLabel, type Topic } from './TopicModelViz';
 
 export interface PublisherDirectoryEntry {
@@ -599,12 +600,18 @@ export const TrendsGraph: React.FC<TrendsGraphProps> = ({
                 </span>
               )}
             </div>
-            <h3 className="font-serif text-lg sm:text-xl font-bold text-parchment-50">
-              {chartMode === 'yearly_imprints'
-                ? 'Annual Imprint Output & Temporal Slicer'
-                : chartMode === 'topic_lines'
-                ? 'Diachronic Topic Trend Trajectories (1970s–2020s)'
-                : 'Decade Topic Share Stack (1970s–2020s)'}
+            <h3 className="font-serif text-lg sm:text-xl font-bold text-parchment-50 flex items-center gap-2 flex-wrap">
+              <span>
+                {chartMode === 'yearly_imprints'
+                  ? 'Annual Imprint Output & Temporal Slicer'
+                  : chartMode === 'topic_lines'
+                  ? 'Diachronic Topic Trend Trajectories (1970s–2020s)'
+                  : 'Decade Topic Share Stack (1970s–2020s)'}
+              </span>
+              <InfoTooltip
+                title="Interactive 1970–2025 Timeline"
+                content="Click any year or decade bar on this chart to slice the entire dashboard (LDA topics & MARC21 Inspector) to that exact time period. Switch views on the right between Publisher Volume, Topic Line Trends, and Decade Stacks."
+              />
             </h3>
           </div>
 

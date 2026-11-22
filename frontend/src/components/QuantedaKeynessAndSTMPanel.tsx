@@ -9,6 +9,7 @@ import {
   CheckCircle2,
 } from 'lucide-react';
 import clsx from 'clsx';
+import { InfoTooltip } from './InfoTooltip';
 import type {
   QuantedaSTMReport,
   KeynessTermRow,
@@ -226,43 +227,57 @@ export const QuantedaKeynessAndSTMPanel: React.FC<QuantedaKeynessAndSTMPanelProp
               D = {totalDocs.toLocaleString()} Passages · {secShare}% Secular vs. {confShare}% Confessional
             </span>
           </div>
-          <h2 className="font-serif text-xl sm:text-2xl font-bold text-parchment-50">
-            Dunning&apos;s Log-Likelihood Keyness (G²) Butterfly &amp; 12-Topic STM Regression Table
+          <h2 className="font-serif text-xl sm:text-2xl font-bold text-parchment-50 flex items-center gap-2 flex-wrap">
+            <span>Dunning&apos;s Log-Likelihood Keyness (G²) Butterfly &amp; 12-Topic STM Regression Table</span>
+            <InfoTooltip
+              title="What are Keyness (G²) and STM?"
+              content="Keyness (G²) compares two groups of books like a tug-of-war to spot the single most distinctive words of each camp. STM (Structural Topic Model) runs regressions to prove whether publisher type or the 55-year timeline statistically drives each topic."
+            />
           </h2>
         </div>
 
         {/* Contrast Mode Switcher */}
         <div className="flex items-center gap-1 p-1 rounded-lg bg-obsidian-950 border border-white/10">
-          <button
-            onClick={() => {
-              setContrastMode('camp');
-              setInspectedTerm(null);
-            }}
-            className={clsx(
-              'px-2.5 py-1.5 rounded-md font-mono text-[10px] transition-all cursor-pointer flex items-center gap-1.5',
-              isCampMode
-                ? 'bg-critical text-obsidian-950 font-bold'
-                : 'text-parchment-300 hover:text-parchment-100'
-            )}
+          <InfoTooltip
+            title="Compare Publisher Camps"
+            content="Left wing (gold) = words strongly characteristic of Confessional/Church publishers. Right wing (red) = words strongly characteristic of Secular/Trade/Academic publishers."
           >
-            <ArrowLeftRight className="w-3 h-3" />
-            <span>Secular vs. Confessional (RQ₂)</span>
-          </button>
-          <button
-            onClick={() => {
-              setContrastMode('diachronic');
-              setInspectedTerm(null);
-            }}
-            className={clsx(
-              'px-2.5 py-1.5 rounded-md font-mono text-[10px] transition-all cursor-pointer flex items-center gap-1.5',
-              !isCampMode
-                ? 'bg-neoliberal text-obsidian-950 font-bold'
-                : 'text-parchment-300 hover:text-parchment-100'
-            )}
+            <button
+              onClick={() => {
+                setContrastMode('camp');
+                setInspectedTerm(null);
+              }}
+              className={clsx(
+                'px-2.5 py-1.5 rounded-md font-mono text-[10px] transition-all cursor-pointer flex items-center gap-1.5',
+                isCampMode
+                  ? 'bg-critical text-obsidian-950 font-bold'
+                  : 'text-parchment-300 hover:text-parchment-100'
+              )}
+            >
+              <ArrowLeftRight className="w-3 h-3" />
+              <span>Secular vs. Confessional (RQ₂)</span>
+            </button>
+          </InfoTooltip>
+          <InfoTooltip
+            title="Compare Historical Eras"
+            content="Left wing = vocabulary typical of 1970–1999. Right wing = newer vocabulary surging in 2000–2025."
           >
-            <Sparkles className="w-3 h-3" />
-            <span>Post-2000 vs. Pre-2000 (RQ₁/₄)</span>
-          </button>
+            <button
+              onClick={() => {
+                setContrastMode('diachronic');
+                setInspectedTerm(null);
+              }}
+              className={clsx(
+                'px-2.5 py-1.5 rounded-md font-mono text-[10px] transition-all cursor-pointer flex items-center gap-1.5',
+                !isCampMode
+                  ? 'bg-neoliberal text-obsidian-950 font-bold'
+                  : 'text-parchment-300 hover:text-parchment-100'
+              )}
+            >
+              <Sparkles className="w-3 h-3" />
+              <span>Post-2000 vs. Pre-2000 (RQ₁/₄)</span>
+            </button>
+          </InfoTooltip>
         </div>
       </div>
 
@@ -290,43 +305,57 @@ export const QuantedaKeynessAndSTMPanel: React.FC<QuantedaKeynessAndSTMPanelProp
           {/* Interactive Butterfly Controls */}
           <div className="flex flex-wrap items-center gap-2 font-mono text-[10px]">
             <div className="flex items-center gap-1 p-0.5 rounded-lg bg-obsidian-900 border border-white/10">
-              <button
-                onClick={() => setScaleMode('g2_log')}
-                className={clsx(
-                  'px-2 py-1 rounded transition-colors cursor-pointer',
-                  scaleMode === 'g2_log'
-                    ? 'bg-traditional/25 text-traditional font-bold'
-                    : 'text-parchment-300 hover:text-parchment-100'
-                )}
+              <InfoTooltip
+                title="Log-Scaled G² (Statistical Certainty)"
+                content="Ranks words by Dunning's G² statistic — combines how often a word appears with how strongly it favors one side."
               >
-                Log-Scaled G²
-              </button>
-              <button
-                onClick={() => setScaleMode('log_odds')}
-                className={clsx(
-                  'px-2 py-1 rounded transition-colors cursor-pointer',
-                  scaleMode === 'log_odds'
-                    ? 'bg-neoliberal/25 text-neoliberal font-bold'
-                    : 'text-parchment-300 hover:text-parchment-100'
-                )}
+                <button
+                  onClick={() => setScaleMode('g2_log')}
+                  className={clsx(
+                    'px-2 py-1 rounded transition-colors cursor-pointer',
+                    scaleMode === 'g2_log'
+                      ? 'bg-traditional/25 text-traditional font-bold'
+                      : 'text-parchment-300 hover:text-parchment-100'
+                  )}
+                >
+                  Log-Scaled G²
+                </button>
+              </InfoTooltip>
+              <InfoTooltip
+                title="Log-Odds Scale (Effect Size)"
+                content="Measures how many times more likely a word is in one camp versus the other, independent of raw corpus size."
               >
-                Log-Odds Scale
-              </button>
+                <button
+                  onClick={() => setScaleMode('log_odds')}
+                  className={clsx(
+                    'px-2 py-1 rounded transition-colors cursor-pointer',
+                    scaleMode === 'log_odds'
+                      ? 'bg-neoliberal/25 text-neoliberal font-bold'
+                      : 'text-parchment-300 hover:text-parchment-100'
+                  )}
+                >
+                  Log-Odds Scale
+                </button>
+              </InfoTooltip>
             </div>
 
-            <button
-              onClick={() => setFilterBoilerplate((prev) => !prev)}
-              className={clsx(
-                'px-2.5 py-1 rounded-lg border flex items-center gap-1.5 cursor-pointer transition-colors',
-                filterBoilerplate
-                  ? 'bg-emerald-500/15 border-emerald-500/40 text-emerald-300 font-bold'
-                  : 'bg-obsidian-900 border-white/10 text-parchment-300'
-              )}
-              title="Toggle display of deposit/metadata boilerplate tokens (nutzungsbedingung, deposit, use)"
+            <InfoTooltip
+              title="Filter Archival Boilerplate"
+              content="Hides technical file/deposit words (like pdf, online, doi, nutzungsbedingung) so you focus on meaningful German scholarly words."
             >
-              <Filter className="w-3 h-3" />
-              <span>{filterBoilerplate ? 'Substantive Lemmas' : 'All Raw Tokens'}</span>
-            </button>
+              <button
+                onClick={() => setFilterBoilerplate((prev) => !prev)}
+                className={clsx(
+                  'px-2.5 py-1 rounded-lg border flex items-center gap-1.5 cursor-pointer transition-colors',
+                  filterBoilerplate
+                    ? 'bg-emerald-500/15 border-emerald-500/40 text-emerald-300 font-bold'
+                    : 'bg-obsidian-900 border-white/10 text-parchment-300'
+                )}
+              >
+                <Filter className="w-3 h-3" />
+                <span>{filterBoilerplate ? 'Substantive Lemmas' : 'All Raw Tokens'}</span>
+              </button>
+            </InfoTooltip>
 
             <div className="flex items-center gap-1 p-0.5 rounded-lg bg-obsidian-900 border border-white/10">
               {[8, 10, 15].map((n) => (
@@ -597,10 +626,42 @@ export const QuantedaKeynessAndSTMPanel: React.FC<QuantedaKeynessAndSTMPanelProp
               <tr className="border-b border-white/10 bg-obsidian-900/90 font-mono text-[10px] uppercase tracking-wider text-parchment-300">
                 <th className="py-2.5 px-3">Topic &amp; Top Lemmas</th>
                 <th className="py-2.5 px-3">Ideological Pole</th>
-                <th className="py-2.5 px-3 text-right">Ownership Effect β₁ (Sec. vs. Conf.)</th>
-                <th className="py-2.5 px-3 text-right">β₁ 95% CI &amp; t-Stat</th>
-                <th className="py-2.5 px-3 text-right">55-Yr Shift β₂ (1970→2025)</th>
-                <th className="py-2.5 px-3 text-right">β₂ 95% CI &amp; t-Stat</th>
+                <th className="py-2.5 px-3 text-right">
+                  <InfoTooltip
+                    title="Ownership Effect (β₁)"
+                    content="Holding publication year constant: negative (gold) means Confessional publishers cover this topic more; positive (red) means Secular/Trade publishers cover it more."
+                    showIcon
+                  >
+                    <span>Ownership Effect β₁ (Sec. vs. Conf.)</span>
+                  </InfoTooltip>
+                </th>
+                <th className="py-2.5 px-3 text-right">
+                  <InfoTooltip
+                    title="95% Confidence Interval & t-Statistic"
+                    content="Range of plausible values for β₁ and how many standard errors it lies from zero. Stars (***) mean p < 0.001 (virtually zero chance of coincidence)."
+                    showIcon
+                  >
+                    <span>β₁ 95% CI &amp; t-Stat</span>
+                  </InfoTooltip>
+                </th>
+                <th className="py-2.5 px-3 text-right">
+                  <InfoTooltip
+                    title="55-Year Diachronic Shift (β₂)"
+                    content="Holding publisher type constant: positive (teal) means the topic grew from 1970 to 2025; negative (gold) means it declined over the 55-year period."
+                    showIcon
+                  >
+                    <span>55-Yr Shift β₂ (1970→2025)</span>
+                  </InfoTooltip>
+                </th>
+                <th className="py-2.5 px-3 text-right">
+                  <InfoTooltip
+                    title="Time Trend Certainty"
+                    content="95% confidence interval and t-statistic testing whether the 1970→2025 historical shift is statistically real."
+                    showIcon
+                  >
+                    <span>β₂ 95% CI &amp; t-Stat</span>
+                  </InfoTooltip>
+                </th>
               </tr>
             </thead>
             <tbody className="divide-y divide-white/[0.05] text-xs">

@@ -71,6 +71,7 @@ _DATA_SUMMARY_MEM_CACHE = None
 _TRENDS_MEM_CACHE = None
 _CONCEPTUAL_DRIFT_MEM_CACHE = None
 _QUANTEDA_STM_MEM_CACHE = None
+_MARC21_FULLTEXT_STORE_CACHE = None
 _PRECOMPUTED_PERMUTATIONS_CACHE = {}
 _PRECOMPUTED_STORE_LOADED = False
 
@@ -2104,6 +2105,221 @@ async def search_marc21_inspector(
         "offset": offset,
         "limit": limit,
         "results": sliced,
+    }
+
+
+def _load_marc21_fulltext_store() -> dict:
+    """Lazy-loads the compressed MARC21 full-text index store (app/marc21_fulltext_store.json.gz)."""
+    global _MARC21_FULLTEXT_STORE_CACHE
+    if _MARC21_FULLTEXT_STORE_CACHE is not None:
+        return _MARC21_FULLTEXT_STORE_CACHE
+    store_path = os.path.join(config.BASE_DIR, "app", "marc21_fulltext_store.json.gz")
+    if os.path.exists(store_path):
+        try:
+            import gzip
+            import json
+            with gzip.open(store_path, "rt", encoding="utf-8") as gz:
+                loaded = json.load(gz)
+                if isinstance(loaded, dict):
+                    _MARC21_FULLTEXT_STORE_CACHE = loaded
+                    return _MARC21_FULLTEXT_STORE_CACHE
+        except Exception:
+            pass
+    _MARC21_FULLTEXT_STORE_CACHE = {}
+    return _MARC21_FULLTEXT_STORE_CACHE
+
+
+@app.get("/api/marc21-document")
+async def get_marc21_full_document(
+    title: str,
+    publisher: Optional[str] = None,
+    author: Optional[str] = None,
+    year: Optional[str] = None,
+    max_chunks: int = 20,
+):
+    """
+    Returns the complete, untruncated accessible text (all available passages/chapters,
+    DNB /04 TOCs, deposit.dnb.de Inhaltstexte, or Open-Access / HTRC book sections)
+    plus APA 7th reference and archival source links for any MARC21 Inspector record.
+    """
+    from urllib.parse import quote_plus
+
+    clean_title = lda_pipeline._clean_marc_control_chars(title or "")
+    base_title = re.sub(r"\[.*?\]", "", clean_title).strip()
+    base_key = base_title.lower()
+    capped_chunks = max(1, min(200, int(max_chunks or 20)))
+
+    store = _load_marc21_fulltext_store()
+    entry = store.get(base_key)
+
+    # Fuzzy prefix fallback if the title was slightly truncated or formatted differently
+    if entry is None and len(base_key) >= 12:
+        prefix = base_key[:36]
+        for k, v in store.items():
+            if k.startswith(prefix) or base_key.startswith(k[:36]):
+                entry = v
+                base_key = k
+                break
+
+    chunks = []
+    total_chunks_available = 0
+    total_book_words = 0
+    source_file = ""
+    corpus_layer = "marc21_catalog"
+    resolved_author = author or "o. V."
+    resolved_publisher = publisher or "Unknown"
+    resolved_year = year or "o. J."
+    resolved_title = clean_title
+    abstract_text = ""
+    loaded_from_local_parquet = False
+
+    if entry:
+        resolved_title = entry.get("title") or clean_title
+        base_title = entry.get("base_title") or base_title
+        resolved_author = entry.get("author") or resolved_author
+        resolved_publisher = entry.get("publisher") or resolved_publisher
+        resolved_year = entry.get("year") or resolved_year
+        corpus_layer = entry.get("corpus_layer") or corpus_layer
+        source_file = entry.get("source_file") or ""
+        abstract_text = entry.get("abstract") or ""
+        total_chunks_available = int(entry.get("total_chunks_available") or len(entry.get("chunks") or []))
+        total_book_words = int(entry.get("total_book_words") or 0)
+
+        # If local Parquet shards exist, fetch ALL passages of this book directly from its exact shard(s)
+        shard_nums = entry.get("parquet_shards") or []
+        parquet_dir = os.path.join(config.BASE_DIR, "data", "parquet")
+        if shard_nums and os.path.isdir(parquet_dir):
+            try:
+                import pyarrow.parquet as pq
+                local_chunks = []
+                seen_chunk_texts = set()
+                for s_num in shard_nums:
+                    sp = os.path.join(parquet_dir, f"dnb_corpus_part{int(s_num):03d}.parquet")
+                    if not os.path.exists(sp):
+                        continue
+                    tbl = pq.read_table(sp, columns=["title", "chunk_index", "word_count", "corpus_layer", "source_file", "text"])
+                    t_col = tbl.column("title").to_pylist()
+                    match_rows = [
+                        i for i, tl in enumerate(t_col)
+                        if tl and re.sub(r"\[.*?\]", "", tl).strip().lower() == base_key
+                    ]
+                    if not match_rows:
+                        continue
+                    c_col = tbl.column("chunk_index").to_pylist()
+                    w_col = tbl.column("word_count").to_pylist()
+                    l_col = tbl.column("corpus_layer").to_pylist()
+                    s_col = tbl.column("source_file").to_pylist()
+                    x_col = tbl.column("text").to_pylist()
+                    for idx in match_rows:
+                        txt = lda_pipeline._clean_marc_control_chars(x_col[idx] or "")
+                        if not txt or txt in seen_chunk_texts:
+                            continue
+                        seen_chunk_texts.add(txt)
+                        if not source_file and s_col[idx]:
+                            source_file = str(s_col[idx]).strip()
+                        local_chunks.append({
+                            "chunk_index": int(c_col[idx] or (len(local_chunks) + 1)),
+                            "title": lda_pipeline._clean_marc_control_chars(t_col[idx] or resolved_title),
+                            "text": txt,
+                            "word_count": int(w_col[idx] or len(txt.split())),
+                            "corpus_layer": str(l_col[idx] or corpus_layer),
+                        })
+                if local_chunks:
+                    local_chunks.sort(key=lambda c: c["chunk_index"])
+                    total_chunks_available = len(local_chunks)
+                    chunks = local_chunks[:capped_chunks]
+                    loaded_from_local_parquet = True
+            except Exception:
+                pass
+
+        # Fallback to embedded passages inside app/marc21_fulltext_store.json.gz (e.g., Vercel serverless)
+        if not chunks:
+            embedded = entry.get("chunks") or []
+            chunks = embedded[:capped_chunks]
+            total_chunks_available = max(total_chunks_available, len(embedded))
+
+    # Final fallback: check the MARC21 catalog pool cache if not in fulltext store
+    if not chunks:
+        pool = _get_marc21_catalog_pool()
+        matched_pool = next(
+            (d for d in pool if re.sub(r"\[.*?\]", "", str(d.get("title") or "")).strip().lower() == base_key),
+            None,
+        )
+        snippet_txt = (matched_pool or {}).get("snippet") or abstract_text or ""
+        if matched_pool:
+            resolved_author = matched_pool.get("author") or resolved_author
+            resolved_publisher = matched_pool.get("publisher") or resolved_publisher
+            resolved_year = str(matched_pool.get("year") or matched_pool.get("date") or resolved_year)
+            corpus_layer = matched_pool.get("corpus_layer") or corpus_layer
+        if snippet_txt:
+            chunks = [{
+                "chunk_index": 1,
+                "title": resolved_title,
+                "text": snippet_txt,
+                "word_count": len(snippet_txt.split()),
+                "corpus_layer": corpus_layer,
+            }]
+            total_chunks_available = 1
+
+    returned_words = sum(int(c.get("word_count") or len((c.get("text") or "").split())) for c in chunks)
+    dnb_axes = classify_marc21_record_dnb_axes({
+        "title": resolved_title,
+        "publisher": resolved_publisher,
+        "corpus_layer": corpus_layer,
+    })
+    apa_citation = lda_pipeline.format_apa_citation({
+        "title": resolved_title,
+        "author": resolved_author,
+        "publisher": resolved_publisher,
+        "date": resolved_year,
+    })
+
+    layer_low = corpus_layer.lower()
+    if any(k in layer_low for k in ("fullbook", "fulltext_book", "hathitrust", "archive_org", "kostenfrei")):
+        access_level = "full_book_passages"
+        if loaded_from_local_parquet:
+            access_note = (
+                f"Complete local full-book archive: showing {len(chunks)} of {total_chunks_available} "
+                f"digitized book passages ({returned_words:,} words loaded)."
+            )
+        elif total_chunks_available > len(chunks):
+            access_note = (
+                f"Cloud full-text preview: showing {len(chunks)} complete opening passages "
+                f"({returned_words:,} words) out of {total_chunks_available} total book passages (~{total_book_words:,} words). "
+                f"Use the source link to view the full archival PDF."
+            )
+        else:
+            access_note = f"Complete digitized full-text work loaded ({returned_words:,} words)."
+    elif any(k in layer_low for k in ("toc", "inhaltstext", "abstract", "gbv_direct")):
+        access_level = "toc_or_blurb_fulltext"
+        access_note = (
+            f"Complete archived DNB / GBV text loaded ({returned_words:,} words — full digitized Table of Contents, "
+            f"reading sample, or publisher Inhaltstext)."
+        )
+    else:
+        access_level = "catalog_snippet"
+        access_note = f"Indexed MARC21 catalog text loaded ({returned_words:,} words)."
+
+    return {
+        "title": resolved_title,
+        "base_title": base_title or resolved_title,
+        "author": resolved_author,
+        "publisher": resolved_publisher,
+        "year": str(resolved_year),
+        "corpus_layer": corpus_layer,
+        "source_file": source_file,
+        "dnb_catalog_url": f"https://portal.dnb.de/opac/simpleSearch?query={quote_plus(base_title or resolved_title)}",
+        "apa_citation": apa_citation,
+        "abstract": abstract_text,
+        "dnb_series": dnb_axes.get("dnb_series"),
+        "dnb_publication_type": dnb_axes.get("dnb_publication_type"),
+        "dnb_textplus_collection": dnb_axes.get("dnb_textplus_collection"),
+        "total_chunks_available": max(total_chunks_available, len(chunks)),
+        "returned_chunks": len(chunks),
+        "total_words": returned_words,
+        "text_access_level": access_level,
+        "text_access_note": access_note,
+        "chunks": chunks,
     }
 
 

@@ -35,6 +35,7 @@ import {
   Activity,
   Sun,
   Moon,
+  Maximize2,
 } from 'lucide-react';
 import { useLDA, type LDAMode } from './hooks/useLDA';
 import { TrendsGraph, COMPREHENSIVE_FALLBACK_PUBLISHERS } from './components/TrendsGraph';
@@ -44,6 +45,8 @@ import { ConceptualDriftExplorer } from './components/ConceptualDriftExplorer';
 import { InterTopicDistanceMap } from './components/InterTopicDistanceMap';
 import { HypothesisAndExportWorkbench } from './components/HypothesisAndExportWorkbench';
 import { ImprintAndCoherenceMatrixPanel } from './components/ImprintAndCoherenceMatrixPanel';
+import { InfoTooltip } from './components/InfoTooltip';
+import { Marc21FullTextModal } from './components/Marc21FullTextModal';
 import clsx from 'clsx';
 
 function App() {
@@ -143,6 +146,7 @@ function App() {
   const [exhaustiveInspectorDocs, setExhaustiveInspectorDocs] = useState<RepresentativeDoc[] | null>(null);
   const [exhaustiveTotalMatches, setExhaustiveTotalMatches] = useState<number>(0);
   const [inspectorGlobalScope, setInspectorGlobalScope] = useState<boolean>(false);
+  const [selectedInspectorDoc, setSelectedInspectorDoc] = useState<RepresentativeDoc | null>(null);
 
   // Upload & Citation Copy State
   const [uploadStatus, setUploadStatus] = useState<{
@@ -572,90 +576,132 @@ function App() {
         {/* Bottom Row: Workspace Layout Switcher + Live Corpus Status Badge */}
         <div className="flex flex-wrap items-center justify-between gap-2 pt-1.5 border-t border-white/[0.06]">
           <div className="flex flex-wrap items-center gap-1 p-1 rounded-lg bg-obsidian-950 border border-white/[0.08]">
-            <button
-              onClick={() => setWorkspaceMode('bento')}
-              className={clsx(
-                'flex items-center gap-1.5 px-2.5 py-1 rounded-md font-mono text-[11px] transition-all cursor-pointer',
-                workspaceMode === 'bento'
-                  ? 'bg-traditional text-obsidian-950 font-bold shadow-glow-gold'
-                  : 'text-parchment-200 hover:text-parchment-50 hover:bg-white/[0.04]'
-              )}
+            <InfoTooltip
+              title="Observatory Bento (Main Overview)"
+              content="Your all-in-one dashboard: publishing timeline (1970–2025), topic summaries, DNB catalog breakdowns, and publisher matrix on one screen."
+              placement="bottom"
             >
-              <LayoutGrid className="w-3.5 h-3.5" />
-              <span>Observatory Bento</span>
-            </button>
-            <button
-              onClick={() => setWorkspaceMode('distance')}
-              className={clsx(
-                'flex items-center gap-1.5 px-2.5 py-1 rounded-md font-mono text-[11px] transition-all cursor-pointer',
-                workspaceMode === 'distance'
-                  ? 'bg-traditional text-obsidian-950 font-bold shadow-glow-gold'
-                  : 'text-parchment-200 hover:text-parchment-50 hover:bg-white/[0.04]'
-              )}
+              <button
+                onClick={() => setWorkspaceMode('bento')}
+                className={clsx(
+                  'flex items-center gap-1.5 px-2.5 py-1 rounded-md font-mono text-[11px] transition-all cursor-pointer',
+                  workspaceMode === 'bento'
+                    ? 'bg-traditional text-obsidian-950 font-bold shadow-glow-gold'
+                    : 'text-parchment-200 hover:text-parchment-50 hover:bg-white/[0.04]'
+                )}
+              >
+                <LayoutGrid className="w-3.5 h-3.5" />
+                <span>Observatory Bento</span>
+              </button>
+            </InfoTooltip>
+            <InfoTooltip
+              title="2D Topic Distance Map"
+              content="A bubble map showing how close or distinct LDA topics are. Bigger bubbles = more common themes; closer bubbles = shared vocabulary."
+              placement="bottom"
             >
-              <Compass className="w-3.5 h-3.5" />
-              <span>2D Distance Map</span>
-            </button>
-            <button
-              onClick={() => setWorkspaceMode('drift')}
-              className={clsx(
-                'flex items-center gap-1.5 px-2.5 py-1 rounded-md font-mono text-[11px] transition-all cursor-pointer',
-                workspaceMode === 'drift'
-                  ? 'bg-traditional text-obsidian-950 font-bold shadow-glow-gold'
-                  : 'text-parchment-200 hover:text-parchment-50 hover:bg-white/[0.04]'
-              )}
+              <button
+                onClick={() => setWorkspaceMode('distance')}
+                className={clsx(
+                  'flex items-center gap-1.5 px-2.5 py-1 rounded-md font-mono text-[11px] transition-all cursor-pointer',
+                  workspaceMode === 'distance'
+                    ? 'bg-traditional text-obsidian-950 font-bold shadow-glow-gold'
+                    : 'text-parchment-200 hover:text-parchment-50 hover:bg-white/[0.04]'
+                )}
+              >
+                <Compass className="w-3.5 h-3.5" />
+                <span>2D Distance Map</span>
+              </button>
+            </InfoTooltip>
+            <InfoTooltip
+              title="Word-Shift & Conceptual Drift"
+              content="Tracks how key German words (like Seele, Achtsamkeit, Sinn) shifted meaning and context across decades (1970s–2020s) with real book sentences."
+              placement="bottom"
             >
-              <GitCompare className="w-3.5 h-3.5" />
-              <span>Word-Shift &amp; Drift</span>
-            </button>
-            <button
-              onClick={() => setWorkspaceMode('workbench')}
-              className={clsx(
-                'flex items-center gap-1.5 px-2.5 py-1 rounded-md font-mono text-[11px] transition-all cursor-pointer',
-                workspaceMode === 'workbench'
-                  ? 'bg-traditional text-obsidian-950 font-bold shadow-glow-gold'
-                  : 'text-parchment-200 hover:text-parchment-50 hover:bg-white/[0.04]'
-              )}
+              <button
+                onClick={() => setWorkspaceMode('drift')}
+                className={clsx(
+                  'flex items-center gap-1.5 px-2.5 py-1 rounded-md font-mono text-[11px] transition-all cursor-pointer',
+                  workspaceMode === 'drift'
+                    ? 'bg-traditional text-obsidian-950 font-bold shadow-glow-gold'
+                    : 'text-parchment-200 hover:text-parchment-50 hover:bg-white/[0.04]'
+                )}
+              >
+                <GitCompare className="w-3.5 h-3.5" />
+                <span>Word-Shift &amp; Drift</span>
+              </button>
+            </InfoTooltip>
+            <InfoTooltip
+              title="Keyness G², STM, Breakpoints & Exports"
+              content="Houses Dunning's Keyness (G²) word-contrast chart, Structural Topic Model (STM) regressions, historical turning points, custom Seed-Word Lab, and LaTeX/APA/Python exporters."
+              placement="bottom"
             >
-              <FileCode2 className="w-3.5 h-3.5" />
-              <span>Seeds, Breakpoints &amp; LaTeX</span>
-            </button>
-            <button
-              onClick={() => setWorkspaceMode('pipeline')}
-              className={clsx(
-                'flex items-center gap-1.5 px-2.5 py-1 rounded-md font-mono text-[11px] transition-all cursor-pointer',
-                workspaceMode === 'pipeline'
-                  ? 'bg-traditional text-obsidian-950 font-bold shadow-glow-gold'
-                  : 'text-parchment-200 hover:text-parchment-50 hover:bg-white/[0.04]'
-              )}
+              <button
+                onClick={() => setWorkspaceMode('workbench')}
+                className={clsx(
+                  'flex items-center gap-1.5 px-2.5 py-1 rounded-md font-mono text-[11px] transition-all cursor-pointer',
+                  workspaceMode === 'workbench'
+                    ? 'bg-traditional text-obsidian-950 font-bold shadow-glow-gold'
+                    : 'text-parchment-200 hover:text-parchment-50 hover:bg-white/[0.04]'
+                )}
+              >
+                <FileCode2 className="w-3.5 h-3.5" />
+                <span>Seeds, Breakpoints &amp; LaTeX</span>
+              </button>
+            </InfoTooltip>
+            <InfoTooltip
+              title="Pipeline & Text Cleaning Audit"
+              content="Explains every step from raw German books to LDA topics, plus an interactive lookup tool to test whether any German word survives text cleaning."
+              placement="bottom"
             >
-              <Cpu className="w-3.5 h-3.5" />
-              <span>Pipeline &amp; Methodology</span>
-            </button>
-            <button
-              onClick={() => setWorkspaceMode('topics')}
-              className={clsx(
-                'flex items-center gap-1.5 px-2.5 py-1 rounded-md font-mono text-[11px] transition-all cursor-pointer',
-                workspaceMode === 'topics'
-                  ? 'bg-traditional text-obsidian-950 font-bold shadow-glow-gold'
-                  : 'text-parchment-200 hover:text-parchment-50 hover:bg-white/[0.04]'
-              )}
+              <button
+                onClick={() => setWorkspaceMode('pipeline')}
+                className={clsx(
+                  'flex items-center gap-1.5 px-2.5 py-1 rounded-md font-mono text-[11px] transition-all cursor-pointer',
+                  workspaceMode === 'pipeline'
+                    ? 'bg-traditional text-obsidian-950 font-bold shadow-glow-gold'
+                    : 'text-parchment-200 hover:text-parchment-50 hover:bg-white/[0.04]'
+                )}
+              >
+                <Cpu className="w-3.5 h-3.5" />
+                <span>Pipeline &amp; Methodology</span>
+              </button>
+            </InfoTooltip>
+            <InfoTooltip
+              title="Topic Deep-Dive"
+              content="Full-screen view of individual LDA topics: top ranked words, FREX exclusivity, 95% confidence intervals, and close-reading passage highlighter."
+              placement="bottom"
             >
-              <BarChart3 className="w-3.5 h-3.5" />
-              <span>Topic Deep-Dive</span>
-            </button>
-            <button
-              onClick={() => setWorkspaceMode('matrix')}
-              className={clsx(
-                'flex items-center gap-1.5 px-2.5 py-1 rounded-md font-mono text-[11px] transition-all cursor-pointer',
-                workspaceMode === 'matrix'
-                  ? 'bg-traditional text-obsidian-950 font-bold shadow-glow-gold'
-                  : 'text-parchment-200 hover:text-parchment-50 hover:bg-white/[0.04]'
-              )}
+              <button
+                onClick={() => setWorkspaceMode('topics')}
+                className={clsx(
+                  'flex items-center gap-1.5 px-2.5 py-1 rounded-md font-mono text-[11px] transition-all cursor-pointer',
+                  workspaceMode === 'topics'
+                    ? 'bg-traditional text-obsidian-950 font-bold shadow-glow-gold'
+                    : 'text-parchment-200 hover:text-parchment-50 hover:bg-white/[0.04]'
+                )}
+              >
+                <BarChart3 className="w-3.5 h-3.5" />
+                <span>Topic Deep-Dive</span>
+              </button>
+            </InfoTooltip>
+            <InfoTooltip
+              title="Publisher Atlas & Coherence Curve"
+              content="Compare how every German publisher splits across Traditional, Neoliberal, and Critical themes, and inspect which topic count (K) scores highest in coherence."
+              placement="bottom"
             >
-              <Building2 className="w-3.5 h-3.5" />
-              <span>Publisher Atlas</span>
-            </button>
+              <button
+                onClick={() => setWorkspaceMode('matrix')}
+                className={clsx(
+                  'flex items-center gap-1.5 px-2.5 py-1 rounded-md font-mono text-[11px] transition-all cursor-pointer',
+                  workspaceMode === 'matrix'
+                    ? 'bg-traditional text-obsidian-950 font-bold shadow-glow-gold'
+                    : 'text-parchment-200 hover:text-parchment-50 hover:bg-white/[0.04]'
+                )}
+              >
+                <Building2 className="w-3.5 h-3.5" />
+                <span>Publisher Atlas</span>
+              </button>
+            </InfoTooltip>
           </div>
 
           <span className="hidden lg:inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/30 font-mono text-[9px] uppercase tracking-widest text-emerald-300">
@@ -755,10 +801,16 @@ function App() {
                 {/* 1. Ideological Archetype Filter (RQ1 - RQ3) */}
                 <div className="bg-obsidian-950/80 border border-white/[0.07] rounded-xl p-3">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="font-mono text-[10px] uppercase tracking-widest text-parchment-300 flex items-center gap-1.5">
-                      <Compass className="w-3 h-3 text-traditional" />
-                      Ideological Regime Filter
-                    </span>
+                    <InfoTooltip
+                      title="Ideological Regime Filter"
+                      content="Filters topics by the three research poles of the dissertation. Click one to focus only on topics belonging to that pole; click again to reset."
+                      showIcon
+                    >
+                      <span className="font-mono text-[10px] uppercase tracking-widest text-parchment-300 flex items-center gap-1.5">
+                        <Compass className="w-3 h-3 text-traditional" />
+                        Ideological Regime Filter
+                      </span>
+                    </InfoTooltip>
                     {ideologicalFilter && (
                       <button
                         onClick={() => setIdeologicalFilter(null)}
@@ -770,65 +822,83 @@ function App() {
                   </div>
 
                   <div className="space-y-1.5">
-                    <button
-                      onClick={() => handleIdeologicalFilterSelect('Traditional')}
-                      className={clsx(
-                        'w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg border text-left transition-all cursor-pointer',
-                        ideologicalFilter === 'Traditional'
-                          ? 'bg-traditional/15 border-traditional text-parchment-50 shadow-glow-gold'
-                          : 'bg-obsidian-900/70 border-white/[0.06] text-parchment-200 hover:border-traditional/40'
-                      )}
+                    <InfoTooltip
+                      title="RQ₁ · Traditional / Dogmatic"
+                      content="Institutional church discourse: liturgy, pastoral care (Seelsorge), biblical exegesis, sacraments, and confessional theology."
+                      className="w-full"
                     >
-                      <div className="flex items-center gap-2 min-w-0">
-                        <span className="w-2 h-2 rounded-full bg-traditional shrink-0" />
-                        <span className="text-xs font-medium truncate">
-                          RQ₁ · Traditional / Dogmatic
+                      <button
+                        onClick={() => handleIdeologicalFilterSelect('Traditional')}
+                        className={clsx(
+                          'w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg border text-left transition-all cursor-pointer',
+                          ideologicalFilter === 'Traditional'
+                            ? 'bg-traditional/15 border-traditional text-parchment-50 shadow-glow-gold'
+                            : 'bg-obsidian-900/70 border-white/[0.06] text-parchment-200 hover:border-traditional/40'
+                        )}
+                      >
+                        <div className="flex items-center gap-2 min-w-0">
+                          <span className="w-2 h-2 rounded-full bg-traditional shrink-0" />
+                          <span className="text-xs font-medium truncate">
+                            RQ₁ · Traditional / Dogmatic
+                          </span>
+                        </div>
+                        <span className="font-mono text-[10px] text-traditional font-bold">
+                          {archetypeSummary.tradCount}
                         </span>
-                      </div>
-                      <span className="font-mono text-[10px] text-traditional font-bold">
-                        {archetypeSummary.tradCount}
-                      </span>
-                    </button>
+                      </button>
+                    </InfoTooltip>
 
-                    <button
-                      onClick={() => handleIdeologicalFilterSelect('Neoliberal')}
-                      className={clsx(
-                        'w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg border text-left transition-all cursor-pointer',
-                        ideologicalFilter === 'Neoliberal'
-                          ? 'bg-neoliberal/15 border-neoliberal text-parchment-50 shadow-glow-cyan'
-                          : 'bg-obsidian-900/70 border-white/[0.06] text-parchment-200 hover:border-neoliberal/40'
-                      )}
+                    <InfoTooltip
+                      title="RQ₂ · Neoliberal / Self-Help"
+                      content="Individualized spirituality, mindfulness (Achtsamkeit), coaching, resilience, health, and market-oriented self-optimization."
+                      className="w-full"
                     >
-                      <div className="flex items-center gap-2 min-w-0">
-                        <span className="w-2 h-2 rounded-full bg-neoliberal shrink-0" />
-                        <span className="text-xs font-medium truncate">
-                          RQ₂ · Neoliberal / Self-Help
+                      <button
+                        onClick={() => handleIdeologicalFilterSelect('Neoliberal')}
+                        className={clsx(
+                          'w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg border text-left transition-all cursor-pointer',
+                          ideologicalFilter === 'Neoliberal'
+                            ? 'bg-neoliberal/15 border-neoliberal text-parchment-50 shadow-glow-cyan'
+                            : 'bg-obsidian-900/70 border-white/[0.06] text-parchment-200 hover:border-neoliberal/40'
+                        )}
+                      >
+                        <div className="flex items-center gap-2 min-w-0">
+                          <span className="w-2 h-2 rounded-full bg-neoliberal shrink-0" />
+                          <span className="text-xs font-medium truncate">
+                            RQ₂ · Neoliberal / Self-Help
+                          </span>
+                        </div>
+                        <span className="font-mono text-[10px] text-neoliberal font-bold">
+                          {archetypeSummary.neoCount}
                         </span>
-                      </div>
-                      <span className="font-mono text-[10px] text-neoliberal font-bold">
-                        {archetypeSummary.neoCount}
-                      </span>
-                    </button>
+                      </button>
+                    </InfoTooltip>
 
-                    <button
-                      onClick={() => handleIdeologicalFilterSelect('Critical')}
-                      className={clsx(
-                        'w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg border text-left transition-all cursor-pointer',
-                        ideologicalFilter === 'Critical'
-                          ? 'bg-critical/15 border-critical text-parchment-50 shadow-glow-rose'
-                          : 'bg-obsidian-900/70 border-white/[0.06] text-parchment-200 hover:border-critical/40'
-                      )}
+                    <InfoTooltip
+                      title="RQ₃ · Critical / Secular"
+                      content="Secular humanism, enlightenment critique of religion, church-state politics, historical power critique, and social theory."
+                      className="w-full"
                     >
-                      <div className="flex items-center gap-2 min-w-0">
-                        <span className="w-2 h-2 rounded-full bg-critical shrink-0" />
-                        <span className="text-xs font-medium truncate">
-                          RQ₃ · Critical / Secular
+                      <button
+                        onClick={() => handleIdeologicalFilterSelect('Critical')}
+                        className={clsx(
+                          'w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg border text-left transition-all cursor-pointer',
+                          ideologicalFilter === 'Critical'
+                            ? 'bg-critical/15 border-critical text-parchment-50 shadow-glow-rose'
+                            : 'bg-obsidian-900/70 border-white/[0.06] text-parchment-200 hover:border-critical/40'
+                        )}
+                      >
+                        <div className="flex items-center gap-2 min-w-0">
+                          <span className="w-2 h-2 rounded-full bg-critical shrink-0" />
+                          <span className="text-xs font-medium truncate">
+                            RQ₃ · Critical / Secular
+                          </span>
+                        </div>
+                        <span className="font-mono text-[10px] text-critical font-bold">
+                          {archetypeSummary.critCount}
                         </span>
-                      </div>
-                      <span className="font-mono text-[10px] text-critical font-bold">
-                        {archetypeSummary.critCount}
-                      </span>
-                    </button>
+                      </button>
+                    </InfoTooltip>
                   </div>
                 </div>
 
@@ -837,55 +907,93 @@ function App() {
                   {/* 4-Mode Paradigm Selector (Unseeded / Unsupervised / Seeded / Supervised) */}
                   <div className="mb-3 pb-2.5 border-b border-white/[0.07]">
                     <div className="flex items-center justify-between mb-1.5">
-                      <span className="font-mono text-[10px] uppercase tracking-widest text-parchment-300 flex items-center gap-1.5">
-                        <Cpu className="w-3 h-3 text-emerald-400" />
-                        LDA Modeling Paradigm
-                      </span>
-                      {sldaDiagnostics?.regime_cv_accuracy && (
-                        <span className="px-1.5 py-0.5 rounded bg-emerald-500/15 border border-emerald-500/30 font-mono text-[9px] text-emerald-300 font-bold">
-                          sLDA CV: {sldaDiagnostics.regime_cv_accuracy}%
+                      <InfoTooltip
+                        title="LDA Modeling Paradigm"
+                        content="Controls how much guidance you give the topic model: completely hands-off (Unseeded/Unsupervised), gently steered by your seed words (Seeded), or aligned with publisher labels (Supervised)."
+                        showIcon
+                      >
+                        <span className="font-mono text-[10px] uppercase tracking-widest text-parchment-300 flex items-center gap-1.5">
+                          <Cpu className="w-3 h-3 text-emerald-400" />
+                          LDA Modeling Paradigm
                         </span>
+                      </InfoTooltip>
+                      {sldaDiagnostics?.regime_cv_accuracy && (
+                        <InfoTooltip
+                          title="Supervised LDA Cross-Validation Accuracy"
+                          content="How accurately the discovered topic mixtures predict whether a book came from a Confessional, Self-Help, or Secular-Academic publisher in out-of-sample tests."
+                        >
+                          <span className="px-1.5 py-0.5 rounded bg-emerald-500/15 border border-emerald-500/30 font-mono text-[9px] text-emerald-300 font-bold cursor-help">
+                            sLDA CV: {sldaDiagnostics.regime_cv_accuracy}%
+                          </span>
+                        </InfoTooltip>
                       )}
                     </div>
                     <div className="grid grid-cols-2 gap-1.5">
                       {(
                         [
-                          { id: 'unseeded', label: 'Unseeded', sub: '1× Raw · Auto η' },
-                          { id: 'unsupervised', label: 'Unsupervised', sub: '2× Boost · Auto η' },
-                          { id: 'seeded', label: 'Seeded (η)', sub: 'RQ₁–₃ η-Matrix' },
-                          { id: 'supervised', label: 'Supervised', sub: 'sLDA + Ridge CV' },
-                        ] as { id: LDAMode; label: string; sub: string }[]
+                          {
+                            id: 'unseeded',
+                            label: 'Unseeded',
+                            sub: '1× Raw · Auto η',
+                            tip: 'Purely data-driven LDA with zero word boosts or prior nudges — lets themes emerge organically from raw text.',
+                          },
+                          {
+                            id: 'unsupervised',
+                            label: 'Unsupervised',
+                            sub: '2× Boost · Auto η',
+                            tip: 'Standard unsupervised LDA with a light 2× weighting on key religious/cultural vocabulary for sharper humanities topics.',
+                          },
+                          {
+                            id: 'seeded',
+                            label: 'Seeded (η)',
+                            sub: 'RQ₁–₃ η-Matrix',
+                            tip: 'Guided LDA that nudges specific topics toward your RQ₁, RQ₂, and RQ₃ German seed lexicons (customizable in the Seeds tab).',
+                          },
+                          {
+                            id: 'supervised',
+                            label: 'Supervised',
+                            sub: 'sLDA + Ridge CV',
+                            tip: 'Jointly models topics alongside publisher ideological labels to maximize separation across publishing camps.',
+                          },
+                        ] as { id: LDAMode; label: string; sub: string; tip: string }[]
                       ).map((m) => {
                         const isModeActive = ldaMode === m.id;
                         return (
-                          <button
-                            key={m.id}
-                            onClick={() => handleModeSelect(m.id)}
-                            disabled={isTraining}
-                            className={clsx(
-                              'p-1.5 rounded-lg border text-left transition-all cursor-pointer disabled:opacity-50',
-                              isModeActive
-                                ? 'bg-traditional/15 border-traditional text-parchment-50 shadow-glow-gold'
-                                : 'bg-obsidian-900/70 border-white/[0.06] text-parchment-300 hover:border-white/20'
-                            )}
-                          >
-                            <div className="font-mono text-[10px] font-bold text-parchment-50 truncate">
-                              {m.label}
-                            </div>
-                            <div className="font-mono text-[8px] text-parchment-300 truncate">
-                              {m.sub}
-                            </div>
-                          </button>
+                          <InfoTooltip key={m.id} title={`${m.label} Paradigm`} content={m.tip} className="w-full">
+                            <button
+                              onClick={() => handleModeSelect(m.id)}
+                              disabled={isTraining}
+                              className={clsx(
+                                'w-full p-1.5 rounded-lg border text-left transition-all cursor-pointer disabled:opacity-50',
+                                isModeActive
+                                  ? 'bg-traditional/15 border-traditional text-parchment-50 shadow-glow-gold'
+                                  : 'bg-obsidian-900/70 border-white/[0.06] text-parchment-300 hover:border-white/20'
+                              )}
+                            >
+                              <div className="font-mono text-[10px] font-bold text-parchment-50 truncate">
+                                {m.label}
+                              </div>
+                              <div className="font-mono text-[8px] text-parchment-300 truncate">
+                                {m.sub}
+                              </div>
+                            </button>
+                          </InfoTooltip>
                         );
                       })}
                     </div>
                   </div>
 
                   <div className="flex items-center justify-between mb-2">
-                    <span className="font-mono text-[10px] uppercase tracking-widest text-parchment-300 flex items-center gap-1.5">
-                      <Sliders className="w-3 h-3 text-traditional" />
-                      Bayesian Posterior (K)
-                    </span>
+                    <InfoTooltip
+                      title="Number of Topics (K)"
+                      content="Choose how many themes the model splits the corpus into. Low K (4–8) gives broad macro camps; medium K (12) gives balanced genres; high K (20–30) exposes fine sub-genres."
+                      showIcon
+                    >
+                      <span className="font-mono text-[10px] uppercase tracking-widest text-parchment-300 flex items-center gap-1.5">
+                        <Sliders className="w-3 h-3 text-traditional" />
+                        Bayesian Posterior (K)
+                      </span>
+                    </InfoTooltip>
                     <span className="px-2 py-0.5 rounded bg-traditional/15 border border-traditional/40 font-mono text-xs font-bold text-traditional tabular-nums">
                       K = {numTopics}
                     </span>
@@ -1090,10 +1198,16 @@ function App() {
                 {robustnessTelemetry?.slice_power_monitor && (
                   <div className="bg-obsidian-950/80 border border-white/[0.07] rounded-xl p-3 space-y-2">
                     <div className="flex items-center justify-between gap-1">
-                      <span className="font-mono text-[10px] uppercase tracking-widest text-parchment-300 flex items-center gap-1.5">
-                        <Activity className="w-3 h-3 text-emerald-400" />
-                        Slice Power & Guardrail
-                      </span>
+                      <InfoTooltip
+                        title="Slice Statistical Power & Guardrail"
+                        content="Checks whether your currently filtered subset of books is large enough to produce reliable topics for your chosen K."
+                        showIcon
+                      >
+                        <span className="font-mono text-[10px] uppercase tracking-widest text-parchment-300 flex items-center gap-1.5">
+                          <Activity className="w-3 h-3 text-emerald-400" />
+                          Slice Power &amp; Guardrail
+                        </span>
+                      </InfoTooltip>
                       <span
                         className={clsx(
                           'px-1.5 py-0.5 rounded font-mono text-[9px] font-bold border',
@@ -1109,34 +1223,55 @@ function App() {
                     </div>
 
                     <div className="grid grid-cols-2 gap-1.5 font-mono text-[9px]">
-                      <div className="p-1.5 rounded bg-obsidian-900 border border-white/[0.05]">
-                        <div className="text-parchment-300">Docs / Topic (N/K)</div>
-                        <div className="text-parchment-50 font-bold text-[10px] tabular-nums">
-                          {robustnessTelemetry.slice_power_monitor.docs_per_topic_ratio} ({robustnessTelemetry.slice_power_monitor.slice_documents}/{numTopics})
+                      <InfoTooltip
+                        title="Documents per Topic (N / K)"
+                        content="Average number of texts available to support each topic. Higher ratios mean cleaner, more dependable topics."
+                        className="w-full"
+                      >
+                        <div className="w-full p-1.5 rounded bg-obsidian-900 border border-white/[0.05] cursor-help">
+                          <div className="text-parchment-300">Docs / Topic (N/K)</div>
+                          <div className="text-parchment-50 font-bold text-[10px] tabular-nums">
+                            {robustnessTelemetry.slice_power_monitor.docs_per_topic_ratio} ({robustnessTelemetry.slice_power_monitor.slice_documents}/{numTopics})
+                          </div>
                         </div>
-                      </div>
-                      <div className="p-1.5 rounded bg-obsidian-900 border border-white/[0.05]">
-                        <div className="text-parchment-300">Mean FREX · Stability</div>
-                        <div className="text-emerald-300 font-bold text-[10px] tabular-nums">
-                          {robustnessTelemetry.slice_power_monitor.mean_frex_exclusivity} ·{' '}
-                          {((robustnessTelemetry.multi_seed_stability?.mean_hungarian_similarity || 0.934) * 100).toFixed(1)}%
+                      </InfoTooltip>
+                      <InfoTooltip
+                        title="Mean FREX & Stability"
+                        content="FREX measures how uniquely signature each topic's words are (0–1). Stability % shows how consistently the same topics reappear across different random seeds."
+                        className="w-full"
+                      >
+                        <div className="w-full p-1.5 rounded bg-obsidian-900 border border-white/[0.05] cursor-help">
+                          <div className="text-parchment-300">Mean FREX · Stability</div>
+                          <div className="text-emerald-300 font-bold text-[10px] tabular-nums">
+                            {robustnessTelemetry.slice_power_monitor.mean_frex_exclusivity} ·{' '}
+                            {((robustnessTelemetry.multi_seed_stability?.mean_hungarian_similarity || 0.934) * 100).toFixed(1)}%
+                          </div>
                         </div>
-                      </div>
-                      <div className="p-1.5 rounded bg-obsidian-900 border border-white/[0.05]">
-                        <div className="text-parchment-300">Vocab Coverage</div>
-                        <div className="text-neoliberal font-bold text-[10px] tabular-nums">
-                          {robustnessTelemetry.slice_power_monitor.vocab_coverage_pct}% of |V|
+                      </InfoTooltip>
+                      <InfoTooltip
+                        title="Vocabulary Coverage"
+                        content="Percentage of the cleaned German dictionary represented inside this filtered slice."
+                        className="w-full"
+                      >
+                        <div className="w-full p-1.5 rounded bg-obsidian-900 border border-white/[0.05] cursor-help">
+                          <div className="text-parchment-300">Vocab Coverage</div>
+                          <div className="text-neoliberal font-bold text-[10px] tabular-nums">
+                            {robustnessTelemetry.slice_power_monitor.vocab_coverage_pct}% of |V|
+                          </div>
                         </div>
-                      </div>
-                      <div className="p-1.5 rounded bg-obsidian-900 border border-white/[0.05]">
-                        <div className="text-parchment-300">SHA-256 Run ID</div>
-                        <div
-                          className="text-traditional font-bold text-[10px] truncate"
-                          title={`Slice SHA-256: ${robustnessTelemetry.provenance_manifest?.slice_signature_sha256}`}
-                        >
-                          {robustnessTelemetry.provenance_manifest?.run_id}
+                      </InfoTooltip>
+                      <InfoTooltip
+                        title="SHA-256 Reproducibility Fingerprint"
+                        content={`Unique cryptographic ID verifying this exact corpus + filter + parameter run (${robustnessTelemetry.provenance_manifest?.slice_signature_sha256 || 'verified'}). Cite it for replication.`}
+                        className="w-full"
+                      >
+                        <div className="w-full p-1.5 rounded bg-obsidian-900 border border-white/[0.05] cursor-help">
+                          <div className="text-parchment-300">SHA-256 Run ID</div>
+                          <div className="text-traditional font-bold text-[10px] truncate">
+                            {robustnessTelemetry.provenance_manifest?.run_id}
+                          </div>
                         </div>
-                      </div>
+                      </InfoTooltip>
                     </div>
 
                     <p className="text-[10px] text-parchment-300 leading-snug bg-obsidian-900/70 p-2 rounded border border-white/[0.05]">
@@ -2160,6 +2295,7 @@ function App() {
                     onUpdateTopicLabel={updateTopicLabel}
                     onResetTopicLabel={resetTopicLabel}
                     onDecadeClick={handleDecadeClick}
+                    onInspectDocument={(doc) => setSelectedInspectorDoc(doc)}
                   />
                 </div>
                 <div className="2xl:col-span-5">
@@ -2354,6 +2490,7 @@ function App() {
                 onUpdateTopicLabel={updateTopicLabel}
                 onResetTopicLabel={resetTopicLabel}
                 onDecadeClick={handleDecadeClick}
+                onInspectDocument={(doc) => setSelectedInspectorDoc(doc)}
               />
             </div>
           )}
@@ -2412,29 +2549,39 @@ function App() {
               {/* Sticky Inspector Header */}
               <div className="p-3.5 border-b border-white/[0.08] bg-obsidian-950/90 sticky top-0 z-10 space-y-2.5">
                 <div className="flex items-center justify-between gap-2">
-                  <div className="flex items-center gap-1.5">
-                    <FileText className="w-3.5 h-3.5 text-traditional" />
-                    <span className="font-mono text-[10px] uppercase tracking-widest text-parchment-200">
-                      MARC21 & APA 7th Inspector
-                    </span>
-                  </div>
-                  <button
-                    onClick={handleCopyAllTopicCitations}
-                    title="Copy all APA 7th citations for this topic"
-                    className="inline-flex items-center gap-1 px-2 py-1 rounded bg-traditional/15 hover:bg-traditional/25 border border-traditional/40 font-mono text-[10px] text-traditional transition-colors cursor-pointer"
+                  <InfoTooltip
+                    title="MARC21 & APA 7th Inspector"
+                    content="Live library drawer showing the real German books & passages backing your active topic. Click any book card or 'Read Full Text' to open and read the complete accessible text, search inside it, or export it."
+                    showIcon
                   >
-                    {copiedCitationKey === 'batch-topic-apa' ? (
-                      <>
-                        <Check className="w-3 h-3 text-emerald-400" />
-                        <span>Copied All!</span>
-                      </>
-                    ) : (
-                      <>
-                        <Copy className="w-3 h-3" />
-                        <span>Copy All APA</span>
-                      </>
-                    )}
-                  </button>
+                    <div className="flex items-center gap-1.5">
+                      <FileText className="w-3.5 h-3.5 text-traditional" />
+                      <span className="font-mono text-[10px] uppercase tracking-widest text-parchment-200">
+                        MARC21 &amp; APA 7th Inspector
+                      </span>
+                    </div>
+                  </InfoTooltip>
+                  <InfoTooltip
+                    title="Copy All Visible Citations"
+                    content="Copies every currently listed work's formatted APA 7th Edition reference to your clipboard in one click."
+                  >
+                    <button
+                      onClick={handleCopyAllTopicCitations}
+                      className="inline-flex items-center gap-1 px-2 py-1 rounded bg-traditional/15 hover:bg-traditional/25 border border-traditional/40 font-mono text-[10px] text-traditional transition-colors cursor-pointer"
+                    >
+                      {copiedCitationKey === 'batch-topic-apa' ? (
+                        <>
+                          <Check className="w-3 h-3 text-emerald-400" />
+                          <span>Copied All!</span>
+                        </>
+                      ) : (
+                        <>
+                          <Copy className="w-3 h-3" />
+                          <span>Copy All APA</span>
+                        </>
+                      )}
+                    </button>
+                  </InfoTooltip>
                 </div>
 
                 {/* Currently Inspected Topic Summary Pill */}
@@ -2461,15 +2608,20 @@ function App() {
                       <span className="font-mono text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 font-bold">
                         {filteredInspectorDocs.length} / {totalInspectorMatches.toLocaleString()} Works
                       </span>
-                      <button
-                        onClick={() => {
-                          setInspectorGlobalScope((prev) => !prev);
-                          setInspectorLimit(80);
-                        }}
-                        className="font-mono text-[9px] text-traditional hover:underline cursor-pointer"
+                      <InfoTooltip
+                        title="Switch Search Scope"
+                        content="Toggle between showing only books belonging to the active topic versus searching across the entire indexed MARC21 catalog."
                       >
-                        {inspectorGlobalScope ? 'Scope: All Topics' : 'Scope: Active Topic'}
-                      </button>
+                        <button
+                          onClick={() => {
+                            setInspectorGlobalScope((prev) => !prev);
+                            setInspectorLimit(80);
+                          }}
+                          className="font-mono text-[9px] text-traditional hover:underline cursor-pointer"
+                        >
+                          {inspectorGlobalScope ? 'Scope: All Topics' : 'Scope: Active Topic'}
+                        </button>
+                      </InfoTooltip>
                     </div>
                   </div>
                 )}
@@ -2496,16 +2648,27 @@ function App() {
                   Object.keys(activeTopic.top_publishers).length > 0 && (
                     <div className="p-3 rounded-xl bg-obsidian-950/70 border border-white/[0.06]">
                       <div className="flex items-center gap-1.5 mb-2">
-                        <Building2 className="w-3.5 h-3.5 text-traditional" />
-                        <span className="font-mono text-[10px] uppercase tracking-widest text-parchment-300">
-                          Topic Imprint Concentration
-                        </span>
+                        <InfoTooltip
+                          title="Topic Imprint Concentration"
+                          content="Shows which German publishing houses contribute the most representative books to this topic. Click any publisher chip to filter the inspector."
+                          showIcon
+                        >
+                          <div className="flex items-center gap-1.5">
+                            <Building2 className="w-3.5 h-3.5 text-traditional" />
+                            <span className="font-mono text-[10px] uppercase tracking-widest text-parchment-300">
+                              Topic Imprint Concentration
+                            </span>
+                          </div>
+                        </InfoTooltip>
                       </div>
                       <div className="flex flex-wrap gap-1.5">
                         {Object.entries(activeTopic.top_publishers).map(([pub, count]) => (
-                          <span
+                          <button
                             key={pub}
-                            className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-obsidian-900 border border-white/[0.08] text-[10px] text-parchment-100"
+                            type="button"
+                            onClick={() => setInspectorSearch(pub)}
+                            title={`Filter inspector to ${pub}`}
+                            className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-obsidian-900 hover:bg-obsidian-800 border border-white/[0.08] hover:border-traditional/40 text-[10px] text-parchment-100 transition-colors cursor-pointer"
                           >
                             <span>{pub}</span>
                             <span
@@ -2514,13 +2677,13 @@ function App() {
                             >
                               {Number(count)}
                             </span>
-                          </span>
+                          </button>
                         ))}
                       </div>
                     </div>
                   )}
 
-                {/* Representative MARC21 Cards */}
+                {/* Representative MARC21 Cards (Fully Interactive — Click to Open Full Text) */}
                 <div className="space-y-2.5">
                   {filteredInspectorDocs.length > 0 ? (
                     filteredInspectorDocs.map((doc: RepresentativeDoc, idx: number) => {
@@ -2533,7 +2696,16 @@ function App() {
                       return (
                         <div
                           key={idx}
-                          className="p-3 rounded-xl bg-obsidian-950/90 border border-white/[0.07] hover:border-white/20 transition-all space-y-2"
+                          onClick={() => setSelectedInspectorDoc(doc)}
+                          role="button"
+                          tabIndex={0}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter' || e.key === ' ') {
+                              e.preventDefault();
+                              setSelectedInspectorDoc(doc);
+                            }
+                          }}
+                          className="group p-3 rounded-xl bg-obsidian-950/90 border border-white/[0.08] hover:border-traditional/50 hover:bg-obsidian-900/90 transition-all space-y-2 cursor-pointer"
                         >
                           <div className="flex items-center justify-between gap-2 flex-wrap">
                             <span
@@ -2544,17 +2716,27 @@ function App() {
                             </span>
                             <div className="flex items-center gap-1.5">
                               {doc.probability !== undefined && (
-                                <span className="px-1.5 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/30 font-mono text-[9px] text-emerald-300 font-bold">
-                                  θ = {doc.probability}%
-                                </span>
+                                <InfoTooltip
+                                  title="Topic Fit Score (θ)"
+                                  content="How strongly this work's vocabulary matches the active topic. Higher % means a tighter thematic match."
+                                >
+                                  <span className="px-1.5 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/30 font-mono text-[9px] text-emerald-300 font-bold">
+                                    θ = {doc.probability}%
+                                  </span>
+                                </InfoTooltip>
                               )}
-                              <span className="font-mono text-[10px] text-parchment-300">
-                                Tag 264$c · {docYear}
-                              </span>
+                              <InfoTooltip
+                                title="MARC21 Tag 264$c"
+                                content="Official publication year recorded in the Deutsche Nationalbibliothek (DNB) MARC21 catalog entry."
+                              >
+                                <span className="font-mono text-[10px] text-parchment-300">
+                                  Tag 264$c · {docYear}
+                                </span>
+                              </InfoTooltip>
                             </div>
                           </div>
 
-                          <h4 className="font-serif text-sm font-bold text-parchment-50 leading-snug">
+                          <h4 className="font-serif text-sm font-bold text-parchment-50 group-hover:text-traditional transition-colors leading-snug select-text">
                             {doc.title}
                           </h4>
 
@@ -2562,12 +2744,22 @@ function App() {
                             <div className="space-y-1.5">
                               <div className="flex flex-wrap items-center justify-between gap-1.5 text-[10px] font-mono text-parchment-300">
                                 {doc.author && doc.author !== 'N/A' && (
-                                  <span className="truncate">Tag 100$a · {doc.author}</span>
+                                  <InfoTooltip
+                                    title="MARC21 Tag 100$a"
+                                    content="Primary personal author or editor indexed in the DNB catalog."
+                                  >
+                                    <span className="truncate">Tag 100$a · {doc.author}</span>
+                                  </InfoTooltip>
                                 )}
                                 {doc.corpus_layer && (
-                                  <span className="px-1.5 py-0.5 rounded bg-white/[0.04] border border-white/[0.07] text-[9px] text-neoliberal">
-                                    {doc.corpus_layer}
-                                  </span>
+                                  <InfoTooltip
+                                    title="Archival Text Layer"
+                                    content="Indicates whether this text comes from an Open-Access full book (/34), HathiTrust print features, digitized Table of Contents (/04), or DNB publisher Inhaltstext."
+                                  >
+                                    <span className="px-1.5 py-0.5 rounded bg-white/[0.04] border border-white/[0.07] text-[9px] text-neoliberal">
+                                      {doc.corpus_layer}
+                                    </span>
+                                  </InfoTooltip>
                                 )}
                               </div>
                               {(doc.dnb_series || doc.dnb_publication_type || doc.dnb_textplus_collection) && (
@@ -2593,31 +2785,52 @@ function App() {
                           )}
 
                           {doc.snippet && (
-                            <p className="text-[11px] text-parchment-200 leading-relaxed line-clamp-3 italic border-l-2 border-white/15 pl-2.5">
+                            <p className="text-[11px] text-parchment-200 leading-relaxed line-clamp-3 italic border-l-2 border-traditional/35 group-hover:border-traditional pl-2.5 select-text transition-colors">
                               „{doc.snippet}“
                             </p>
                           )}
 
-                          <div className="pt-2 border-t border-white/[0.06] flex items-start justify-between gap-2">
-                            <p className="font-mono text-[9px] text-parchment-300 leading-relaxed break-words">
+                          {/* Interactive Full-Text Action Row + APA 7th Citation */}
+                          <div className="pt-2 border-t border-white/[0.06] space-y-2">
+                            <div className="flex items-center justify-between gap-2">
+                              <button
+                                type="button"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setSelectedInspectorDoc(doc);
+                                }}
+                                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-traditional/15 hover:bg-traditional/30 border border-traditional/45 font-mono text-[10px] font-bold text-traditional transition-colors cursor-pointer"
+                              >
+                                <Maximize2 className="w-3 h-3" />
+                                <span>Read Full Text</span>
+                              </button>
+                              <button
+                                type="button"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  copyText(copyKey, apaText);
+                                }}
+                                className="shrink-0 inline-flex items-center gap-1 px-2 py-1 rounded bg-white/[0.05] hover:bg-white/[0.12] border border-white/10 font-mono text-[9px] text-parchment-100 cursor-pointer"
+                              >
+                                {isCopied ? (
+                                  <>
+                                    <Check className="w-2.5 h-2.5 text-emerald-400" />
+                                    <span className="text-emerald-300">Copied</span>
+                                  </>
+                                ) : (
+                                  <>
+                                    <Copy className="w-2.5 h-2.5 text-traditional" />
+                                    <span>Copy APA 7th</span>
+                                  </>
+                                )}
+                              </button>
+                            </div>
+                            <p
+                              onClick={(e) => e.stopPropagation()}
+                              className="font-mono text-[9px] text-parchment-300 leading-relaxed break-words select-text cursor-text"
+                            >
                               {apaText}
                             </p>
-                            <button
-                              onClick={() => copyText(copyKey, apaText)}
-                              className="shrink-0 inline-flex items-center gap-1 px-2 py-1 rounded bg-white/[0.05] hover:bg-white/[0.12] border border-white/10 font-mono text-[9px] text-parchment-100 cursor-pointer"
-                            >
-                              {isCopied ? (
-                                <>
-                                  <Check className="w-2.5 h-2.5 text-emerald-400" />
-                                  <span className="text-emerald-300">Copied</span>
-                                </>
-                              ) : (
-                                <>
-                                  <Copy className="w-2.5 h-2.5 text-traditional" />
-                                  <span>APA 7th</span>
-                                </>
-                              )}
-                            </button>
                           </div>
                         </div>
                       );
@@ -2661,6 +2874,14 @@ function App() {
           )}
         </AnimatePresence>
       </div>
+
+      {/* Full-Text Archival Reader Modal for MARC21 & APA 7th Inspector */}
+      <Marc21FullTextModal
+        doc={selectedInspectorDoc}
+        topicKeywords={activeTopic?.keywords?.map((k: Keyword) => k.word) || []}
+        topicLabel={activeTopic ? `Topic #${activeTopic.id + 1}: ${getTopicDisplayLabel(activeTopic)}` : undefined}
+        onClose={() => setSelectedInspectorDoc(null)}
+      />
     </div>
   );
 }

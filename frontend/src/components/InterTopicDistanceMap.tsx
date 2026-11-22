@@ -5,6 +5,7 @@ import {
 } from 'lucide-react';
 import clsx from 'clsx';
 import { getArchetypeTheme, getTopicDisplayLabel, type Topic, type Keyword } from './TopicModelViz';
+import { InfoTooltip } from './InfoTooltip';
 
 interface InterTopicDistanceMapProps {
   topics: Topic[];
@@ -343,32 +344,46 @@ export const InterTopicDistanceMap: React.FC<InterTopicDistanceMapProps> = ({
                 Jensen-Shannon Divergence MDS · K = {numTopics} · Mode: {ldaMode.toUpperCase()}
               </span>
             </div>
-            <h2 className="font-serif text-xl sm:text-2xl font-bold text-parchment-50">
-              2D Principal Coordinate Projection (PC₁ × PC₂) & λ-Relevance Lexical Salience
+            <h2 className="font-serif text-xl sm:text-2xl font-bold text-parchment-50 flex items-center gap-2 flex-wrap">
+              <span>2D Principal Coordinate Projection (PC₁ × PC₂) &amp; λ-Relevance Lexical Salience</span>
+              <InfoTooltip
+                title="How to Read This 2D Bubble Map"
+                content="Each bubble is one LDA topic. Bigger bubbles mean the topic appears in more books. Bubbles placed close together share similar vocabulary; far-apart bubbles represent opposing discourses. Click any bubble to inspect its words."
+              />
             </h2>
           </div>
 
           {/* Nearest & Furthest Neighbor Telemetry Pills */}
           {nearestNeighbor && furthestNeighbor && (
             <div className="flex flex-wrap items-center gap-2 font-mono text-[10px]">
-              <button
-                onClick={() => onSelectTopicIndex(nearestNeighbor.point.index)}
-                className="px-2.5 py-1.5 rounded-lg bg-obsidian-950 border border-emerald-500/30 text-parchment-200 hover:border-emerald-400 cursor-pointer flex items-center gap-1.5"
+              <InfoTooltip
+                title="Closest Neighbor (Lowest JSD Distance)"
+                content="The topic whose vocabulary overlaps most closely with your selected topic (0 = identical, 1 = completely separate). Click to jump to it."
               >
-                <span className="text-emerald-300 font-bold">Closest Neighbor:</span>
-                <span>
-                  {nearestNeighbor.point.shortCode} (JSD = {nearestNeighbor.dist.toFixed(3)})
-                </span>
-              </button>
-              <button
-                onClick={() => onSelectTopicIndex(furthestNeighbor.point.index)}
-                className="px-2.5 py-1.5 rounded-lg bg-obsidian-950 border border-rose-500/30 text-parchment-200 hover:border-rose-400 cursor-pointer flex items-center gap-1.5"
+                <button
+                  onClick={() => onSelectTopicIndex(nearestNeighbor.point.index)}
+                  className="px-2.5 py-1.5 rounded-lg bg-obsidian-950 border border-emerald-500/30 text-parchment-200 hover:border-emerald-400 cursor-pointer flex items-center gap-1.5"
+                >
+                  <span className="text-emerald-300 font-bold">Closest Neighbor:</span>
+                  <span>
+                    {nearestNeighbor.point.shortCode} (JSD = {nearestNeighbor.dist.toFixed(3)})
+                  </span>
+                </button>
+              </InfoTooltip>
+              <InfoTooltip
+                title="Counter-Pole (Highest JSD Distance)"
+                content="The topic most vocabularily opposite to your selected topic. Click to jump to it."
               >
-                <span className="text-rose-300 font-bold">Counter-Pole:</span>
-                <span>
-                  {furthestNeighbor.point.shortCode} (JSD = {furthestNeighbor.dist.toFixed(3)})
-                </span>
-              </button>
+                <button
+                  onClick={() => onSelectTopicIndex(furthestNeighbor.point.index)}
+                  className="px-2.5 py-1.5 rounded-lg bg-obsidian-950 border border-rose-500/30 text-parchment-200 hover:border-rose-400 cursor-pointer flex items-center gap-1.5"
+                >
+                  <span className="text-rose-300 font-bold">Counter-Pole:</span>
+                  <span>
+                    {furthestNeighbor.point.shortCode} (JSD = {furthestNeighbor.dist.toFixed(3)})
+                  </span>
+                </button>
+              </InfoTooltip>
             </div>
           )}
         </div>
@@ -647,9 +662,15 @@ export const InterTopicDistanceMap: React.FC<InterTopicDistanceMapProps> = ({
               {/* Interactive λ Slider Control */}
               <div className="p-3 rounded-lg bg-obsidian-900 border border-white/[0.06] mb-3">
                 <div className="flex items-center justify-between font-mono text-[10px] mb-1.5">
-                  <span className="text-parchment-200">
-                    Relevance Weight: <code>r(w,k|λ) = λ·log(φ_kw) + (1-λ)·log(φ_kw / p_w)</code>
-                  </span>
+                  <InfoTooltip
+                    title="λ (Lambda) Relevance Slider"
+                    content="Slide right (toward 1.0) to show the most frequent words in this topic. Slide left (toward 0.0) to show the most exclusive signature words unique to this topic. λ = 0.6 is the standard sweet spot."
+                    showIcon
+                  >
+                    <span className="text-parchment-200">
+                      Relevance Weight: <code>r(w,k|λ) = λ·log(φ_kw) + (1-λ)·log(φ_kw / p_w)</code>
+                    </span>
+                  </InfoTooltip>
                   <span className="px-2 py-0.5 rounded bg-neoliberal/15 border border-neoliberal/40 text-neoliberal font-bold">
                     λ = {lambda.toFixed(2)}
                   </span>

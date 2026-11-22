@@ -17,6 +17,7 @@ import {
   Scale,
 } from 'lucide-react';
 import clsx from 'clsx';
+import { InfoTooltip } from './InfoTooltip';
 
 import { type LDAMode, type ModeComparisonRow, type SLDADiagnostics } from '../hooks/useLDA';
 import { ldaClientAdapter } from '../adapters/ldaClientAdapter';
@@ -1564,8 +1565,12 @@ export const PipelineExplainer: React.FC<PipelineExplainerProps> = ({
                 <span className="font-mono text-[10px] uppercase tracking-widest text-emerald-400 font-bold">
                   Denny & Spirling (2018) Preprocessing Transparency & Stopword Ablation Audit
                 </span>
-                <h3 className="font-serif text-lg sm:text-xl font-bold text-parchment-50">
-                  6-Stage Token Attrition Funnel & Interactive German Lemma Survival Inspector
+                <h3 className="font-serif text-lg sm:text-xl font-bold text-parchment-50 flex items-center gap-2 flex-wrap">
+                  <span>6-Stage Token Attrition Funnel &amp; Interactive German Lemma Survival Inspector</span>
+                  <InfoTooltip
+                    title="Check How Any German Word Is Cleaned"
+                    content="Shows how raw German book words pass through 6 cleaning stages (lowercasing, stopword removal, name filtering, lemmatization, TF-IDF). Type any German word in the box on the right to see whether it survived or which stage removed it."
+                  />
                 </h3>
               </div>
               <div className="flex items-center gap-2">

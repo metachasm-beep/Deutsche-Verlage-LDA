@@ -2,6 +2,7 @@ import React from 'react';
 import { TrendingUp } from 'lucide-react';
 import clsx from 'clsx';
 import type { CoherencePoint, PublisherArchetypeRow } from '../hooks/useLDA';
+import { InfoTooltip } from './InfoTooltip';
 
 export interface ImprintAndCoherenceMatrixPanelProps {
   publisherArchetypes: PublisherArchetypeRow[];
@@ -36,8 +37,12 @@ export const ImprintAndCoherenceMatrixPanel: React.FC<ImprintAndCoherenceMatrixP
               <span className="font-mono text-[10px] uppercase tracking-widest text-traditional">
                 Institutional Imprint Positioning
               </span>
-              <h3 className="font-serif text-lg sm:text-xl font-bold text-parchment-50">
-                Publisher × Ideological Archetype Matrix
+              <h3 className="font-serif text-lg sm:text-xl font-bold text-parchment-50 flex items-center gap-2">
+                <span>Publisher × Ideological Archetype Matrix</span>
+                <InfoTooltip
+                  title="Publisher Ideological Breakdown"
+                  content="Shows each German publishing house's percentage split across Traditional (gold), Neoliberal/Self-Help (teal), and Critical/Secular (red) discourse. Click any publisher row to isolate the whole dashboard to that publisher."
+                />
               </h3>
             </div>
             <div className="flex items-center gap-2 font-mono text-[10px]">
@@ -140,8 +145,12 @@ export const ImprintAndCoherenceMatrixPanel: React.FC<ImprintAndCoherenceMatrixP
               <span className="font-mono text-[10px] uppercase tracking-widest text-emerald-400">
                 Röder et al. (2015) Validation
               </span>
-              <h3 className="font-serif text-lg sm:text-xl font-bold text-parchment-50">
-                Coherence Grid (C<sub>v</sub> vs. U<sub>Mass</sub>)
+              <h3 className="font-serif text-lg sm:text-xl font-bold text-parchment-50 flex items-center gap-2">
+                <span>Coherence Grid (C<sub>v</sub> vs. U<sub>Mass</sub>)</span>
+                <InfoTooltip
+                  title="How to Pick the Best Topic Count (K)"
+                  content="Higher C_v (closer to 1.0) and U_Mass (closer to 0) mean cleaner, more human-interpretable topics. Click any row in the table to immediately switch your live LDA model to that K."
+                />
               </h3>
             </div>
             <TrendingUp className="w-4 h-4 text-emerald-400" />
@@ -157,8 +166,16 @@ export const ImprintAndCoherenceMatrixPanel: React.FC<ImprintAndCoherenceMatrixP
               <thead>
                 <tr className="border-b border-white/10 text-parchment-300 text-[9px] uppercase">
                   <th className="py-1.5 px-2">K</th>
-                  <th className="py-1.5 px-2">Cv (NPMI)</th>
-                  <th className="py-1.5 px-2">UMass</th>
+                  <th className="py-1.5 px-2">
+                    <InfoTooltip title="C_v Coherence (Higher = Better)" content="Measures how closely a topic's top words co-occur in real German books (0 to 1 scale).">
+                      <span>Cv (NPMI)</span>
+                    </InfoTooltip>
+                  </th>
+                  <th className="py-1.5 px-2">
+                    <InfoTooltip title="U_Mass Coherence (Closer to 0 = Better)" content="Internal log-probability score checking whether topic words appear together in the same documents.">
+                      <span>UMass</span>
+                    </InfoTooltip>
+                  </th>
                   <th className="py-1.5 px-2 text-right">Regime</th>
                 </tr>
               </thead>

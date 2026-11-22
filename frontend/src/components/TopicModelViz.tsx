@@ -29,8 +29,10 @@ import {
   X,
   RotateCcw,
   TrendingUp,
+  Maximize2,
 } from 'lucide-react';
 import clsx from 'clsx';
+import { InfoTooltip } from './InfoTooltip';
 
 export interface Keyword {
   word: string;
@@ -129,6 +131,7 @@ interface TopicModelVizProps {
   ) => void;
   onResetTopicLabel?: (topicId?: number) => void;
   onDecadeClick?: (decade: number) => void;
+  onInspectDocument?: (doc: RepresentativeDoc) => void;
 }
 
 export interface ArchetypeTheme {
@@ -221,6 +224,7 @@ export const TopicModelViz: React.FC<TopicModelVizProps> = ({
   onUpdateTopicLabel,
   onResetTopicLabel,
   onDecadeClick,
+  onInspectDocument,
 }) => {
   const [internalIndex, setInternalIndex] = useState<number>(0);
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -458,34 +462,45 @@ export const TopicModelViz: React.FC<TopicModelVizProps> = ({
             )}
             {currentTopic?.diagnostics && (
               <>
-                <span
-                  title="Hungarian Alignment Topic Stability across R=10 random initializations"
-                  className="px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/30 font-mono text-[10px] text-emerald-300 tabular-nums"
+                <InfoTooltip
+                  title="Topic Stability (S_k)"
+                  content="How reliably this exact same topic reappears across 10 independent random runs. Values above 85% mean the theme is rock-solid, not random noise."
                 >
-                  Stability: {(currentTopic.diagnostics.stability_score * 100).toFixed(1)}%
-                </span>
-                <span
-                  title="Roberts et al. (2014) Harmonic Mean of Frequency & Exclusivity"
-                  className="px-2 py-0.5 rounded bg-violet-500/10 border border-violet-500/30 font-mono text-[10px] text-violet-300 tabular-nums"
+                  <span className="px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/30 font-mono text-[10px] text-emerald-300 tabular-nums cursor-help">
+                    Stability: {(currentTopic.diagnostics.stability_score * 100).toFixed(1)}%
+                  </span>
+                </InfoTooltip>
+                <InfoTooltip
+                  title="FREX Exclusivity Score"
+                  content="Balances how frequent a topic's words are AND how unique they are to this topic compared to all others (0–1). Higher FREX = sharper, more distinct theme."
                 >
-                  FREX: {currentTopic.diagnostics.frex_score.toFixed(3)}
-                </span>
-                <span
-                  title="95% Bootstrap Confidence Interval for Topic Prevalence θ_k"
-                  className="px-2 py-0.5 rounded bg-white/[0.04] border border-white/10 font-mono text-[10px] text-parchment-200 tabular-nums"
+                  <span className="px-2 py-0.5 rounded bg-violet-500/10 border border-violet-500/30 font-mono text-[10px] text-violet-300 tabular-nums cursor-help">
+                    FREX: {currentTopic.diagnostics.frex_score.toFixed(3)}
+                  </span>
+                </InfoTooltip>
+                <InfoTooltip
+                  title="Topic Prevalence (θ_k) & 95% CI"
+                  content="Share of the corpus devoted to this topic, plus its 95% confidence interval showing statistical precision."
                 >
-                  θ<sub>k</sub>={currentTopic.prevalence}% [{currentTopic.diagnostics.prevalence_ci_95[0]}–{currentTopic.diagnostics.prevalence_ci_95[1]}%]
-                </span>
+                  <span className="px-2 py-0.5 rounded bg-white/[0.04] border border-white/10 font-mono text-[10px] text-parchment-200 tabular-nums cursor-help">
+                    θ<sub>k</sub>={currentTopic.prevalence}% [{currentTopic.diagnostics.prevalence_ci_95[0]}–{currentTopic.diagnostics.prevalence_ci_95[1]}%]
+                  </span>
+                </InfoTooltip>
               </>
             )}
-            <span
-              className={clsx(
-                'px-2.5 py-0.5 rounded border font-mono text-[10px] font-semibold',
-                currentTheme.badgeClass
-              )}
+            <InfoTooltip
+              title="Ideological Alignment %"
+              content="How strongly this topic's vocabulary leans toward its assigned research pole (Traditional, Neoliberal, or Critical)."
             >
-              {currentTopic?.archetype?.confidence || 0}% Alignment
-            </span>
+              <span
+                className={clsx(
+                  'px-2.5 py-0.5 rounded border font-mono text-[10px] font-semibold cursor-help',
+                  currentTheme.badgeClass
+                )}
+              >
+                {currentTopic?.archetype?.confidence || 0}% Alignment
+              </span>
+            </InfoTooltip>
             {hideInlineInspector && onOpenInspector && (
               <button
                 onClick={onOpenInspector}
@@ -725,13 +740,19 @@ export const TopicModelViz: React.FC<TopicModelVizProps> = ({
             <div className="mt-2.5 pt-2.5 border-t border-white/[0.06] grid grid-cols-1 lg:grid-cols-12 gap-2.5 items-center">
               <div className="lg:col-span-7">
                 <div className="flex flex-wrap items-center justify-between gap-2 text-[10px] font-mono mb-1">
-                  <span className="text-parchment-300">
-                    Prior vs. Empirical Likelihood Decomposition (D<sub>KL</sub> ={' '}
-                    <strong className="text-parchment-100">
-                      {currentTopic.diagnostics.kl_divergence_from_prior.toFixed(2)} nats
-                    </strong>
-                    ):
-                  </span>
+                  <InfoTooltip
+                    title="Prior vs. Real-Corpus Evidence (KL Divergence)"
+                    content="Checks whether the topic is genuinely backed by real German books rather than just echoing seed words. Higher 'Organic Co-Clustered' % means the corpus naturally discovered companion words."
+                    showIcon
+                  >
+                    <span className="text-parchment-300">
+                      Prior vs. Empirical Likelihood (D<sub>KL</sub> ={' '}
+                      <strong className="text-parchment-100">
+                        {currentTopic.diagnostics.kl_divergence_from_prior.toFixed(2)} nats
+                      </strong>
+                      )
+                    </span>
+                  </InfoTooltip>
                   <span className="text-parchment-200 tabular-nums">
                     <span className="text-traditional">
                       Seed Mass: {currentTopic.diagnostics.seed_dominance_pct.toFixed(1)}%
@@ -756,20 +777,24 @@ export const TopicModelViz: React.FC<TopicModelVizProps> = ({
                 </div>
               </div>
               <div className="lg:col-span-5 flex flex-wrap items-center justify-end gap-1.5 font-mono text-[9px]">
-                <span
-                  title="Cosine similarity between active topic vector φ_k and unconstrained Unseeded LDA baseline"
-                  className="px-2 py-0.5 rounded bg-obsidian-900 border border-white/10 text-parchment-200"
+                <InfoTooltip
+                  title="Unseeded Convergence"
+                  content="How closely this topic matches what a completely unguided (Unseeded) LDA model discovers on its own. High % proves the theme truly exists in the books."
                 >
-                  Unseeded Conv: {(currentTopic.diagnostics.unseeded_cosine_convergence * 100).toFixed(1)}%
-                </span>
-                {currentTopic.diagnostics.exclusive_lemmas?.slice(0, 3).map((exLemma) => (
-                  <span
-                    key={exLemma}
-                    title="Top FREX Exclusive Lemma (Roberts et al., 2014)"
-                    className="px-1.5 py-0.5 rounded bg-violet-500/10 border border-violet-500/25 text-violet-300"
-                  >
-                    ★ {exLemma}
+                  <span className="px-2 py-0.5 rounded bg-obsidian-900 border border-white/10 text-parchment-200 cursor-help">
+                    Unseeded Conv: {(currentTopic.diagnostics.unseeded_cosine_convergence * 100).toFixed(1)}%
                   </span>
+                </InfoTooltip>
+                {currentTopic.diagnostics.exclusive_lemmas?.slice(0, 3).map((exLemma) => (
+                  <InfoTooltip
+                    key={exLemma}
+                    title={`Signature Exclusive Word: "${exLemma}"`}
+                    content="One of this topic's top FREX words — both frequent here and rare in all other topics."
+                  >
+                    <span className="px-1.5 py-0.5 rounded bg-violet-500/10 border border-violet-500/25 text-violet-300 cursor-help">
+                      ★ {exLemma}
+                    </span>
+                  </InfoTooltip>
                 ))}
               </div>
             </div>
@@ -1073,12 +1098,18 @@ export const TopicModelViz: React.FC<TopicModelVizProps> = ({
             {currentTopic.representative_docs && currentTopic.representative_docs.length > 0 && (
               <div className="bg-obsidian-950/75 border border-white/[0.06] rounded-lg p-3">
                 <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
-                  <span className="font-mono text-[10px] uppercase tracking-widest text-parchment-200 flex items-center gap-1.5">
-                    <BookText className="w-3.5 h-3.5" style={{ color: currentTheme.hex }} />
-                    Close-Reading Token Attribution Highlighter — r(w, d, z<sub>{currentTopic.id + 1}</sub>) ∝ θ<sub>d,k</sub> · φ<sub>k,w</sub>
-                  </span>
+                  <InfoTooltip
+                    title="Close-Reading Token Attribution Highlighter"
+                    content="Shows real German book passages with the exact words that caused LDA to place them in this topic highlighted. Click any passage card to open the full accessible text."
+                    showIcon
+                  >
+                    <span className="font-mono text-[10px] uppercase tracking-widest text-parchment-200 flex items-center gap-1.5">
+                      <BookText className="w-3.5 h-3.5" style={{ color: currentTheme.hex }} />
+                      Close-Reading Token Attribution Highlighter — r(w, d, z<sub>{currentTopic.id + 1}</sub>) ∝ θ<sub>d,k</sub> · φ<sub>k,w</sub>
+                    </span>
+                  </InfoTooltip>
                   <span className="font-mono text-[9px] text-parchment-300">
-                    Highlighted stems drive posterior assignment to Topic #{currentTopic.id + 1}
+                    Click any passage card to open the complete accessible text
                   </span>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
@@ -1096,17 +1127,29 @@ export const TopicModelViz: React.FC<TopicModelVizProps> = ({
                     return (
                       <div
                         key={dIdx}
-                        className="p-2.5 rounded-lg bg-obsidian-900/80 border border-white/[0.06] text-xs"
+                        onClick={() => onInspectDocument?.(doc)}
+                        className={clsx(
+                          'p-2.5 rounded-lg bg-obsidian-900/80 border border-white/[0.06] text-xs transition-all',
+                          onInspectDocument && 'hover:border-traditional/50 cursor-pointer'
+                        )}
                       >
                         <div className="flex items-center justify-between gap-2 mb-1 font-mono text-[9px] text-parchment-300">
                           <span className="text-parchment-100 font-bold truncate">
                             {doc.publisher} ({doc.year})
                           </span>
-                          <span style={{ color: currentTheme.hex }}>
-                            θ<sub>d,{currentTopic.id + 1}</sub> = {docProbPct.toFixed(1)}%
-                          </span>
+                          <div className="flex items-center gap-2 shrink-0">
+                            <span style={{ color: currentTheme.hex }}>
+                              θ<sub>d,{currentTopic.id + 1}</sub> = {docProbPct.toFixed(1)}%
+                            </span>
+                            {onInspectDocument && (
+                              <span className="inline-flex items-center gap-0.5 text-traditional font-bold">
+                                <Maximize2 className="w-2.5 h-2.5" />
+                                Full Text
+                              </span>
+                            )}
+                          </div>
                         </div>
-                        <p className="font-serif text-xs text-parchment-100 leading-relaxed">
+                        <p className="font-serif text-xs text-parchment-100 leading-relaxed select-text">
                           {tokens.map((tok, tIdx) => {
                             const cleanTok = tok.replace(/[^a-zA-ZäöüÄÖÜß]/g, '').toLowerCase();
                             const matchedKw =
@@ -1157,7 +1200,11 @@ export const TopicModelViz: React.FC<TopicModelVizProps> = ({
                     return (
                       <div
                         key={idx}
-                        className="p-3 rounded-lg bg-obsidian-950/90 border border-white/[0.07] flex flex-col justify-between gap-2"
+                        onClick={() => onInspectDocument?.(doc)}
+                        className={clsx(
+                          'p-3 rounded-lg bg-obsidian-950/90 border border-white/[0.07] flex flex-col justify-between gap-2 transition-all',
+                          onInspectDocument && 'hover:border-traditional/50 cursor-pointer'
+                        )}
                       >
                         <div>
                           <div className="flex items-center justify-between gap-2 mb-1">
@@ -1168,21 +1215,48 @@ export const TopicModelViz: React.FC<TopicModelVizProps> = ({
                               {doc.year}
                             </span>
                           </div>
-                          <h5 className="font-serif text-sm font-bold text-parchment-50 leading-snug">
+                          <h5 className="font-serif text-sm font-bold text-parchment-50 leading-snug select-text">
                             {doc.title}
                           </h5>
+                          {doc.snippet && (
+                            <p className="mt-1.5 text-[11px] text-parchment-200 line-clamp-2 italic border-l-2 border-traditional/30 pl-2 select-text">
+                              „{doc.snippet}“
+                            </p>
+                          )}
                         </div>
                         <div className="flex items-center justify-between gap-2 pt-2 border-t border-white/[0.05]">
-                          <p className="font-mono text-[10px] text-parchment-300 leading-relaxed break-words">
+                          <p
+                            onClick={(e) => e.stopPropagation()}
+                            className="font-mono text-[10px] text-parchment-300 leading-relaxed break-words select-text"
+                          >
                             <Quote className="w-2.5 h-2.5 inline mr-1 text-traditional" />
                             {apaText}
                           </p>
-                          <button
-                            onClick={() => handleCopyCitation(apaText)}
-                            className="shrink-0 px-2 py-0.5 rounded bg-white/[0.05] hover:bg-white/[0.1] font-mono text-[10px] text-parchment-200 cursor-pointer"
-                          >
-                            {isCopied ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
-                          </button>
+                          <div className="flex items-center gap-1 shrink-0">
+                            {onInspectDocument && (
+                              <button
+                                type="button"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  onInspectDocument(doc);
+                                }}
+                                className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-traditional/15 hover:bg-traditional/30 border border-traditional/40 font-mono text-[9px] font-bold text-traditional cursor-pointer"
+                              >
+                                <Maximize2 className="w-2.5 h-2.5" />
+                                <span>Full Text</span>
+                              </button>
+                            )}
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleCopyCitation(apaText);
+                              }}
+                              className="px-2 py-0.5 rounded bg-white/[0.05] hover:bg-white/[0.1] font-mono text-[10px] text-parchment-200 cursor-pointer"
+                            >
+                              {isCopied ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
+                            </button>
+                          </div>
                         </div>
                       </div>
                     );

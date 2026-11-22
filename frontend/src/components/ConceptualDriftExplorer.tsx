@@ -18,6 +18,7 @@ import {
   Search,
 } from 'lucide-react';
 import clsx from 'clsx';
+import { InfoTooltip } from './InfoTooltip';
 
 interface DecadePoint {
   decade: string;
@@ -254,8 +255,12 @@ export const ConceptualDriftExplorer: React.FC<ConceptualDriftExplorerProps> = (
                 P(RQ_m | w, Decade) · Jensen-Shannon Drift · Mann-Kendall Trend
               </span>
             </div>
-            <h2 className="font-serif text-xl sm:text-2xl font-bold text-parchment-50">
-              Semantic Displacement & Polysemous Signifier Drift Across RQ₁, RQ₂ & RQ₃
+            <h2 className="font-serif text-xl sm:text-2xl font-bold text-parchment-50 flex items-center gap-2 flex-wrap">
+              <span>Semantic Displacement &amp; Polysemous Signifier Drift Across RQ₁, RQ₂ &amp; RQ₃</span>
+              <InfoTooltip
+                title="What Is Conceptual / Word-Shift Drift?"
+                content="Tracks how the exact same German word (like Seele, Achtsamkeit, or Sinn) moved between Traditional, Self-Help, and Secular contexts from the 1970s to the 2020s — backed by Mann-Kendall trend tests, neighboring words (PMI collocates), and real book quotes (KWIC)."
+              />
             </h2>
           </div>
 
